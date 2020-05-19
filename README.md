@@ -173,6 +173,9 @@ Frontend assets are generated into
   works out of the box.
 - `FrontendAssetsWatch` is a separate npm run config for continuous frontend rebuilds — run it
   in a second IntelliJ tab alongside `EnduranceTrioApplication` when editing SCSS or JS.
+- Icons use a CSS mask system with SVGs embedded as data URIs. Source SVGs and config
+  live in the webpack directory (`icons.config.json`, `src/icons/`). Prebuild hooks
+  regenerate icon CSS automatically.
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 

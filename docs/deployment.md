@@ -106,6 +106,9 @@ The `.env` file manages environment-specific configurations and secrets.
 | `DB_URL`                 | Datasource URL                                     | Yes      |
 | `DB_USERNAME`            | Database username                                  | Yes      |
 | `DB_SECRET`              | Database password                                  | Yes      |
+| `KOFI_USER_ID`           | Ko-fi user ID for the donation button              | Optional |
+| `FACEBOOK_PAGE_ID`       | Facebook Page ID for Open Graph meta tags          | Optional |
+| `TWITTER_SITE`           | Twitter/X site handle for Twitter Card meta tags   | Optional |
 | `FIRST_OWNER`            | Name for the initial account initialization        | Optional |
 | `FIRST_HASH`             | Bcrypt hash for the initial account initialization | Optional |
 

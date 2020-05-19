@@ -27,9 +27,11 @@ app:
     default-img: /img/endurancetrio-open-graph.png
     default-img-height: 628
     default-img-width: 1200
+  kofi:
+    user-id: ${KOFI_USER_ID:}
   social:
-    facebook-page-id: "1692877750958091"
-    twitter-site: "@EnduranceTrio"
+    facebook-page-id: ${FACEBOOK_PAGE_ID:}
+    twitter-site: ${TWITTER_SITE:}
   version: @project.version@
 
 cors:
