@@ -135,6 +135,13 @@ env vars `FIRST_OWNER` + `FIRST_HASH`.
   `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`
 - Project-maintained SCSS customizations for Bulma/third-party code use the `endurance-` prefix
   for file names, including Klaro, switch-control, and theme entrypoints
+- **Icon system (generated):** Configured via `webpack/icons.config.json`. Each icon
+  produces a `.et-{name}` CSS class using `mask-image` data URIs so the icon inherits
+  the current text color. MDI icons are sourced from `@mdi/svg` (install as devDependency);
+  custom SVGs go in `webpack/src/icons/`. The generator runs automatically via the
+  `prebuild:*` npm hooks. To add an icon: add it to `icons.config.json`, then run
+  `npm run generate:icons` (or just build). The output lands at
+  `webpack/src/scss/utilities/endurance-icons.scss`.
 
 ## Docker
 

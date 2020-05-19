@@ -33,6 +33,7 @@ public class PageMetadata {
   private String copyrightYear;
   private String description;
   private String facebookPageId;
+  private String kofiUserId;
   private String ogImage;
   private Integer ogImageHeight;
   private Integer ogImageWidth;
@@ -82,6 +83,14 @@ public class PageMetadata {
 
   public void setFacebookPageId(String facebookPageId) {
     this.facebookPageId = facebookPageId;
+  }
+
+  public String getKofiUserId() {
+    return kofiUserId;
+  }
+
+  public void setKofiUserId(String kofiUserId) {
+    this.kofiUserId = kofiUserId;
   }
 
   public String getOgImage() {

@@ -37,7 +37,7 @@
 @forward 'bulma/sass/elements/content';
 @forward 'bulma/sass/elements/button';
 // @forward 'bulma/sass/elements/delete';
-// @forward 'bulma/sass/elements/icon';
+@forward 'bulma/sass/elements/icon';
 @forward 'bulma/sass/elements/image';
 // @forward 'bulma/sass/elements/loader';
 // @forward 'bulma/sass/elements/notification';
@@ -69,8 +69,8 @@
 // @forward 'bulma/sass/components/modal';
 @forward 'bulma/sass/components/navbar';
 @forward 'components/endurance-navbar';
-// @forward 'bulma/sass/components/pagination; */
-// @forward 'bulma/sass/components/panel */
+// @forward 'bulma/sass/components/pagination'; */
+// @forward 'bulma/sass/components/panel'; */
 // @forward 'bulma/sass/components/tabs; */
 
 // Klaro - Cookie Consent
@@ -78,7 +78,7 @@
 
 // Grid
 // -------------------------------------------------------------------------------------------------
-// @forward 'bulma/sass/grid/columns"';
+@forward 'bulma/sass/grid/columns';
 @forward 'bulma/sass/grid/grid';
 
 // Layout
@@ -106,6 +106,10 @@
 @forward 'bulma/sass/helpers/typography';
 @forward 'bulma/sass/helpers/visibility';
 // @forward 'bulma/sass/helpers/other';
+
+// Icon system (generated)
+// -------------------------------------------------------------------------------------------------
+@forward 'utilities/endurance-icons';
 
 // Themes
 // -------------------------------------------------------------------------------------------------

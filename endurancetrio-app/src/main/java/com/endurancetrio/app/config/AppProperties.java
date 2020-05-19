@@ -28,9 +28,18 @@ import org.springframework.stereotype.Component;
 public class AppProperties {
 
   private String copyrightYear;
+  private KoFi kofi = new KoFi();
   private OpenGraph openGraph = new OpenGraph();
   private Social social = new Social();
   private String version;
+
+  public KoFi getKoFi() {
+    return kofi;
+  }
+
+  public void setKoFi(KoFi kofi) {
+    this.kofi = kofi;
+  }
 
   public String getCopyrightYear() {
     return copyrightYear;
@@ -62,6 +71,19 @@ public class AppProperties {
 
   public void setVersion(String version) {
     this.version = version;
+  }
+
+  public static class KoFi {
+
+    private String userId;
+
+    public String getUserId() {
+      return userId;
+    }
+
+    public void setUserId(String userId) {
+      this.userId = userId;
+    }
   }
 
   public static class OpenGraph {

@@ -367,9 +367,15 @@ Generated frontend assets are written to
 For standalone frontend work inside `endurancetrio-app/src/main/resources/webpack/`, the available
 npm scripts are:
 
+- `npm run generate:icons` - generate icon CSS classes from `icons.config.json`
 - `npm run build:dev` - development bundle with source maps
 - `npm run build:prod` - production bundle without source maps
 - `npm run build:watch` - continuous development rebuilds with source maps
+
+Icons are generated via `scripts/generate-icons.js`. The `prebuild:*` hooks run it automatically
+before every webpack build, so you rarely need to call it directly. To add a new icon, edit
+`icons.config.json` (add an MDI name or a custom path in `src/icons/`) and rebuild - the prebuild
+hook regenerates the SCSS.
 
 ## Run the application
 
