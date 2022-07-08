@@ -22,6 +22,8 @@
 
   <properties>
     <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
   <modules>
@@ -41,4 +43,9 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <developerConnection>scm:git:git@github.com:EnduranceCode/endurancetrio-community.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>
