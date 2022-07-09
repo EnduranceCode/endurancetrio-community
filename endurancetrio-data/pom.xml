@@ -9,7 +9,7 @@
 
   <parent>
     <groupId>com.endurancetrio</groupId>
-    <artifactId>portal</artifactId>
+    <artifactId>endurancetrio-community</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
