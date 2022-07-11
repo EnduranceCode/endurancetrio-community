@@ -15,13 +15,13 @@
  */
 package com.endurancetrio.app;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootApplication
-public class EnduranceTrioWebPortalApplication {
+@SpringBootTest
+class EnduranceTrioCommunityApplicationTests {
 
-  public static void main(String[] args) {
-    SpringApplication.run(EnduranceTrioWebPortalApplication.class, args);
-  }
+	@Test
+	void contextLoads() {
+	}
 }
