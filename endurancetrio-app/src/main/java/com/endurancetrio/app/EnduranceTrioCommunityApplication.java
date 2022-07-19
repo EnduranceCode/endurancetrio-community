@@ -17,8 +17,10 @@ package com.endurancetrio.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
+@EntityScan("com.endurancetrio.data")
 public class EnduranceTrioCommunityApplication {
 
   public static void main(String[] args) {
