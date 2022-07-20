@@ -32,14 +32,19 @@ public class Organizer {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
   @Column(name = "name", nullable = false)
   private String name;
+
   @Column(name = "district", nullable = false)
   private String district;
+
   @Column(name = "county", nullable = false)
   private String county;
+
   @Column(name = "city", nullable = false)
   private String city;
+
   @Convert(converter = OrganizerTypeConverter.class)
   @Column(name = "organizer_type", nullable = false)
   private OrganizerType organizerType;

@@ -17,6 +17,7 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.FileTypeConverter;
 import com.endurancetrio.data.model.enumerator.FileType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -35,18 +36,25 @@ public class EventFile {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+      CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
   @JoinColumn(name = "event_id", nullable = false)
   private Event event;
+
   @Column(name = "title", nullable = false)
   private String title;
+
   @Convert(converter = FileTypeConverter.class)
   @Column(name = "file_type", nullable = false)
   private FileType fileType;
+
   @Column(name = "file_name", nullable = false)
   private String fileName;
+
   @Column(name = "revision", nullable = false)
   private Integer revisionNumber;
+
   @Column(name = "is_active", nullable = false)
   private Boolean isActive;
 

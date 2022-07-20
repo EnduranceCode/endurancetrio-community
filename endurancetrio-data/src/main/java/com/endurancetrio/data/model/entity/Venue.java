@@ -29,12 +29,16 @@ public class Venue {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
   @Column(name = "district", nullable = false)
   private String district;
+
   @Column(name = "county", nullable = false)
   private String county;
+
   @Column(name = "city", nullable = false)
   private String city;
+
   @Column(name = "title", nullable = false)
   private String title;
 

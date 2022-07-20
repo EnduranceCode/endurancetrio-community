@@ -15,6 +15,7 @@
  */
 package com.endurancetrio.data.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,17 +33,24 @@ public class ResultsFile {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+
+  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+      CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
   @JoinColumn(name = "results_file_id", nullable = false)
   private Event event;
+
   @Column(name = "race_title", nullable = false)
   private String raceTitle;
+
   @Column(name = "competition_title", nullable = false)
   private String competitionTitle;
+
   @Column(name = "file_name", nullable = false)
   private String fileName;
+
   @Column(name = "revision", nullable = false)
   private Integer revisionNumber;
+
   @Column(name = "is_active", nullable = false)
   private Boolean isActive;
 

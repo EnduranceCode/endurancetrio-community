@@ -18,6 +18,7 @@ package com.endurancetrio.data.model.entity;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,18 +38,26 @@ public class Event {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
   @Column(name = "title", nullable = false)
   private String title;
+
   @Column(name = "start_date", nullable = false)
   private LocalDate startDate;
+
   @Column(name = "end_date", nullable = false)
   private LocalDate endDate;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+      CascadeType.REFRESH, CascadeType.DETACH})
   @JoinColumn(name = "venue_id")
   private Venue venue;
-  @ManyToMany(fetch = FetchType.LAZY)
+
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+      CascadeType.DETACH})
   @JoinTable(name = "event_organizer", joinColumns = {
-      @JoinColumn(name = "event_id")}, inverseJoinColumns = {@JoinColumn(name = "organizer_id")})
+      @JoinColumn(name = "event_id", referencedColumnName = "id")}, inverseJoinColumns = {
+      @JoinColumn(name = "organizer_id", referencedColumnName = "id")})
   private Set<Organizer> organizers = new HashSet<>();
 
   public Event() {
