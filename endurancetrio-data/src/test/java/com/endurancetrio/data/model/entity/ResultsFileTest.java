@@ -60,7 +60,6 @@ class ResultsFileTest {
     testEvent.setTitle("XVI Duatlo Jovem de Grândola");
     testEvent.setStartDate(LocalDate.parse("2010-03-07"));
     testEvent.setEndDate(LocalDate.parse("2010-03-08"));
-    testEvent.setVenue(testVenue);
     testEvent.setOrganizers(organizers);
 
     testResultsFile = new ResultsFile();

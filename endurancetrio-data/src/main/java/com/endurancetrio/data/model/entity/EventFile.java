@@ -29,12 +29,47 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * The {@link EventFile} entity represents a file with information (other than the race's results)
+ * concerning an {@link Event} or an event's race.
+ * <p>
+ * An {@link EventFile} can refer to the {@link Event event}'s guide, regulations, race courses or
+ * media images.
+ * <p>
+ * The {@link Event} defines the event that the file refers/belongs to.
+ * <p>
+ * The {@link FileType} defines the type of the {@link EventFile}.
+ * <p>
+ * The field {@link #getTitle() title} stores the file title that should describe the file's
+ * content.
+ * <p>
+ * The field {@link #getFileName() fileName} stores the file name and must be unique. It must also
+ * be written in small caps and must follow the format <b>aaaammdd-nnnnnn-fffii-vv.ext</b>, which
+ * will be enforced on the business layer of the application, and is described next:
+ * <ul>
+ *   <li><b>aaaa</b> is the year of the event's start date;</li>
+ *   <li><b>mm</b> is the month number of the event's start date;</li>
+ *   <li><b>dd</b> is the day of the event's start date;</li>
+ *   <li><b>nnnnnn</b> is the last six digits of the event's ID;</li>
+ *   <li><b>fff</b> is the file's type code;</li>
+ *   <li><b>ii</b> is the file's type sequence number;</li>
+ *   <li><b>vv</b> is the file's revision number;</li>
+ *   <li><b>ext</b> is the extension of the file which is determined by the file type.</li>
+ * </ul>
+ * <p>
+ * The field {@link #getRevisionNumber() revisionNumber} stores the revision number of the file and
+ * the first revision of each file must always be one.
+ * <p>
+ * The field {@link #getActive() isActive} is a flag that must be set to <i>true</i> for the file,
+ * referring to the same content, with the highest revision number. All other files of the same
+ * content must have this flag set to <i>false</i>.
+ */
 @Entity(name = "EventFile")
 @Table(name = "event_file")
 public class EventFile {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
@@ -42,14 +77,14 @@ public class EventFile {
   @JoinColumn(name = "event_id", nullable = false)
   private Event event;
 
-  @Column(name = "title", nullable = false)
-  private String title;
-
   @Convert(converter = FileTypeConverter.class)
   @Column(name = "file_type", nullable = false)
   private FileType fileType;
 
-  @Column(name = "file_name", nullable = false)
+  @Column(name = "title", nullable = false)
+  private String title;
+
+  @Column(name = "file_name", nullable = false, unique = true)
   private String fileName;
 
   @Column(name = "revision", nullable = false)
@@ -78,20 +113,20 @@ public class EventFile {
     this.event = event;
   }
 
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
   public FileType getFileType() {
     return fileType;
   }
 
   public void setFileType(FileType fileType) {
     this.fileType = fileType;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getFileName() {

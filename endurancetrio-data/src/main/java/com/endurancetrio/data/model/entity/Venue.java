@@ -22,6 +22,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * The {@link Venue} entity represents a venue of a race of an endurance sport event.
+ * <p>
+ * The field {@link #getTitle() title} stores the {@link Venue venue}'s title.
+ * <p>
+ * The {@link #getCity() city}, {@link #getCounty() county} and {@link #getDistrict() district}
+ * fields are used to store the city, county and district of the race's {@link Venue venue}.
+ */
 @Entity(name = "Venue")
 @Table(name = "venue")
 public class Venue {
@@ -29,6 +37,9 @@ public class Venue {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
+  @Column(name = "title", nullable = false)
+  private String title;
 
   @Column(name = "district", nullable = false)
   private String district;
@@ -38,9 +49,6 @@ public class Venue {
 
   @Column(name = "city", nullable = false)
   private String city;
-
-  @Column(name = "title", nullable = false)
-  private String title;
 
   public Venue() {
     super();

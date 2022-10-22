@@ -21,22 +21,32 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * The {@link Event} entity represents an endurance sport event that can have one or more endurance
+ * races.
+ * <p>
+ * The field {@link #getTitle() title} stores the event title.
+ * <p>
+ * An event can be held on a single day or span several days. The event's
+ * {@link  #getStartDate() startDate} is the start date of the event's first race and the event's
+ * {@link #getEndDate() endDate} is the end date of the event's last race.
+ * <p>
+ * An event can have one or multiple {@link Organizer organizers}.
+ */
 @Entity(name = "Event")
 @Table(name = "event")
 public class Event {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "title", nullable = false)
@@ -47,11 +57,6 @@ public class Event {
 
   @Column(name = "end_date", nullable = false)
   private LocalDate endDate;
-
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-      CascadeType.REFRESH, CascadeType.DETACH})
-  @JoinColumn(name = "venue_id")
-  private Venue venue;
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
       CascadeType.DETACH})
@@ -94,14 +99,6 @@ public class Event {
 
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
-  }
-
-  public Venue getVenue() {
-    return venue;
-  }
-
-  public void setVenue(Venue venue) {
-    this.venue = venue;
   }
 
   public Set<Organizer> getOrganizers() {

@@ -15,10 +15,37 @@
  */
 package com.endurancetrio.data.model.enumerator;
 
+/**
+ * The {@link FileType} enum defines the possible type classification of an
+ * {@link com.endurancetrio.data.model.entity.Event event}'s
+ * {@link com.endurancetrio.data.model.entity.EventFile file}.
+ * <p>
+ * The constant {@link #GUIDE} must be used for
+ * {@link com.endurancetrio.data.model.entity.EventFile files} that contains information and
+ * guidance for to the {@link com.endurancetrio.data.model.entity.Event event}.
+ * <p>
+ * The constant {@link #RULES} must be used for
+ * {@link com.endurancetrio.data.model.entity.EventFile files} that contains the regulations or
+ * rules of the {@link com.endurancetrio.data.model.entity.Event event}.
+ * <p>
+ * The constant {@link #MAP} must be used for
+ * {@link com.endurancetrio.data.model.entity.EventFile files} that contains maps or course maps of
+ * the {@link com.endurancetrio.data.model.entity.Event event}.
+ * <p>
+ * The constant {@link #COVER} must be used for
+ * {@link com.endurancetrio.data.model.entity.EventFile file} that contains the cover image of the
+ * {@link com.endurancetrio.data.model.entity.Event event}.
+ * <p>
+ * The constant {@link #POSTER} must be used for
+ * {@link com.endurancetrio.data.model.entity.EventFile file} that contains the poster image of the
+ * {@link com.endurancetrio.data.model.entity.Event event}.
+ */
 public enum FileType {
 
+  GUIDE("GUI"),
   RULES("RUL"),
-  COURSE_MAP("MAP"),
+  MAP("MAP"),
+  COVER("COV"),
   POSTER("POS");
 
   private final String code;

@@ -44,13 +44,12 @@ class EventFileTest {
     testEvent.setTitle("XVI Duatlo Jovem de Grândola");
     testEvent.setStartDate(LocalDate.parse("2010-03-07"));
     testEvent.setEndDate(LocalDate.parse("2010-03-08"));
-    testEvent.setVenue(testVenue);
 
     testEventFile = new EventFile();
     testEventFile.setId(1L);
     testEventFile.setEvent(testEvent);
-    testEventFile.setTitle("Regulamento");
     testEventFile.setFileType(FileType.RULES);
+    testEventFile.setTitle("Regulamento");
     testEventFile.setFileName("20100306FTP001-RUL001.pdf");
     testEventFile.setRevisionNumber(1);
     testEventFile.setActive(true);
@@ -67,13 +66,13 @@ class EventFileTest {
   }
 
   @Test
-  void getTitle() {
-    assertEquals("Regulamento", testEventFile.getTitle());
+  void getFileType() {
+    assertEquals(FileType.RULES, testEventFile.getFileType());
   }
 
   @Test
-  void getFileType() {
-    assertEquals(FileType.RULES, testEventFile.getFileType());
+  void getTitle() {
+    assertEquals("Regulamento", testEventFile.getTitle());
   }
 
   @Test

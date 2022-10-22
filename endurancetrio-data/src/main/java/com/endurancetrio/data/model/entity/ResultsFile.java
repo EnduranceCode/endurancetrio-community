@@ -26,17 +26,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * The {@link ResultsFile} entity represents the file with the results of a race that is part of an
+ * {@link Event event}.
+ * <p>
+ * The {@link Event} defines the event that includes the race results contained in the
+ * {@link ResultsFile}.
+ * <p>
+ * The field {@link #getRaceTitle() title} stores the race title that is related with the results
+ * included in the {@link ResultsFile}.
+ * <p>
+ * The field {@link #getCompetitionTitle() competitionTitle} stores the competition title that is
+ * related with the results included in the {@link ResultsFile}.
+ * <p>
+ * The field {@link #getFileName()  fileName} stores the name of the
+ * {@link ResultsFile results file}.
+ * <p>
+ * The field {@link #getRevisionNumber() revisionNumber} stores the revision number of the file and
+ * the first revision of each file must always be one.
+ * <p>
+ * The field {@link #getActive() isActive} is a flag that must be set to <i>true</i> for the file,
+ * referring to the same content, with the highest revision number. All other files of the same
+ * content must have this flag set to <i>false</i>.
+ */
 @Entity(name = "ResultsFile")
 @Table(name = "results_file")
 public class ResultsFile {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
       CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
-  @JoinColumn(name = "results_file_id", nullable = false)
+  @JoinColumn(name = "event_id", nullable = false)
   private Event event;
 
   @Column(name = "race_title", nullable = false)

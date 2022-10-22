@@ -28,15 +28,20 @@ class VenueTest {
   void setUp() {
     testVenue = new Venue();
     testVenue.setId(1L);
+    testVenue.setTitle("Complexo Desportivo Municipal José Afonso");
     testVenue.setDistrict("Setúbal");
     testVenue.setCounty("Grândola");
     testVenue.setCity("Grândola");
-    testVenue.setTitle("Complexo Desportivo Municipal José Afonso");
   }
 
   @Test
   void getId() {
     assertEquals(1L, testVenue.getId());
+  }
+
+  @Test
+  void getTitle() {
+    assertEquals("Complexo Desportivo Municipal José Afonso", testVenue.getTitle());
   }
 
   @Test
@@ -52,10 +57,5 @@ class VenueTest {
   @Test
   void getCity() {
     assertEquals("Grândola", testVenue.getCity());
-  }
-
-  @Test
-  void getTitle() {
-    assertEquals("Complexo Desportivo Municipal José Afonso", testVenue.getTitle());
   }
 }

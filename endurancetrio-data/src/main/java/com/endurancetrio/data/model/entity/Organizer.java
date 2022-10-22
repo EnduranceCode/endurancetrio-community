@@ -25,12 +25,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * The {@link Organizer} entity represents a single organizer of an endurance sport
+ * {@link Event event}.
+ * <p>
+ * The {@link #getName() name} field stores the name or designation of the {@link Event event}'s
+ * {@link Organizer organizer}.
+ * <p>
+ * The {@link #getCity() city}, {@link #getCounty() county} and {@link #getDistrict() district}
+ * fields are used to store the city, county and district of the {@link Event event}'s
+ * {@link Organizer organizer} headquarters.
+ * <p>
+ * The {@link OrganizerType} defines the type of the {@link Event event}'s
+ * {@link Organizer organizer}.
+ */
 @Entity(name = "Organizer")
 @Table(name = "organizer")
 public class Organizer {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "name", nullable = false)
