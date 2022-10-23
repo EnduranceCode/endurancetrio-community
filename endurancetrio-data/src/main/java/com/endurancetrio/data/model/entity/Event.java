@@ -15,6 +15,7 @@
  */
 package com.endurancetrio.data.model.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +44,9 @@ import javax.persistence.Table;
  */
 @Entity(name = "Event")
 @Table(name = "event")
-public class Event {
+public class Event implements Serializable {
+
+  private static final long serialVersionUID = 6502900944333782043L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

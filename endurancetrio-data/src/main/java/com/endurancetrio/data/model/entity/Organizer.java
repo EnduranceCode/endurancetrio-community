@@ -17,6 +17,7 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.OrganizerTypeConverter;
 import com.endurancetrio.data.model.enumerator.OrganizerType;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -41,7 +42,9 @@ import javax.persistence.Table;
  */
 @Entity(name = "Organizer")
 @Table(name = "organizer")
-public class Organizer {
+public class Organizer implements Serializable {
+
+  private static final long serialVersionUID = -526672915056670838L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

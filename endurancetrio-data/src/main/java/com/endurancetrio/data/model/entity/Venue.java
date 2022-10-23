@@ -15,6 +15,7 @@
  */
 package com.endurancetrio.data.model.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +33,9 @@ import javax.persistence.Table;
  */
 @Entity(name = "Venue")
 @Table(name = "venue")
-public class Venue {
+public class Venue implements Serializable {
+
+  private static final long serialVersionUID = 7978080716989864204L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

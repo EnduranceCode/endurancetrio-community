@@ -17,6 +17,7 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.FileTypeConverter;
 import com.endurancetrio.data.model.enumerator.FileType;
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -66,7 +67,9 @@ import javax.persistence.Table;
  */
 @Entity(name = "EventFile")
 @Table(name = "event_file")
-public class EventFile {
+public class EventFile implements Serializable {
+
+  private static final long serialVersionUID = 5079912795319022972L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

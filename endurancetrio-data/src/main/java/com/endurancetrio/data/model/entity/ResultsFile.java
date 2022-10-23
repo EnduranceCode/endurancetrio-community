@@ -15,6 +15,7 @@
  */
 package com.endurancetrio.data.model.entity;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +52,9 @@ import javax.persistence.Table;
  */
 @Entity(name = "ResultsFile")
 @Table(name = "results_file")
-public class ResultsFile {
+public class ResultsFile implements Serializable {
+
+  private static final long serialVersionUID = -4555604220978503175L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
