@@ -16,9 +16,9 @@
 package com.endurancetrio.data.model.converter;
 
 import com.endurancetrio.data.model.enumerator.OrganizerType;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import java.util.stream.Stream;
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 @Converter
 public class OrganizerTypeConverter implements AttributeConverter<OrganizerType, String> {

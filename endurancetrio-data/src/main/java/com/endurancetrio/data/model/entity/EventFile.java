@@ -17,18 +17,19 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.FileTypeConverter;
 import com.endurancetrio.data.model.enumerator.FileType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * The {@link EventFile} entity represents a file with information (other than the race's results)
@@ -69,7 +70,8 @@ import javax.persistence.Table;
 @Table(name = "event_file")
 public class EventFile implements Serializable {
 
-  private static final long serialVersionUID = 5079912795319022972L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

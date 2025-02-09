@@ -17,14 +17,15 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.OrganizerTypeConverter;
 import com.endurancetrio.data.model.enumerator.OrganizerType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * The {@link Organizer} entity represents a single organizer of an endurance sport
@@ -44,7 +45,8 @@ import javax.persistence.Table;
 @Table(name = "organizer")
 public class Organizer implements Serializable {
 
-  private static final long serialVersionUID = -526672915056670838L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,13 +15,14 @@
  */
 package com.endurancetrio.data.model.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * The {@link Venue} entity represents a venue of a race of an endurance sport event.
@@ -35,7 +36,8 @@ import javax.persistence.Table;
 @Table(name = "venue")
 public class Venue implements Serializable {
 
-  private static final long serialVersionUID = 7978080716989864204L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
