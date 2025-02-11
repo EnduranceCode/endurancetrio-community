@@ -23,70 +23,45 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit test for the {@link EventFile} entity.
+ * <p>
+ * This test may seem redundant since it only verify getters and setters, but its purpose is
+ * to establish a testing culture from the very beginning of the project. It serves as a reminder
+ * that every part of the application should be testable and that tests should always be present.
+ */
 class EventFileTest {
 
-  EventFile testEventFile;
+  EventFile underTest;
 
-  Venue testVenue;
   Event testEvent;
 
   @BeforeEach
   void setUp() {
-    testVenue = new Venue();
-    testVenue.setId(1L);
-    testVenue.setDistrict("Setúbal");
-    testVenue.setCounty("Grândola");
-    testVenue.setCity("Grândola");
-    testVenue.setTitle("Complexo Desportivo Municipal José Afonso");
-
     testEvent = new Event();
     testEvent.setId(1L);
     testEvent.setTitle("XVI Duatlo Jovem de Grândola");
     testEvent.setStartDate(LocalDate.parse("2010-03-07"));
     testEvent.setEndDate(LocalDate.parse("2010-03-08"));
 
-    testEventFile = new EventFile();
-    testEventFile.setId(1L);
-    testEventFile.setEvent(testEvent);
-    testEventFile.setFileType(FileType.RULES);
-    testEventFile.setTitle("Regulamento");
-    testEventFile.setFileName("20100306FTP001-RUL001.pdf");
-    testEventFile.setRevisionNumber(1);
-    testEventFile.setActive(true);
+    underTest = new EventFile();
+    underTest.setId(1L);
+    underTest.setEvent(testEvent);
+    underTest.setFileType(FileType.RULES);
+    underTest.setTitle("Regulamento");
+    underTest.setFileName("20100307FTP001-REG001.pdf");
+    underTest.setRevisionNumber(1);
+    underTest.setActive(true);
   }
 
   @Test
-  void getId() {
-    assertEquals(1L, testEventFile.getId());
-  }
-
-  @Test
-  void getEvent() {
-    assertEquals(testEvent, testEventFile.getEvent());
-  }
-
-  @Test
-  void getFileType() {
-    assertEquals(FileType.RULES, testEventFile.getFileType());
-  }
-
-  @Test
-  void getTitle() {
-    assertEquals("Regulamento", testEventFile.getTitle());
-  }
-
-  @Test
-  void getFileName() {
-    assertEquals("20100306FTP001-RUL001.pdf", testEventFile.getFileName());
-  }
-
-  @Test
-  void getRevisionNumber() {
-    assertEquals(1, testEventFile.getRevisionNumber());
-  }
-
-  @Test
-  void getActive() {
-    assertTrue(testEventFile.getActive());
+  void entityShouldRetainValues() {
+    assertEquals(1L, underTest.getId());
+    assertEquals(testEvent, underTest.getEvent());
+    assertEquals(FileType.RULES, underTest.getFileType());
+    assertEquals("Regulamento", underTest.getTitle());
+    assertEquals("20100307FTP001-REG001.pdf", underTest.getFileName());
+    assertEquals(1, underTest.getRevisionNumber());
+    assertTrue(underTest.getActive());
   }
 }

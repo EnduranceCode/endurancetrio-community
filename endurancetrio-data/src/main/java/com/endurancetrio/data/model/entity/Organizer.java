@@ -26,6 +26,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * The {@link Organizer} entity represents a single organizer of an endurance sport
@@ -118,5 +120,31 @@ public class Organizer implements Serializable {
 
   public void setOrganizerType(OrganizerType organizerType) {
     this.organizerType = organizerType;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Organizer organizer = (Organizer) o;
+    return Objects.equals(id, organizer.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Organizer.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("name='" + name + "'")
+        .add("district='" + district + "'")
+        .add("county='" + county + "'")
+        .add("city='" + city + "'")
+        .add("organizerType=" + organizerType)
+        .toString();
   }
 }

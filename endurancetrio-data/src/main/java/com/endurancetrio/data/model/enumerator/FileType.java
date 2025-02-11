@@ -15,38 +15,39 @@
  */
 package com.endurancetrio.data.model.enumerator;
 
+import com.endurancetrio.data.model.entity.Event;
+import com.endurancetrio.data.model.entity.EventFile;
+
 /**
- * The {@link FileType} enum defines the possible type classification of an
- * {@link com.endurancetrio.data.model.entity.Event event}'s
- * {@link com.endurancetrio.data.model.entity.EventFile file}.
+ * The {@link FileType} enum defines the possible type classification of an {@link Event event}'s
+ * {@link EventFile file}.
  * <p>
- * The constant {@link #GUIDE} must be used for
- * {@link com.endurancetrio.data.model.entity.EventFile files} that contains information and
- * guidance for to the {@link com.endurancetrio.data.model.entity.Event event}.
+ * The constant {@link #COURSE_MAPS} must be used for {@link EventFile files} that contains an
+ * {@link Event event}'s map or course map.
  * <p>
- * The constant {@link #RULES} must be used for
- * {@link com.endurancetrio.data.model.entity.EventFile files} that contains the regulations or
- * rules of the {@link com.endurancetrio.data.model.entity.Event event}.
+ * The constant {@link #COVER_IMAGE} must be used for {@link EventFile file} that contains an
+ * {@link Event event}'s the cover image.
  * <p>
- * The constant {@link #MAP} must be used for
- * {@link com.endurancetrio.data.model.entity.EventFile files} that contains maps or course maps of
- * the {@link com.endurancetrio.data.model.entity.Event event}.
+ * The constant {@link #GUIDE} must be used for {@link EventFile files} that contains information
+ * and guidance for to the {@link Event event}.
  * <p>
- * The constant {@link #COVER} must be used for
- * {@link com.endurancetrio.data.model.entity.EventFile file} that contains the cover image of the
- * {@link com.endurancetrio.data.model.entity.Event event}.
+ * The constant {@link #POSTER} must be used for {@link EventFile file} that contains an
+ * {@link Event event}'s poster image.
  * <p>
- * The constant {@link #POSTER} must be used for
- * {@link com.endurancetrio.data.model.entity.EventFile file} that contains the poster image of the
- * {@link com.endurancetrio.data.model.entity.Event event}.
+ * The constant {@link #RULES} must be used for {@link EventFile files} that contains an
+ * {@link Event event}'s regulations or rules.
+ * <p>
+ * The constant {@link #START_LIST} must be used for {@link EventFile files} that contains an
+ * {@link Event event}'s start list.
  */
 public enum FileType {
 
-  GUIDE("GUI"),
-  RULES("RUL"),
-  MAP("MAP"),
-  COVER("COV"),
-  POSTER("POS");
+  COURSE_MAPS("COURSE_MAPS"),
+  COVER_IMAGE("COVER_IMAGE"),
+  GUIDE("GUIDE"),
+  POSTER("POSTER"),
+  RULES("RULES"),
+  START_LIST("START_LIST"),;
 
   private final String code;
 

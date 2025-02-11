@@ -35,9 +35,9 @@ public class OrganizerTypeConverter implements AttributeConverter<OrganizerType,
   @Override
   public OrganizerType convertToEntityAttribute(String code) {
     return Stream.of(OrganizerType.values())
-                 .filter(organizerType -> organizerType.getCode().equals(code)).findFirst()
-                 .orElseThrow(() -> new IllegalArgumentException(
-                     String.format("The value '%s' returned from the database is not valid",
-                                   code)));
+        .filter(organizerType -> organizerType.getCode().equals(code))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+            String.format("The value '%s' returned from the database is not valid", code)));
   }
 }

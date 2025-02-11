@@ -27,23 +27,22 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit test for the {@link ResultsFileTest} entity.
+ * <p>
+ * This test may seem redundant since it only verify getters and setters, but its purpose is
+ * to establish a testing culture from the very beginning of the project. It serves as a reminder
+ * that every part of the application should be testable and that tests should always be present.
+ */
 class ResultsFileTest {
 
-  ResultsFile testResultsFile;
+  ResultsFile underTest;
 
-  Venue testVenue;
   Organizer testOrganizer;
   Event testEvent;
 
   @BeforeEach
   void setUp() {
-    testVenue = new Venue();
-    testVenue.setId(1L);
-    testVenue.setDistrict("Setúbal");
-    testVenue.setCounty("Grândola");
-    testVenue.setCity("Grândola");
-    testVenue.setTitle("Complexo Desportivo Municipal José Afonso");
-
     testOrganizer = new Organizer();
     testOrganizer.setId(1L);
     testOrganizer.setName("Câmara Municipal de Grândola");
@@ -62,49 +61,25 @@ class ResultsFileTest {
     testEvent.setEndDate(LocalDate.parse("2010-03-08"));
     testEvent.setOrganizers(organizers);
 
-    testResultsFile = new ResultsFile();
-    testResultsFile.setId(1L);
-    testResultsFile.setEvent(testEvent);
-    testResultsFile.setRaceTitle("XVI Duatlo Jovem de Grândola [Benjamins]");
-    testResultsFile.setCompetitionTitle("Absolutos Masculinos");
-    testResultsFile.setFileName("20100307FTP001-001-01.pdf");
-    testResultsFile.setRevisionNumber(1);
-    testResultsFile.setActive(true);
+    underTest = new ResultsFile();
+    underTest.setId(1L);
+    underTest.setEvent(testEvent);
+    underTest.setRaceTitle("XVI Duatlo Jovem de Grândola");
+    underTest.setCompetitionTitle("Benjamins Masculinos");
+    underTest.setFileName("20100307FTP001-001A-01.pdf");
+    underTest.setRevisionNumber(1);
+    underTest.setActive(true);
   }
 
   @Test
-  void getId() {
-    assertEquals(1L, testResultsFile.getId());
-  }
-
-  @Test
-  void getEvent() {
-    assertNotNull(testResultsFile.getEvent());
-    assertEquals(1L, testResultsFile.getEvent().getId());
-  }
-
-  @Test
-  void getRaceTitle() {
-    assertEquals("XVI Duatlo Jovem de Grândola [Benjamins]", testResultsFile.getRaceTitle());
-  }
-
-  @Test
-  void getCompetitionTitle() {
-    assertEquals("Absolutos Masculinos", testResultsFile.getCompetitionTitle());
-  }
-
-  @Test
-  void getFileName() {
-    assertEquals("20100307FTP001-001-01.pdf", testResultsFile.getFileName());
-  }
-
-  @Test
-  void getRevisionNumber() {
-    assertEquals(1, testResultsFile.getRevisionNumber());
-  }
-
-  @Test
-  void getActive() {
-    assertTrue(testResultsFile.getActive());
+  void entityShouldRetainValues() {
+    assertEquals(1L, underTest.getId());
+    assertNotNull(underTest.getEvent());
+    assertEquals(1L, underTest.getEvent().getId());
+    assertEquals("XVI Duatlo Jovem de Grândola", underTest.getRaceTitle());
+    assertEquals("Benjamins Masculinos", underTest.getCompetitionTitle());
+    assertEquals("20100307FTP001-001A-01.pdf", underTest.getFileName());
+    assertEquals(1, underTest.getRevisionNumber());
+    assertTrue(underTest.getActive());
   }
 }

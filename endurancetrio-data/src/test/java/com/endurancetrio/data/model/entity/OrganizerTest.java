@@ -21,48 +21,35 @@ import com.endurancetrio.data.model.enumerator.OrganizerType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit test for the {@link Organizer} entity.
+ * <p>
+ * This test may seem redundant since it only verify getters and setters, but its purpose is
+ * to establish a testing culture from the very beginning of the project. It serves as a reminder
+ * that every part of the application should be testable and that tests should always be present.
+ */
 class OrganizerTest {
 
-  Organizer testOrganizer;
+  Organizer underTest;
 
   @BeforeEach
   void setUp() {
-    testOrganizer = new Organizer();
-    testOrganizer.setId(1L);
-    testOrganizer.setName("Câmara Municipal de Grândola");
-    testOrganizer.setDistrict("Setúbal");
-    testOrganizer.setCounty("Grândola");
-    testOrganizer.setCity("Grândola");
-    testOrganizer.setOrganizerType(OrganizerType.PUBLIC);
+    underTest = new Organizer();
+    underTest.setId(1L);
+    underTest.setName("Câmara Municipal de Grândola");
+    underTest.setDistrict("Setúbal");
+    underTest.setCounty("Grândola");
+    underTest.setCity("Grândola");
+    underTest.setOrganizerType(OrganizerType.PUBLIC);
   }
 
   @Test
-  void getId() {
-    assertEquals(1L, testOrganizer.getId());
-  }
-
-  @Test
-  void getName() {
-    assertEquals("Câmara Municipal de Grândola", testOrganizer.getName());
-  }
-
-  @Test
-  void getDistrict() {
-    assertEquals("Setúbal", testOrganizer.getDistrict());
-  }
-
-  @Test
-  void getCounty() {
-    assertEquals("Grândola", testOrganizer.getCounty());
-  }
-
-  @Test
-  void getCity() {
-    assertEquals("Grândola", testOrganizer.getCity());
-  }
-
-  @Test
-  void getOrganizerType() {
-    assertEquals(OrganizerType.PUBLIC, testOrganizer.getOrganizerType());
+  void entityShouldRetainValues() {
+    assertEquals(1L, underTest.getId());
+    assertEquals("Câmara Municipal de Grândola", underTest.getName());
+    assertEquals("Setúbal", underTest.getDistrict());
+    assertEquals("Grândola", underTest.getCounty());
+    assertEquals("Grândola", underTest.getCity());
+    assertEquals(OrganizerType.PUBLIC, underTest.getOrganizerType());
   }
 }

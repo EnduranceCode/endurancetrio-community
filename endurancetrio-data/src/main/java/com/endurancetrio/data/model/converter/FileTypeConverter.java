@@ -35,9 +35,8 @@ public class FileTypeConverter implements AttributeConverter<FileType, String> {
   @Override
   public FileType convertToEntityAttribute(String code) {
     return Stream.of(FileType.values()).filter(fileType -> fileType.getCode().equals(code))
-                 .findFirst()
-                 .orElseThrow(() -> new IllegalArgumentException(
-                     String.format("The value '%s' returned from the database is not valid",
-                                   code)));
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+            String.format("The value '%s' returned from the database is not valid", code)));
   }
 }

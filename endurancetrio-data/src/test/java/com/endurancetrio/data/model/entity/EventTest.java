@@ -20,31 +20,31 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.endurancetrio.data.model.enumerator.FileType;
 import com.endurancetrio.data.model.enumerator.OrganizerType;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit test for the {@link Event} entity.
+ * <p>
+ * This test may seem redundant since it only verify getters and setters, but its purpose is
+ * to establish a testing culture from the very beginning of the project. It serves as a reminder
+ * that every part of the application should be testable and that tests should always be present.
+ */
 class EventTest {
 
-  Event testEvent;
+  Event underTest;
 
-  Venue testVenue;
   Organizer firstTestOrganizer;
   Organizer secondTestOrganizer;
   Organizer thirdTestOrganizer;
+  EventFile testEventFile;
 
   @BeforeEach
   void setUp() {
-    testVenue = new Venue();
-    testVenue.setId(1L);
-    testVenue.setDistrict("Setúbal");
-    testVenue.setCounty("Grândola");
-    testVenue.setCity("Grândola");
-    testVenue.setTitle("Complexo Desportivo Municipal José Afonso");
-
     firstTestOrganizer = new Organizer();
     firstTestOrganizer.setId(1L);
     firstTestOrganizer.setName("Câmara Municipal de Grândola");
@@ -63,52 +63,55 @@ class EventTest {
 
     thirdTestOrganizer = new Organizer();
     thirdTestOrganizer.setId(3L);
-    thirdTestOrganizer.setName("Federação de Tratlo de Portugal");
+    thirdTestOrganizer.setName("Federação de Triatlo de Portugal");
     thirdTestOrganizer.setDistrict("Lisboa");
     thirdTestOrganizer.setCounty("Oeiras");
     thirdTestOrganizer.setCity("Caxias");
     thirdTestOrganizer.setOrganizerType(OrganizerType.PUBLIC);
 
-    Set<Organizer> organizers = new HashSet<>();
-    organizers.add(firstTestOrganizer);
-    organizers.add(secondTestOrganizer);
-    organizers.add(thirdTestOrganizer);
+    Set<Organizer> organizers = Set.of(firstTestOrganizer, secondTestOrganizer, thirdTestOrganizer);
 
-    testEvent = new Event();
-    testEvent.setId(1L);
-    testEvent.setTitle("XVI Duatlo Jovem de Grândola");
-    testEvent.setStartDate(LocalDate.parse("2010-03-07"));
-    testEvent.setEndDate(LocalDate.parse("2010-03-08"));
-    testEvent.setOrganizers(organizers);
+    testEventFile = new EventFile();
+    testEventFile.setId(1L);
+    testEventFile.setFileType(FileType.RULES);
+    testEventFile.setTitle("Regulamento");
+    testEventFile.setFileName("20100307FTP001-REG001.pdf");
+    testEventFile.setRevisionNumber(1);
+    testEventFile.setActive(true);
+
+    underTest = new Event();
+    underTest.setId(1L);
+    underTest.setEventReference("20100307FTP001");
+    underTest.setTitle("XVI Duatlo Jovem de Grândola");
+    underTest.setStartDate(LocalDate.parse("2010-03-07"));
+    underTest.setEndDate(LocalDate.parse("2010-03-08"));
+    underTest.setDistrict("Setúbal");
+    underTest.setCounty("Grândola");
+    underTest.setCity("Grândola");
+    underTest.setOrganizers(organizers);
+    underTest.setEventFiles(Set.of(testEventFile));
+
+    testEventFile.setEvent(underTest);
   }
 
   @Test
-  void getId() {
-    assertEquals(1L, testEvent.getId());
-  }
-
-  @Test
-  void getTitle() {
-    assertEquals("XVI Duatlo Jovem de Grândola", testEvent.getTitle());
-  }
-
-  @Test
-  void getStartDate() {
-    assertEquals(LocalDate.parse("2010-03-07"), testEvent.getStartDate());
-  }
-
-  @Test
-  void getEndDate() {
-    assertEquals(LocalDate.parse("2010-03-08"), testEvent.getEndDate());
-  }
-
-  @Test
-  void getOrganizers() {
-    assertNotNull(testEvent.getOrganizers());
-    assertFalse(testEvent.getOrganizers().isEmpty());
-    assertTrue(testEvent.getOrganizers().contains(firstTestOrganizer));
-    assertTrue(testEvent.getOrganizers().contains(secondTestOrganizer));
-    assertTrue(testEvent.getOrganizers().contains(thirdTestOrganizer));
-    assertEquals(3, testEvent.getOrganizers().size());
+  void entityShouldRetainValues() {
+    assertEquals(1L, underTest.getId());
+    assertEquals("20100307FTP001", underTest.getEventReference());
+    assertEquals("XVI Duatlo Jovem de Grândola", underTest.getTitle());
+    assertEquals(LocalDate.parse("2010-03-07"), underTest.getStartDate());
+    assertEquals(LocalDate.parse("2010-03-08"), underTest.getEndDate());
+    assertEquals("Setúbal", underTest.getDistrict());
+    assertEquals("Grândola", underTest.getCounty());
+    assertEquals("Grândola", underTest.getCity());
+    assertNotNull(underTest.getOrganizers());
+    assertFalse(underTest.getOrganizers().isEmpty());
+    assertTrue(underTest.getOrganizers().contains(firstTestOrganizer));
+    assertTrue(underTest.getOrganizers().contains(secondTestOrganizer));
+    assertTrue(underTest.getOrganizers().contains(thirdTestOrganizer));
+    assertEquals(3, underTest.getOrganizers().size());
+    assertNotNull(underTest.getEventFiles());
+    assertFalse(underTest.getEventFiles().isEmpty());
+    assertEquals(1, underTest.getEventFiles().size());
   }
 }

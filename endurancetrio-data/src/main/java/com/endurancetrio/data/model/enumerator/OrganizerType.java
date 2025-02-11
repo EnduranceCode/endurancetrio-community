@@ -15,24 +15,24 @@
  */
 package com.endurancetrio.data.model.enumerator;
 
+import com.endurancetrio.data.model.entity.Event;
+import com.endurancetrio.data.model.entity.Organizer;
+
 /**
- * The {@link OrganizerType} enum holds the possible type classification of an
- * {@link com.endurancetrio.data.model.entity.Event event}'s
- * {@link com.endurancetrio.data.model.entity.Organizer organizer}.
+ * The {@link OrganizerType} enum holds the possible type classification of an {@link Event event}'s
+ * {@link Organizer organizer}.
+ * <p>
+ * The constant {@link #CLUB} must be used for {@link Organizer organizers} that are a sport club.
+ * <p>
+ * The constant {@link #PRIVATE} must be used for private {@link Organizer organizers}.
  * <p>
  * The constant {@link #PUBLIC} must be used for public or governmental
- * {@link com.endurancetrio.data.model.entity.Organizer organizers}.
- * <p>
- * The constant {@link #CLUB} must be used for
- * {@link com.endurancetrio.data.model.entity.Organizer organizers} that are a sport club.
- * <p>
- * The constant {@link #PRIVATE} must be used for private
- * {@link com.endurancetrio.data.model.entity.Organizer organizers}.
+ * {@link Organizer organizers}.
  */
 public enum OrganizerType {
-  PUBLIC("PUBLIC"),
   CLUB("CLUB"),
-  PRIVATE("PRIVATE");
+  PRIVATE("PRIVATE"),
+  PUBLIC("PUBLIC");
 
   final String code;
 
