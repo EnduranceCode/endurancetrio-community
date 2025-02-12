@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2022 Ricardo do Canto
+ * Copyright (c) 2011-2025 Ricardo do Canto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,8 +85,8 @@ public class EventFile implements Serializable {
   @Column(name = "title", nullable = false)
   private String title;
 
-  @Convert(converter = FileTypeConverter.class)
   @Column(name = "file_type", nullable = false)
+  @Convert(converter = FileTypeConverter.class)
   private FileType fileType;
 
   @Column(name = "file_name", nullable = false, unique = true)
@@ -176,7 +176,7 @@ public class EventFile implements Serializable {
   public String toString() {
     return new StringJoiner(", ", EventFile.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("event=" + event)
+        .add("event=" + (event != null ? event.getId() : null))
         .add("title='" + title + "'")
         .add("fileType=" + fileType)
         .add("fileName='" + fileName + "'")

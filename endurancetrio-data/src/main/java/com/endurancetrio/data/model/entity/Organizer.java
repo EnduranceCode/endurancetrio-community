@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2022 Ricardo do Canto
+ * Copyright (c) 2011-2025 Ricardo do Canto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,8 @@ public class Organizer implements Serializable {
   @Column(name = "city", nullable = false)
   private String city;
 
-  @Convert(converter = OrganizerTypeConverter.class)
   @Column(name = "organizer_type", nullable = false)
+  @Convert(converter = OrganizerTypeConverter.class)
   private OrganizerType organizerType;
 
   public Organizer() {

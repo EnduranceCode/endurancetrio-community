@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2022 Ricardo do Canto
+ * Copyright (c) 2011-2025 Ricardo do Canto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ import java.util.StringJoiner;
  * The field {@link #getTitle() title} stores the event title.
  * <p>
  * An event can be held on a single day or span several days. The event's
- * {@link  #getStartDate() startDate} is the start date of the event's first race and the event's
+ * {@link #getStartDate() startDate} is the start date of the event's first race and the event's
  * {@link #getEndDate() endDate} is the end date of the event's last race.
  * <p>
  * An event can have one or multiple {@link Organizer organizers} and zero or multiple
@@ -102,23 +102,32 @@ public class Event implements Serializable {
       joinColumns = {@JoinColumn(name = "event_id", referencedColumnName = "id")},
       inverseJoinColumns = {@JoinColumn(name = "organizer_id", referencedColumnName = "id")}
   )
-  private Set<Organizer> organizers = new HashSet<>();
+  private Set<Organizer> organizers;
 
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
   private Set<EventFile> eventFiles;
+
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+  private Set<Course> courses;
+
+  public Event() {
+    super();
+    this.organizers = new HashSet<>();
+    this.eventFiles = new HashSet<>();
+    this.courses = new HashSet<>();
+  }
 
   @AssertTrue(message = "Start date must be before or equal to end date")
   private boolean isValidDateRange() {
     return startDate != null && endDate != null && !startDate.isAfter(endDate);
   }
 
-  public Event() {
-    super();
-    this.organizers = new HashSet<>();
-  }
-
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getEventReference() {
@@ -127,10 +136,6 @@ public class Event implements Serializable {
 
   public void setEventReference(String eventReference) {
     this.eventReference = eventReference;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getTitle() {
@@ -195,6 +200,14 @@ public class Event implements Serializable {
 
   public void setEventFiles(Set<EventFile> eventFiles) {
     this.eventFiles = eventFiles;
+  }
+
+  public Set<Course> getCourses() {
+    return courses;
+  }
+
+  public void setCourses(Set<Course> courses) {
+    this.courses = courses;
   }
 
   @Override

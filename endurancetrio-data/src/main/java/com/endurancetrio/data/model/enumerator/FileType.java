@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2022 Ricardo do Canto
+ * Copyright (c) 2011-2025 Ricardo do Canto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,26 +19,36 @@ import com.endurancetrio.data.model.entity.Event;
 import com.endurancetrio.data.model.entity.EventFile;
 
 /**
- * The {@link FileType} enum defines the possible type classification of an {@link Event event}'s
- * {@link EventFile file}.
+ * The {@link FileType} enum is used to classify the type of file that is associated with an
+ * {@link Event event}.
  * <p>
- * The constant {@link #COURSE_MAPS} must be used for {@link EventFile files} that contains an
- * {@link Event event}'s map or course map.
- * <p>
- * The constant {@link #COVER_IMAGE} must be used for {@link EventFile file} that contains an
- * {@link Event event}'s the cover image.
- * <p>
- * The constant {@link #GUIDE} must be used for {@link EventFile files} that contains information
- * and guidance for to the {@link Event event}.
- * <p>
- * The constant {@link #POSTER} must be used for {@link EventFile file} that contains an
- * {@link Event event}'s poster image.
- * <p>
- * The constant {@link #RULES} must be used for {@link EventFile files} that contains an
- * {@link Event event}'s regulations or rules.
- * <p>
- * The constant {@link #START_LIST} must be used for {@link EventFile files} that contains an
- * {@link Event event}'s start list.
+ * It includes the following types:
+ * <ul>
+ *   <li>
+ *     {@link #COURSE_MAPS} : used for {@link EventFile files} that contains
+ *     an {@link Event event}'s map or course map;
+ *   </li>
+ *   <li>
+ *     {@link #COVER_IMAGE} : used for {@link EventFile file} that contains an {@link Event event}'s
+ *     cover image;
+ *   </li>
+ *   <li>
+ *     {@link #GUIDE} : used for {@link EventFile files} that contains information and guidance
+ *     about the {@link Event event};
+ *   </li>
+ *   <li>
+ *     {@link #POSTER} : used for {@link EventFile file} that contains an {@link Event event}'s
+ *     poster image;
+ *   </li>
+ *   <li>
+ *     {@link #RULES} : used for {@link EventFile files} that contains an {@link Event event}'s
+ *     regulations or rules;
+ *   </li>
+ *   <li>
+ *     {@link #START_LIST} : used for {@link EventFile files} that contains an {@link Event event}'s
+ *     start list;
+ *   </li>
+ * </ul>
  */
 public enum FileType {
 
@@ -47,7 +57,7 @@ public enum FileType {
   GUIDE("GUIDE"),
   POSTER("POSTER"),
   RULES("RULES"),
-  START_LIST("START_LIST"),;
+  START_LIST("START_LIST");
 
   private final String code;
 
@@ -57,5 +67,10 @@ public enum FileType {
 
   public String getCode() {
     return this.code;
+  }
+
+  @Override
+  public String toString() {
+    return code;
   }
 }

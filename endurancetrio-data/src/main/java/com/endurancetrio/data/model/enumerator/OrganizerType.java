@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2022 Ricardo do Canto
+ * Copyright (c) 2011-2025 Ricardo do Canto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ import com.endurancetrio.data.model.entity.Event;
 import com.endurancetrio.data.model.entity.Organizer;
 
 /**
- * The {@link OrganizerType} enum holds the possible type classification of an {@link Event event}'s
+ * The {@link OrganizerType} enum is used to classify the type of {@link Event event}'s
  * {@link Organizer organizer}.
  * <p>
- * The constant {@link #CLUB} must be used for {@link Organizer organizers} that are a sport club.
- * <p>
- * The constant {@link #PRIVATE} must be used for private {@link Organizer organizers}.
- * <p>
- * The constant {@link #PUBLIC} must be used for public or governmental
- * {@link Organizer organizers}.
+ * It includes the following types:
+ * <ul>
+ *   <li>{@link #CLUB} : used for {@link Organizer organizers} that are a sport club;</li>
+ *   <li>{@link #PRIVATE} : used for private {@link Organizer organizers};</li>
+ *   <li>{@link #PUBLIC} : used for public or governmental {@link Organizer organizers};</li>
+ * </ul>
  */
 public enum OrganizerType {
   CLUB("CLUB"),
@@ -41,6 +41,11 @@ public enum OrganizerType {
   }
 
   public String getCode() {
+    return code;
+  }
+
+  @Override
+  public String toString() {
     return code;
   }
 }
