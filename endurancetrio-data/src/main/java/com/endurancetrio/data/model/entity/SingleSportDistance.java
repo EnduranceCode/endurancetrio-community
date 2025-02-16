@@ -27,9 +27,9 @@ import java.util.StringJoiner;
 
 /**
  * The {@link SingleSportDistance} entity extends the {@link Distance} entity and represents the
- * data of a {@link Course}'s single {@link Sport} {@link Distance}.
+ * data of a single {@link Sport} {@link Course}'s {@link Distance}.
  * <p>
- * Besides the fields inherited from the {@link Distance}, the {@link SingleSportDistance}'s
+ * Besides the fields inherited from {@link Distance}, the {@link SingleSportDistance}'s
  * fields are defined as follows:
  * <ul>
  *   <li>{@link #getDistance() distance} : the distance, in meters, of the {@link Course}.</li>

@@ -27,9 +27,9 @@ import java.util.StringJoiner;
 
 /**
  * The {@link AquathlonDistance} entity extends the {@link Distance} entity and represents the data
- * of a {@link Course}'s {@link Sport#AQUATHLON} {@link Distance}.
+ * of a {@link Sport#AQUATHLON Aquathlon} {@link Course}'s {@link Distance}.
  * <p>
- * Besides the fields inherited from the {@link Distance}, the {@link AquathlonDistance}'s
+ * Besides the fields inherited from {@link Distance}, the {@link AquathlonDistance}'s
  * fields are defined as follows:
  * <ul>
  *   <li>

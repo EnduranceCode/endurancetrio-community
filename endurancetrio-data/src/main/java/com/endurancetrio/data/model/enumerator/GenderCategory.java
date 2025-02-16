@@ -22,7 +22,7 @@ import com.endurancetrio.data.model.entity.Race;
  * <p>
  * It includes the following constants:
  * <ul>
- *   <li>{@link #OPEN} : used for the {@link Race races} that ate open for both genders.</li>
+ *   <li>{@link #OPEN} : used for the {@link Race races} that are open for both genders.</li>
  *   <li>{@link #FEMALE} : used for the {@link Race races} where only women can participate.</li>
  *   <li>{@link #MALE} : used for the {@link Race races} where only men can participate.</li>
  *   <li>
