@@ -33,15 +33,22 @@ import java.util.StringJoiner;
  * The {@link Organizer} entity represents a single organizer of an endurance sport
  * {@link Event event}.
  * <p>
- * The {@link #getName() name} field stores the name or designation of the {@link Event event}'s
- * {@link Organizer organizer}.
- * <p>
- * The {@link #getCity() city}, {@link #getCounty() county} and {@link #getDistrict() district}
- * fields are used to store the city, county and district of the {@link Event event}'s
- * {@link Organizer organizer} headquarters.
- * <p>
- * The {@link OrganizerType} defines the type of the {@link Event event}'s
- * {@link Organizer organizer}.
+ * The {@link Organizer}'s fields are defined as follows:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier of the {@link Organizer} that is automatically
+ *     generated and is the primary key.
+ *   </li>
+ *   <li>{@link #getName() name} : the name or designation of the {@link Organizer organizer}.</li>
+ *   <li>
+ *     {@link #getDistrict() district} : the district of the {@link Organizer organizer} headquarters.
+ *   </li>
+ *   <li>
+ *     {@link #getCounty() county} : the county of the {@link Organizer organizer} headquarters.
+ *   </li>
+ *   <li>{@link #getCity() city} : the city of the {@link Organizer organizer} headquarters.</li>
+ *   <li>{@link #getOrganizerType() organizerType} : the {@link OrganizerType type}.</li>
+ * </ul>
  */
 @Entity(name = "Organizer")
 @Table(name = "organizer")
@@ -70,6 +77,9 @@ public class Organizer implements Serializable {
   @Convert(converter = OrganizerTypeConverter.class)
   private OrganizerType organizerType;
 
+  /**
+   * Default constructor for the {@link Organizer} entity.
+   */
   public Organizer() {
     super();
   }

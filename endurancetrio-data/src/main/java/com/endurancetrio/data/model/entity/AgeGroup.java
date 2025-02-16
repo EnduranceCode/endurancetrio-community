@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * The {@link AgeGroup} entity represents the allowed participants age group category allowed to
+ * The {@link AgeGroup} entity represents the participants age group category allowed to
  * enter a {@link Race}.
  * <p>
  * The {@link AgeGroup}'s fields are defined as follows:

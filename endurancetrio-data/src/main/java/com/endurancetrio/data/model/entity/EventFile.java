@@ -41,29 +41,37 @@ import java.util.StringJoiner;
  * An {@link EventFile} can refer to the {@link Event event}'s guide, regulations, courses or media
  * images.
  * <p>
- * The {@link Event} defines the event that the file refers/belongs to.
- * <p>
- * The {@link FileType} defines the type of the {@link EventFile}.
- * <p>
- * The field {@link #getTitle() title} stores the file title that should describe the file's
- * content.
- * <p>
- * The field {@link #getFileName() fileName} value has exactly 24 characters and is in the format
- * YYYYMMDDXXXNNN-TTTYYY-VV.ext. In this format ""YYYYMMDDXXXNNN"" corresponds to the
- * {@link Event}'s {@link Event#getEventReference()}, "TTT", written in upper case, corresponds to
- * the document type ("GDE" for guides, "REG" for Regulations, "MAP" for course maps, "IMG" for
- * images and "STL" for start lists), "YYY" is the document's order number (in the case where there
- * are, for example, different regulations in the same event: middle distance regulations and full
- * distance regulations), "VV" corresponds to the document's revision number (the first revision
- * always has the number 01) and "ext" corresponds to the file extension (always in lower case
- * letters).
- * <p>
- * The field {@link #getRevisionNumber() revisionNumber} stores the revision number of the file and
- * the first revision of each file must always be one.
- * <p>
- * The field {@link #getActive() isActive} is a flag that must be set to <i>true</i> for the file,
- * referring to the same content, with the highest revision number. All other files of the same
- * content must have this flag set to <i>false</i>.
+ * The {@link EventFile}'s fields are defined as follows:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier of the {@link Event} that
+ *     is automatically generated and is the primary key.
+ *   </li>
+ *   <li>{@link #getEvent() event} : the {@link Event} that the {@link EventFile} belongs to.</li>
+ *   <li>{@link #getTitle() title} : the title of the file that should describe the file's content.</li>
+ *   <li>{@link #getFileType() fileType} : the {@link FileType type} of the {@link EventFile}.</li>
+ *   <li>
+ *     {@link #getFileName() fileName} : the {@link EventFile file} name that has exactly
+ *     24 characters and is in the format YYYYMMDDXXXNNN-TTTYYY-VV.ext. In this format,
+ *     "YYYYMMDDXXXNNN" corresponds to the {@link Event}'s {@link Event#getEventReference()},
+ *     "TTT", written in upper case letters, corresponds to the document type
+ *     ("GDE" for guides, "REG" for Regulations, "MAP" for course maps, "IMG" for images
+ *     and "STL" for start lists), "YYY" is the document's order number (in the cases where
+ *     there are, for example, different regulations in the same event: middle distance regulations
+ *     and full distance regulations), "VV" corresponds to the document's revision number
+ *     (the first revision always starts at "01") and "ext" corresponds to the file extension
+ *     (always in lower case letters).
+ *   </li>
+ *   <li>
+ *     {@link #getRevisionNumber() revisionNumber} : the revision number
+ *     of the {@link EventFile file}. The first revision always starts at "01".
+ *   </li>
+ *   <li>
+ *     {@link #getActive() isActive} : flag that indicates the most recent version
+ *     of a {@link EventFile}. It is set to <i>true</i> for the file with the highest
+ *     {@link #getRevisionNumber() revisionNumber} and <i>false</i> for all previous versions.
+ *   </li>
+ * </ul>
  */
 @Entity(name = "EventFile")
 @Table(name = "event_file")
@@ -99,6 +107,9 @@ public class EventFile implements Serializable {
   @Column(name = "is_active", nullable = false)
   private Boolean isActive;
 
+  /**
+   * Default constructor for the {@link EventFile} entity.
+   */
   public EventFile() {
     super();
   }

@@ -59,7 +59,7 @@ import java.util.StringJoiner;
  *     unambiguously differentiated.
  *   </li>
  *   <li>
- *     {@link #getSport() sport} : the type of sport that the {@link Course} is used for.
+ *     {@link #getSport() sport} : the {@link Sport sport} that the {@link Course} is used for.
  *   </li>
  *   <li>
  *     {@link #getDistance() distance} : the data that defines

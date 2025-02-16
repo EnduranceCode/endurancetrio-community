@@ -35,7 +35,7 @@ import java.util.StringJoiner;
 /**
  * The {@link ResultsFile} entity represents a file storing the official results of a {@link Race}.
  * <p>
- * The fields of the entity are:
+ * The {@link ResultsFile}'s fields are defined as follows:
  * <ul>
  *   <li>
  *     {@link #getId() id} : the unique identifier of the {@link ResultsFile} that is automatically
@@ -115,6 +115,9 @@ public class ResultsFile implements Serializable {
   @Column(name = "is_active", nullable = false)
   private Boolean isActive;
 
+  /**
+   * Default constructor for the {@link ResultsFile} entity.
+   */
   public ResultsFile() {
     super();
   }
