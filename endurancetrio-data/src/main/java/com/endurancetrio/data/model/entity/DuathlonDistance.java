@@ -22,6 +22,7 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -29,30 +30,31 @@ import java.util.StringJoiner;
  * of a {@link Course}'s {@link Sport#DUATHLON} and/or a {@link Sport#CROSS_DUATHLON}
  * {@link Distance}.
  * <p>
- * The {@link DuathlonDistance}'s fields are defined as follows:
+ * Besides the fields inherited from the {@link Distance}, the {@link DuathlonDistance}'s
+ * fields are defined as follows:
  * <ul>
  *   <li>
- *     {@link #getFirstRunDistance() firstRundDistance} - the distance, in meters,
- *     of the first run leg of the {@link Course}
+ *     {@link #getFirstRunDistance() firstRundDistance} : the distance, in meters,
+ *     of the first run leg of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getFirstRunLaps() firstRunLaps} - the number of laps that the first run distance
- *     is divided into
+ *     {@link #getFirstRunLaps() firstRunLaps} : the number of laps that the first run distance
+ *     is divided into.
  *   </li>
  *   <li>
- *     {@link #getBikeDistance() bikeDistance} - the distance, in meters, of the bike leg
- *     of the {@link Course}
+ *     {@link #getBikeDistance() bikeDistance} : the distance, in meters, of the bike leg
+ *     of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getBikeLaps() bikeLaps} - the number of laps that the bike distance is divided into
+ *     {@link #getBikeLaps() bikeLaps} : the number of laps that the bike distance is divided into.
  *   </li>
  *   <li>
  *     {@link #getSecondRunDistance() secondRunDistance} - the distance, in meters,
- *     of the second run leg of the {@link Course}
+ *     of the second run leg of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getSecondRunLaps() runLaps} - the number of laps that the second run distance
- *     is divided into
+ *     {@link #getSecondRunLaps() runLaps} : the number of laps that the second run distance
+ *     is divided into.
  *   </li>
  * </ul>
  */
@@ -81,6 +83,9 @@ public class DuathlonDistance extends Distance implements Serializable {
   @Column(name = "second_run_laps")
   private Integer secondRunLaps;
 
+  /**
+   * Default constructor for the {@link DuathlonDistance} entity.
+   */
   public DuathlonDistance() {
     super();
   }
@@ -135,6 +140,9 @@ public class DuathlonDistance extends Distance implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
@@ -142,7 +150,7 @@ public class DuathlonDistance extends Distance implements Serializable {
       return false;
     }
     DuathlonDistance that = (DuathlonDistance) o;
-    return Objects.equals(super.getId(), that.getId());
+    return super.getId() != null && Objects.equals(super.getId(), that.getId());
   }
 
   @Override
@@ -154,7 +162,7 @@ public class DuathlonDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", DuathlonDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("course=" + (super.getCourse() != null ? super.getCourse().getId() : null))
+        .add("courseId=" + Optional.ofNullable(super.getCourse()).map(Course::getId).orElse(null))
         .add("type=" + super.getType())
         .add("firstRunDistance=" + firstRunDistance)
         .add("firstRunLaps=" + firstRunLaps)

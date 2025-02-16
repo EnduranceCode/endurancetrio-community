@@ -16,9 +16,11 @@
 package com.endurancetrio.data.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.endurancetrio.data.model.enumerator.DistanceType;
 import com.endurancetrio.data.model.enumerator.Sport;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +37,7 @@ class CourseTest {
 
   private Event testEvent;
   private DuathlonDistance testDistance;
+  private Race testRace;
 
   @BeforeEach
   void setUp() {
@@ -51,12 +54,16 @@ class CourseTest {
     testDistance.setSecondRunDistance(180);
     testDistance.setSecondRunLaps(1);
 
+    testRace = new Race();
+    testRace.setId(1L);
+
     underTest = new Course();
     underTest.setId(1L);
     underTest.setEvent(testEvent);
     underTest.setTitle("Duatlo Benjamins");
     underTest.setSport(Sport.DUATHLON);
     underTest.setDistance(testDistance);
+    underTest.setRaces(Set.of(testRace));
   }
 
   @Test
@@ -66,5 +73,7 @@ class CourseTest {
     assertEquals("Duatlo Benjamins", underTest.getTitle());
     assertEquals(Sport.DUATHLON, underTest.getSport());
     assertEquals(testDistance, underTest.getDistance());
+    assertNotNull(underTest.getRaces());
+    assertEquals(1, underTest.getRaces().size());
   }
 }

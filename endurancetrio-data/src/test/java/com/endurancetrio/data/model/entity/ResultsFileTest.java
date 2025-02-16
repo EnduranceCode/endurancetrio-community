@@ -17,7 +17,6 @@
 package com.endurancetrio.data.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.data.model.enumerator.OrganizerType;
@@ -57,16 +56,15 @@ class ResultsFileTest {
     testEvent = new Event();
     testEvent.setId(1L);
     testEvent.setTitle("XVI Duatlo Jovem de Grândola");
-    testEvent.setStartDate(LocalDate.parse("2010-03-07"));
-    testEvent.setEndDate(LocalDate.parse("2010-03-08"));
+    testEvent.setStartDate(LocalDate.parse("2010-03-06"));
+    testEvent.setEndDate(LocalDate.parse("2010-03-07"));
     testEvent.setOrganizers(organizers);
 
     underTest = new ResultsFile();
     underTest.setId(1L);
-    underTest.setEvent(testEvent);
-    underTest.setRaceTitle("XVI Duatlo Jovem de Grândola");
-    underTest.setCompetitionTitle("Benjamins Masculinos");
-    underTest.setFileName("20100307FTP001-001A-01.pdf");
+    underTest.setTitle("XVI Duatlo Jovem de Grândola");
+    underTest.setSubtitle("Benjamins Masculinos");
+    underTest.setFileName("20100306FTP001-003A-01.pdf");
     underTest.setRevisionNumber(1);
     underTest.setActive(true);
   }
@@ -74,11 +72,9 @@ class ResultsFileTest {
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertNotNull(underTest.getEvent());
-    assertEquals(1L, underTest.getEvent().getId());
-    assertEquals("XVI Duatlo Jovem de Grândola", underTest.getRaceTitle());
-    assertEquals("Benjamins Masculinos", underTest.getCompetitionTitle());
-    assertEquals("20100307FTP001-001A-01.pdf", underTest.getFileName());
+    assertEquals("XVI Duatlo Jovem de Grândola", underTest.getTitle());
+    assertEquals("Benjamins Masculinos", underTest.getSubtitle());
+    assertEquals("20100306FTP001-003A-01.pdf", underTest.getFileName());
     assertEquals(1, underTest.getRevisionNumber());
     assertTrue(underTest.getActive());
   }

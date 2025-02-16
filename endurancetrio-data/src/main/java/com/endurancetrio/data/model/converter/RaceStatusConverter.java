@@ -15,34 +15,34 @@
  */
 package com.endurancetrio.data.model.converter;
 
-import com.endurancetrio.data.model.enumerator.FileType;
+import com.endurancetrio.data.model.enumerator.RaceStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * The {@link FileTypeConverter} class is responsible for converting the {@link FileType} enum to
- * its corresponding database column representation and vice versa.
+ * The {@link RaceStatusConverter} class is responsible for converting the {@link RaceStatus} enum
+ * to its corresponding database column representation and vice versa.
  * <p>
- * This converter is used to persist the {@link FileType} enum as a string in the database. It
+ * This converter is used to persist the {@link RaceStatus} enum as a string in the database. It
  * converts the enum to its code when storing it in the database and converts the code back to the
  * enum when retrieving it from the database.
  */
 @Converter
-public class FileTypeConverter implements AttributeConverter<FileType, String> {
+public class RaceStatusConverter implements AttributeConverter<RaceStatus, String> {
 
   @Override
-  public String convertToDatabaseColumn(FileType fileType) {
-    return Optional.ofNullable(fileType)
-        .map(FileType::getCode)
+  public String convertToDatabaseColumn(RaceStatus attribute) {
+    return Optional.ofNullable(attribute)
+        .map(RaceStatus::getCode)
         .orElse(null);
   }
 
   @Override
-  public FileType convertToEntityAttribute(String code) {
-    return Stream.of(FileType.values())
-        .filter(fileType -> fileType.getCode().equals(code.toUpperCase()))
+  public RaceStatus convertToEntityAttribute(String code) {
+    return Stream.of(RaceStatus.values())
+        .filter(raceStatus -> raceStatus.getCode().equals(code.toUpperCase()))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
             String.format("The value '%s' returned from the database is not valid", code)));

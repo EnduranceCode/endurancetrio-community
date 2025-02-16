@@ -18,24 +18,31 @@ package com.endurancetrio.data.model.converter;
 import com.endurancetrio.data.model.enumerator.OrganizerType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * The {@link OrganizerTypeConverter} class is responsible for converting the {@link OrganizerType}
+ * enum to its corresponding database column representation and vice versa.
+ * <p>
+ * This converter is used to persist the {@link OrganizerType} enum as a string in the database. It
+ * converts the enum to its code when storing it in the database and converts the code back to the
+ * enum when retrieving it from the database.
+ */
 @Converter
 public class OrganizerTypeConverter implements AttributeConverter<OrganizerType, String> {
 
   @Override
   public String convertToDatabaseColumn(OrganizerType organizerType) {
-    if (organizerType == null) {
-      return null;
-    }
-
-    return organizerType.getCode();
+    return Optional.ofNullable(organizerType)
+        .map(OrganizerType::getCode)
+        .orElse(null);
   }
 
   @Override
   public OrganizerType convertToEntityAttribute(String code) {
     return Stream.of(OrganizerType.values())
-        .filter(organizerType -> organizerType.getCode().equals(code))
+        .filter(organizerType -> organizerType.getCode().equals(code.toUpperCase()))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
             String.format("The value '%s' returned from the database is not valid", code)));

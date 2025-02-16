@@ -124,11 +124,14 @@ public class Organizer implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
     Organizer organizer = (Organizer) o;
-    return Objects.equals(id, organizer.id);
+    return id != null && Objects.equals(id, organizer.id);
   }
 
   @Override

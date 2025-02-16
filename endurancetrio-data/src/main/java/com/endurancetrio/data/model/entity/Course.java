@@ -26,28 +26,49 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
  * The {@link Course} entity represents an {@link Event}'s {@link Course course}.
  * <p>
- * The field {@link #getTitle() title} uniquely identifies it in relation to any other
- * {@link Course courses} of the {@link Event}. Typically, it consists of the name of the
- * {@link Course course}'s {@link Sport sport} and its distance, such as "Sprint Triathlon" or
- * "Standard Duathlon". When an {@link Event} has different {@link Course courses} with the same
- * distance (e.g. with different routes), a second reference should be added to the name of the
- * programs so that they can be unambiguously differentiated.
- * <p>
- * The field {@link #getSport() sport} is the type of sport that the {@link Course} is related to.
- * <p>
- * The {@link Course} also has a one-to-one relationship with a {@link Distance} field that contains
- * the {@link Course}'s {@link Distance}.
+ * The {@link Course}'s fields are defined as follows:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier of the {@link Course} that
+ *     is automatically generated and is the primary key.
+ *   </li>
+ *   <li>
+ *     {@link #getEvent() event} : the {@link Event} to which the {@link Course} belongs.
+ *   </li>
+ *   <li>
+ *     {@link #getTitle() title} : the title of the {@link Course}, typically consisting
+ *     of the name of the {@link Course course}'s {@link Sport sport} and its distance,
+ *     such as "Sprint Triathlon" or "Standard Duathlon". When an {@link Event} has different
+ *     {@link Course courses} with the same distance (e.g. with different routes), a second
+ *     reference should be added to the name of the programs so that they can be
+ *     unambiguously differentiated.
+ *   </li>
+ *   <li>
+ *     {@link #getSport() sport} : the type of sport that the {@link Course} is used for.
+ *   </li>
+ *   <li>
+ *     {@link #getDistance() distance} : the data that defines
+ *     the {@link Course}'s {@link Distance distance}.
+ *   </li>
+ *   <li>
+ *     {@link #getRaces() races} : the {@link Race races} that use this {@link Course}.
+ *   </li>
+ * </ul>
  */
 @Entity(name = "Course")
 @Table(name = "course")
@@ -71,11 +92,21 @@ public class Course implements Serializable {
   @Convert(converter = SportConverter.class)
   private Sport sport;
 
-  @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
   private Distance distance;
 
+  @ManyToMany(
+      mappedBy = "courses", fetch = FetchType.LAZY,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+  )
+  private Set<Race> races;
+
+  /**
+   * Default constructor for the {@link Course} entity.
+   */
   public Course() {
     super();
+    this.races = new HashSet<>();
   }
 
   public Long getId() {
@@ -118,13 +149,24 @@ public class Course implements Serializable {
     this.distance = distance;
   }
 
+  public Set<Race> getRaces() {
+    return races;
+  }
+
+  public void setRaces(Set<Race> races) {
+    this.races = races;
+  }
+
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
     Course course = (Course) o;
-    return Objects.equals(id, course.id);
+    return id != null && Objects.equals(id, course.id);
   }
 
   @Override
@@ -135,7 +177,7 @@ public class Course implements Serializable {
   @Override
   public String toString() {
     return new StringJoiner(", ", Course.class.getSimpleName() + "[", "]").add("id=" + id)
-        .add("event=" + (event != null ? event.getId() : "null"))
+        .add("eventId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
         .add("title='" + title + "'")
         .add("sport=" + sport)
         .add("distance=" + (distance != null ? distance.getId() : "null"))

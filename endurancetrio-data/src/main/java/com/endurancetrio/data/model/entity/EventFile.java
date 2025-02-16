@@ -31,6 +31,7 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -160,11 +161,14 @@ public class EventFile implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
     EventFile eventFile = (EventFile) o;
-    return Objects.equals(id, eventFile.id);
+    return id != null && Objects.equals(id, eventFile.id);
   }
 
   @Override
@@ -176,7 +180,7 @@ public class EventFile implements Serializable {
   public String toString() {
     return new StringJoiner(", ", EventFile.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("event=" + (event != null ? event.getId() : null))
+        .add("courseId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
         .add("title='" + title + "'")
         .add("fileType=" + fileType)
         .add("fileName='" + fileName + "'")

@@ -22,45 +22,47 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
  * The {@link DoubleBiathlonDistance} entity extends the {@link Distance} entity and represents the
  * data of a {@link Course}'s {@link Sport#DOUBLE_BIATHLON} {@link Distance}.
  * <p>
- * The {@link DoubleBiathlonDistance}'s fields are defined as follows:
+ * Besides the fields inherited from the {@link Distance}, the {@link DoubleBiathlonDistance}'s
+ * fields are defined as follows:
  * <ul>
  *   <li>
- *     {@link #getFirstBikeDistance() firstBikeDistance} - the distance, in meters, of the bike leg
- *     of the {@link Course}
+ *     {@link #getFirstBikeDistance() firstBikeDistance} : the distance, in meters, of the bike leg
+ *     of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getFirstBikeLaps() firstBikeLaps} - the number of laps that the bike distance
- *     is divided into
+ *     {@link #getFirstBikeLaps() firstBikeLaps} : the number of laps that the bike distance
+ *     is divided into.
  *   </li>
  *   <li>
- *     {@link #getFirstRunDistance() firstRunDistance} - the distance, in meters,
- *     of the first run leg of the {@link Course}
+ *     {@link #getFirstRunDistance() firstRunDistance} : the distance, in meters,
+ *     of the first run leg of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getFirstRunLaps() firstRunLaps} - the number of laps that the first run distance
- *     is divided into
+ *     {@link #getFirstRunLaps() firstRunLaps} : the number of laps that the first run distance
+ *     is divided into.
  *   </li>
  *   <li>
- *     {@link #getSecondBikeDistance() secondBikeDistance} - the distance, in meters,
- *     of the bike leg of the {@link Course}
+ *     {@link #getSecondBikeDistance() secondBikeDistance} : the distance, in meters,
+ *     of the bike leg of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getSecondBikeLaps() secondBikeLaps} - the number of laps that the bike distance
- *     is divided into
+ *     {@link #getSecondBikeLaps() secondBikeLaps} : the number of laps that the bike distance
+ *     is divided into.
  *   </li>
  *   <li>
- *     {@link #getSecondRunDistance() secondRunDistance} - the distance, in meters,
- *     of the second run leg of the {@link Course}
+ *     {@link #getSecondRunDistance() secondRunDistance} : the distance, in meters,
+ *     of the second run leg of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getSecondRunLaps() secondRunLaps} - the number of laps that the second run distance
- *     is divided into
+ *     {@link #getSecondRunLaps() secondRunLaps} : the number of laps that the second run distance
+ *     is divided into.
  *   </li>
  * </ul>
  */
@@ -95,6 +97,9 @@ public class DoubleBiathlonDistance extends Distance implements Serializable {
   @Column(name = "second_run_laps")
   private Integer secondRunLaps;
 
+  /**
+   * Default constructor for the {@link DoubleBiathlonDistance} entity.
+   */
   public DoubleBiathlonDistance() {
     super();
   }
@@ -165,6 +170,9 @@ public class DoubleBiathlonDistance extends Distance implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
@@ -172,7 +180,7 @@ public class DoubleBiathlonDistance extends Distance implements Serializable {
       return false;
     }
     DoubleBiathlonDistance that = (DoubleBiathlonDistance) o;
-    return Objects.equals(super.getId(), that.getId());
+    return super.getId() != null && Objects.equals(super.getId(), that.getId());
   }
 
   @Override
@@ -184,7 +192,7 @@ public class DoubleBiathlonDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", DoubleBiathlonDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("course=" + (super.getCourse() != null ? super.getCourse().getId() : null))
+        .add("courseId=" + Optional.ofNullable(super.getCourse()).map(Course::getId).orElse(null))
         .add("type=" + super.getType())
         .add("firstBikeDistance=" + firstBikeDistance)
         .add("firstBikeLaps=" + firstBikeLaps)

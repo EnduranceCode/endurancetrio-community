@@ -103,8 +103,8 @@ class EventTest {
     underTest.setId(1L);
     underTest.setEventReference("20100307FTP001");
     underTest.setTitle("XVI Duatlo Jovem de Grândola");
-    underTest.setStartDate(LocalDate.parse("2010-03-07"));
-    underTest.setEndDate(LocalDate.parse("2010-03-08"));
+    underTest.setStartDate(LocalDate.parse("2010-03-06"));
+    underTest.setEndDate(LocalDate.parse("2010-03-07"));
     underTest.setDistrict("Setúbal");
     underTest.setCounty("Grândola");
     underTest.setCity("Grândola");
@@ -122,8 +122,8 @@ class EventTest {
     assertEquals(1L, underTest.getId());
     assertEquals("20100307FTP001", underTest.getEventReference());
     assertEquals("XVI Duatlo Jovem de Grândola", underTest.getTitle());
-    assertEquals(LocalDate.parse("2010-03-07"), underTest.getStartDate());
-    assertEquals(LocalDate.parse("2010-03-08"), underTest.getEndDate());
+    assertEquals(LocalDate.parse("2010-03-06"), underTest.getStartDate());
+    assertEquals(LocalDate.parse("2010-03-07"), underTest.getEndDate());
     assertEquals("Setúbal", underTest.getDistrict());
     assertEquals("Grândola", underTest.getCounty());
     assertEquals("Grândola", underTest.getCity());

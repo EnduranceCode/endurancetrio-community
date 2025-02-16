@@ -18,6 +18,7 @@ package com.endurancetrio.data.model.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,30 +39,53 @@ import java.util.StringJoiner;
 
 /**
  * The {@link Event} entity represents an endurance sport event that can have one or more endurance
- * races.
+ * {@link Race races}.
  * <p>
- * The field {@link #getEventReference() eventReference} is a unique identifier of the {@link Event}
- * and contains exactly 14 characters long and has the format "YYYYMMDDXXXNNN". In this format,
- * "YYYY" corresponds to the year of the {@link Event} {@link  #getStartDate() startDate}, "MM"
- * corresponds to the month of the {@link Event} {@link  #getStartDate() startDate}, "DD"
- * corresponds to the day of the {@link Event} {@link  #getStartDate() startDate}, "XXX" corresponds
- * to the {@link Event}'s scope code (written in upper case), and "NNN" corresponds to the
- * {@link Event}'s order number.
- * <p>
- * The {@link Event}'s order number is the number corresponding to the chronological order of
- * {@link Event}'s with the same {@link  #getStartDate() startDate} and the same scope. That is, the
- * first {@link Event} with the same {@link  #getStartDate() startDate} and  scope has an order
- * number (""NNN"") of 001, the second {@link Event} with that same
- * {@link  #getStartDate() startDate} and scope has an order number of 002, and so on.
- * <p>
- * The field {@link #getTitle() title} stores the event title.
- * <p>
- * An event can be held on a single day or span several days. The event's
- * {@link #getStartDate() startDate} is the start date of the event's first race and the event's
- * {@link #getEndDate() endDate} is the end date of the event's last race.
- * <p>
- * An event can have one or multiple {@link Organizer organizers} and zero or multiple
- * {@link EventFile}.
+ * The {@link Event}'s fields are defined as follows:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier of the {@link Event} that
+ *     is automatically generated and is the primary key.
+ *   </li>
+ *   <li>
+ *     {@link #getEventReference() eventReference} : the unique {@link Event} reference number
+ *     that is exactly 14 characters long and has the format "YYYYMMDDXXXNNN". In this format,
+ *     "YYYY" corresponds to the year of the {@link Event} {@link  #getStartDate() startDate},
+ *     "MM" corresponds to the month of the {@link Event} {@link  #getStartDate() startDate},
+ *     "DD" corresponds to the day of the {@link Event} {@link  #getStartDate() startDate},
+ *     "XXX" corresponds to the {@link Event}'s scope code (written in upper case),
+ *     and "NNN" corresponds to the {@link Event}'s order number. The {@link Event}'s order number
+ *     is the number corresponding to the chronological order of {@link Event}'s with
+ *     the same {@link  #getStartDate() startDate} and the same scope. That is, the first
+ *     {@link Event} with the same {@link  #getStartDate() startDate} and scope has an order number
+ *     (""NNN"") of 001, the second {@link Event} with that same {@link  #getStartDate() startDate}
+ *     and scope has an order number of 002, and so on.
+ *   </li>
+ *   <li>{@link #getTitle() title} : the title of the {@link Event}.</li>
+ *   <li>{@link #getStartDate() startDate} : the start date of the {@link Event}.</li>
+ *   <li>
+ *     {@link #getEndDate() endDate} : the end date of the {@link Event}. As an {@link Event} held
+ *     on a single day or span several days, the {@link #getEndDate() endDate} must be equals
+ *     or after the {@link #getStartDate() startDate}.
+ *   </li>
+ *   <li>
+ *     {@link #getDistrict() district} : the district of the {@link Event event}'s main location.
+ *   </li>
+ *   <li>{@link #getCounty() county} : the county of the {@link Event event}'s main location.</li>
+ *   <li>{@link #getCity() city} : the city of the {@link Event event}'s main location.</li>
+ *   <li>
+ *     {@link #getOrganizers() organizers} : the {@link Organizer organizers} of the {@link Event}.
+ *     Am {@link Event event} can have one or multiple {@link Organizer organizers}.
+ *   </li>
+ *   <li>
+ *     {@link #getEventFiles() eventFiles} : the {@link EventFile event files} of the {@link Event}.
+ *     An {@link Event event} can have zero or multiple {@link EventFile event files}.
+ *   </li>
+ *   <li>
+ *     {@link #getCourses() courses} : the {@link Course courses} of the {@link Event}.
+ *     An {@link Event} can have one or multiple {@link Course courses}.
+ *   </li>
+ * </ul>
  */
 @Entity(name = "Event")
 @Table(name = "event")
@@ -74,8 +98,11 @@ public class Event implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Pattern(regexp = "\\d{8}[A-Z]{3}\\d{3}", message = "Invalid event reference format")
   @Column(name = "event_reference", unique = true, nullable = false)
+  @Pattern(
+      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}$",
+      message = "Event reference must follow the format YYYYMMDDXXXNNN (e.g., 19840815NAC001)"
+  )
   private String eventReference;
 
   @Column(name = "title", nullable = false)
@@ -96,7 +123,7 @@ public class Event implements Serializable {
   @Column(name = "city", nullable = false)
   private String city;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "event_organizer",
       joinColumns = {@JoinColumn(name = "event_id", referencedColumnName = "id")},
@@ -110,6 +137,9 @@ public class Event implements Serializable {
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
   private Set<Course> courses;
 
+  /**
+   * Default constructor for the {@link Event} entity.
+   */
   public Event() {
     super();
     this.organizers = new HashSet<>();
@@ -212,11 +242,14 @@ public class Event implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
     Event event = (Event) o;
-    return Objects.equals(id, event.id);
+    return id != null && Objects.equals(id, event.id);
   }
 
   @Override

@@ -15,37 +15,35 @@
  */
 package com.endurancetrio.data.model.enumerator;
 
-import com.endurancetrio.data.model.entity.Event;
-import com.endurancetrio.data.model.entity.Organizer;
+import com.endurancetrio.data.model.entity.Race;
 
 /**
- * The {@link OrganizerType} enum is used to classify the type of {@link Event event}'s
- * {@link Organizer organizer}.
+ * The {@link GenderCategory} enum represents the Gender Category of a {@link Race}.
  * <p>
  * It includes the following constants:
  * <ul>
- *   <li>{@link #CLUB} : used for {@link Organizer organizers} that are a sport club.</li>
- *   <li>{@link #PRIVATE} : used for private {@link Organizer organizers}.</li>
- *   <li>{@link #PUBLIC} : used for public or governmental {@link Organizer organizers}.</li>
+ *   <li>{@link #OPEN} : used for the {@link Race races} that ate open for both genders.</li>
+ *   <li>{@link #FEMALE} : used for the {@link Race races} where only women can participate.</li>
+ *   <li>{@link #MALE} : used for the {@link Race races} where only men can participate.</li>
+ *   <li>
+ *     {@link #MIXED} : used for {@link Race races} whose competitors are a mix from both genders
+ *     (e.g., mixed relays).
+ *   </li>
  * </ul>
  */
-public enum OrganizerType {
-  CLUB("CLUB"),
-  PRIVATE("PRIVATE"),
-  PUBLIC("PUBLIC");
+public enum GenderCategory {
+  OPEN("OPEN"),
+  FEMALE("FEMALE"),
+  MALE("MALE"),
+  MIXED("MIXED");
 
-  final String code;
+  private final String code;
 
-  OrganizerType(String code) {
+  GenderCategory(String code) {
     this.code = code;
   }
 
   public String getCode() {
-    return code;
-  }
-
-  @Override
-  public String toString() {
     return code;
   }
 }

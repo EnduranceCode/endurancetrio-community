@@ -25,31 +25,58 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.StringJoiner;
 
 /**
- * The {@link ResultsFile} entity represents the file with the results of a race that is part of an
- * {@link Event event}.
+ * The {@link ResultsFile} entity represents a file storing the official results of a {@link Race}.
  * <p>
- * The {@link Event} defines the event that includes the race results contained in the
- * {@link ResultsFile}.
- * <p>
- * The field {@link #getRaceTitle() title} stores the race title that is related with the results
- * included in the {@link ResultsFile}.
- * <p>
- * The field {@link #getCompetitionTitle() competitionTitle} stores the competition title that is
- * related with the results included in the {@link ResultsFile}.
- * <p>
- * The field {@link #getFileName()  fileName} stores the name of the
- * {@link ResultsFile results file}.
- * <p>
- * The field {@link #getRevisionNumber() revisionNumber} stores the revision number of the file and
- * the first revision of each file must always be one.
- * <p>
- * The field {@link #getActive() isActive} is a flag that must be set to <i>true</i> for the file,
- * referring to the same content, with the highest revision number. All other files of the same
- * content must have this flag set to <i>false</i>.
+ * The fields of the entity are:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier of the {@link ResultsFile} that is automatically
+ *     generated and is the primary key.
+ *   </li>
+ *   <li>{@link #getRace() race} : </li>
+ *   <li>
+ *     {@link #getTitle() title} : the title of the {@link Race}. It should ideally match the
+ *     championship it belongs to (e.g., "Individual National Championship") or describe the race
+ *     distance (e.g., "Duathlon Powerman Mafra Sprint" or "Duathlon Powerman Mafra Standard").
+ *   </li>
+ *   <li>
+ *     {@link #getSubtitle() subtitle} : the subtitle of the {@link Race}. If the
+ *     {@link Race#getGenderCategory() genderCategory} alone is sufficient to distinguish the race,
+ *     it is used as the {@link #getSubtitle() subtitle} (e.g., "Women"). Otherwise, both the
+ *     {@link Race#getAgeGroup() ageGroup} and the {@link Race#getGenderCategory() genderCategory}
+ *     are included (e.g., "Elite Women").
+ *   </li>
+ *   <li>
+ *     {@link #getFileName()  fileName} : the name of the {@link ResultsFile} which has exactly
+ *     21 characters and follows the format "YYYYMMDDXXXNNN-YYYZ-VV.ext". In this format,
+ *     "YYYMMDDXXXNNN-YYY" corresponds to the {@link Race#getRaceReference() raceReference},
+ *     "Z" defines the class of the results contained in the {@link ResultsFile}, "VV" corresponds
+ *     to the revision/version of the file (the first revision always starts at "01")
+ *     and ".ext" corresponds to the extension (Mime type) of the file. The letter corresponding
+ *     to the class of results has the value "A" when the results correspond to the absolute
+ *     classification of the {@link Race} and "B" when the results are grouped
+ *     by {@link AgeGroup age group} (additional letters may be used when applicable.).
+ *     The {@link #getFileName()  fileName} is unique, there cannot be two different
+ *     {@link ResultsFile} with the same {@link #getFileName()  fileName}.
+ *   </li>
+ *   <li>
+ *     {@link #getRevisionNumber() revisionNumber} : the revision number
+ *     of the {@link ResultsFile results file}. The first revision always starts at "01".
+ *   </li>
+ *   <li>
+ *     {@link #getActive() isActive} : flag that indicates the most recent version
+ *     of a {@link ResultsFile}. It is set to <i>true</i> for the file with the highest
+ *     {@link #getRevisionNumber() revisionNumber} and <i>false</i> for all previous versions.
+ *   </li>
+ * </ul>
  */
 @Entity(name = "ResultsFile")
 @Table(name = "results_file")
@@ -62,18 +89,24 @@ public class ResultsFile implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-      CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
-  @JoinColumn(name = "event_id", nullable = false)
-  private Event event;
+  @ManyToOne(
+      fetch = FetchType.LAZY,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+  )
+  @JoinColumn(name = "race_id", referencedColumnName = "id", nullable = false)
+  private Race race;
 
-  @Column(name = "race_title", nullable = false)
-  private String raceTitle;
+  @Column(name = "title", nullable = false)
+  private String title;
 
-  @Column(name = "competition_title", nullable = false)
-  private String competitionTitle;
+  @Column(name = "subtitle", nullable = false)
+  private String subtitle;
 
-  @Column(name = "file_name", nullable = false)
+  @Column(name = "file_name", nullable = false, unique = true)
+  @Pattern(
+      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}-[0-9]{3}[A-Z]-[0-9]{2}\\.[a-zA-Z0-9]+$",
+      message = "File name must follow the format YYYYMMDDXXXNNN-YYYZ-VV.ext (e.g., 19840815NAC001-001A-01.pdf)"
+  )
   private String fileName;
 
   @Column(name = "revision", nullable = false)
@@ -94,28 +127,28 @@ public class ResultsFile implements Serializable {
     this.id = id;
   }
 
-  public Event getEvent() {
-    return event;
+  public Race getRace() {
+    return race;
   }
 
-  public void setEvent(Event event) {
-    this.event = event;
+  public void setRace(Race race) {
+    this.race = race;
   }
 
-  public String getRaceTitle() {
-    return raceTitle;
+  public String getTitle() {
+    return title;
   }
 
-  public void setRaceTitle(String raceTitle) {
-    this.raceTitle = raceTitle;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
-  public String getCompetitionTitle() {
-    return competitionTitle;
+  public String getSubtitle() {
+    return subtitle;
   }
 
-  public void setCompetitionTitle(String competitionTitle) {
-    this.competitionTitle = competitionTitle;
+  public void setSubtitle(String subtitle) {
+    this.subtitle = subtitle;
   }
 
   public String getFileName() {
@@ -140,5 +173,35 @@ public class ResultsFile implements Serializable {
 
   public void setActive(Boolean active) {
     isActive = active;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ResultsFile that = (ResultsFile) o;
+    return id != null && Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", ResultsFile.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("raceId=" + Optional.ofNullable(race).map(Race::getId).orElse(null))
+        .add("title='" + title + "'")
+        .add("subtitle='" + subtitle + "'")
+        .add("fileName='" + fileName + "'")
+        .add("revisionNumber=" + revisionNumber)
+        .add("isActive=" + isActive)
+        .toString();
   }
 }

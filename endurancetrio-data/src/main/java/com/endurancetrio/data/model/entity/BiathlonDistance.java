@@ -22,27 +22,29 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
  * The {@link BiathlonDistance} entity extends the {@link Distance} entity and represents the data
  * of a {@link Course}'s {@link Sport#BIATHLON} {@link Distance}.
  * <p>
- * The {@link BiathlonDistance}'s fields are defined as follows:
+ * Besides the fields inherited from the {@link Distance}, the {@link BiathlonDistance}'s
+ * fields are defined as follows:
  * <ul>
  *   <li>
- *     {@link #getBikeDistance() bikeDistance} - the distance, in meters, of the bike leg
- *     of the {@link Course}
+ *     {@link #getBikeDistance() bikeDistance} : the distance, in meters, of the bike leg
+ *     of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getBikeLaps() bikeLaps} - the number of laps that the bike distance is divided into
+ *     {@link #getBikeLaps() bikeLaps} : the number of laps that the bike distance is divided into.
  *   </li>
  *   <li>
- *     {@link #getRunDistance() runDistance} - the distance, in meters, of the run leg
- *     of the {@link Course}
+ *     {@link #getRunDistance() runDistance} : the distance, in meters, of the run leg
+ *     of the {@link Course}.
  *   </li>
  *   <li>
- *     {@link #getRunLaps() runLaps} - the number of laps that the run distance is divided into
+ *     {@link #getRunLaps() runLaps} : the number of laps that the run distance is divided into.
  *   </li>
  * </ul>
  */
@@ -65,6 +67,9 @@ public class BiathlonDistance extends Distance implements Serializable {
   @Column(name = "run_laps")
   private Integer runLaps;
 
+  /**
+   * Default constructor for the {@link BiathlonDistance} entity.
+   */
   public BiathlonDistance() {
     super();
   }
@@ -103,6 +108,9 @@ public class BiathlonDistance extends Distance implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
@@ -110,7 +118,7 @@ public class BiathlonDistance extends Distance implements Serializable {
       return false;
     }
     BiathlonDistance that = (BiathlonDistance) o;
-    return Objects.equals(super.getId(), that.getId());
+    return super.getId() != null && Objects.equals(super.getId(), that.getId());
   }
 
   @Override
@@ -122,7 +130,7 @@ public class BiathlonDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", BiathlonDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("course=" + (super.getCourse() != null ? super.getCourse().getId() : null))
+        .add("courseId=" + Optional.ofNullable(super.getCourse()).map(Course::getId).orElse(null))
         .add("type=" + super.getType())
         .add("bikeDistance=" + bikeDistance)
         .add("bikeLaps=" + bikeLaps)

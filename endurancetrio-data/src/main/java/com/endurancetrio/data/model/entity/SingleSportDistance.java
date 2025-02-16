@@ -22,15 +22,19 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
  * The {@link SingleSportDistance} entity extends the {@link Distance} entity and represents the
  * data of a {@link Course}'s single {@link Sport} {@link Distance}.
  * <p>
- * The {@link #getDistance() distance} field stores the distance, in meters, of the {@link Course}
- * and the {@link #getLaps() laps} field stores the number of laps that the distance is divided
- * into.
+ * Besides the fields inherited from the {@link Distance}, the {@link SingleSportDistance}'s
+ * fields are defined as follows:
+ * <ul>
+ *   <li>{@link #getDistance() distance} : the distance, in meters, of the {@link Course}.</li>
+ *   <li>{@link #getLaps() laps} : the number of laps that the distance is divided into.</li>
+ * </ul>
  */
 @Entity(name = "SingleSportDistance")
 @Table(name = "single_sport_distance")
@@ -45,6 +49,9 @@ public class SingleSportDistance extends Distance implements Serializable {
   @Column(name = "laps")
   private Integer laps;
 
+  /**
+   * Default constructor for the {@link SingleSportDistance} entity.
+   */
   public SingleSportDistance() {
     super();
   }
@@ -67,6 +74,9 @@ public class SingleSportDistance extends Distance implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
@@ -74,7 +84,7 @@ public class SingleSportDistance extends Distance implements Serializable {
       return false;
     }
     SingleSportDistance that = (SingleSportDistance) o;
-    return Objects.equals(super.getId(), that.getId());
+    return super.getId() != null && Objects.equals(super.getId(), that.getId());
   }
 
   @Override
@@ -86,7 +96,7 @@ public class SingleSportDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", SingleSportDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("course=" + (super.getCourse() != null ? super.getCourse().getId() : null))
+        .add("courseId=" + Optional.ofNullable(super.getCourse()).map(Course::getId).orElse(null))
         .add("type=" + super.getType())
         .add("distance=" + distance)
         .add("laps=" + laps)

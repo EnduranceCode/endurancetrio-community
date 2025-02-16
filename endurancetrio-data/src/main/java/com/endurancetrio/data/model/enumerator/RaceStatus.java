@@ -15,37 +15,31 @@
  */
 package com.endurancetrio.data.model.enumerator;
 
-import com.endurancetrio.data.model.entity.Event;
-import com.endurancetrio.data.model.entity.Organizer;
+import com.endurancetrio.data.model.entity.Race;
 
 /**
- * The {@link OrganizerType} enum is used to classify the type of {@link Event event}'s
- * {@link Organizer organizer}.
+ * The {@link RaceStatus} enum represents the status of a {@link Race}
  * <p>
  * It includes the following constants:
  * <ul>
- *   <li>{@link #CLUB} : used for {@link Organizer organizers} that are a sport club.</li>
- *   <li>{@link #PRIVATE} : used for private {@link Organizer organizers}.</li>
- *   <li>{@link #PUBLIC} : used for public or governmental {@link Organizer organizers}.</li>
+ *   <li>
+ *     {@link #PLANNED} : used for the {@link Race races} that are planned but not yet
+ *     (or never) completed.
+ *   </li>
+ *   <li>{@link #COMPLETED} : used for the {@link Race races} that are completed.</li>
  * </ul>
  */
-public enum OrganizerType {
-  CLUB("CLUB"),
-  PRIVATE("PRIVATE"),
-  PUBLIC("PUBLIC");
+public enum RaceStatus {
+  PLANNED("PLANNED"),
+  COMPLETED("COMPLETED");
 
-  final String code;
+  private final String code;
 
-  OrganizerType(String code) {
+  RaceStatus(String code) {
     this.code = code;
   }
 
   public String getCode() {
-    return code;
-  }
-
-  @Override
-  public String toString() {
     return code;
   }
 }

@@ -22,31 +22,31 @@ import com.endurancetrio.data.model.entity.EventFile;
  * The {@link FileType} enum is used to classify the type of file that is associated with an
  * {@link Event event}.
  * <p>
- * It includes the following types:
+ * It includes the following constants:
  * <ul>
  *   <li>
  *     {@link #COURSE_MAPS} : used for {@link EventFile files} that contains
- *     an {@link Event event}'s map or course map;
+ *     an {@link Event event}'s map or course map.
  *   </li>
  *   <li>
  *     {@link #COVER_IMAGE} : used for {@link EventFile file} that contains an {@link Event event}'s
- *     cover image;
+ *     cover image.
  *   </li>
  *   <li>
  *     {@link #GUIDE} : used for {@link EventFile files} that contains information and guidance
- *     about the {@link Event event};
+ *     about the {@link Event event}.
  *   </li>
  *   <li>
  *     {@link #POSTER} : used for {@link EventFile file} that contains an {@link Event event}'s
- *     poster image;
+ *     poster image.
  *   </li>
  *   <li>
  *     {@link #RULES} : used for {@link EventFile files} that contains an {@link Event event}'s
- *     regulations or rules;
+ *     regulations or rules.
  *   </li>
  *   <li>
  *     {@link #START_LIST} : used for {@link EventFile files} that contains an {@link Event event}'s
- *     start list;
+ *     start list.
  *   </li>
  * </ul>
  */

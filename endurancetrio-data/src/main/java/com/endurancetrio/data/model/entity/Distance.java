@@ -32,12 +32,24 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
  * The {@link Distance} entity represents the data of a {@link Course}'s {@link Distance}.
  * <p>
- * The {@link #getType() type} field stores the type of the {@link Distance}.
+ * The {@link Distance}'s fields are defined as follows:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier of the {@link Distance} that
+ *     is automatically generated and is the primary key.
+ *   </li>
+ *   <li>{@link #getCourse() course} : the {@link Course} to which the {@link Distance} belongs.</li>
+ *   <li>
+ *     {@link #getType() type} : the type of the {@link Distance} that defines
+ *     the {@link Distance} classification of an {@link Course course}.
+ *   </li>
+ * </ul>
  */
 @Entity(name = "Distance")
 @Table(name = "distance")
@@ -59,6 +71,9 @@ public class Distance implements Serializable {
   @Convert(converter = DistanceTypeConverter.class)
   private DistanceType type;
 
+  /**
+   * Default constructor for the {@link Distance} entity.
+   */
   public Distance() {
     super();
   }
@@ -89,11 +104,14 @@ public class Distance implements Serializable {
 
   @Override
   public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
     Distance distance = (Distance) o;
-    return Objects.equals(id, distance.id);
+    return id != null && Objects.equals(id, distance.id);
   }
 
   @Override
@@ -105,7 +123,7 @@ public class Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", Distance.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("course=" + (course != null ? course.getId() : null))
+        .add("courseId=" + Optional.ofNullable(course).map(Course::getId).orElse(null))
         .add("type=" + type)
         .toString();
   }

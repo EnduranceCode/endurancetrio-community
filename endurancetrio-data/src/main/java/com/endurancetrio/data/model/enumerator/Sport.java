@@ -20,21 +20,21 @@ import com.endurancetrio.data.model.entity.Course;
 /**
  * The {@link Sport} enum defines the possible sport classification of an {@link Course course}.
  * <p>
- * It includes the following types:
+ * It includes the following constants:
  * <ul>
- *  <li>{@link #OPEN_WATER} : used for open water swimming {@link Course courses};</li>
+ *  <li>{@link #OPEN_WATER} : used for open water swimming {@link Course courses}.</li>
  *  <li>{@link #ROAD_CYCLING} : used for  road cycling {@link Course courses};</li>
- *  <li>{@link #MOUNTAIN_BIKING} : used for mountain biking {@link Course courses};</li>
- *  <li>{@link #ROAD_RUNNING} : used for road running {@link Course courses};</li>
- *  <li>{@link #TRAIL_RUNNING} : used for trail running {@link Course courses};</li>
- *  <li>{@link #TRIATHLON} : used for triathlon {@link Course courses};</li>
- *  <li>{@link #DUATHLON} : used for duathlon {@link Course courses};</li>
- *  <li>{@link #AQUATHLON} : used for aquathlon {@link Course courses};</li>
- *  <li>{@link #AQUABIKE} : used for aquabike {@link Course courses};</li>
- *  <li>{@link #CROSS_TRIATHLON} : used for cross triathlon {@link Course courses};</li>
- *  <li>{@link #CROSS_DUATHLON} : used for cross duathlon {@link Course courses};</li>
- *  <li>{@link #BIATHLON} : used for biathlon {@link Course courses};</li>
- *  <li>{@link #DOUBLE_BIATHLON} : used for double biathlon {@link Course courses};</li>
+ *  <li>{@link #MOUNTAIN_BIKING} : used for mountain biking {@link Course courses}.</li>
+ *  <li>{@link #ROAD_RUNNING} : used for road running {@link Course courses}.</li>
+ *  <li>{@link #TRAIL_RUNNING} : used for trail running {@link Course courses}.</li>
+ *  <li>{@link #TRIATHLON} : used for triathlon {@link Course courses}.</li>
+ *  <li>{@link #DUATHLON} : used for duathlon {@link Course courses}.</li>
+ *  <li>{@link #AQUATHLON} : used for aquathlon {@link Course courses}.</li>
+ *  <li>{@link #AQUABIKE} : used for aquabike {@link Course courses}.</li>
+ *  <li>{@link #CROSS_TRIATHLON} : used for cross triathlon {@link Course courses}.</li>
+ *  <li>{@link #CROSS_DUATHLON} : used for cross duathlon {@link Course courses}.</li>
+ *  <li>{@link #BIATHLON} : used for biathlon {@link Course courses}.</li>
+ *  <li>{@link #DOUBLE_BIATHLON} : used for double biathlon {@link Course courses}.</li>
  *  <li>{@link #SWIMRUN} : used for swimrun {@link Course courses}.</li>
  * </ul>
  */

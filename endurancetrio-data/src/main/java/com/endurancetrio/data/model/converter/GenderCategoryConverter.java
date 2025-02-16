@@ -15,34 +15,34 @@
  */
 package com.endurancetrio.data.model.converter;
 
-import com.endurancetrio.data.model.enumerator.FileType;
+import com.endurancetrio.data.model.enumerator.GenderCategory;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * The {@link FileTypeConverter} class is responsible for converting the {@link FileType} enum to
- * its corresponding database column representation and vice versa.
+ * The {@link GenderCategoryConverter} class is responsible for converting the
+ * {@link GenderCategory} enum to its corresponding database column representation and vice versa.
  * <p>
- * This converter is used to persist the {@link FileType} enum as a string in the database. It
+ * This converter is used to persist the {@link GenderCategory} enum as a string in the database. It
  * converts the enum to its code when storing it in the database and converts the code back to the
  * enum when retrieving it from the database.
  */
 @Converter
-public class FileTypeConverter implements AttributeConverter<FileType, String> {
+public class GenderCategoryConverter implements AttributeConverter<GenderCategory, String> {
 
   @Override
-  public String convertToDatabaseColumn(FileType fileType) {
-    return Optional.ofNullable(fileType)
-        .map(FileType::getCode)
+  public String convertToDatabaseColumn(GenderCategory genderCategory) {
+    return Optional.ofNullable(genderCategory)
+        .map(GenderCategory::getCode)
         .orElse(null);
   }
 
   @Override
-  public FileType convertToEntityAttribute(String code) {
-    return Stream.of(FileType.values())
-        .filter(fileType -> fileType.getCode().equals(code.toUpperCase()))
+  public GenderCategory convertToEntityAttribute(String code) {
+    return Stream.of(GenderCategory.values())
+        .filter(genderCategory -> genderCategory.getCode().equals(code.toUpperCase()))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
             String.format("The value '%s' returned from the database is not valid", code)));
