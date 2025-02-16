@@ -28,6 +28,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -99,6 +100,10 @@ public class EventFile implements Serializable {
   private FileType fileType;
 
   @Column(name = "file_name", nullable = false, unique = true)
+  @Pattern(
+      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}-[A-Z]{3}[0-9]{3}-[0-9]{2}\\.[a-zA-Z0-9]+$",
+      message = "File name must follow the format YYYYMMDDXXXNNN-TTTYYY-VV.ext (e.g., 19840815NAC001-IMG001-01.png)"
+  )
   private String fileName;
 
   @Column(name = "revision", nullable = false)
