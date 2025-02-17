@@ -38,8 +38,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 /**
- * The {@link Event} entity represents an endurance sport event that can have one or more endurance
- * {@link Race races}.
+ * The {@link Event} entity represents an endurance sport {@link Event} that can have
+ * one or more endurance {@link Race races}.
  * <p>
  * The {@link Event}'s fields are defined as follows:
  * <ul>
@@ -64,8 +64,8 @@ import java.util.StringJoiner;
  *   <li>{@link #getTitle() title} : the title of the {@link Event}.</li>
  *   <li>{@link #getStartDate() startDate} : the start date of the {@link Event}.</li>
  *   <li>
- *     {@link #getEndDate() endDate} : the end date of the {@link Event}. As an {@link Event} held
- *     on a single day or span several days, the {@link #getEndDate() endDate} must be equals
+ *     {@link #getEndDate() endDate} : the end date of the {@link Event}. As an {@link Event} can be
+ *     held on a single day or span several days, the {@link #getEndDate() endDate} must be equals
  *     or after the {@link #getStartDate() startDate}.
  *   </li>
  *   <li>
@@ -74,12 +74,13 @@ import java.util.StringJoiner;
  *   <li>{@link #getCounty() county} : the county of the {@link Event event}'s main location.</li>
  *   <li>{@link #getCity() city} : the city of the {@link Event event}'s main location.</li>
  *   <li>
- *     {@link #getOrganizers() organizers} : the {@link Organizer organizers} of the {@link Event}.
- *     Am {@link Event event} can have one or multiple {@link Organizer organizers}.
+ *     {@link #getOrganizers() organizers} : the {@link Organizer} of the {@link Event}.
+ *     An {@link Event event} can have one or multiple {@link Organizer organizers}.
  *   </li>
  *   <li>
- *     {@link #getEventFiles() eventFiles} : the {@link EventFile event files} of the {@link Event}.
- *     An {@link Event event} can have zero or multiple {@link EventFile event files}.
+ *     {@link #getEventFiles() eventFiles} : the list of {@link EventFile event files}
+ *     of the {@link Event}. An {@link Event event} can have zero or multiple
+ *     {@link EventFile event files}.
  *   </li>
  *   <li>
  *     {@link #getCourses() courses} : the {@link Course courses} of the {@link Event}.

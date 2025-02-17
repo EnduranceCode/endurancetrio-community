@@ -25,27 +25,27 @@ import com.endurancetrio.data.model.entity.EventFile;
  * It includes the following constants:
  * <ul>
  *   <li>
- *     {@link #COURSE_MAPS} : used for {@link EventFile files} that contains
- *     an {@link Event event}'s map or course map.
+ *     {@link #COURSE_MAPS} : used for {@link EventFile files} that contains an {@link Event}'s
+ *     map or course map.
  *   </li>
  *   <li>
- *     {@link #COVER_IMAGE} : used for {@link EventFile file} that contains an {@link Event event}'s
+ *     {@link #COVER_IMAGE} : used for {@link EventFile files} that contains an {@link Event}'s
  *     cover image.
  *   </li>
  *   <li>
  *     {@link #GUIDE} : used for {@link EventFile files} that contains information and guidance
- *     about the {@link Event event}.
+ *     about the {@link Event}.
  *   </li>
  *   <li>
- *     {@link #POSTER} : used for {@link EventFile file} that contains an {@link Event event}'s
+ *     {@link #POSTER} : used for {@link EventFile file} that contains an {@link Event}'s
  *     poster image.
  *   </li>
  *   <li>
- *     {@link #RULES} : used for {@link EventFile files} that contains an {@link Event event}'s
+ *     {@link #RULES} : used for {@link EventFile files} that contains an {@link Event}'s
  *     regulations or rules.
  *   </li>
  *   <li>
- *     {@link #START_LIST} : used for {@link EventFile files} that contains an {@link Event event}'s
+ *     {@link #START_LIST} : used for {@link EventFile files} that contains an {@link Event}'s
  *     start list.
  *   </li>
  * </ul>

@@ -41,7 +41,9 @@ import java.util.StringJoiner;
  *     {@link #getId() id} : the unique identifier of the {@link ResultsFile} that is automatically
  *     generated and is the primary key.
  *   </li>
- *   <li>{@link #getRace() race} : </li>
+ *   <li>
+ *     {@link #getRace() race} : the {@link Race} whose results the {@link ResultsFile} stores.
+ *   </li>
  *   <li>
  *     {@link #getTitle() title} : the title of the {@link Race}. It should ideally match the
  *     championship it belongs to (e.g., "Individual National Championship") or describe the race
@@ -60,7 +62,7 @@ import java.util.StringJoiner;
  *     "YYYMMDDXXXNNN-YYY" corresponds to the {@link Race#getRaceReference() raceReference},
  *     "Z" defines the class of the results contained in the {@link ResultsFile}, "VV" corresponds
  *     to the revision/version of the file (the first revision always starts at "01")
- *     and ".ext" corresponds to the extension (Mime type) of the file. The letter corresponding
+ *     and "ext" corresponds to the extension (Mime type) of the file. The letter corresponding
  *     to the class of results has the value "A" when the results correspond to the absolute
  *     classification of the {@link Race} and "B" when the results are grouped
  *     by {@link AgeGroup age group} (additional letters may be used when applicable.).

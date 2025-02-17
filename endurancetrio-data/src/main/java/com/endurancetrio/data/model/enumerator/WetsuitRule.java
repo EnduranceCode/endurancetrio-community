@@ -18,7 +18,7 @@ package com.endurancetrio.data.model.enumerator;
 import com.endurancetrio.data.model.entity.TriathlonBasedRace;
 
 /**
- * The {@link WetsuitRule} enum represents the wetsuit rule of a {@link TriathlonBasedRace}.
+ * The {@link WetsuitRule} enum represents the wetsuit rule for a {@link TriathlonBasedRace}.
  * <p>
  * It includes the following constants:
  * <ul>

@@ -30,8 +30,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * The {@link Organizer} entity represents a single organizer of an endurance sport
- * {@link Event event}.
+ * The {@link Organizer} entity represents a single organizer of an endurance sport {@link Event}.
  * <p>
  * The {@link Organizer}'s fields are defined as follows:
  * <ul>
@@ -39,15 +38,18 @@ import java.util.StringJoiner;
  *     {@link #getId() id} : the unique identifier of the {@link Organizer} that is automatically
  *     generated and is the primary key.
  *   </li>
- *   <li>{@link #getName() name} : the name or designation of the {@link Organizer organizer}.</li>
+ *   <li>{@link #getName() name} : the name or designation of the {@link Organizer}.</li>
  *   <li>
- *     {@link #getDistrict() district} : the district of the {@link Organizer organizer} headquarters.
+ *     {@link #getDistrict() district} : the district of the {@link Organizer} headquarters.
  *   </li>
  *   <li>
- *     {@link #getCounty() county} : the county of the {@link Organizer organizer} headquarters.
+ *     {@link #getCounty() county} : the county of the {@link Organizer} headquarters.
  *   </li>
- *   <li>{@link #getCity() city} : the city of the {@link Organizer organizer} headquarters.</li>
- *   <li>{@link #getOrganizerType() organizerType} : the {@link OrganizerType type}.</li>
+ *   <li>{@link #getCity() city} : the city of the {@link Organizer} headquarters.</li>
+ *   <li>
+ *     {@link #getOrganizerType() organizerType} : the {@link OrganizerType} used to classify
+ *     the type of {@link Event event}'s {@link Organizer}.
+ *   </li>
  * </ul>
  */
 @Entity(name = "Organizer")

@@ -24,9 +24,9 @@ import com.endurancetrio.data.model.entity.Race;
  * <ul>
  *   <li>
  *     {@link #PLANNED} : used for the {@link Race races} that are planned but not yet
- *     (or never) completed.
+ *     (or were ever) completed.
  *   </li>
- *   <li>{@link #COMPLETED} : used for the {@link Race races} that are completed.</li>
+ *   <li>{@link #COMPLETED} : used for the {@link Race races} that were completed.</li>
  * </ul>
  */
 public enum RaceStatus {

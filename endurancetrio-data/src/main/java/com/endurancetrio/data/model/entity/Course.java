@@ -39,7 +39,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 /**
- * The {@link Course} entity represents an {@link Event}'s {@link Course course}.
+ * The {@link Course} entity represents a {@link Course course}
+ * used by an {@link Event}'s {@link Race}.
  * <p>
  * The {@link Course}'s fields are defined as follows:
  * <ul>
@@ -52,21 +53,21 @@ import java.util.StringJoiner;
  *   </li>
  *   <li>
  *     {@link #getTitle() title} : the title of the {@link Course}, typically consisting
- *     of the name of the {@link Course course}'s {@link Sport sport} and its distance,
- *     such as "Sprint Triathlon" or "Standard Duathlon". When an {@link Event} has different
+ *     of the name of the {@link Course}'s {@link Sport sport} and its distance, such as
+ *     "Sprint Triathlon" or "Standard Duathlon". When an {@link Event} has different
  *     {@link Course courses} with the same distance (e.g. with different routes), a second
- *     reference should be added to the name of the programs so that they can be
+ *     reference should be added to the title of the {@link Course} so that they can be
  *     unambiguously differentiated.
  *   </li>
  *   <li>
- *     {@link #getSport() sport} : the {@link Sport sport} that the {@link Course} is used for.
+ *     {@link #getSport() sport} : the {@link Sport} of the {@link Race} that the {@link Course}
+ *     is used for.
  *   </li>
  *   <li>
- *     {@link #getDistance() distance} : the data that defines
- *     the {@link Course}'s {@link Distance distance}.
+ *     {@link #getDistance() distance} : the data of a {@link Course}'s {@link Distance}.
  *   </li>
  *   <li>
- *     {@link #getRaces() races} : the {@link Race races} that use this {@link Course}.
+ *     {@link #getRaces() races} : the {@link Race races} that the {@link Course} is used for.
  *   </li>
  * </ul>
  */

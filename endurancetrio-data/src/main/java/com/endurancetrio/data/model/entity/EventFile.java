@@ -36,25 +36,31 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
- * The {@link EventFile} entity represents a file with information (other than the race's results)
- * concerning an {@link Event} or an event's race.
+ * The {@link EventFile} entity represents a file with information (other than the
+ * {@link Race race}'s results) concerning an {@link Event} or an event's {@link Race}.
  * <p>
- * An {@link EventFile} can refer to the {@link Event event}'s guide, regulations, courses or media
+ * An {@link EventFile} may refer to the {@link Event event}'s guide, regulations, courses or media
  * images.
  * <p>
  * The {@link EventFile}'s fields are defined as follows:
  * <ul>
  *   <li>
- *     {@link #getId() id} : the unique identifier of the {@link Event} that
+ *     {@link #getId() id} : the unique identifier of the {@link EventFile} that
  *     is automatically generated and is the primary key.
  *   </li>
  *   <li>{@link #getEvent() event} : the {@link Event} that the {@link EventFile} belongs to.</li>
- *   <li>{@link #getTitle() title} : the title of the file that should describe the file's content.</li>
- *   <li>{@link #getFileType() fileType} : the {@link FileType type} of the {@link EventFile}.</li>
+ *   <li>
+ *     {@link #getTitle() title} : the title of the file that should describe
+ *     the {@link EventFile}'s content.
+ *   </li>
+ *   <li>
+ *     {@link #getFileType() fileType} : the {@link FileType} used to classify the type
+ *     of {@link EventFile} that is associated with an {@link Event}.
+ *   </li>
  *   <li>
  *     {@link #getFileName() fileName} : the {@link EventFile file} name that has exactly
- *     24 characters and is in the format YYYYMMDDXXXNNN-TTTYYY-VV.ext. In this format,
- *     "YYYYMMDDXXXNNN" corresponds to the {@link Event}'s {@link Event#getEventReference()},
+ *     24 characters and has the format YYYYMMDDXXXNNN-TTTYYY-VV.ext. In this format,
+ *     "YYYYMMDDXXXNNN" corresponds to the {@link Event}'s {@link Event#getEventReference() reference},
  *     "TTT", written in upper case letters, corresponds to the document type
  *     ("GDE" for guides, "REG" for Regulations, "MAP" for course maps, "IMG" for images
  *     and "STL" for start lists), "YYY" is the document's order number (in the cases where

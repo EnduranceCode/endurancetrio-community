@@ -28,12 +28,12 @@ import java.util.StringJoiner;
  * The {@link TriathlonBasedRace} class represents a triathlon based {@link Race} such as Aquathlon,
  * Aquabike or Triathlon.
  * <p>
- * Besides the fields inherited from the {@link Race}, the {@link Race}'s fields are defined as
- * follows:
+ * Besides the fields inherited from the {@link Race}, the {@link TriathlonBasedRace}'s fields
+ * are defined as follows:
  * <ul>
  *   <li>
  *     {@link #getWaterTemperature() waterTemperature} : the official water temperature
- *     of the {@link Race}
+ *     for the {@link Race}
  *   </li>
  *   <li>
  *     {@link #getWetsuitRule() wetSuitRule} : the {@link WetsuitRule wetsuit rule}

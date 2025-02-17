@@ -52,8 +52,8 @@ import java.util.StringJoiner;
  * <p>
  * A {@link Race} is uniquely defined by its {@link Course} and its start list formation rules,
  * meaning no two {@link Race races} can have identical {@link Course course} and start list
- * formation rules. Additionally, each {@link Race} corresponds to a single starting shot;
- * a {@link Race} cannot have multiple starting shots.
+ * formation rules. Additionally, each {@link Race} corresponds to a single start; a {@link Race}
+ * cannot have multiple starts.
  * <p>
  * Both individual and collective competitions are represented by this entity. Collective
  * competitions (such as club or team events) derive their classification from the results
@@ -63,7 +63,7 @@ import java.util.StringJoiner;
  * scenarios (e.g., collective youth races whose classification derives from multiple individual
  * {@link Race races}), a {@link Race} may belong to multiple {@link Course courses}.
  * <p>
- * The fields of the entity are:
+ * The {@link Race}'s fields are defined as follows:
  * <ul>
  *   <li>
  *     {@link #getId() id} : the unique identifier of the {@link Race} that is automatically
@@ -111,17 +111,17 @@ import java.util.StringJoiner;
  *   <li>{@link #getGenderCategory() genderCategory} the gender category of the {@link Race}.</li>
  *   <li>{@link #getAgeGroup() ageGroup} : the {@link AgeGroup age group} of the {@link Race}.</li>
  *   <li>{@link #getDate() date} : the date of the {@link Race}.</li>
- *   <li>{@link #getTime() time} : the time scheduled for the gun shot of the {@link Race}.</li>
+ *   <li>{@link #getTime() time} : the time scheduled for the starting gun of the {@link Race}.</li>
  *   <li>
  *     {@link #getRaceStatus() raceStatus} : the {@link RaceStatus status} of the {@link Race}.
  *   </li>
- *   <li>{@link #getGunTime() gunTime} : the time of the gun shot of the {@link Race}.</li>
+ *   <li>{@link #getGunTime() gunTime} : the time of the starting gun of the {@link Race}.</li>
  *   <li>
- *     {@link #getAirTemperature() airTemperature} : the air temperature at the time
- *     of the gun shot of the {@link Race}.
+ *     {@link #getAirTemperature() airTemperature} : the official air temperature
+ *     for the {@link Race}.
  *   </li>
  *   <li>
- *     {@link #getResultsFiles() resultsFiles} : the {@link ResultsFile files} of the {@link Race}.
+ *     {@link #getResultsFiles() resultsFiles} : the {@link ResultsFile} of the {@link Race}.
  *   </li>
  * </ul>
  */

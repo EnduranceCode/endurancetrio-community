@@ -18,7 +18,7 @@ package com.endurancetrio.data.model.enumerator;
 import com.endurancetrio.data.model.entity.Course;
 
 /**
- * The {@link Sport} enum defines the possible sport classification of an {@link Course course}.
+ * The {@link Sport} enum represent the possible sport classifications for a {@link Course course}.
  * <p>
  * It includes the following constants:
  * <ul>

@@ -23,23 +23,23 @@ import com.endurancetrio.data.model.entity.Race;
  * It includes the following constants:
  * <ul>
  *   <li>
- *     {@link #INDIVIDUAL_PARENT} : used for the {@link Race races} that have no parent {@link Race},
- *     that are not derived from any other {@link Race}.
+ *     {@link #INDIVIDUAL_PARENT} : used for the individual {@link Race races} that have no parent
+ *     {@link Race}, that are not derived from any other {@link Race}.
  *   </li>
  *   <li>
- *     {@link #INDIVIDUAL_DERIVED} : used for the {@link Race races} that are derived
- *     from another {@link Race race(s)}.
+ *     {@link #INDIVIDUAL_DERIVED} : used for the individual {@link Race races} that are derived
+ *     (or a subset) of another {@link Race race(s)}.
  *   </li>
  *   <li>
- *     {@link #TEAM_BY_RANK} : used for the {@link Race races} whose results are based
+ *     {@link #TEAM_BY_RANK} : used for the collective {@link Race races} whose results are based
  *     on the rank of the team members on an individual {@link Race}.
  *   </li>
  *   <li>
- *     {@link #TEAM_BY_TIME} : used for the {@link Race races} whose results are based
+ *     {@link #TEAM_BY_TIME} : used for the collective {@link Race races} whose results are based
  *     on the time of the team members on an individual {@link Race}.
  *   </li>
  *   <li>
- *     {@link #TEAM_BY_POINTS} : used for the {@link Race races} whose results are based
+ *     {@link #TEAM_BY_POINTS} : used for the collective {@link Race races} whose results are based
  *     on the points of the team members on an individual {@link Race}.
  *   </li>
  *   <li>

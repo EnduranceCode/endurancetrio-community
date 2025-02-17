@@ -27,7 +27,7 @@ import java.util.StringJoiner;
 
 /**
  * The {@link DuathlonDistance} entity extends the {@link Distance} entity and represents the data
- * of a {@link Sport#DUATHLON Duathlon} and/or a {@link Sport#CROSS_DUATHLON Cross Duathlo}
+ * of a {@link Sport#DUATHLON Duathlon} and {@link Sport#CROSS_DUATHLON Cross Duathlon}
  * {@link Course}'s {@link Distance}.
  * <p>
  * Besides the fields inherited from {@link Distance}, the {@link DuathlonDistance}'s

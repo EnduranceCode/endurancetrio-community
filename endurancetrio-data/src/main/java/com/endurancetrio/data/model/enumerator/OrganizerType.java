@@ -19,8 +19,7 @@ import com.endurancetrio.data.model.entity.Event;
 import com.endurancetrio.data.model.entity.Organizer;
 
 /**
- * The {@link OrganizerType} enum is used to classify the type of {@link Event event}'s
- * {@link Organizer organizer}.
+ * The {@link OrganizerType} enum is used to classify an {@link Event}'s {@link Organizer}.
  * <p>
  * It includes the following constants:
  * <ul>

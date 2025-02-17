@@ -33,7 +33,7 @@ import java.util.StringJoiner;
  * The {@link AgeGroup}'s fields are defined as follows:
  * <ul>
  *   <li>
- *     {@link #getId() id} : the unique identifier of the {@link AgeGroup age group} that
+ *     {@link #getId() id} : the unique identifier of the {@link AgeGroup} that
  *     is automatically generated and is the primary key.
  *   </li>
  *   <li>{@link #getTitle() title} : the full title of the {@link AgeGroup age group}.</li>

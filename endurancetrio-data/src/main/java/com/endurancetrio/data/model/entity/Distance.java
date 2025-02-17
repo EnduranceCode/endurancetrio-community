@@ -46,8 +46,8 @@ import java.util.StringJoiner;
  *   </li>
  *   <li>{@link #getCourse() course} : the {@link Course} to which the {@link Distance} belongs.</li>
  *   <li>
- *     {@link #getType() type} : the type of the {@link Distance} that defines
- *     the {@link Distance} classification of an {@link Course course}.
+ *     {@link #getType() type} : the {@link DistanceType} that defines the {@link Course}'s
+ *     {@link Distance} classification.
  *   </li>
  * </ul>
  */
