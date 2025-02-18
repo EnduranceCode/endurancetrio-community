@@ -101,7 +101,7 @@ public class Event implements Serializable {
 
   @Column(name = "event_reference", unique = true, nullable = false)
   @Pattern(
-      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}$",
+      regexp = "^\\d{8}[A-Z]{3}\\d{3}$",
       message = "Event reference must follow the format YYYYMMDDXXXNNN (e.g., 19840815NAC001)"
   )
   private String eventReference;
@@ -151,6 +151,28 @@ public class Event implements Serializable {
   @AssertTrue(message = "Start date must be before or equal to end date")
   private boolean isValidDateRange() {
     return startDate != null && endDate != null && !startDate.isAfter(endDate);
+  }
+
+  /**
+   * Adds an {@link EventFile} to the {@link Event}. This method also sets the {@link Event}
+   * reference in the {@link EventFile}.
+   *
+   * @param eventFile the {@link EventFile} to be added
+   */
+  public void addEventFile(EventFile eventFile) {
+    this.eventFiles.add(eventFile);
+    eventFile.setEvent(this);
+  }
+
+  /**
+   * Removes an {@link EventFile} from the {@link Event}. This method also removes the {@link Event}
+   * reference from the {@link EventFile}.
+   *
+   * @param eventFile the {@link EventFile} to be removed
+   */
+  public void removeEventFile(EventFile eventFile) {
+    this.eventFiles.remove(eventFile);
+    eventFile.setEvent(null);
   }
 
   public Long getId() {

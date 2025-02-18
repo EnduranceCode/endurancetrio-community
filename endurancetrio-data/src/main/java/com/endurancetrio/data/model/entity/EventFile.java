@@ -107,7 +107,7 @@ public class EventFile implements Serializable {
 
   @Column(name = "file_name", nullable = false, unique = true)
   @Pattern(
-      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}-[A-Z]{3}[0-9]{3}-[0-9]{2}\\.[a-zA-Z0-9]+$",
+      regexp = "^\\d{8}[A-Z]{3}\\d{3}-[A-Z]{3}\\d{3}-\\d{2}\\.[a-zA-Z0-9]+$",
       message = "File name must follow the format YYYYMMDDXXXNNN-TTTYYY-VV.ext (e.g., 19840815NAC001-IMG001-01.png)"
   )
   private String fileName;
@@ -139,6 +139,9 @@ public class EventFile implements Serializable {
 
   public void setEvent(Event event) {
     this.event = event;
+    if (event != null) {
+      event.getEventFiles().add(this);
+    }
   }
 
   public String getTitle() {
@@ -202,7 +205,7 @@ public class EventFile implements Serializable {
   public String toString() {
     return new StringJoiner(", ", EventFile.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("courseId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
+        .add("eventId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
         .add("title='" + title + "'")
         .add("fileType=" + fileType)
         .add("fileName='" + fileName + "'")
