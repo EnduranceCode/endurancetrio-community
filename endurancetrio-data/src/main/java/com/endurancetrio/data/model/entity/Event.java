@@ -175,6 +175,28 @@ public class Event implements Serializable {
     eventFile.setEvent(null);
   }
 
+  /**
+   * Adds an {@link Course} to the {@link Event}. This method also sets the {@link Event}
+   * reference in the {@link Course}.
+   *
+   * @param course the {@link Course} to be added
+   */
+  public void addCourse(Course course) {
+    courses.add(course);
+    course.setEvent(this);
+  }
+
+  /**
+   * Removes an {@link Course} from the {@link Event}. This method also removes the {@link Event}
+   * reference from the {@link Course}.
+   *
+   * @param course the {@link Course} to be removed
+   */
+  public void removeCourse(Course course) {
+    courses.remove(course);
+    course.setEvent(null);
+  }
+
   public Long getId() {
     return id;
   }

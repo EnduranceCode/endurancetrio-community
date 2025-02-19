@@ -16,7 +16,6 @@
 package com.endurancetrio.data.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.endurancetrio.data.model.enumerator.DistanceType;
 import com.endurancetrio.data.model.enumerator.Sport;
@@ -73,7 +72,6 @@ class CourseTest {
     assertEquals("Duatlo Benjamins", underTest.getTitle());
     assertEquals(Sport.DUATHLON, underTest.getSport());
     assertEquals(testDistance, underTest.getDistance());
-    assertNotNull(underTest.getRaces());
-    assertEquals(1, underTest.getRaces().size());
+    assertEquals(testRace, underTest.getRaces().iterator().next());
   }
 }

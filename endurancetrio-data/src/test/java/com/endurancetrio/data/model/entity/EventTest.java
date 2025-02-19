@@ -110,10 +110,7 @@ class EventTest {
     underTest.setCity("Grândola");
     underTest.setOrganizers(organizers);
     underTest.addEventFile(testEventFile);
-    underTest.setCourses(Set.of(testCourse));
-
-    testDistance.setCourse(testCourse);
-    testCourse.setEvent(underTest);
+    underTest.addCourse(testCourse);
   }
 
   @Test

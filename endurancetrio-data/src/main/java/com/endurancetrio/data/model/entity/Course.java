@@ -124,6 +124,9 @@ public class Course implements Serializable {
 
   public void setEvent(Event event) {
     this.event = event;
+    if (event != null) {
+      event.getCourses().add(this);
+    }
   }
 
   public String getTitle() {
@@ -177,11 +180,12 @@ public class Course implements Serializable {
 
   @Override
   public String toString() {
-    return new StringJoiner(", ", Course.class.getSimpleName() + "[", "]").add("id=" + id)
+    return new StringJoiner(", ", Course.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
         .add("eventId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
         .add("title='" + title + "'")
         .add("sport=" + sport)
-        .add("distance=" + (distance != null ? distance.getId() : "null"))
+        .add("distanceId=" + Optional.ofNullable(distance).map(Distance::getId).orElse(null))
         .toString();
   }
 }
