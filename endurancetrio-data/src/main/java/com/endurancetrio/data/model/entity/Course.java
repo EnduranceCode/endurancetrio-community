@@ -65,6 +65,10 @@ import java.util.StringJoiner;
  *   </li>
  *   <li>
  *     {@link #getDistance() distance} : the data of a {@link Course}'s {@link Distance}.
+ *     Each {@link Course} has a unique {@link Distance}, and distances are not shared
+ *     across multiple courses. The relationship is unidirectional, meaning {@link Distance}
+ *     does not have a reference back to {@link Course}. Deleting a {@link Course} will also
+ *     delete its associated {@link Distance} due to cascading and orphan removal settings.
  *   </li>
  *   <li>
  *     {@link #getRaces() races} : the {@link Race races} that the {@link Course} is used for.
@@ -93,7 +97,10 @@ public class Course implements Serializable {
   @Convert(converter = SportConverter.class)
   private Sport sport;
 
-  @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
+  @OneToOne(
+      fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true, orphanRemoval = true
+  )
+  @JoinColumn(name = "distance_id", referencedColumnName = "id")
   private Distance distance;
 
   @ManyToMany(
@@ -185,7 +192,7 @@ public class Course implements Serializable {
         .add("eventId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
         .add("title='" + title + "'")
         .add("sport=" + sport)
-        .add("distanceId=" + Optional.ofNullable(distance).map(Distance::getId).orElse(null))
+        .add("distanceId=" + Optional.ofNullable(distance).map(Distance::toString).orElse(null))
         .toString();
   }
 }

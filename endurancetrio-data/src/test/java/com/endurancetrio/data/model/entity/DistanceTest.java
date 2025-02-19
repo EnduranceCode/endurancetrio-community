@@ -32,23 +32,16 @@ class DistanceTest {
 
   private Distance underTest;
 
-  private Course testCourse;
-
   @BeforeEach
   void setUp() {
-    testCourse = new Course();
-    testCourse.setId(1L);
-
     underTest = new Distance();
     underTest.setId(1L);
-    underTest.setCourse(testCourse);
     underTest.setType(DistanceType.SPRINT);
   }
 
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals(testCourse, underTest.getCourse());
     assertEquals(DistanceType.SPRINT, underTest.getType());
   }
 }

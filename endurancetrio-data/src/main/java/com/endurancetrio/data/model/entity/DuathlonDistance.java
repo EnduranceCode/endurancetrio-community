@@ -22,7 +22,6 @@ import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -162,7 +161,6 @@ public class DuathlonDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", DuathlonDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("courseId=" + Optional.ofNullable(super.getCourse()).map(Course::getId).orElse(null))
         .add("type=" + super.getType())
         .add("firstRunDistance=" + firstRunDistance)
         .add("firstRunLaps=" + firstRunLaps)

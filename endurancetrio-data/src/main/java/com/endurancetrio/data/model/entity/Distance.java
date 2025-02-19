@@ -17,7 +17,6 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.DistanceTypeConverter;
 import com.endurancetrio.data.model.enumerator.DistanceType;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -26,13 +25,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -44,7 +40,6 @@ import java.util.StringJoiner;
  *     {@link #getId() id} : the unique identifier of the {@link Distance} that
  *     is automatically generated and is the primary key.
  *   </li>
- *   <li>{@link #getCourse() course} : the {@link Course} to which the {@link Distance} belongs.</li>
  *   <li>
  *     {@link #getType() type} : the {@link DistanceType} that defines the {@link Course}'s
  *     {@link Distance} classification.
@@ -63,10 +58,6 @@ public class Distance implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
-  private Course course;
-
   @Column(name = "type", nullable = false)
   @Convert(converter = DistanceTypeConverter.class)
   private DistanceType type;
@@ -84,14 +75,6 @@ public class Distance implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Course getCourse() {
-    return course;
-  }
-
-  public void setCourse(Course course) {
-    this.course = course;
   }
 
   public DistanceType getType() {
@@ -123,7 +106,6 @@ public class Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", Distance.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("courseId=" + Optional.ofNullable(course).map(Course::getId).orElse(null))
         .add("type=" + type)
         .toString();
   }

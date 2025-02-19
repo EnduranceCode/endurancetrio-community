@@ -32,16 +32,10 @@ class DoubleBiathlonDistanceTest {
 
   private DoubleBiathlonDistance underTest;
 
-  private Course testCourse;
-
   @BeforeEach
   void setUp() {
-    testCourse = new Course();
-    testCourse.setId(1L);
-
     underTest = new DoubleBiathlonDistance();
     underTest.setId(1L);
-    underTest.setCourse(testCourse);
     underTest.setType(DistanceType.SPRINT);
     underTest.setFirstBikeDistance(20000);
     underTest.setFirstBikeLaps(2);
@@ -56,7 +50,6 @@ class DoubleBiathlonDistanceTest {
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals(testCourse, underTest.getCourse());
     assertEquals(DistanceType.SPRINT, underTest.getType());
     assertEquals(20000, underTest.getFirstBikeDistance());
     assertEquals(2, underTest.getFirstBikeLaps());
