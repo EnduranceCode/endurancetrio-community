@@ -16,7 +16,7 @@
 
 spring:
   application:
-    name: EnduranceTrio Web Portal
+    name: EnduranceTrio Community
 
   datasource:
     url: jdbc:h2:mem:endurancetrio

@@ -23,8 +23,8 @@
   <artifactId>endurancetrio-community</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>EnduranceTrio Web Portal</name>
-  <description>Web app for endurance sports</description>
+  <name>EnduranceTrio Community</name>
+  <description>A central hub for endurance sports data and resources</description>
 
   <url>https://github.com/EnduranceCode/endurancetrio-community</url>
 
