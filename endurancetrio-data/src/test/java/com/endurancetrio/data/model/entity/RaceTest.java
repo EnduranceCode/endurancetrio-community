@@ -59,7 +59,7 @@ class RaceTest {
     underTest = new Race();
     underTest.setId(1L);
     underTest.setRaceReference("20100307FTP001-003");
-    underTest.setCourses(Set.of(testCourse));
+    underTest.addCourse(testCourse);
     underTest.setRaceType(RaceType.INDIVIDUAL_DERIVED);
     underTest.setParentRaces(new HashSet<>());
     underTest.setTitle("XVI Duatlo Jovem de Grândola");

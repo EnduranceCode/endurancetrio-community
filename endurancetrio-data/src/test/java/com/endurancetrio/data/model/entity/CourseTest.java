@@ -18,7 +18,13 @@ package com.endurancetrio.data.model.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.endurancetrio.data.model.enumerator.DistanceType;
+import com.endurancetrio.data.model.enumerator.GenderCategory;
+import com.endurancetrio.data.model.enumerator.RaceStatus;
+import com.endurancetrio.data.model.enumerator.RaceType;
 import com.endurancetrio.data.model.enumerator.Sport;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,8 +59,29 @@ class CourseTest {
     testDistance.setSecondRunDistance(180);
     testDistance.setSecondRunLaps(1);
 
+    AgeGroup testAgeGroup = new AgeGroup();
+    testAgeGroup.setId(1L);
+    testAgeGroup.setTitle("Benjamins");
+    testAgeGroup.setShortTitle("BEN");
+
+    ResultsFile testResultsFile = new ResultsFile();
+    testResultsFile.setId(1L);
+
     testRace = new Race();
     testRace.setId(1L);
+    testRace.setRaceReference("20100307FTP001-003");
+    testRace.setRaceType(RaceType.INDIVIDUAL_DERIVED);
+    testRace.setParentRaces(new HashSet<>());
+    testRace.setTitle("XVI Duatlo Jovem de Grândola");
+    testRace.setSubtitle("Benjamins Masculinos");
+    testRace.setGenderCategory(GenderCategory.MALE);
+    testRace.setAgeGroup(testAgeGroup);
+    testRace.setDate(LocalDate.parse("2010-03-06"));
+    testRace.setTime(LocalTime.parse("14:30:00"));
+    testRace.setRaceStatus(RaceStatus.COMPLETED);
+    testRace.setGunTime(LocalTime.parse("14:33:30"));
+    testRace.setAirTemperature(18.0);
+    testRace.setResultsFiles(Set.of(testResultsFile));
 
     underTest = new Course();
     underTest.setId(1L);
@@ -62,7 +89,7 @@ class CourseTest {
     underTest.setTitle("Duatlo Benjamins");
     underTest.setSport(Sport.DUATHLON);
     underTest.setDistance(testDistance);
-    underTest.setRaces(Set.of(testRace));
+    underTest.addRace(testRace);
   }
 
   @Test

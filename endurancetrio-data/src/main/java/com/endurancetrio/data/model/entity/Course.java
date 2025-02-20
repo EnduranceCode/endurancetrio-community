@@ -26,6 +26,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -104,8 +105,13 @@ public class Course implements Serializable {
   private Distance distance;
 
   @ManyToMany(
-      mappedBy = "courses", fetch = FetchType.LAZY,
+      fetch = FetchType.LAZY,
       cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+  )
+  @JoinTable(
+      name = "course_race",
+      joinColumns = @JoinColumn(name = "course_id"),
+      inverseJoinColumns = @JoinColumn(name = "race_id")
   )
   private Set<Race> races;
 
@@ -115,6 +121,32 @@ public class Course implements Serializable {
   public Course() {
     super();
     this.races = new HashSet<>();
+  }
+
+  /**
+   * Adds a {@link Race} to this {@link Course}'s {@link #getRaces() races} collection. Ensures
+   * bidirectional consistency by also adding this {@link Course} to the {@link Race}'s
+   * {@link Race#getCourses() courses} collection.
+   *
+   * @param race the {@link Race} to add; ignored if {@code null} or already present
+   */
+  public void addRace(Race race) {
+    if (race != null && races.add(race)) {
+      race.addCourse(this);
+    }
+  }
+
+  /**
+   * Removes a {@link Race} from this {@link Course}'s {@link #getRaces() races} collection. Ensures
+   * bidirectional consistency by also removing this {@link Course} from the {@link Race}'s
+   * {@link Race#getCourses() courses} collection.
+   *
+   * @param race the {@link Race} to remove; ignored if {@code null} or not present
+   */
+  public void removeRace(Race race) {
+    if (race != null && races.remove(race)) {
+      race.removeCourse(this);
+    }
   }
 
   public Long getId() {

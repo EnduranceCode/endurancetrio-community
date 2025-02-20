@@ -139,17 +139,12 @@ public class Race implements Serializable {
 
   @Column(name = "race_reference", unique = true, nullable = false)
   @Pattern(
-      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}-[0-9]{3}$",
+      regexp = "^\\d{8}[A-Z]{3}\\d{3}-\\d{3}$",
       message = "Race reference must follow the format YYYYMMDDXXXNNN-YYY (e.g., 19840815NAC001-001)"
   )
   private String raceReference;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(
-      name = "race_course",
-      joinColumns = @JoinColumn(name = "race_id"),
-      inverseJoinColumns = @JoinColumn(name = "course_id")
-  )
+  @ManyToMany(mappedBy = "races", fetch = FetchType.LAZY)
   private Set<Course> courses;
 
   @Column(name = "race_type", nullable = false)
@@ -201,6 +196,32 @@ public class Race implements Serializable {
     super();
     this.courses = new HashSet<>();
     this.parentRaces = new HashSet<>();
+  }
+
+  /**
+   * Adds a {@link Course} to this {@link Race}'s {@link #getCourses() races} collection. Ensures
+   * bidirectional consistency by also adding this {@link Race} to the {@link Course}'s
+   * {@link Course#getRaces() races} collection.
+   *
+   * @param course the {@link Course} to add; ignored if {@code null} or already present
+   */
+  public void addCourse(Course course) {
+    if (course != null && courses.add(course)) {
+      course.addRace(this);
+    }
+  }
+
+  /**
+   * Removes a {@link Course} from this {@link Race}'s {@link #getCourses() courses} collection.
+   * Ensures bidirectional consistency by also removing this {@link Race} from the {@link Course}'s
+   * {@link Course#getRaces() races} collection.
+   *
+   * @param course the {@link Course} to remove; ignored if {@code null} or not present
+   */
+  public void removeCourse(Course course) {
+    if (course != null && courses.remove(course)) {
+      course.removeRace(this);
+    }
   }
 
   public Long getId() {
