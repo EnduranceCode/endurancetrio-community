@@ -151,7 +151,7 @@ public class Race implements Serializable {
   @Convert(converter = RaceTypeConverter.class)
   private RaceType raceType;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "race_hierarchy",
       joinColumns = @JoinColumn(name = "race_id"),
@@ -192,6 +192,9 @@ public class Race implements Serializable {
   @OneToMany(mappedBy = "race", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Set<ResultsFile> resultsFiles;
 
+  /**
+   * Default constructor for the {@link Race} entity.
+   */
   public Race() {
     super();
     this.courses = new HashSet<>();
@@ -221,6 +224,38 @@ public class Race implements Serializable {
   public void removeCourse(Course course) {
     if (course != null && courses.remove(course)) {
       course.removeRace(this);
+    }
+  }
+
+  /**
+   * Adds a parent {@link Race} to this {@link Race}.
+   * <p>
+   * This method establishes a parent-child relationship between the current {@link Race} and the
+   * provided {@link Race}. The parent {@link Race} must already be persisted in the database before
+   * adding it as a parent.
+   *
+   * @param parentRace The {@link Race} to be added as a parent. It must be a non-null race.
+   */
+  public void addParentRace(Race parentRace) {
+    if (parentRace != null && parentRace.getId() != null  && !this.equals(parentRace)) {
+      this.parentRaces.add(parentRace);
+    }
+  }
+
+  /**
+   * Removes a parent {@link Race} from this {@link Race}.
+   * <p>
+   * This method removes the association between the current {@link Race} and the specified parent
+   * {@link Race}. The provided parent {@link Race} must be one of the already existing
+   * {@link #getParentRaces() parentRaces} of this {@link Race}.
+   *
+   * @param parentRace The {@link Race} to be removed from the list
+   *                   {@link #getParentRaces() parentRaces}. It must already be associated as a
+   *                   parent.
+   */
+  public void removeParentRace(Race parentRace) {
+    if (parentRace != null && parentRace.getId() != null) {
+      this.parentRaces.remove(parentRace);
     }
   }
 

@@ -23,7 +23,6 @@ import com.endurancetrio.data.model.enumerator.RaceStatus;
 import com.endurancetrio.data.model.enumerator.RaceType;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,15 +52,34 @@ class RaceTest {
     testAgeGroup.setTitle("Benjamins");
     testAgeGroup.setShortTitle("BEN");
 
+    ResultsFile testParentResultFile = new ResultsFile();
+    testParentResultFile.setId(1L);
     testResultsFile = new ResultsFile();
-    testResultsFile.setId(1L);
+    testResultsFile.setId(2L);
+
+    Race testParentRace = new Race();
+    testParentRace.setId(1L);
+    testParentRace.setRaceReference("20100307FTP001-001");
+    testParentRace.addCourse(testCourse);
+    testParentRace.setRaceType(RaceType.INDIVIDUAL_PARENT);
+    testParentRace.addParentRace(testParentRace);
+    testParentRace.setTitle("XVI Duatlo Jovem de Grândola");
+    testParentRace.setSubtitle("Benjamins Geral");
+    testParentRace.setGenderCategory(GenderCategory.OPEN);
+    testParentRace.setAgeGroup(testAgeGroup);
+    testParentRace.setDate(LocalDate.parse("2010-03-06"));
+    testParentRace.setTime(LocalTime.parse("14:30:00"));
+    testParentRace.setRaceStatus(RaceStatus.COMPLETED);
+    testParentRace.setGunTime(LocalTime.parse("14:33:30"));
+    testParentRace.setAirTemperature(18.0);
+    testParentRace.setResultsFiles(Set.of(testParentResultFile));
 
     underTest = new Race();
-    underTest.setId(1L);
+    underTest.setId(2L);
     underTest.setRaceReference("20100307FTP001-003");
     underTest.addCourse(testCourse);
     underTest.setRaceType(RaceType.INDIVIDUAL_DERIVED);
-    underTest.setParentRaces(new HashSet<>());
+    underTest.addParentRace(testParentRace);
     underTest.setTitle("XVI Duatlo Jovem de Grândola");
     underTest.setSubtitle("Benjamins Masculinos");
     underTest.setGenderCategory(GenderCategory.MALE);
@@ -76,13 +94,13 @@ class RaceTest {
 
   @Test
   void entityShouldRetainValues() {
-    assertEquals(1L, underTest.getId());
+    assertEquals(2L, underTest.getId());
     assertEquals("20100307FTP001-003", underTest.getRaceReference());
     assertNotNull(underTest.getCourses());
     assertEquals(1, underTest.getCourses().size());
     assertEquals(testCourse, underTest.getCourses().iterator().next());
     assertNotNull(underTest.getParentRaces());
-    assertEquals(0, underTest.getParentRaces().size());
+    assertEquals(1, underTest.getParentRaces().size());
     assertEquals("XVI Duatlo Jovem de Grândola", underTest.getTitle());
     assertEquals("Benjamins Masculinos", underTest.getSubtitle());
     assertEquals(GenderCategory.MALE, underTest.getGenderCategory());
