@@ -89,7 +89,7 @@ class RaceTest {
     underTest.setRaceStatus(RaceStatus.COMPLETED);
     underTest.setGunTime(LocalTime.parse("14:33:30"));
     underTest.setAirTemperature(18.0);
-    underTest.setResultsFiles(Set.of(testResultsFile));
+    underTest.getResultsFiles().add(testResultsFile);
   }
 
   @Test

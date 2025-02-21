@@ -46,7 +46,6 @@ class EventFileTest {
 
     underTest = new EventFile();
     underTest.setId(1L);
-    underTest.setEvent(testEvent);
     underTest.setFileType(FileType.RULES);
     underTest.setTitle("Regulamento");
     underTest.setFileName("20100307FTP001-REG001.pdf");
@@ -57,7 +56,6 @@ class EventFileTest {
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals(testEvent, underTest.getEvent());
     assertEquals(FileType.RULES, underTest.getFileType());
     assertEquals("Regulamento", underTest.getTitle());
     assertEquals("20100307FTP001-REG001.pdf", underTest.getFileName());

@@ -155,7 +155,7 @@ public class Race implements Serializable {
   @JoinTable(
       name = "race_hierarchy",
       joinColumns = @JoinColumn(name = "race_id"),
-      inverseJoinColumns = @JoinColumn(name = "source_race_id")
+      inverseJoinColumns = @JoinColumn(name = "parent_race_id")
   )
   private Set<Race> parentRaces;
 
@@ -189,7 +189,8 @@ public class Race implements Serializable {
   @Column(name = "air_temperature", nullable = true)
   private Double airTemperature;
 
-  @OneToMany(mappedBy = "race", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "race_id", referencedColumnName = "id")
   private Set<ResultsFile> resultsFiles;
 
   /**
@@ -199,6 +200,7 @@ public class Race implements Serializable {
     super();
     this.courses = new HashSet<>();
     this.parentRaces = new HashSet<>();
+    this.resultsFiles = new HashSet<>();
   }
 
   /**
@@ -209,7 +211,7 @@ public class Race implements Serializable {
    * @param course the {@link Course} to add; ignored if {@code null} or already present
    */
   public void addCourse(Course course) {
-    if (course != null && courses.add(course)) {
+    if (course != null && this.courses.add(course)) {
       course.addRace(this);
     }
   }
@@ -222,7 +224,7 @@ public class Race implements Serializable {
    * @param course the {@link Course} to remove; ignored if {@code null} or not present
    */
   public void removeCourse(Course course) {
-    if (course != null && courses.remove(course)) {
+    if (course != null && this.courses.remove(course)) {
       course.removeRace(this);
     }
   }

@@ -132,7 +132,8 @@ public class Event implements Serializable {
   )
   private Set<Organizer> organizers;
 
-  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "event_id", referencedColumnName = "id")
   private Set<EventFile> eventFiles;
 
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -154,36 +155,15 @@ public class Event implements Serializable {
   }
 
   /**
-   * Adds an {@link EventFile} to the {@link Event}. This method also sets the {@link Event}
-   * reference in the {@link EventFile}.
-   *
-   * @param eventFile the {@link EventFile} to be added
-   */
-  public void addEventFile(EventFile eventFile) {
-    this.eventFiles.add(eventFile);
-    eventFile.setEvent(this);
-  }
-
-  /**
-   * Removes an {@link EventFile} from the {@link Event}. This method also removes the {@link Event}
-   * reference from the {@link EventFile}.
-   *
-   * @param eventFile the {@link EventFile} to be removed
-   */
-  public void removeEventFile(EventFile eventFile) {
-    this.eventFiles.remove(eventFile);
-    eventFile.setEvent(null);
-  }
-
-  /**
    * Adds an {@link Course} to the {@link Event}. This method also sets the {@link Event}
    * reference in the {@link Course}.
    *
    * @param course the {@link Course} to be added
    */
   public void addCourse(Course course) {
-    courses.add(course);
-    course.setEvent(this);
+    if (course != null && this.courses.add(course)) {
+      course.setEvent(this);
+    }
   }
 
   /**
@@ -193,8 +173,9 @@ public class Event implements Serializable {
    * @param course the {@link Course} to be removed
    */
   public void removeCourse(Course course) {
-    courses.remove(course);
-    course.setEvent(null);
+    if (course != null && this.courses.remove(course)) {
+      course.setEvent(null);
+    }
   }
 
   public Long getId() {

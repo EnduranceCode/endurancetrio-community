@@ -15,21 +15,16 @@
  */
 package com.endurancetrio.data.model.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -40,9 +35,6 @@ import java.util.StringJoiner;
  *   <li>
  *     {@link #getId() id} : the unique identifier of the {@link ResultsFile} that is automatically
  *     generated and is the primary key.
- *   </li>
- *   <li>
- *     {@link #getRace() race} : the {@link Race} whose results the {@link ResultsFile} stores.
  *   </li>
  *   <li>
  *     {@link #getTitle() title} : the title of the {@link Race}. It should ideally match the
@@ -91,13 +83,6 @@ public class ResultsFile implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(
-      fetch = FetchType.LAZY,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
-  )
-  @JoinColumn(name = "race_id", referencedColumnName = "id", nullable = false)
-  private Race race;
-
   @Column(name = "title", nullable = false)
   private String title;
 
@@ -106,7 +91,7 @@ public class ResultsFile implements Serializable {
 
   @Column(name = "file_name", nullable = false, unique = true)
   @Pattern(
-      regexp = "^[0-9]{8}[A-Z]{3}[0-9]{3}-[0-9]{3}[A-Z]-[0-9]{2}\\.[a-zA-Z0-9]+$",
+      regexp = "^\\d{8}[A-Z]{3}\\d{3}-\\d{3}[A-Z]-\\d{2}\\.[a-zA-Z0-9]+$",
       message = "File name must follow the format YYYYMMDDXXXNNN-YYYZ-VV.ext (e.g., 19840815NAC001-001A-01.pdf)"
   )
   private String fileName;
@@ -130,14 +115,6 @@ public class ResultsFile implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Race getRace() {
-    return race;
-  }
-
-  public void setRace(Race race) {
-    this.race = race;
   }
 
   public String getTitle() {
@@ -201,7 +178,6 @@ public class ResultsFile implements Serializable {
   public String toString() {
     return new StringJoiner(", ", ResultsFile.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("raceId=" + Optional.ofNullable(race).map(Race::getId).orElse(null))
         .add("title='" + title + "'")
         .add("subtitle='" + subtitle + "'")
         .add("fileName='" + fileName + "'")

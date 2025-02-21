@@ -109,7 +109,7 @@ class EventTest {
     underTest.setCounty("Grândola");
     underTest.setCity("Grândola");
     underTest.setOrganizers(organizers);
-    underTest.addEventFile(testEventFile);
+    underTest.getEventFiles().add(testEventFile);
     underTest.addCourse(testCourse);
   }
 

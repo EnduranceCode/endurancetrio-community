@@ -17,22 +17,17 @@ package com.endurancetrio.data.model.entity;
 
 import com.endurancetrio.data.model.converter.FileTypeConverter;
 import com.endurancetrio.data.model.enumerator.FileType;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -48,7 +43,6 @@ import java.util.StringJoiner;
  *     {@link #getId() id} : the unique identifier of the {@link EventFile} that
  *     is automatically generated and is the primary key.
  *   </li>
- *   <li>{@link #getEvent() event} : the {@link Event} that the {@link EventFile} belongs to.</li>
  *   <li>
  *     {@link #getTitle() title} : the title of the file that should describe
  *     the {@link EventFile}'s content.
@@ -91,13 +85,6 @@ public class EventFile implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(
-      fetch = FetchType.LAZY,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
-  )
-  @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
-  private Event event;
-
   @Column(name = "title", nullable = false)
   private String title;
 
@@ -131,17 +118,6 @@ public class EventFile implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Event getEvent() {
-    return event;
-  }
-
-  public void setEvent(Event event) {
-    this.event = event;
-    if (event != null) {
-      event.getEventFiles().add(this);
-    }
   }
 
   public String getTitle() {
@@ -205,7 +181,6 @@ public class EventFile implements Serializable {
   public String toString() {
     return new StringJoiner(", ", EventFile.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("eventId=" + Optional.ofNullable(event).map(Event::getId).orElse(null))
         .add("title='" + title + "'")
         .add("fileType=" + fileType)
         .add("fileName='" + fileName + "'")

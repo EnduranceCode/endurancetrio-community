@@ -104,10 +104,7 @@ public class Course implements Serializable {
   @JoinColumn(name = "distance_id", referencedColumnName = "id")
   private Distance distance;
 
-  @ManyToMany(
-      fetch = FetchType.LAZY,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE}
-  )
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
       name = "course_race",
       joinColumns = @JoinColumn(name = "course_id"),
@@ -131,7 +128,7 @@ public class Course implements Serializable {
    * @param race the {@link Race} to add; ignored if {@code null} or already present
    */
   public void addRace(Race race) {
-    if (race != null && races.add(race)) {
+    if (race != null && this.races.add(race)) {
       race.addCourse(this);
     }
   }
@@ -144,7 +141,7 @@ public class Course implements Serializable {
    * @param race the {@link Race} to remove; ignored if {@code null} or not present
    */
   public void removeRace(Race race) {
-    if (race != null && races.remove(race)) {
+    if (race != null && this.races.remove(race)) {
       race.removeCourse(this);
     }
   }
