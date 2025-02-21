@@ -148,13 +148,13 @@ public class DuathlonDistance extends Distance implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    DuathlonDistance that = (DuathlonDistance) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    DuathlonDistance duathlonDistance = (DuathlonDistance) o;
+    return super.getId() != null && Objects.equals(super.getId(), duathlonDistance.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.getId());
+    return super.hashCode();
   }
 
   @Override

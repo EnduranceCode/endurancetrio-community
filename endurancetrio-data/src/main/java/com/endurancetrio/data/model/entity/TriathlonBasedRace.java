@@ -88,13 +88,13 @@ public class TriathlonBasedRace extends Race implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    TriathlonBasedRace that = (TriathlonBasedRace) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    TriathlonBasedRace triathlonBasedRace = (TriathlonBasedRace) o;
+    return super.getId() != null && Objects.equals(super.getId(), triathlonBasedRace.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), waterTemperature);
+    return super.hashCode();
   }
 
   @Override

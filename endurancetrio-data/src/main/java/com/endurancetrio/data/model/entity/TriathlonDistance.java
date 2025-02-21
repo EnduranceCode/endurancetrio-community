@@ -146,13 +146,13 @@ public class TriathlonDistance extends Distance implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    TriathlonDistance that = (TriathlonDistance) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    TriathlonDistance triathlonDistance = (TriathlonDistance) o;
+    return super.getId() != null && Objects.equals(super.getId(), triathlonDistance.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.getId());
+    return super.hashCode();
   }
 
   @Override

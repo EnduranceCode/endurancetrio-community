@@ -116,13 +116,13 @@ public class BiathlonDistance extends Distance implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    BiathlonDistance that = (BiathlonDistance) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    BiathlonDistance biathlonDistance = (BiathlonDistance) o;
+    return super.getId() != null && Objects.equals(super.getId(), biathlonDistance.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.getId());
+    return super.hashCode();
   }
 
   @Override

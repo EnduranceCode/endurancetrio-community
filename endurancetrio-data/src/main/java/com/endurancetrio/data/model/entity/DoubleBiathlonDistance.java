@@ -178,13 +178,13 @@ public class DoubleBiathlonDistance extends Distance implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    DoubleBiathlonDistance that = (DoubleBiathlonDistance) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    DoubleBiathlonDistance doubleBiathlonDistance = (DoubleBiathlonDistance) o;
+    return super.getId() != null && Objects.equals(super.getId(), doubleBiathlonDistance.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.getId());
+    return super.hashCode();
   }
 
   @Override

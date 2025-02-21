@@ -82,13 +82,13 @@ public class SingleSportDistance extends Distance implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    SingleSportDistance that = (SingleSportDistance) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    SingleSportDistance singleSportDistance = (SingleSportDistance) o;
+    return super.getId() != null && Objects.equals(super.getId(), singleSportDistance.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.getId());
+    return super.hashCode();
   }
 
   @Override

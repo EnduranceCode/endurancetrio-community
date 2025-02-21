@@ -116,13 +116,13 @@ public class AquabikeDistance extends Distance implements Serializable {
     if (!super.equals(o)) {
       return false;
     }
-    AquabikeDistance that = (AquabikeDistance) o;
-    return super.getId() != null && Objects.equals(super.getId(), that.getId());
+    AquabikeDistance aquabikeDistance = (AquabikeDistance) o;
+    return super.getId() != null && Objects.equals(super.getId(), aquabikeDistance.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.getId());
+    return super.hashCode();
   }
 
   @Override

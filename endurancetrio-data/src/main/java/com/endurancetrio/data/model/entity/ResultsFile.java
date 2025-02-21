@@ -165,13 +165,13 @@ public class ResultsFile implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ResultsFile that = (ResultsFile) o;
-    return id != null && Objects.equals(id, that.id);
+    ResultsFile resultsFile = (ResultsFile) o;
+    return id != null && Objects.equals(id, resultsFile.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id);
+    return getClass().hashCode();
   }
 
   @Override

@@ -211,7 +211,7 @@ public class Course implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id);
+    return getClass().hashCode();
   }
 
   @Override
