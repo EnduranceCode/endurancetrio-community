@@ -33,11 +33,11 @@ import java.util.StringJoiner;
  * <ul>
  *   <li>
  *     {@link #getWaterTemperature() waterTemperature} : the official water temperature
- *     for the {@link Race}
+ *     for the {@link Race}.
  *   </li>
  *   <li>
  *     {@link #getWetsuitRule() wetSuitRule} : the {@link WetsuitRule wetsuit rule}
- *     for the {@link Race}
+ *     for the {@link Race} (in Celsius).
  *   </li>
  * </ul>
  */

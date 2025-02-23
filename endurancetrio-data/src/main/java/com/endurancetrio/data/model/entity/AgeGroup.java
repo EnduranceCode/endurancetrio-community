@@ -20,6 +20,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
@@ -50,7 +51,8 @@ public class AgeGroup implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_age_group")
+  @SequenceGenerator(name = "sq_age_group", sequenceName = "sq_age_group", allocationSize = 1)
   private Long id;
 
   @Column(name = "title", nullable = false)

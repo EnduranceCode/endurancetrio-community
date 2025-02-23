@@ -20,6 +20,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
@@ -80,7 +81,8 @@ public class ResultsFile implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_results_file")
+  @SequenceGenerator(name = "sq_results_file", sequenceName = "sq_results_file", allocationSize = 1)
   private Long id;
 
   @Column(name = "title", nullable = false)

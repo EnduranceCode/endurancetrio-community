@@ -26,6 +26,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;
@@ -96,7 +97,8 @@ public class Event implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_event")
+  @SequenceGenerator(name = "sq_event", sequenceName = "sq_event", allocationSize = 1)
   private Long id;
 
   @Column(name = "event_reference", unique = true, nullable = false)

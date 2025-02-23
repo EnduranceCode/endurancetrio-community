@@ -23,6 +23,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
@@ -82,7 +83,8 @@ public class EventFile implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_event_file")
+  @SequenceGenerator(name = "sq_event_file", sequenceName = "sq_event_file", allocationSize = 1)
   private Long id;
 
   @Column(name = "title", nullable = false)

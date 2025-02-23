@@ -19,15 +19,22 @@ spring:
     name: EnduranceTrio Community
 
   datasource:
-    url: jdbc:h2:mem:endurancetrio
+    url: jdbc:h2:mem:endurancetrio;MODE=PostgreSQL
     driverClassName: org.h2.Driver
     username: EnduranceCode
     password: EnduranceTrio
 
+  flyway:
+    enabled: true
+    locations:
+      - classpath:db/migration/ddl
+      - classpath:db/migration/dml
+    schemas: endurancetrio
+    table: flyway_schema_history
+
   jpa:
-    generate-ddl: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     open-in-view: false
 
   h2:

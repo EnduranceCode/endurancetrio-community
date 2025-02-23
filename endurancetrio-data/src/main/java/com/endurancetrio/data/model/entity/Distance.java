@@ -25,6 +25,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
@@ -55,7 +56,8 @@ public class Distance implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_distance")
+  @SequenceGenerator(name = "sq_distance", sequenceName = "sq_distance", allocationSize = 1)
   private Long id;
 
   @Column(name = "type", nullable = false)

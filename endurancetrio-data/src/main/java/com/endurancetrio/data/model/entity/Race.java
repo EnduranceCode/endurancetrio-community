@@ -36,6 +36,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
@@ -118,7 +119,7 @@ import java.util.StringJoiner;
  *   <li>{@link #getGunTime() gunTime} : the time of the starting gun of the {@link Race}.</li>
  *   <li>
  *     {@link #getAirTemperature() airTemperature} : the official air temperature
- *     for the {@link Race}.
+ *     for the {@link Race} (in Celsius).
  *   </li>
  *   <li>
  *     {@link #getResultsFiles() resultsFiles} : the {@link ResultsFile} of the {@link Race}.
@@ -134,7 +135,8 @@ public class Race implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_race")
+  @SequenceGenerator(name = "sq_race", sequenceName = "sq_race", allocationSize = 1)
   private Long id;
 
   @Column(name = "race_reference", unique = true, nullable = false)
