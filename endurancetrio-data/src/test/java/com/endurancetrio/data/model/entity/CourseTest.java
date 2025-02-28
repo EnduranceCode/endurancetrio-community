@@ -51,7 +51,7 @@ class CourseTest {
 
     testDistance = new DuathlonDistance();
     testDistance.setId(1L);
-    testDistance.setType(DistanceType.YOUTH);
+    testDistance.setDistanceType(DistanceType.YOUTH);
     testDistance.setFirstRunDistance(320);
     testDistance.setFirstRunLaps(1);
     testDistance.setBikeDistance(900);

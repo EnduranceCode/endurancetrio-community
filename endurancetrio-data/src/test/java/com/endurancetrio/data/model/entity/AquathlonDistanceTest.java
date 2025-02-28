@@ -36,7 +36,7 @@ class AquathlonDistanceTest {
   void setUp() {
     underTest = new AquathlonDistance();
     underTest.setId(1L);
-    underTest.setType(DistanceType.SPRINT);
+    underTest.setDistanceType(DistanceType.SPRINT);
     underTest.setSwimDistance(750);
     underTest.setSwimLaps(1);
     underTest.setRunDistance(5000);
@@ -46,7 +46,7 @@ class AquathlonDistanceTest {
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals(DistanceType.SPRINT, underTest.getType());
+    assertEquals(DistanceType.SPRINT, underTest.getDistanceType());
     assertEquals(750, underTest.getSwimDistance());
     assertEquals(1, underTest.getSwimLaps());
     assertEquals(5000, underTest.getRunDistance());

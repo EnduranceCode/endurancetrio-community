@@ -63,13 +63,13 @@ import java.util.StringJoiner;
  *     {@link ResultsFile} with the same {@link #getFileName()  fileName}.
  *   </li>
  *   <li>
- *     {@link #getRevisionNumber() revisionNumber} : the revision number
+ *     {@link #getRevision() revisionNumber} : the revision number
  *     of the {@link ResultsFile results file}. The first revision always starts at "01".
  *   </li>
  *   <li>
  *     {@link #getActive() isActive} : flag that indicates the most recent version
  *     of a {@link ResultsFile}. It is set to <i>true</i> for the file with the highest
- *     {@link #getRevisionNumber() revisionNumber} and <i>false</i> for all previous versions.
+ *     {@link #getRevision() revisionNumber} and <i>false</i> for all previous versions.
  *   </li>
  * </ul>
  */
@@ -99,7 +99,7 @@ public class ResultsFile implements Serializable {
   private String fileName;
 
   @Column(name = "revision", nullable = false)
-  private Integer revisionNumber;
+  private Integer revision;
 
   @Column(name = "is_active", nullable = false)
   private Boolean isActive;
@@ -143,12 +143,12 @@ public class ResultsFile implements Serializable {
     this.fileName = fileName;
   }
 
-  public Integer getRevisionNumber() {
-    return revisionNumber;
+  public Integer getRevision() {
+    return revision;
   }
 
-  public void setRevisionNumber(Integer revisionNumber) {
-    this.revisionNumber = revisionNumber;
+  public void setRevision(Integer revision) {
+    this.revision = revision;
   }
 
   public Boolean getActive() {
@@ -183,7 +183,7 @@ public class ResultsFile implements Serializable {
         .add("title='" + title + "'")
         .add("subtitle='" + subtitle + "'")
         .add("fileName='" + fileName + "'")
-        .add("revisionNumber=" + revisionNumber)
+        .add("revisionNumber=" + revision)
         .add("isActive=" + isActive)
         .toString();
   }

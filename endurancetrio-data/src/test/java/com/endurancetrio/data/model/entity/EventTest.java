@@ -80,12 +80,12 @@ class EventTest {
     testEventFile.setFileType(FileType.RULES);
     testEventFile.setTitle("Regulamento");
     testEventFile.setFileName("20100307FTP001-REG001.pdf");
-    testEventFile.setRevisionNumber(1);
+    testEventFile.setRevision(1);
     testEventFile.setActive(true);
 
     testDistance = new DuathlonDistance();
     testDistance.setId(1L);
-    testDistance.setType(DistanceType.YOUTH);
+    testDistance.setDistanceType(DistanceType.YOUTH);
     testDistance.setFirstRunDistance(320);
     testDistance.setFirstRunLaps(1);
     testDistance.setBikeDistance(900);

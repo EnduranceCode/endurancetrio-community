@@ -36,12 +36,12 @@ class DistanceTest {
   void setUp() {
     underTest = new Distance();
     underTest.setId(1L);
-    underTest.setType(DistanceType.SPRINT);
+    underTest.setDistanceType(DistanceType.SPRINT);
   }
 
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals(DistanceType.SPRINT, underTest.getType());
+    assertEquals(DistanceType.SPRINT, underTest.getDistanceType());
   }
 }

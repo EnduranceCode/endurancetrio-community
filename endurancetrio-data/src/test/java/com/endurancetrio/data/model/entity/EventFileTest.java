@@ -49,7 +49,7 @@ class EventFileTest {
     underTest.setFileType(FileType.RULES);
     underTest.setTitle("Regulamento");
     underTest.setFileName("20100307FTP001-REG001.pdf");
-    underTest.setRevisionNumber(1);
+    underTest.setRevision(1);
     underTest.setActive(true);
   }
 
@@ -59,7 +59,7 @@ class EventFileTest {
     assertEquals(FileType.RULES, underTest.getFileType());
     assertEquals("Regulamento", underTest.getTitle());
     assertEquals("20100307FTP001-REG001.pdf", underTest.getFileName());
-    assertEquals(1, underTest.getRevisionNumber());
+    assertEquals(1, underTest.getRevision());
     assertTrue(underTest.getActive());
   }
 }

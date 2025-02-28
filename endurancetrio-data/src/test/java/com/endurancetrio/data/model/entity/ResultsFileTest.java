@@ -65,7 +65,7 @@ class ResultsFileTest {
     underTest.setTitle("XVI Duatlo Jovem de Grândola");
     underTest.setSubtitle("Benjamins Masculinos");
     underTest.setFileName("20100306FTP001-003A-01.pdf");
-    underTest.setRevisionNumber(1);
+    underTest.setRevision(1);
     underTest.setActive(true);
   }
 
@@ -75,7 +75,7 @@ class ResultsFileTest {
     assertEquals("XVI Duatlo Jovem de Grândola", underTest.getTitle());
     assertEquals("Benjamins Masculinos", underTest.getSubtitle());
     assertEquals("20100306FTP001-003A-01.pdf", underTest.getFileName());
-    assertEquals(1, underTest.getRevisionNumber());
+    assertEquals(1, underTest.getRevision());
     assertTrue(underTest.getActive());
   }
 }

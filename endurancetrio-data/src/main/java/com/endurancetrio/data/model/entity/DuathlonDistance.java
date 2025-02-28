@@ -161,7 +161,7 @@ public class DuathlonDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", DuathlonDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("type=" + super.getType())
+        .add("type=" + super.getDistanceType())
         .add("firstRunDistance=" + firstRunDistance)
         .add("firstRunLaps=" + firstRunLaps)
         .add("bikeDistance=" + bikeDistance)

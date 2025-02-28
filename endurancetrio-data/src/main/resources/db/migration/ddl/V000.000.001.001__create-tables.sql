@@ -77,8 +77,8 @@ ALTER TABLE endurancetrio.event_file ALTER COLUMN id SET DEFAULT NEXT VALUE FOR 
 CREATE INDEX IF NOT EXISTS endurancetrio.idx_event_id ON endurancetrio.event_file(event_id);
 
 CREATE TABLE IF NOT EXISTS endurancetrio.distance (
-    id    BIGINT PRIMARY KEY,
-    type  VARCHAR NOT NULL
+    id            BIGINT PRIMARY KEY,
+    distance_type VARCHAR NOT NULL
 );
 
 ALTER TABLE endurancetrio.distance ALTER COLUMN id SET DEFAULT NEXT VALUE FOR endurancetrio.sq_distance;
@@ -219,12 +219,16 @@ CREATE TABLE endurancetrio.triathlon_based_race (
 );
 
 CREATE TABLE IF NOT EXISTS endurancetrio.results_file (
-    id                BIGINT  PRIMARY KEY,
-    title             VARCHAR NOT NULL,
-    subtitle          VARCHAR NOT NULL,
-    file_name         VARCHAR NOT NULL UNIQUE,
-    revision_number   INTEGER NOT NULL,
-    is_active         BOOLEAN NOT NULL
+    id        BIGINT  PRIMARY KEY,
+    race_id   BIGINT  NOT NULL,
+    title     VARCHAR NOT NULL,
+    subtitle  VARCHAR NOT NULL,
+    file_name VARCHAR NOT NULL UNIQUE,
+    revision  INTEGER NOT NULL,
+    is_active BOOLEAN NOT NULL,
+    FOREIGN KEY (race_id) REFERENCES endurancetrio.race(id) ON DELETE CASCADE
 );
 
 ALTER TABLE endurancetrio.results_file ALTER COLUMN id SET DEFAULT NEXT VALUE FOR endurancetrio.sq_results_file;
+
+CREATE INDEX IF NOT EXISTS endurancetrio.idx_race_id ON endurancetrio.results_file(race_id);

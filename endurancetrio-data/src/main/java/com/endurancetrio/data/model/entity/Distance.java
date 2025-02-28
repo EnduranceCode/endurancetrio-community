@@ -42,7 +42,7 @@ import java.util.StringJoiner;
  *     is automatically generated and is the primary key.
  *   </li>
  *   <li>
- *     {@link #getType() type} : the {@link DistanceType} that defines the {@link Course}'s
+ *     {@link #getDistanceType() type} : the {@link DistanceType} that defines the {@link Course}'s
  *     {@link Distance} classification.
  *   </li>
  * </ul>
@@ -60,9 +60,9 @@ public class Distance implements Serializable {
   @SequenceGenerator(name = "sq_distance", sequenceName = "sq_distance", allocationSize = 1)
   private Long id;
 
-  @Column(name = "type", nullable = false)
+  @Column(name = "distance_type", nullable = false)
   @Convert(converter = DistanceTypeConverter.class)
-  private DistanceType type;
+  private DistanceType distanceType;
 
   /**
    * Default constructor for the {@link Distance} entity.
@@ -79,12 +79,12 @@ public class Distance implements Serializable {
     this.id = id;
   }
 
-  public DistanceType getType() {
-    return type;
+  public DistanceType getDistanceType() {
+    return distanceType;
   }
 
-  public void setType(DistanceType type) {
-    this.type = type;
+  public void setDistanceType(DistanceType distanceType) {
+    this.distanceType = distanceType;
   }
 
   @Override
@@ -108,7 +108,7 @@ public class Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", Distance.class.getSimpleName() + "[", "]")
         .add("id=" + id)
-        .add("type=" + type)
+        .add("type=" + distanceType)
         .toString();
   }
 }

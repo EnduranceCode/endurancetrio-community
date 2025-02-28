@@ -129,7 +129,7 @@ public class AquabikeDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", AquabikeDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("type=" + super.getType())
+        .add("type=" + super.getDistanceType())
         .add("swimDistance=" + swimDistance)
         .add("swimLaps=" + swimLaps)
         .add("bikeDistance=" + bikeDistance)

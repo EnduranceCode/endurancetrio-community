@@ -36,7 +36,7 @@ class BiathlonDistanceTest {
   void setUp() {
     underTest = new BiathlonDistance();
     underTest.setId(1L);
-    underTest.setType(DistanceType.STANDARD);
+    underTest.setDistanceType(DistanceType.STANDARD);
     underTest.setBikeDistance(40000);
     underTest.setBikeLaps(2);
     underTest.setRunDistance(5000);
@@ -46,7 +46,7 @@ class BiathlonDistanceTest {
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals(DistanceType.STANDARD, underTest.getType());
+    assertEquals(DistanceType.STANDARD, underTest.getDistanceType());
     assertEquals(40000, underTest.getBikeDistance());
     assertEquals(2, underTest.getBikeLaps());
     assertEquals(5000, underTest.getRunDistance());

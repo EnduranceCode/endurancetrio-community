@@ -95,7 +95,7 @@ public class SingleSportDistance extends Distance implements Serializable {
   public String toString() {
     return new StringJoiner(", ", SingleSportDistance.class.getSimpleName() + "[", "]")
         .add("id=" + super.getId())
-        .add("type=" + super.getType())
+        .add("type=" + super.getDistanceType())
         .add("distance=" + distance)
         .add("laps=" + laps)
         .toString();

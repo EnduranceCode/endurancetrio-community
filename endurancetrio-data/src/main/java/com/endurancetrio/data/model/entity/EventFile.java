@@ -65,13 +65,13 @@ import java.util.StringJoiner;
  *     (always in lower case letters).
  *   </li>
  *   <li>
- *     {@link #getRevisionNumber() revisionNumber} : the revision number
+ *     {@link #getRevision() revisionNumber} : the revision number
  *     of the {@link EventFile file}. The first revision always starts at "01".
  *   </li>
  *   <li>
  *     {@link #getActive() isActive} : flag that indicates the most recent version
  *     of a {@link EventFile}. It is set to <i>true</i> for the file with the highest
- *     {@link #getRevisionNumber() revisionNumber} and <i>false</i> for all previous versions.
+ *     {@link #getRevision() revisionNumber} and <i>false</i> for all previous versions.
  *   </li>
  * </ul>
  */
@@ -102,7 +102,7 @@ public class EventFile implements Serializable {
   private String fileName;
 
   @Column(name = "revision", nullable = false)
-  private Integer revisionNumber;
+  private Integer revision;
 
   @Column(name = "is_active", nullable = false)
   private Boolean isActive;
@@ -146,12 +146,12 @@ public class EventFile implements Serializable {
     this.fileName = fileName;
   }
 
-  public Integer getRevisionNumber() {
-    return revisionNumber;
+  public Integer getRevision() {
+    return revision;
   }
 
-  public void setRevisionNumber(Integer revisionNumber) {
-    this.revisionNumber = revisionNumber;
+  public void setRevision(Integer revision) {
+    this.revision = revision;
   }
 
   public Boolean getActive() {
@@ -186,7 +186,7 @@ public class EventFile implements Serializable {
         .add("title='" + title + "'")
         .add("fileType=" + fileType)
         .add("fileName='" + fileName + "'")
-        .add("revisionNumber=" + revisionNumber)
+        .add("revisionNumber=" + revision)
         .add("isActive=" + isActive)
         .toString();
   }
