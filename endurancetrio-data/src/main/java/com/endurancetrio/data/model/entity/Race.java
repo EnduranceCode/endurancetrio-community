@@ -114,9 +114,13 @@ import java.util.StringJoiner;
  *   <li>{@link #getDate() date} : the date of the {@link Race}.</li>
  *   <li>{@link #getTime() time} : the time scheduled for the starting gun of the {@link Race}.</li>
  *   <li>
- *     {@link #getRaceStatus() raceStatus} : the {@link RaceStatus status} of the {@link Race}.
+ *     {@link #getRaceStatus() raceStatus} : the {@link RaceStatus status} of the {@link Race},
+ *     always displayed in the {@link Race}'s time zone.
  *   </li>
- *   <li>{@link #getGunTime() gunTime} : the time of the starting gun of the {@link Race}.</li>
+ *   <li>
+ *     {@link #getGunTime() gunTime} : the time of the starting gun of the {@link Race},
+ *     always displayed in the {@link Race}'s time zone.
+ *   </li>
  *   <li>
  *     {@link #getAirTemperature() airTemperature} : the official air temperature
  *     for the {@link Race} (in Celsius).
