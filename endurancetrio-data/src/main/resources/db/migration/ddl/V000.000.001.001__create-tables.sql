@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio.biathlon_distance (
 CREATE TABLE IF NOT EXISTS endurancetrio.double_biathlon_distance (
     id                    BIGINT PRIMARY KEY,
     first_bike_distance   INTEGER,
-    firstBike_laps        INTEGER,
+    first_bike_laps       INTEGER,
     first_run_distance    INTEGER,
     first_run_laps        INTEGER,
     second_bike_distance  INTEGER,
