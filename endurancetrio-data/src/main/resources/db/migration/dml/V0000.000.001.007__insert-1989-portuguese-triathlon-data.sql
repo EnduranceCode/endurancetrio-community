@@ -19,724 +19,763 @@
 
 -- endurancetrio.event table
 -- -------------------------
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (40, '19890305APT001', '1º Biatlo de Ponte de Sor', '1989-03-05', '1989-03-05', 'Ponte de Sor', 'Ponte de Sor', 'Portalegre');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (41, '19890318FPT001', 'Biatlo Jovem Nauticampo', '1989-03-18', '1989-03-18', 'Lisboa', 'Lisboa', 'Lisboa');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (42, '19890319APT001', '2º Biatlo de Porto de Mós', '1989-03-19', '1989-03-19', 'Porto de Mós', 'Porto de Mós', 'Leiria');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (43, '19890402APT001', '2º Biatlo do Concelho de Loures', '1989-04-02', '1989-04-02', 'Loures', 'Loures', 'Lisboa');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (44, '19890409APT001', '1º Biatlo de Almodôvar', '1989-04-09', '1989-04-09', 'Almodôvar', 'Almodôvar', 'Beja');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (45, '19890416APT001', '3º Biatlo do Porto', '1989-04-16', '1989-04-16', 'Porto', 'Porto', 'Porto');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (46, '19890430FTP001', '1º Triatlo de Alpiarça', '1989-04-30', '1989-04-30', 'Alpiarça', 'Alpiarça', 'Santarém');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (47, '19890521FTP001', '1º Triatlo Cidade de Gaia', '1989-05-21', '1989-05-21', 'Vila Nova de Gaia', 'Vila Nova de Gaia', 'Porto');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (48, '19890527FTP001', 'Triatlo Internacional da Costa Azul', '1989-05-27', '1989-05-27', 'Grândola', 'Grândola', 'Setúbal');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (49, '19890604FTP001', '2º Triatlo do Ambiente', '1989-06-04', '1989-06-04', 'Paço de Arcos', 'Oeiras', 'Lisboa');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (50, '19890611FTP001', 'Triatlo Internacional de Promoção', '1989-06-11', '1989-06-11', 'Cascais', 'Cascais', 'Lisboa');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (51, '19890625FTP001', 'I Biatlo do Regimento de Comandos da Amadora', '1989-06-25', '1989-06-25', 'Amadora', 'Amadora', 'Lisboa');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (52, '19890625FTP002', 'Triatlo de Almodôvar', '1989-06-25', '1989-06-25', 'Almodôvar', 'Almodôvar', 'Beja');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (53, '19890702FTP001', 'Triatlo de Coimbra', '1989-07-02', '1989-07-02', 'Coimbra', 'Coimbra', 'Coimbra');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (54, '19890709FTP001', 'Biatlo de Oliveira de Azeméis', '1989-07-09', '1989-07-09', 'Oliveira de Azeméis', 'Oliveira de Azeméis', 'Aveiro');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (55, '19890716FTP001', '1º Triatlo Concelho da Lourinhã', '1989-07-16', '1989-07-16', 'Lourinhã', 'Lourinhã', 'Lisboa');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (56, '19890722FTP001', 'III Triatlo do Coimbrão', '1989-07-22', '1989-07-22', 'Coimbrão', 'Leiria', 'Leiria');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (57, '19890815FTP001', 'VI Triatlo de Peniche', '1989-08-15', '1989-08-15', 'Peniche', 'Peniche', 'Leiria');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (58, '19890820FTP001', 'I Triatlo de Oliveira de Frades', '1989-08-20', '1989-08-20', 'Oliveira de Frades', 'Oliveira de Frades', 'Viseu');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (59, '19890827FTP001', 'I Triatlo da Carregueira', '1989-08-27', '1989-08-27', 'Carregueira', 'Chamusca', 'Santarém');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (60, '19890910FTP001', 'II Triatlo de Óbidos', '1989-09-10', '1989-09-10', 'Óbidos', 'Óbidos', 'Leiria');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (61, '19890924FTP001', 'III Triatlo de Lagos', '1989-09-24', '1989-09-24', 'Lagos', 'Lagos', 'Faro');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (62, '19890930FTP001', 'I Triatlo de Ferreira do Alentejo', '1989-07-30', '1989-07-30', 'Ferreira do Alentejo', 'Ferreira do Alentejo', 'Beja');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (63, '19891007FTP001', '3º Triatlo de Ponte de Sor', '1989-10-07', '1989-10-07', 'Ponte de Sor', 'Ponte de Sor', 'Portalegre');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (64, '19891014FTP001', 'Triatlo da Golegã', '1989-10-14', '1989-10-14', 'Golegã', 'Golegã', 'Santarém');
-INSERT INTO endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district) VALUES (65, '19891021FTP001', 'Triatlo Cidade de Figueira da Foz', '1989-10-21', '1989-10-21', 'Figueira da Foz', 'Figueira da Foz', 'Coimbra');
+INSERT INTO
+  endurancetrio.event (id, event_reference, title, start_date, end_date, city, county, district)
+VALUES
+  (40, '19890305APT001', '1º Biatlo de Ponte de Sor', '1989-03-05', '1989-03-05', 'Ponte de Sor', 'Ponte de Sor', 'Portalegre'),
+  (41, '19890318FPT001', 'Biatlo Jovem Nauticampo', '1989-03-18', '1989-03-18', 'Lisboa', 'Lisboa', 'Lisboa'),
+  (42, '19890319APT001', '2º Biatlo de Porto de Mós', '1989-03-19', '1989-03-19', 'Porto de Mós', 'Porto de Mós', 'Leiria'),
+  (43, '19890402APT001', '2º Biatlo do Concelho de Loures', '1989-04-02', '1989-04-02', 'Loures', 'Loures', 'Lisboa'),
+  (44, '19890409APT001', '1º Biatlo de Almodôvar', '1989-04-09', '1989-04-09', 'Almodôvar', 'Almodôvar', 'Beja'),
+  (45, '19890416APT001', '3º Biatlo do Porto', '1989-04-16', '1989-04-16', 'Porto', 'Porto', 'Porto'),
+  (46, '19890430FTP001', '1º Triatlo de Alpiarça', '1989-04-30', '1989-04-30', 'Alpiarça', 'Alpiarça', 'Santarém'),
+  (47, '19890521FTP001', '1º Triatlo Cidade de Gaia', '1989-05-21', '1989-05-21', 'Vila Nova de Gaia', 'Vila Nova de Gaia', 'Porto'),
+  (48, '19890527FTP001', 'Triatlo Internacional da Costa Azul', '1989-05-27', '1989-05-27', 'Grândola', 'Grândola', 'Setúbal'),
+  (49, '19890604FTP001', '2º Triatlo do Ambiente', '1989-06-04', '1989-06-04', 'Paço de Arcos', 'Oeiras', 'Lisboa'),
+  (50, '19890611FTP001', 'Triatlo Internacional de Promoção', '1989-06-11', '1989-06-11', 'Cascais', 'Cascais', 'Lisboa'),
+  (51, '19890625FTP001', 'I Biatlo do Regimento de Comandos da Amadora', '1989-06-25', '1989-06-25', 'Amadora', 'Amadora', 'Lisboa'),
+  (52, '19890625FTP002', 'Triatlo de Almodôvar', '1989-06-25', '1989-06-25', 'Almodôvar', 'Almodôvar', 'Beja'),
+  (53, '19890702FTP001', 'Triatlo de Coimbra', '1989-07-02', '1989-07-02', 'Coimbra', 'Coimbra', 'Coimbra'),
+  (54, '19890709FTP001', 'Biatlo de Oliveira de Azeméis', '1989-07-09', '1989-07-09', 'Oliveira de Azeméis', 'Oliveira de Azeméis', 'Aveiro'),
+  (55, '19890716FTP001', '1º Triatlo Concelho da Lourinhã', '1989-07-16', '1989-07-16', 'Lourinhã', 'Lourinhã', 'Lisboa'),
+  (56, '19890722FTP001', 'III Triatlo do Coimbrão', '1989-07-22', '1989-07-22', 'Coimbrão', 'Leiria', 'Leiria'),
+  (57, '19890815FTP001', 'VI Triatlo de Peniche', '1989-08-15', '1989-08-15', 'Peniche', 'Peniche', 'Leiria'),
+  (58, '19890820FTP001', 'I Triatlo de Oliveira de Frades', '1989-08-20', '1989-08-20', 'Oliveira de Frades', 'Oliveira de Frades', 'Viseu'),
+  (59, '19890827FTP001', 'I Triatlo da Carregueira', '1989-08-27', '1989-08-27', 'Carregueira', 'Chamusca', 'Santarém'),
+  (60, '19890910FTP001', 'II Triatlo de Óbidos', '1989-09-10', '1989-09-10', 'Óbidos', 'Óbidos', 'Leiria'),
+  (61, '19890924FTP001', 'III Triatlo de Lagos', '1989-09-24', '1989-09-24', 'Lagos', 'Lagos', 'Faro'),
+  (62, '19890930FTP001', 'I Triatlo de Ferreira do Alentejo', '1989-07-30', '1989-07-30', 'Ferreira do Alentejo', 'Ferreira do Alentejo', 'Beja'),
+  (63, '19891007FTP001', '3º Triatlo de Ponte de Sor', '1989-10-07', '1989-10-07', 'Ponte de Sor', 'Ponte de Sor', 'Portalegre'),
+  (64, '19891014FTP001', 'Triatlo da Golegã', '1989-10-14', '1989-10-14', 'Golegã', 'Golegã', 'Santarém'),
+  (65, '19891021FTP001', 'Triatlo Cidade de Figueira da Foz', '1989-10-21', '1989-10-21', 'Figueira da Foz', 'Figueira da Foz', 'Coimbra');
 
 
 -- endurancetrio.organizer table
 -- -----------------------------
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (34, 'Federação de Triatlo de Portugal', 'Murganhal', 'Oeiras', 'Lisboa', 'PRIVATE');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (35, 'Associação Industrial Portuguesa', 'Lisboa', 'Lisboa', 'Lisboa', 'PRIVATE');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (36, 'Grupo Desportivo Bicicletas Altis', 'Porto', 'Porto', 'Porto', 'CLUB');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (37, 'Câmara Municipal de Alpiarça', 'Alpiarça', 'Alpiarça', 'Santarém', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (38, 'Câmara Municipal de Gaia', 'Vila Nova de Gaia', 'Vila Nova de Gaia', 'Porto', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (39, 'Regimento de Comandos da Amadora', 'Amadora', 'Amadora', 'Lisboa', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (40, 'Câmara Municipal de Coimbra', 'Coimbra', 'Coimbra', 'Coimbra', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (41, 'Câmara Municipal da Lourinhã', 'Lourinhã', 'Lourinhã', 'Lisboa', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (42, 'Câmara Municipal de Oliveira de Frades', 'Oliveira de Frades', 'Oliveira de Frades', 'Viseu', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (43, 'Grupo Desportivo União Carregueirense', 'Carregueira', 'Chamusca', 'Santarém', 'CLUB');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (44, 'Câmara Municipal de Ferreira do Alentejo', 'Ferreira do Alentejo', 'Ferreira do Alentejo', 'Beja', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (45, 'Câmara Municipal da Golegã', 'Golegã', 'Golegã', 'Santarém', 'PUBLIC');
-INSERT INTO endurancetrio.organizer (id, name, city, county, district, organizer_type) VALUES (46, 'Câmara Municipal da Figueira da Foz', 'Figueira da Foz', 'Figueira da Foz', 'Coimbra', 'PUBLIC');
+INSERT INTO
+  endurancetrio.organizer (id, name, city, county, district, organizer_type)
+VALUES
+  (34, 'Federação de Triatlo de Portugal', 'Murganhal', 'Oeiras', 'Lisboa', 'PRIVATE'),
+  (35, 'Associação Industrial Portuguesa', 'Lisboa', 'Lisboa', 'Lisboa', 'PRIVATE'),
+  (36, 'Grupo Desportivo Bicicletas Altis', 'Porto', 'Porto', 'Porto', 'CLUB'),
+  (37, 'Câmara Municipal de Alpiarça', 'Alpiarça', 'Alpiarça', 'Santarém', 'PUBLIC'),
+  (38, 'Câmara Municipal de Gaia', 'Vila Nova de Gaia', 'Vila Nova de Gaia', 'Porto', 'PUBLIC'),
+  (39, 'Regimento de Comandos da Amadora', 'Amadora', 'Amadora', 'Lisboa', 'PUBLIC'),
+  (40, 'Câmara Municipal de Coimbra', 'Coimbra', 'Coimbra', 'Coimbra', 'PUBLIC'),
+  (41, 'Câmara Municipal da Lourinhã', 'Lourinhã', 'Lourinhã', 'Lisboa', 'PUBLIC'),
+  (42, 'Câmara Municipal de Oliveira de Frades', 'Oliveira de Frades', 'Oliveira de Frades', 'Viseu', 'PUBLIC'),
+  (43, 'Grupo Desportivo União Carregueirense', 'Carregueira', 'Chamusca', 'Santarém', 'CLUB'),
+  (44, 'Câmara Municipal de Ferreira do Alentejo', 'Ferreira do Alentejo', 'Ferreira do Alentejo', 'Beja', 'PUBLIC'),
+  (45, 'Câmara Municipal da Golegã', 'Golegã', 'Golegã', 'Santarém', 'PUBLIC'),
+  (46, 'Câmara Municipal da Figueira da Foz', 'Figueira da Foz', 'Figueira da Foz', 'Coimbra', 'PUBLIC');
 
 
 -- endurancetrio.event_organizer table
 -- -----------------------------------
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (40, 16);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (40, 12);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (41, 34);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (41, 35);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (42, 22);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (43, 10);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (43, 12);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (44, 29);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (44, 12);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (45, 36);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (46, 37);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (46, 34);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (47, 38);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (48, 20);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (49, 28);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (50, 4);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (50, 3);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (50, 37);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (51, 39);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (52, 29);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (52, 37);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (53, 37);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (54, 17);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (55, 41);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (56, 30);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (57, 2);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (58, 34);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (58, 42);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (59, 43);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (60, 32);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (61, 34);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (61, 18);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (62, 44);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (63, 12);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (63, 16);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (64, 45);
-INSERT INTO endurancetrio.event_organizer (event_id, organizer_id) VALUES (65, 46);
+INSERT INTO
+  endurancetrio.event_organizer (event_id, organizer_id)
+VALUES
+  (40, 16),
+  (40, 12),
+  (41, 34),
+  (41, 35),
+  (42, 22),
+  (43, 10),
+  (43, 12),
+  (44, 29),
+  (44, 12),
+  (45, 36),
+  (46, 37),
+  (46, 34),
+  (47, 38),
+  (48, 20),
+  (49, 28),
+  (50, 4),
+  (50, 3),
+  (50, 37),
+  (51, 39),
+  (52, 29),
+  (52, 37),
+  (53, 37),
+  (54, 17),
+  (55, 41),
+  (56, 30),
+  (57, 2),
+  (58, 34),
+  (58, 42),
+  (59, 43),
+  (60, 32),
+  (61, 34),
+  (61, 18),
+  (62, 44),
+  (63, 12),
+  (63, 16),
+  (64, 45),
+  (65, 46);
 
 
 -- endurancetrio.event_file table
 -- ------------------------------
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (78, 40, 'Regulamento', 1, true, '19890305APT001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (79, 40, 'Percursos', 1, true, '19890305APT001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (80, 41, 'Cartaz', 1, true, '19890318FPT001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (81, 44, 'Cartaz', 1, true, '19890409APT001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (82, 44, 'Regulamento', 1, true, '19890409APT001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (83, 44, 'Percursos', 1, true, '19890409APT001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (84, 46, 'Regulamento', 1, true, '19890430FTP001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (85, 47, 'Cartaz', 1, true, '19890521FTP001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (86, 49, 'Cartaz', 1, true, '19890604FTP001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (87, 49, 'Percursos', 1, true, '19890604FTP001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (88, 50, 'Cartaz', 1, true, '19890611FTP001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (89, 51, 'Regulamento', 1, true, '19890625FTP001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (90, 51, 'Percursos', 1, true, '19890625FTP001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (91, 58, 'Cartaz', 1, true, '19890820FTP001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (92, 58, 'Percursos', 1, true, '19890820FTP001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (93, 59, 'Cartaz', 1, true, '19890827FTP001-IMG001-01.pdf', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (94, 59, 'Regulamento', 1, true, '19890827FTP001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (95, 59, 'Percursos', 1, true, '19890827FTP001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (96, 63, 'Cartaz', 1, true, '19891007FTP001-IMG001-01.png', 'POSTER');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (97, 63, 'Regulamento', 1, true, '19891007FTP001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (98, 63, 'Percursos', 1, true, '19891007FTP001-MAP001-01.pdf', 'COURSE_MAPS');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (99, 65, 'Regulamento', 1, true, '19891021FTP001-REG001-01.pdf', 'RULES');
-INSERT INTO endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type) VALUES (100, 65, 'Percursos', 1, true, '19891021FTP001-MAP001-01.pdf', 'COURSE_MAPS');
+INSERT INTO
+  endurancetrio.event_file (id, event_id, title, revision, is_active, file_name, file_type)
+VALUES
+  (78, 40, 'Regulamento', 1, true, '19890305APT001-REG001-01.pdf', 'RULES'),
+  (79, 40, 'Percursos', 1, true, '19890305APT001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (80, 41, 'Cartaz', 1, true, '19890318FPT001-IMG001-01.png', 'POSTER'),
+  (81, 44, 'Cartaz', 1, true, '19890409APT001-IMG001-01.png', 'POSTER'),
+  (82, 44, 'Regulamento', 1, true, '19890409APT001-REG001-01.pdf', 'RULES'),
+  (83, 44, 'Percursos', 1, true, '19890409APT001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (84, 46, 'Regulamento', 1, true, '19890430FTP001-REG001-01.pdf', 'RULES'),
+  (85, 47, 'Cartaz', 1, true, '19890521FTP001-IMG001-01.png', 'POSTER'),
+  (86, 49, 'Cartaz', 1, true, '19890604FTP001-IMG001-01.png', 'POSTER'),
+  (87, 49, 'Percursos', 1, true, '19890604FTP001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (88, 50, 'Cartaz', 1, true, '19890611FTP001-IMG001-01.png', 'POSTER'),
+  (89, 51, 'Regulamento', 1, true, '19890625FTP001-REG001-01.pdf', 'RULES'),
+  (90, 51, 'Percursos', 1, true, '19890625FTP001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (91, 58, 'Cartaz', 1, true, '19890820FTP001-IMG001-01.png', 'POSTER'),
+  (92, 58, 'Percursos', 1, true, '19890820FTP001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (93, 59, 'Cartaz', 1, true, '19890827FTP001-IMG001-01.pdf', 'POSTER'),
+  (94, 59, 'Regulamento', 1, true, '19890827FTP001-REG001-01.pdf', 'RULES'),
+  (95, 59, 'Percursos', 1, true, '19890827FTP001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (96, 63, 'Cartaz', 1, true, '19891007FTP001-IMG001-01.png', 'POSTER'),
+  (97, 63, 'Regulamento', 1, true, '19891007FTP001-REG001-01.pdf', 'RULES'),
+  (98, 63, 'Percursos', 1, true, '19891007FTP001-MAP001-01.pdf', 'COURSE_MAPS'),
+  (99, 65, 'Regulamento', 1, true, '19891021FTP001-REG001-01.pdf', 'RULES'),
+  (100, 65, 'Percursos', 1, true, '19891021FTP001-MAP001-01.pdf', 'COURSE_MAPS');
 
 
 -- endurancetrio.distance table
 -- ----------------------------
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (41, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (42, 'YOUTH');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (43, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (44, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (45, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (46, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (47, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (48, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (49, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (50, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (51, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (52, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (53, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (54, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (55, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (56, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (57, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (58, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (59, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (60, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (61, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (62, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (63, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (64, 'MIDDLE_DISTANCE');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (65, 'SPRINT');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (66, 'STANDARD');
-INSERT INTO endurancetrio.distance (id, distance_type) VALUES (67, 'STANDARD');
+INSERT INTO
+  endurancetrio.distance (id, distance_type)
+VALUES
+  (41, 'SPRINT'),
+  (42, 'YOUTH'),
+  (43, 'STANDARD'),
+  (44, 'STANDARD'),
+  (45, 'SPRINT'),
+  (46, 'STANDARD'),
+  (47, 'STANDARD'),
+  (48, 'STANDARD'),
+  (49, 'STANDARD'),
+  (50, 'SPRINT'),
+  (51, 'SPRINT'),
+  (52, 'STANDARD'),
+  (53, 'SPRINT'),
+  (54, 'STANDARD'),
+  (55, 'STANDARD'),
+  (56, 'STANDARD'),
+  (57, 'STANDARD'),
+  (58, 'STANDARD'),
+  (59, 'STANDARD'),
+  (60, 'SPRINT'),
+  (61, 'STANDARD'),
+  (62, 'STANDARD'),
+  (63, 'STANDARD'),
+  (64, 'MIDDLE_DISTANCE'),
+  (65, 'SPRINT'),
+  (66, 'STANDARD'),
+  (67, 'STANDARD');
 
 
 -- endurancetrio.duathlon_distance table
 -- -------------------------------------
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (41, 5000, 1, 30000, 1, 5000, 1);
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (42, 1000, 1, 8000, 1, 1000, 1);
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (43, 5000, 1, 42000, 1, 5000, 1);
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (44, 5000, 1, 40000, 1, 5000, 1);
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (45, 5500, 1, 30000, 1, 5500, 1);
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (46, 5000, 1, 47000, 1, 5000, 1);
-INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (52, 5000, 1, 42000, 1, 5000, 1);
+INSERT INTO
+  endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps)
+VALUES
+  (41, 5000, 1, 30000, 1, 5000, 1),
+  (42, 1000, 1, 8000, 1, 1000, 1),
+  (43, 5000, 1, 42000, 1, 5000, 1),
+  (44, 5000, 1, 40000, 1, 5000, 1),
+  (45, 5500, 1, 30000, 1, 5500, 1),
+  (46, 5000, 1, 47000, 1, 5000, 1),
+  (52, 5000, 1, 42000, 1, 5000, 1);
 
 
 -- endurancetrio.triathlon_distance table
 -- --------------------------------------
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (47, 600, 1, 36000, 1, 6000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (48, 1000, 1, 50000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (49, 1500, 1, 48000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (50, 500, 1, 22000, 1, 5000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (51, 900, 1, 26000, 1, 6000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (53, 650, 1, 30000, 1, 6000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (54, 1000, 1, 40000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (56, 1000, 1, 40000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (57, 1300, 1, 40000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (58, 1500, 1, 40000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (59, 1000, 1, 42800, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (60, 450, 1, 26500, 1, 9500, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (61, 1000, 1, 40000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (62, 1500, 1, 40000, 1, 10000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (63, 900, 1, 35000, 1, 8000, 1);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (64, 2500, 1, 80000, 1, 20000, 4);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (65, 500, 1, 30000, 1, 5000, 2);
-INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (67, 1000, 1, 40000, 1, 10000, 1);
+INSERT INTO
+  endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
+VALUES
+  (47, 600, 1, 36000, 1, 6000, 1),
+  (48, 1000, 1, 50000, 1, 10000, 1),
+  (49, 1500, 1, 48000, 1, 10000, 1),
+  (50, 500, 1, 22000, 1, 5000, 1),
+  (51, 900, 1, 26000, 1, 6000, 1),
+  (53, 650, 1, 30000, 1, 6000, 1),
+  (54, 1000, 1, 40000, 1, 10000, 1),
+  (56, 1000, 1, 40000, 1, 10000, 1),
+  (57, 1300, 1, 40000, 1, 10000, 1),
+  (58, 1500, 1, 40000, 1, 10000, 1),
+  (59, 1000, 1, 42800, 1, 10000, 1),
+  (60, 450, 1, 26500, 1, 9500, 1),
+  (61, 1000, 1, 40000, 1, 10000, 1),
+  (62, 1500, 1, 40000, 1, 10000, 1),
+  (63, 900, 1, 35000, 1, 8000, 1),
+  (64, 2500, 1, 80000, 1, 20000, 4),
+  (65, 500, 1, 30000, 1, 5000, 2),
+  (67, 1000, 1, 40000, 1, 10000, 1);
 
 
 -- endurancetrio.course table
 -- --------------------------
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (41, 40, 'Duatlo Sprint', 'DUATHLON', 41);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (42, 41, 'Duatlo Jovem', 'DUATHLON', 42);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (43, 42, 'Duatlo Standard', 'DUATHLON', 43);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (44, 43, 'Duatlo Standard', 'DUATHLON', 44);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (45, 44, 'Duatlo Sprint', 'DUATHLON', 45);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (46, 45, 'Duatlo Standard', 'DUATHLON', 46);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (47, 46, 'Triato Sprint', 'TRIATHLON', 47);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (48, 47, 'Triatlo Standard', 'TRIATHLON', 48);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (49, 48, 'Triatlo Standard', 'TRIATHLON', 49);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (50, 49, 'Triato Sprint', 'TRIATHLON', 50);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (51, 50, 'Triatlo Sprint', 'TRIATHLON', 51);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (52, 51, 'Biatlo Standard', 'DUATHLON', 52);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (53, 52, 'Triatlo Sprint', 'TRIATHLON', 53);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (54, 53, 'Triatlo Standard', 'TRIATHLON', 54);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (55, 54, 'Duatlo Standard', 'DUATHLON', null);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (56, 55, 'Triatlo Standard', 'TRIATHLON', 56);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (57, 56, 'Triatlo Standard', 'TRIATHLON', 57);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (58, 57, 'Triatlo Standard', 'TRIATHLON', 58);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (59, 58, 'Triatlo Standard', 'TRIATHLON', 59);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (60, 59, 'Triatlo Sprint', 'TRIATHLON', 60);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (61, 60, 'Triatlo Standard', 'TRIATHLON', 61);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (62, 61, 'Triatlo Standard', 'TRIATHLON', 62);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (63, 62, 'Triatlo Standard', 'TRIATHLON', 63);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (64, 63, 'Triatlo Categoria B', 'TRIATHLON', 64);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (65, 63, 'Triatlo de Promoção', 'TRIATHLON', 65);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (66, 64, 'Triatlo de Promoção', 'TRIATHLON', null);
-INSERT INTO endurancetrio.course (id, event_id, title, sport, distance_id) VALUES (67, 65, 'Triatlo Standard', 'TRIATHLON', 67);
+INSERT INTO
+  endurancetrio.course (id, event_id, title, sport, distance_id)
+VALUES
+  (41, 40, 'Duatlo Sprint', 'DUATHLON', 41),
+  (42, 41, 'Duatlo Jovem', 'DUATHLON', 42),
+  (43, 42, 'Duatlo Standard', 'DUATHLON', 43),
+  (44, 43, 'Duatlo Standard', 'DUATHLON', 44),
+  (45, 44, 'Duatlo Sprint', 'DUATHLON', 45),
+  (46, 45, 'Duatlo Standard', 'DUATHLON', 46),
+  (47, 46, 'Triato Sprint', 'TRIATHLON', 47),
+  (48, 47, 'Triatlo Standard', 'TRIATHLON', 48),
+  (49, 48, 'Triatlo Standard', 'TRIATHLON', 49),
+  (50, 49, 'Triato Sprint', 'TRIATHLON', 50),
+  (51, 50, 'Triatlo Sprint', 'TRIATHLON', 51),
+  (52, 51, 'Biatlo Standard', 'DUATHLON', 52),
+  (53, 52, 'Triatlo Sprint', 'TRIATHLON', 53),
+  (54, 53, 'Triatlo Standard', 'TRIATHLON', 54),
+  (55, 54, 'Duatlo Standard', 'DUATHLON', null),
+  (56, 55, 'Triatlo Standard', 'TRIATHLON', 56),
+  (57, 56, 'Triatlo Standard', 'TRIATHLON', 57),
+  (58, 57, 'Triatlo Standard', 'TRIATHLON', 58),
+  (59, 58, 'Triatlo Standard', 'TRIATHLON', 59),
+  (60, 59, 'Triatlo Sprint', 'TRIATHLON', 60),
+  (61, 60, 'Triatlo Standard', 'TRIATHLON', 61),
+  (62, 61, 'Triatlo Standard', 'TRIATHLON', 62),
+  (63, 62, 'Triatlo Standard', 'TRIATHLON', 63),
+  (64, 63, 'Triatlo Categoria B', 'TRIATHLON', 64),
+  (65, 63, 'Triatlo de Promoção', 'TRIATHLON', 65),
+  (66, 64, 'Triatlo de Promoção', 'TRIATHLON', null),
+  (67, 65, 'Triatlo Standard', 'TRIATHLON', 67);
 
 
 -- endurancetrio.race table
 -- ------------------------
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (164, '19890305APT001-001', '1º Biatlo de Ponte de Sor', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-05', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (165, '19890305APT001-002', '1º Biatlo de Ponte de Sor', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-05', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (166, '19890305APT001-003', '1º Biatlo de Ponte de Sor', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-05', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (167, '19890305APT001-004', '1º Biatlo de Ponte de Sor', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-03-05', '14:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (168, '19890305APT001-005', '1º Biatlo de Ponte de Sor', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-03-05', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (169, '19890318FPT001-001', 'Biatlo Jovem Nauticampo', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-18', '16:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (170, '19890318FPT001-002', 'Biatlo Jovem Nauticampo', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-18', '16:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (171, '19890318FPT001-003', 'Biatlo Jovem Nauticampo', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-18', '16:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (172, '19890319APT001-001', '2º Biatlo de Porto de Mós', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-19', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (173, '19890319APT001-002', '2º Biatlo de Porto de Mós', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-19', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (174, '19890319APT001-003', '2º Biatlo de Porto de Mós', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-19', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (175, '19890319APT001-004', '2º Biatlo de Porto de Mós', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-03-19', '14:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (176, '19890319APT001-005', '2º Biatlo de Porto de Mós', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-03-19', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (177, '19890402APT001-001', '2º Biatlo do Concelho de Loures', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (178, '19890402APT001-002', '2º Biatlo do Concelho de Loures', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (179, '19890402APT001-003', '2º Biatlo do Concelho de Loures', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (180, '19890402APT001-004', '2º Biatlo do Concelho de Loures', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-02', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (181, '19890402APT001-005', '2º Biatlo do Concelho de Loures', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (182, '19890409APT001-001', '1º Biatlo de Almodôvar', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-09', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (183, '19890409APT001-002', '1º Biatlo de Almodôvar', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-09', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (184, '19890409APT001-003', '1º Biatlo de Almodôvar', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-09', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (185, '19890409APT001-004', '1º Biatlo de Almodôvar', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-09', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (186, '19890409APT001-005', '1º Biatlo de Almodôvar', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-09', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (187, '19890416APT001-001', '3º Biatlo do Porto', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (188, '19890416APT001-002', '3º Biatlo do Porto', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (189, '19890416APT001-003', '3º Biatlo do Porto', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (190, '19890416APT001-004', '3º Biatlo do Porto', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-16', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (191, '19890416APT001-005', '3º Biatlo do Porto', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (192, '19890430FTP001-001', '1º Triatlo de Alpiarça', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-30', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (193, '19890430FTP001-002', '1º Triatlo de Alpiarça', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-30', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (194, '19890430FTP001-003', '1º Triatlo de Alpiarça', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-30', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (195, '19890430FTP001-004', '1º Triatlo de Alpiarça', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-30', '14:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (196, '19890430FTP001-005', '1º Triatlo de Alpiarça', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-30', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (197, '19890521FTP001-001', '1º Triatlo Cidade de Gaia', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-05-21', '10:30:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (198, '19890521FTP001-002', '1º Triatlo Cidade de Gaia', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-21', '10:30:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (199, '19890521FTP001-003', '1º Triatlo Cidade de Gaia', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-21', '10:30:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (200, '19890521FTP001-004', '1º Triatlo Cidade de Gaia', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-05-21', '10:30:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (201, '19890521FTP001-005', '1º Triatlo Cidade de Gaia', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-05-21', '10:30:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (202, '19890527FTO001-001', 'Triatlo Internacional da Costa Azul', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-05-27', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (203, '19890527FTO001-002', 'Triatlo Internacional da Costa Azul', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-27', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (204, '19890527FTO001-003', 'Triatlo Internacional da Costa Azul', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-27', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (205, '19890527FTO001-004', 'Triatlo Internacional da Costa Azul', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-05-27', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (206, '19890527FTO001-005', 'Triatlo Internacional da Costa Azul', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-05-27', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (207, '19890604FTP001-001', '2º Triatlo do Ambiente', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-04', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (208, '19890604FTP001-002', '2º Triatlo do Ambiente', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-04', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (209, '19890604FTP001-003', '2º Triatlo do Ambiente', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-04', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (210, '19890604FTP001-004', '2º Triatlo do Ambiente', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-06-04', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (211, '19890604FTP001-005', '2º Triatlo do Ambiente', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-06-04', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (212, '19890611FTP001-001', 'Triatlo Internacional de Promoção', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-11', '09:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (213, '19890611FTP001-002', 'Triatlo Internacional de Promoção', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-11', '09:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (214, '19890611FTP001-003', 'Triatlo Internacional de Promoção', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-11', '09:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (215, '19890625FTP001-001', 'I Biatlo do Regimento de Comandos da Amadora', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-25', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (216, '19890625FTP001-002', 'I Biatlo do Regimento de Comandos da Amadora', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (217, '19890625FTP001-003', 'I Biatlo do Regimento de Comandos da Amadora', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (218, '19890625FTP001-004', 'I Biatlo do Regimento de Comandos da Amadora', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (219, '19890625FTP001-005', 'I Biatlo do Regimento de Comandos da Amadora', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (220, '19890625FTP002-001', 'Triatlo de Almodôvar', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-25', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (221, '19890625FTP002-002', 'Triatlo de Almodôvar', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (222, '19890625FTP002-003', 'Triatlo de Almodôvar', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (223, '19890625FTP002-004', 'Triatlo de Almodôvar', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (224, '19890625FTP002-005', 'Triatlo de Almodôvar', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (225, '19890702FTP001-001', 'Triatlo de Coimbra', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (226, '19890702FTP001-002', 'Triatlo de Coimbra', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-02', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (227, '19890702FTP001-003', 'Triatlo de Coimbra', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (228, '19890702FTP001-004', 'Triatlo de Coimbra', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-02', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (229, '19890702FTP001-005', 'Triatlo de Coimbra', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-02', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (230, '19890709FTP001-001', 'Biatlo de Oliveira de Azeméis', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-09', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (231, '19890709FTP001-002', 'Biatlo de Oliveira de Azeméis', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-09', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (232, '19890709FTP001-003', 'Biatlo de Oliveira de Azeméis', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-09', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (233, '19890709FTP001-004', 'Biatlo de Oliveira de Azeméis', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-09', null, null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (234, '19890709FTP001-005', 'Biatlo de Oliveira de Azeméis', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-09', null, null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (235, '19890716FTP001-001', '1º Triatlo Concelho da Lourinhã', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (236, '19890716FTP001-002', '1º Triatlo Concelho da Lourinhã', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (237, '19890716FTP001-003', '1º Triatlo Concelho da Lourinhã', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (238, '19890716FTP001-004', '1º Triatlo Concelho da Lourinhã', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-16', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (239, '19890716FTP001-005', '1º Triatlo Concelho da Lourinhã', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-16', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (240, '19890722FTP001-001', 'III Triatlo do Coimbrão', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-22', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (241, '19890722FTP001-002', 'III Triatlo do Coimbrão', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-22', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (242, '19890722FTP001-003', 'III Triatlo do Coimbrão', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-22', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (243, '19890722FTP001-004', 'III Triatlo do Coimbrão', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-22', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (244, '19890722FTP001-005', 'III Triatlo do Coimbrão', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-22', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (245, '19890815FTP001-001', 'VI Triatlo de Peniche', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-08-15', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (246, '19890815FTP001-002', 'VI Triatlo de Peniche', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-15', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (247, '19890815FTP001-003', 'VI Triatlo de Peniche', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-15', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (248, '19890815FTP001-004', 'VI Triatlo de Peniche', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-08-15', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (249, '19890815FTP001-005', 'VI Triatlo de Peniche', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-08-15', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (250, '19890820FTP001-001', 'I Triatlo de Oliveira de Frades', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-08-20', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (251, '19890820FTP001-002', 'I Triatlo de Oliveira de Frades', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-20', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (252, '19890820FTP001-003', 'I Triatlo de Oliveira de Frades', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-20', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (253, '19890820FTP001-004', 'I Triatlo de Oliveira de Frades', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-08-20', '14:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (254, '19890820FTP001-005', 'I Triatlo de Oliveira de Frades', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-08-20', '14:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (255, '19890827FTP001-001', 'I Triatlo da Carregueira', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-08-27', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (256, '19890827FTP001-002', 'I Triatlo da Carregueira', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-27', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (257, '19890827FTP001-003', 'I Triatlo da Carregueira', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-27', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (258, '19890827FTP001-004', 'I Triatlo da Carregueira', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-08-27', '11:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (259, '19890827FTP001-005', 'I Triatlo da Carregueira', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-08-27', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (260, '19890910FTP001-001', 'II Triatlo de Óbidos', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-09-10', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (261, '19890910FTP001-002', 'II Triatlo de Óbidos', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-10', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (262, '19890910FTP001-003', 'II Triatlo de Óbidos', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-10', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (263, '19890910FTP001-004', 'II Triatlo de Óbidos', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-09-10', '11:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (264, '19890910FTP001-005', 'II Triatlo de Óbidos', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-09-10', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (265, '19890924FTP001-001', 'III Triatlo de Lagos', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-09-24', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (266, '19890924FTP001-002', 'III Triatlo de Lagos', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-24', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (267, '19890924FTP001-003', 'III Triatlo de Lagos', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-24', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (268, '19890924FTP001-004', 'III Triatlo de Lagos', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-09-24', '11:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (269, '19890924FTP001-005', 'III Triatlo de Lagos', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-09-24', '11:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (270, '19890930FTP001-001', 'Triatlo de Ferreira do Alentejo', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-30', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (271, '19890930FTP001-002', 'Triatlo de Ferreira do Alentejo', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-30', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (272, '19890930FTP001-003', 'Triatlo de Ferreira do Alentejo', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-30', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (273, '19890930FTP001-004', 'Triatlo de Ferreira do Alentejo', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-30', '15:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (274, '19890930FTP001-005', 'Triatlo de Ferreira do Alentejo', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-30', '15:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (275, '19891007FTP001-001', 'Triatlo Médio de Ponte de Sôr', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (276, '19891007FTP001-002', 'Triatlo Médio de Ponte de Sôr', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (277, '19891007FTP001-003', 'Triatlo Médio de Ponte de Sôr', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (278, '19891007FTP001-004', 'Triatlo Médio de Ponte de Sôr', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (279, '19891007FTP001-005', 'Triatlo Médio de Ponte de Sôr', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (280, '19891007FTP001-006', 'Triatlo de Promoção de Ponte de Sôr', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (281, '19891007FTP001-007', 'Triatlo de Promoção de Ponte de Sôr', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (282, '19891007FTP001-008', 'Triatlo de Promoção de Ponte de Sôr', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (283, '19891014FTP001-001', 'Triatlo da Golegã', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-14', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (284, '19891014FTP001-002', 'Triatlo da Golegã', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-14', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (285, '19891014FTP001-003', 'Triatlo da Golegã', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-14', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (286, '19891021FTP001-001', 'Triatlo Cidade de Figueira da Foz', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-21', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (287, '19891021FTP001-002', 'Triatlo Cidade de Figueira da Foz', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-21', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (288, '19891021FTP001-003', 'Triatlo Cidade de Figueira da Foz', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-21', '10:00:00', null, null, 'COMPLETED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (289, '19891021FTP001-004', 'Triatlo Cidade de Figueira da Foz', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-10-21', '10:00:00', null, null, 'PLANNED');
-INSERT INTO endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status) VALUES (290, '19891021FTP001-005', 'Triatlo Cidade de Figueira da Foz', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-10-21', '10:00:00', null, null, 'COMPLETED');
+INSERT INTO
+  endurancetrio.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, date, time, gun_time, air_temperature, race_status)
+VALUES
+  (164, '19890305APT001-001', '1º Biatlo de Ponte de Sor', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-05', '14:00:00', null, null, 'COMPLETED'),
+  (165, '19890305APT001-002', '1º Biatlo de Ponte de Sor', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-05', '14:00:00', null, null, 'COMPLETED'),
+  (166, '19890305APT001-003', '1º Biatlo de Ponte de Sor', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-05', '14:00:00', null, null, 'COMPLETED'),
+  (167, '19890305APT001-004', '1º Biatlo de Ponte de Sor', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-03-05', '14:00:00', null, null, 'PLANNED'),
+  (168, '19890305APT001-005', '1º Biatlo de Ponte de Sor', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-03-05', '14:00:00', null, null, 'COMPLETED'),
+  (169, '19890318FPT001-001', 'Biatlo Jovem Nauticampo', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-18', '16:00:00', null, null, 'COMPLETED'),
+  (170, '19890318FPT001-002', 'Biatlo Jovem Nauticampo', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-18', '16:00:00', null, null, 'COMPLETED'),
+  (171, '19890318FPT001-003', 'Biatlo Jovem Nauticampo', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-18', '16:00:00', null, null, 'COMPLETED'),
+  (172, '19890319APT001-001', '2º Biatlo de Porto de Mós', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-19', '14:00:00', null, null, 'COMPLETED'),
+  (173, '19890319APT001-002', '2º Biatlo de Porto de Mós', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-19', '14:00:00', null, null, 'COMPLETED'),
+  (174, '19890319APT001-003', '2º Biatlo de Porto de Mós', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-19', '14:00:00', null, null, 'COMPLETED'),
+  (175, '19890319APT001-004', '2º Biatlo de Porto de Mós', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-03-19', '14:00:00', null, null, 'PLANNED'),
+  (176, '19890319APT001-005', '2º Biatlo de Porto de Mós', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-03-19', '14:00:00', null, null, 'COMPLETED'),
+  (177, '19890402APT001-001', '2º Biatlo do Concelho de Loures', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-02', '15:00:00', null, null, 'COMPLETED'),
+  (178, '19890402APT001-002', '2º Biatlo do Concelho de Loures', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-02', '15:00:00', null, null, 'COMPLETED'),
+  (179, '19890402APT001-003', '2º Biatlo do Concelho de Loures', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-02', '15:00:00', null, null, 'COMPLETED'),
+  (180, '19890402APT001-004', '2º Biatlo do Concelho de Loures', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-02', '15:00:00', null, null, 'PLANNED'),
+  (181, '19890402APT001-005', '2º Biatlo do Concelho de Loures', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-02', '15:00:00', null, null, 'COMPLETED'),
+  (182, '19890409APT001-001', '1º Biatlo de Almodôvar', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-09', '15:00:00', null, null, 'COMPLETED'),
+  (183, '19890409APT001-002', '1º Biatlo de Almodôvar', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-09', '15:00:00', null, null, 'COMPLETED'),
+  (184, '19890409APT001-003', '1º Biatlo de Almodôvar', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-09', '15:00:00', null, null, 'COMPLETED'),
+  (185, '19890409APT001-004', '1º Biatlo de Almodôvar', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-09', '15:00:00', null, null, 'PLANNED'),
+  (186, '19890409APT001-005', '1º Biatlo de Almodôvar', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-09', '15:00:00', null, null, 'COMPLETED'),
+  (187, '19890416APT001-001', '3º Biatlo do Porto', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-16', '15:00:00', null, null, 'COMPLETED'),
+  (188, '19890416APT001-002', '3º Biatlo do Porto', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-16', '15:00:00', null, null, 'COMPLETED'),
+  (189, '19890416APT001-003', '3º Biatlo do Porto', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-16', '15:00:00', null, null, 'COMPLETED'),
+  (190, '19890416APT001-004', '3º Biatlo do Porto', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-16', '15:00:00', null, null, 'PLANNED'),
+  (191, '19890416APT001-005', '3º Biatlo do Porto', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-16', '15:00:00', null, null, 'COMPLETED'),
+  (192, '19890430FTP001-001', '1º Triatlo de Alpiarça', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-04-30', '14:00:00', null, null, 'COMPLETED'),
+  (193, '19890430FTP001-002', '1º Triatlo de Alpiarça', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-30', '14:00:00', null, null, 'COMPLETED'),
+  (194, '19890430FTP001-003', '1º Triatlo de Alpiarça', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-04-30', '14:00:00', null, null, 'COMPLETED'),
+  (195, '19890430FTP001-004', '1º Triatlo de Alpiarça', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-04-30', '14:00:00', null, null, 'PLANNED'),
+  (196, '19890430FTP001-005', '1º Triatlo de Alpiarça', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-04-30', '14:00:00', null, null, 'COMPLETED'),
+  (197, '19890521FTP001-001', '1º Triatlo Cidade de Gaia', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-05-21', '10:30:00', null, null, 'COMPLETED'),
+  (198, '19890521FTP001-002', '1º Triatlo Cidade de Gaia', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-21', '10:30:00', null, null, 'COMPLETED'),
+  (199, '19890521FTP001-003', '1º Triatlo Cidade de Gaia', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-21', '10:30:00', null, null, 'COMPLETED'),
+  (200, '19890521FTP001-004', '1º Triatlo Cidade de Gaia', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-05-21', '10:30:00', null, null, 'PLANNED'),
+  (201, '19890521FTP001-005', '1º Triatlo Cidade de Gaia', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-05-21', '10:30:00', null, null, 'COMPLETED'),
+  (202, '19890527FTO001-001', 'Triatlo Internacional da Costa Azul', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-05-27', null, null, null, 'COMPLETED'),
+  (203, '19890527FTO001-002', 'Triatlo Internacional da Costa Azul', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-27', null, null, null, 'COMPLETED'),
+  (204, '19890527FTO001-003', 'Triatlo Internacional da Costa Azul', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-05-27', null, null, null, 'COMPLETED'),
+  (205, '19890527FTO001-004', 'Triatlo Internacional da Costa Azul', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-05-27', null, null, null, 'COMPLETED'),
+  (206, '19890527FTO001-005', 'Triatlo Internacional da Costa Azul', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-05-27', null, null, null, 'COMPLETED'),
+  (207, '19890604FTP001-001', '2º Triatlo do Ambiente', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-04', '15:00:00', null, null, 'COMPLETED'),
+  (208, '19890604FTP001-002', '2º Triatlo do Ambiente', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-04', '15:00:00', null, null, 'COMPLETED'),
+  (209, '19890604FTP001-003', '2º Triatlo do Ambiente', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-04', '15:00:00', null, null, 'COMPLETED'),
+  (210, '19890604FTP001-004', '2º Triatlo do Ambiente', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-06-04', '15:00:00', null, null, 'PLANNED'),
+  (211, '19890604FTP001-005', '2º Triatlo do Ambiente', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-06-04', '15:00:00', null, null, 'COMPLETED'),
+  (212, '19890611FTP001-001', 'Triatlo Internacional de Promoção', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-11', '09:00:00', null, null, 'COMPLETED'),
+  (213, '19890611FTP001-002', 'Triatlo Internacional de Promoção', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-11', '09:00:00', null, null, 'COMPLETED'),
+  (214, '19890611FTP001-003', 'Triatlo Internacional de Promoção', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-11', '09:00:00', null, null, 'COMPLETED'),
+  (215, '19890625FTP001-001', 'I Biatlo do Regimento de Comandos da Amadora', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-25', '10:00:00', null, null, 'COMPLETED'),
+  (216, '19890625FTP001-002', 'I Biatlo do Regimento de Comandos da Amadora', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'PLANNED'),
+  (217, '19890625FTP001-003', 'I Biatlo do Regimento de Comandos da Amadora', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'COMPLETED'),
+  (218, '19890625FTP001-004', 'I Biatlo do Regimento de Comandos da Amadora', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'PLANNED'),
+  (219, '19890625FTP001-005', 'I Biatlo do Regimento de Comandos da Amadora', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'COMPLETED'),
+  (220, '19890625FTP002-001', 'Triatlo de Almodôvar', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-06-25', '10:00:00', null, null, 'COMPLETED'),
+  (221, '19890625FTP002-002', 'Triatlo de Almodôvar', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'PLANNED'),
+  (222, '19890625FTP002-003', 'Triatlo de Almodôvar', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-06-25', '10:00:00', null, null, 'COMPLETED'),
+  (223, '19890625FTP002-004', 'Triatlo de Almodôvar', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'PLANNED'),
+  (224, '19890625FTP002-005', 'Triatlo de Almodôvar', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-06-25', '10:00:00', null, null, 'COMPLETED'),
+  (225, '19890702FTP001-001', 'Triatlo de Coimbra', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-02', '15:00:00', null, null, 'COMPLETED'),
+  (226, '19890702FTP001-002', 'Triatlo de Coimbra', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-02', '15:00:00', null, null, 'PLANNED'),
+  (227, '19890702FTP001-003', 'Triatlo de Coimbra', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-02', '15:00:00', null, null, 'COMPLETED'),
+  (228, '19890702FTP001-004', 'Triatlo de Coimbra', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-02', '15:00:00', null, null, 'PLANNED'),
+  (229, '19890702FTP001-005', 'Triatlo de Coimbra', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-02', '15:00:00', null, null, 'COMPLETED'),
+  (230, '19890709FTP001-001', 'Biatlo de Oliveira de Azeméis', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-09', null, null, null, 'COMPLETED'),
+  (231, '19890709FTP001-002', 'Biatlo de Oliveira de Azeméis', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-09', null, null, null, 'COMPLETED'),
+  (232, '19890709FTP001-003', 'Biatlo de Oliveira de Azeméis', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-09', null, null, null, 'COMPLETED'),
+  (233, '19890709FTP001-004', 'Biatlo de Oliveira de Azeméis', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-09', null, null, null, 'PLANNED'),
+  (234, '19890709FTP001-005', 'Biatlo de Oliveira de Azeméis', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-09', null, null, null, 'COMPLETED'),
+  (235, '19890716FTP001-001', '1º Triatlo Concelho da Lourinhã', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-16', '15:00:00', null, null, 'COMPLETED'),
+  (236, '19890716FTP001-002', '1º Triatlo Concelho da Lourinhã', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-16', '15:00:00', null, null, 'COMPLETED'),
+  (237, '19890716FTP001-003', '1º Triatlo Concelho da Lourinhã', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-16', '15:00:00', null, null, 'COMPLETED'),
+  (238, '19890716FTP001-004', '1º Triatlo Concelho da Lourinhã', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-16', '15:00:00', null, null, 'PLANNED'),
+  (239, '19890716FTP001-005', '1º Triatlo Concelho da Lourinhã', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-16', '15:00:00', null, null, 'COMPLETED'),
+  (240, '19890722FTP001-001', 'III Triatlo do Coimbrão', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-22', '15:00:00', null, null, 'COMPLETED'),
+  (241, '19890722FTP001-002', 'III Triatlo do Coimbrão', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-22', '15:00:00', null, null, 'COMPLETED'),
+  (242, '19890722FTP001-003', 'III Triatlo do Coimbrão', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-22', '15:00:00', null, null, 'COMPLETED'),
+  (243, '19890722FTP001-004', 'III Triatlo do Coimbrão', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-22', '15:00:00', null, null, 'PLANNED'),
+  (244, '19890722FTP001-005', 'III Triatlo do Coimbrão', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-22', '15:00:00', null, null, 'COMPLETED'),
+  (245, '19890815FTP001-001', 'VI Triatlo de Peniche', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-08-15', '15:00:00', null, null, 'COMPLETED'),
+  (246, '19890815FTP001-002', 'VI Triatlo de Peniche', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-15', '15:00:00', null, null, 'COMPLETED'),
+  (247, '19890815FTP001-003', 'VI Triatlo de Peniche', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-15', '15:00:00', null, null, 'COMPLETED'),
+  (248, '19890815FTP001-004', 'VI Triatlo de Peniche', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-08-15', '15:00:00', null, null, 'PLANNED'),
+  (249, '19890815FTP001-005', 'VI Triatlo de Peniche', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-08-15', '15:00:00', null, null, 'COMPLETED'),
+  (250, '19890820FTP001-001', 'I Triatlo de Oliveira de Frades', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-08-20', '14:00:00', null, null, 'COMPLETED'),
+  (251, '19890820FTP001-002', 'I Triatlo de Oliveira de Frades', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-20', '14:00:00', null, null, 'COMPLETED'),
+  (252, '19890820FTP001-003', 'I Triatlo de Oliveira de Frades', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-20', '14:00:00', null, null, 'COMPLETED'),
+  (253, '19890820FTP001-004', 'I Triatlo de Oliveira de Frades', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-08-20', '14:00:00', null, null, 'PLANNED'),
+  (254, '19890820FTP001-005', 'I Triatlo de Oliveira de Frades', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-08-20', '14:00:00', null, null, 'COMPLETED'),
+  (255, '19890827FTP001-001', 'I Triatlo da Carregueira', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-08-27', '11:00:00', null, null, 'COMPLETED'),
+  (256, '19890827FTP001-002', 'I Triatlo da Carregueira', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-27', '11:00:00', null, null, 'COMPLETED'),
+  (257, '19890827FTP001-003', 'I Triatlo da Carregueira', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-08-27', '11:00:00', null, null, 'COMPLETED'),
+  (258, '19890827FTP001-004', 'I Triatlo da Carregueira', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-08-27', '11:00:00', null, null, 'PLANNED'),
+  (259, '19890827FTP001-005', 'I Triatlo da Carregueira', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-08-27', '11:00:00', null, null, 'COMPLETED'),
+  (260, '19890910FTP001-001', 'II Triatlo de Óbidos', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-09-10', '11:00:00', null, null, 'COMPLETED'),
+  (261, '19890910FTP001-002', 'II Triatlo de Óbidos', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-10', '11:00:00', null, null, 'COMPLETED'),
+  (262, '19890910FTP001-003', 'II Triatlo de Óbidos', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-10', '11:00:00', null, null, 'COMPLETED'),
+  (263, '19890910FTP001-004', 'II Triatlo de Óbidos', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-09-10', '11:00:00', null, null, 'PLANNED'),
+  (264, '19890910FTP001-005', 'II Triatlo de Óbidos', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-09-10', '11:00:00', null, null, 'COMPLETED'),
+  (265, '19890924FTP001-001', 'III Triatlo de Lagos', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-09-24', '11:00:00', null, null, 'COMPLETED'),
+  (266, '19890924FTP001-002', 'III Triatlo de Lagos', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-24', '11:00:00', null, null, 'COMPLETED'),
+  (267, '19890924FTP001-003', 'III Triatlo de Lagos', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-09-24', '11:00:00', null, null, 'COMPLETED'),
+  (268, '19890924FTP001-004', 'III Triatlo de Lagos', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-09-24', '11:00:00', null, null, 'PLANNED'),
+  (269, '19890924FTP001-005', 'III Triatlo de Lagos', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-09-24', '11:00:00', null, null, 'COMPLETED'),
+  (270, '19890930FTP001-001', 'Triatlo de Ferreira do Alentejo', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-07-30', '15:00:00', null, null, 'COMPLETED'),
+  (271, '19890930FTP001-002', 'Triatlo de Ferreira do Alentejo', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-30', '15:00:00', null, null, 'COMPLETED'),
+  (272, '19890930FTP001-003', 'Triatlo de Ferreira do Alentejo', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-07-30', '15:00:00', null, null, 'COMPLETED'),
+  (273, '19890930FTP001-004', 'Triatlo de Ferreira do Alentejo', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-07-30', '15:00:00', null, null, 'PLANNED'),
+  (274, '19890930FTP001-005', 'Triatlo de Ferreira do Alentejo', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-07-30', '15:00:00', null, null, 'COMPLETED'),
+  (275, '19891007FTP001-001', 'Triatlo Médio de Ponte de Sôr', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (276, '19891007FTP001-002', 'Triatlo Médio de Ponte de Sôr', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (277, '19891007FTP001-003', 'Triatlo Médio de Ponte de Sôr', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (278, '19891007FTP001-004', 'Triatlo Médio de Ponte de Sôr', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (279, '19891007FTP001-005', 'Triatlo Médio de Ponte de Sôr', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (280, '19891007FTP001-006', 'Triatlo de Promoção de Ponte de Sôr', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (281, '19891007FTP001-007', 'Triatlo de Promoção de Ponte de Sôr', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'PLANNED'),
+  (282, '19891007FTP001-008', 'Triatlo de Promoção de Ponte de Sôr', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-07', '10:00:00', null, null, 'COMPLETED'),
+  (283, '19891014FTP001-001', 'Triatlo da Golegã', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-14', '10:00:00', null, null, 'COMPLETED'),
+  (284, '19891014FTP001-002', 'Triatlo da Golegã', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-14', '10:00:00', null, null, 'COMPLETED'),
+  (285, '19891014FTP001-003', 'Triatlo da Golegã', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-14', '10:00:00', null, null, 'COMPLETED'),
+  (286, '19891021FTP001-001', 'Triatlo Cidade de Figueira da Foz', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-10-21', '10:00:00', null, null, 'COMPLETED'),
+  (287, '19891021FTP001-002', 'Triatlo Cidade de Figueira da Foz', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-21', '10:00:00', null, null, 'COMPLETED'),
+  (288, '19891021FTP001-003', 'Triatlo Cidade de Figueira da Foz', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1989-10-21', '10:00:00', null, null, 'COMPLETED'),
+  (289, '19891021FTP001-004', 'Triatlo Cidade de Figueira da Foz', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-10-21', '10:00:00', null, null, 'PLANNED'),
+  (290, '19891021FTP001-005', 'Triatlo Cidade de Figueira da Foz', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-10-21', '10:00:00', null, null, 'COMPLETED');
 
 
 -- endurancetrio.triathlon_based_race table
 -- ----------------------------------------
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (192, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (193, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (194, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (195, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (196, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (197, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (198, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (199, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (200, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (201, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (202, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (203, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (204, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (205, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (206, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (207, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (208, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (209, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (210, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (211, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (212, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (213, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (214, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (220, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (221, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (222, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (223, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (224, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (225, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (226, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (227, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (228, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (229, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (235, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (236, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (237, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (238, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (239, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (240, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (241, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (242, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (243, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (244, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (245, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (246, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (247, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (248, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (249, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (250, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (251, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (252, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (253, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (254, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (255, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (256, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (257, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (258, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (259, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (260, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (261, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (262, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (263, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (264, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (265, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (266, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (267, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (268, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (269, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (270, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (271, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (272, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (273, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (274, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (275, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (276, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (277, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (278, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (279, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (280, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (281, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (282, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (283, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (284, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (285, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (286, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (287, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (288, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (289, null, 'UNKNOWN');
-INSERT INTO endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule) VALUES (290, null, 'UNKNOWN');
+INSERT INTO
+  endurancetrio.triathlon_based_race (id, water_temperature, wetsuit_rule)
+VALUES
+  (192, null, 'UNKNOWN'),
+  (193, null, 'UNKNOWN'),
+  (194, null, 'UNKNOWN'),
+  (195, null, 'UNKNOWN'),
+  (196, null, 'UNKNOWN'),
+  (197, null, 'UNKNOWN'),
+  (198, null, 'UNKNOWN'),
+  (199, null, 'UNKNOWN'),
+  (200, null, 'UNKNOWN'),
+  (201, null, 'UNKNOWN'),
+  (202, null, 'UNKNOWN'),
+  (203, null, 'UNKNOWN'),
+  (204, null, 'UNKNOWN'),
+  (205, null, 'UNKNOWN'),
+  (206, null, 'UNKNOWN'),
+  (207, null, 'UNKNOWN'),
+  (208, null, 'UNKNOWN'),
+  (209, null, 'UNKNOWN'),
+  (210, null, 'UNKNOWN'),
+  (211, null, 'UNKNOWN'),
+  (212, null, 'UNKNOWN'),
+  (213, null, 'UNKNOWN'),
+  (214, null, 'UNKNOWN'),
+  (220, null, 'UNKNOWN'),
+  (221, null, 'UNKNOWN'),
+  (222, null, 'UNKNOWN'),
+  (223, null, 'UNKNOWN'),
+  (224, null, 'UNKNOWN'),
+  (225, null, 'UNKNOWN'),
+  (226, null, 'UNKNOWN'),
+  (227, null, 'UNKNOWN'),
+  (228, null, 'UNKNOWN'),
+  (229, null, 'UNKNOWN'),
+  (235, null, 'UNKNOWN'),
+  (236, null, 'UNKNOWN'),
+  (237, null, 'UNKNOWN'),
+  (238, null, 'UNKNOWN'),
+  (239, null, 'UNKNOWN'),
+  (240, null, 'UNKNOWN'),
+  (241, null, 'UNKNOWN'),
+  (242, null, 'UNKNOWN'),
+  (243, null, 'UNKNOWN'),
+  (244, null, 'UNKNOWN'),
+  (245, null, 'UNKNOWN'),
+  (246, null, 'UNKNOWN'),
+  (247, null, 'UNKNOWN'),
+  (248, null, 'UNKNOWN'),
+  (249, null, 'UNKNOWN'),
+  (250, null, 'UNKNOWN'),
+  (251, null, 'UNKNOWN'),
+  (252, null, 'UNKNOWN'),
+  (253, null, 'UNKNOWN'),
+  (254, null, 'UNKNOWN'),
+  (255, null, 'UNKNOWN'),
+  (256, null, 'UNKNOWN'),
+  (257, null, 'UNKNOWN'),
+  (258, null, 'UNKNOWN'),
+  (259, null, 'UNKNOWN'),
+  (260, null, 'UNKNOWN'),
+  (261, null, 'UNKNOWN'),
+  (262, null, 'UNKNOWN'),
+  (263, null, 'UNKNOWN'),
+  (264, null, 'UNKNOWN'),
+  (265, null, 'UNKNOWN'),
+  (266, null, 'UNKNOWN'),
+  (267, null, 'UNKNOWN'),
+  (268, null, 'UNKNOWN'),
+  (269, null, 'UNKNOWN'),
+  (270, null, 'UNKNOWN'),
+  (271, null, 'UNKNOWN'),
+  (272, null, 'UNKNOWN'),
+  (273, null, 'UNKNOWN'),
+  (274, null, 'UNKNOWN'),
+  (275, null, 'UNKNOWN'),
+  (276, null, 'UNKNOWN'),
+  (277, null, 'UNKNOWN'),
+  (278, null, 'UNKNOWN'),
+  (279, null, 'UNKNOWN'),
+  (280, null, 'UNKNOWN'),
+  (281, null, 'UNKNOWN'),
+  (282, null, 'UNKNOWN'),
+  (283, null, 'UNKNOWN'),
+  (284, null, 'UNKNOWN'),
+  (285, null, 'UNKNOWN'),
+  (286, null, 'UNKNOWN'),
+  (287, null, 'UNKNOWN'),
+  (288, null, 'UNKNOWN'),
+  (289, null, 'UNKNOWN'),
+  (290, null, 'UNKNOWN');
 
 
 -- endurancetrio.course_race table
 -- -------------------------------
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (41, 164);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (41, 165);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (41, 166);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (41, 167);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (41, 168);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (43, 172);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (43, 173);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (43, 174);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (43, 175);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (43, 176);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (44, 177);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (44, 178);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (44, 179);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (44, 180);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (44, 181);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (45, 182);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (45, 183);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (45, 184);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (45, 185);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (45, 186);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (46, 187);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (46, 188);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (46, 189);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (46, 190);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (46, 191);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (47, 192);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (47, 193);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (47, 194);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (47, 195);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (47, 196);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (48, 197);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (48, 198);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (48, 199);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (48, 200);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (48, 201);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (49, 202);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (49, 203);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (49, 204);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (49, 205);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (49, 206);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (50, 207);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (50, 208);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (50, 209);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (50, 210);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (50, 211);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (51, 212);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (51, 213);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (51, 214);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (52, 215);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (52, 216);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (52, 217);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (52, 218);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (52, 219);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (53, 220);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (53, 221);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (53, 222);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (53, 223);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (53, 224);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (54, 225);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (54, 226);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (54, 227);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (54, 228);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (54, 229);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (55, 230);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (55, 231);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (55, 232);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (55, 233);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (55, 234);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (56, 235);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (56, 236);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (56, 237);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (56, 238);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (56, 239);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (57, 240);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (57, 241);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (57, 242);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (57, 243);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (57, 244);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (58, 245);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (58, 246);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (58, 247);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (58, 248);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (58, 249);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (59, 250);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (59, 251);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (59, 252);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (59, 253);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (59, 254);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (60, 255);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (60, 256);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (60, 257);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (60, 258);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (60, 259);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (61, 260);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (61, 261);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (61, 262);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (61, 263);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (61, 264);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (62, 265);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (62, 266);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (62, 267);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (62, 268);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (62, 269);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (63, 270);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (63, 271);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (63, 272);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (63, 273);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (63, 274);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (64, 275);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (64, 276);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (64, 277);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (64, 278);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (64, 279);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (65, 280);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (65, 281);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (65, 282);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (66, 283);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (66, 284);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (66, 285);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (67, 286);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (67, 287);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (67, 288);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (67, 289);
-INSERT INTO endurancetrio.course_race (course_id, race_id) VALUES (67, 290);
+INSERT INTO
+  endurancetrio.course_race (course_id, race_id)
+VALUES
+  (41, 164),
+  (41, 165),
+  (41, 166),
+  (41, 167),
+  (41, 168),
+  (43, 172),
+  (43, 173),
+  (43, 174),
+  (43, 175),
+  (43, 176),
+  (44, 177),
+  (44, 178),
+  (44, 179),
+  (44, 180),
+  (44, 181),
+  (45, 182),
+  (45, 183),
+  (45, 184),
+  (45, 185),
+  (45, 186),
+  (46, 187),
+  (46, 188),
+  (46, 189),
+  (46, 190),
+  (46, 191),
+  (47, 192),
+  (47, 193),
+  (47, 194),
+  (47, 195),
+  (47, 196),
+  (48, 197),
+  (48, 198),
+  (48, 199),
+  (48, 200),
+  (48, 201),
+  (49, 202),
+  (49, 203),
+  (49, 204),
+  (49, 205),
+  (49, 206),
+  (50, 207),
+  (50, 208),
+  (50, 209),
+  (50, 210),
+  (50, 211),
+  (51, 212),
+  (51, 213),
+  (51, 214),
+  (52, 215),
+  (52, 216),
+  (52, 217),
+  (52, 218),
+  (52, 219),
+  (53, 220),
+  (53, 221),
+  (53, 222),
+  (53, 223),
+  (53, 224),
+  (54, 225),
+  (54, 226),
+  (54, 227),
+  (54, 228),
+  (54, 229),
+  (55, 230),
+  (55, 231),
+  (55, 232),
+  (55, 233),
+  (55, 234),
+  (56, 235),
+  (56, 236),
+  (56, 237),
+  (56, 238),
+  (56, 239),
+  (57, 240),
+  (57, 241),
+  (57, 242),
+  (57, 243),
+  (57, 244),
+  (58, 245),
+  (58, 246),
+  (58, 247),
+  (58, 248),
+  (58, 249),
+  (59, 250),
+  (59, 251),
+  (59, 252),
+  (59, 253),
+  (59, 254),
+  (60, 255),
+  (60, 256),
+  (60, 257),
+  (60, 258),
+  (60, 259),
+  (61, 260),
+  (61, 261),
+  (61, 262),
+  (61, 263),
+  (61, 264),
+  (62, 265),
+  (62, 266),
+  (62, 267),
+  (62, 268),
+  (62, 269),
+  (63, 270),
+  (63, 271),
+  (63, 272),
+  (63, 273),
+  (63, 274),
+  (64, 275),
+  (64, 276),
+  (64, 277),
+  (64, 278),
+  (64, 279),
+  (65, 280),
+  (65, 281),
+  (65, 282),
+  (66, 283),
+  (66, 284),
+  (66, 285),
+  (67, 286),
+  (67, 287),
+  (67, 288),
+  (67, 289),
+  (67, 290);
 
 
 -- endurancetrio.race_hierarchy table
 -- ----------------------------------
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (165, 164);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (166, 164);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (167, 165);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (168, 166);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (170, 169);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (171, 169);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (173, 172);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (174, 171);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (175, 173);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (176, 174);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (178, 177);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (179, 177);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (180, 178);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (181, 179);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (183, 182);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (184, 182);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (185, 183);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (186, 184);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (188, 187);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (189, 187);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (190, 188);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (191, 189);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (193, 192);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (194, 192);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (195, 193);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (196, 194);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (198, 197);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (199, 197);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (200, 198);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (201, 199);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (203, 202);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (204, 202);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (205, 203);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (206, 204);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (208, 207);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (209, 207);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (210, 208);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (211, 209);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (213, 212);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (214, 212);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (216, 215);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (217, 215);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (218, 216);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (219, 217);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (221, 220);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (222, 220);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (223, 221);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (224, 222);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (226, 225);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (227, 225);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (228, 226);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (229, 227);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (231, 230);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (232, 230);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (233, 231);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (234, 232);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (236, 235);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (237, 235);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (238, 236);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (239, 237);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (241, 240);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (242, 240);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (243, 241);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (244, 242);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (246, 245);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (247, 245);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (248, 246);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (249, 246);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (251, 250);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (252, 250);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (253, 251);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (254, 251);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (256, 255);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (257, 255);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (258, 256);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (259, 257);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (261, 260);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (262, 260);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (263, 261);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (264, 262);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (266, 265);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (267, 265);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (268, 266);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (269, 267);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (271, 270);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (272, 270);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (273, 271);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (274, 272);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (276, 275);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (277, 275);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (278, 276);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (279, 277);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (281, 280);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (282, 280);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (284, 283);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (285, 283);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (287, 286);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (288, 286);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (289, 287);
-INSERT INTO endurancetrio.race_hierarchy (race_id, parent_race_id) VALUES (290, 288);
+INSERT INTO
+  endurancetrio.race_hierarchy (race_id, parent_race_id)
+VALUES
+  (165, 164),
+  (166, 164),
+  (167, 165),
+  (168, 166),
+  (170, 169),
+  (171, 169),
+  (173, 172),
+  (174, 171),
+  (175, 173),
+  (176, 174),
+  (178, 177),
+  (179, 177),
+  (180, 178),
+  (181, 179),
+  (183, 182),
+  (184, 182),
+  (185, 183),
+  (186, 184),
+  (188, 187),
+  (189, 187),
+  (190, 188),
+  (191, 189),
+  (193, 192),
+  (194, 192),
+  (195, 193),
+  (196, 194),
+  (198, 197),
+  (199, 197),
+  (200, 198),
+  (201, 199),
+  (203, 202),
+  (204, 202),
+  (205, 203),
+  (206, 204),
+  (208, 207),
+  (209, 207),
+  (210, 208),
+  (211, 209),
+  (213, 212),
+  (214, 212),
+  (216, 215),
+  (217, 215),
+  (218, 216),
+  (219, 217),
+  (221, 220),
+  (222, 220),
+  (223, 221),
+  (224, 222),
+  (226, 225),
+  (227, 225),
+  (228, 226),
+  (229, 227),
+  (231, 230),
+  (232, 230),
+  (233, 231),
+  (234, 232),
+  (236, 235),
+  (237, 235),
+  (238, 236),
+  (239, 237),
+  (241, 240),
+  (242, 240),
+  (243, 241),
+  (244, 242),
+  (246, 245),
+  (247, 245),
+  (248, 246),
+  (249, 246),
+  (251, 250),
+  (252, 250),
+  (253, 251),
+  (254, 251),
+  (256, 255),
+  (257, 255),
+  (258, 256),
+  (259, 257),
+  (261, 260),
+  (262, 260),
+  (263, 261),
+  (264, 262),
+  (266, 265),
+  (267, 265),
+  (268, 266),
+  (269, 267),
+  (271, 270),
+  (272, 270),
+  (273, 271),
+  (274, 272),
+  (276, 275),
+  (277, 275),
+  (278, 276),
+  (279, 277),
+  (281, 280),
+  (282, 280),
+  (284, 283),
+  (285, 283),
+  (287, 286),
+  (288, 286),
+  (289, 287),
+  (290, 288);
 
 
 -- endurancetrio.results_file table
 -- --------------------------------
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (59, 164, '1º Biatlo de Ponte de Sor', 'Geral', 1, true, '19890305APT001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (60, 166, '1º Biatlo de Ponte de Sor', 'Escalões Masculinos', 1, true, '19890305APT001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (61, 168, '1º Biatlo de Ponte de Sor', 'Equipas Masculinas', 1, true, '19890305APT001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (62, 172, '2º Biatlo de Porto de Mós', 'Geral', 1, true, '19890319APT001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (63, 173, '2º Biatlo de Porto de Mós', 'Escalões Femininos', 1, true, '19890319APT001-002B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (64, 174, '2º Biatlo de Porto de Mós', 'Escalões Masculinos', 1, true, '19890319APT001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (65, 176, '2º Biatlo de Porto de Mós', 'Equipas Masculinas', 1, true, '19890319APT001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (66, 177, '2º Biatlo do Concelho de Loures', 'Geral', 1, true, '19890402APT001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (67, 181, '2º Biatlo do Concelho de Loures', 'Equipas Masculinas', 1, true, '19890402APT001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (68, 182, '1º Biatlo de Almodôvar', 'Geral', 1, true, '19890409APT001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (69, 183, '1º Biatlo de Almodôvar', 'Escalões Femininos', 1, true, '19890409APT001-002B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (70, 184, '1º Biatlo de Almodôvar', 'Escalões Masculinos', 1, true, '19890409APT001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (71, 186, '1º Biatlo de Almodôvar', 'Equipas Masculinas', 1, true, '19890409APT001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (72, 187, '3º Biatlo do Porto', 'Geral', 1, true, '19890416APT001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (73, 188, '3º Biatlo do Porto', 'Escalões Femininos', 1, true, '19890416APT001-002B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (74, 189, '3º Biatlo do Porto', 'Escalões Masculinos', 1, true, '19890416APT001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (75, 191, '3º Biatlo do Porto', 'Equipas Masculinas', 1, true, '19890416APT001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (76, 192, '1º Triatlo de Alpiarça', 'Geral', 1, true, '19890430FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (77, 193, '1º Triatlo de Alpiarça', 'Femininos', 1, true, '19890430FTP001-002A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (78, 196, '1º Triatlo de Alpiarça', 'Equipas Masculinas', 1, true, '19890430FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (79, 197, '1º Triatlo Cidade de Gaia', 'Geral', 1, true, '19890521FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (80, 201, '1º Triatlo Cidade de Gaia', 'Equipas Masculinas', 1, true, '19890521FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (81, 207, '2º Triatlo do Ambiente', 'Geral', 1, true, '19890604FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (82, 208, '2º Triatlo do Ambiente', 'Escalões Femininos', 1, true, '19890604FTP001-002B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (83, 209, '2º Triatlo do Ambiente', 'Escalões Masculinos', 1, true, '19890604FTP001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (84, 211, '2º Triatlo do Ambiente', 'Equipas Masculinas', 1, true, '19890604FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (85, 212, 'Triatlo Internacional de Promoção', 'Geral', 1, true, '19890611FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (86, 215, 'I Biatlo do Regimento de Comandos da Amadora', 'Geral', 1, true, '19890625FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (87, 219, 'I Biatlo do Regimento de Comandos da Amadora', 'Equipas Masculinas', 1, true, '19890625FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (88, 220, 'Triatlo de Almodôvar', 'Geral', 1, true, '19890625FTP002-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (89, 225, 'Triatlo de Coimbra', 'Geral', 1, true, '19890702FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (90, 230, 'Biatlo de Oliveira de Azeméis', 'Geral', 1, true, '19890709FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (91, 234, 'Biatlo de Oliveira de Azeméis', 'Equipas Masculinas', 1, true, '19890709FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (92, 235, 'I Triatlo Concelho da Lourinhã', 'Geral', 1, true, '19890716FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (93, 240, 'III Triatlo do Coimbrão', 'Geral', 1, true, '19890722FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (94, 245, 'VI Triatlo de Peniche', 'Geral', 1, true, '19890815FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (95, 246, 'VI Triatlo de Peniche', 'Femininos', 1, true, '19890815FTP001-002A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (96, 247, 'VI Triatlo de Peniche', 'Escalões Masculinos', 1, true, '19890815FTP001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (97, 249, 'VI Triatlo de Peniche', 'Equipas Masculinas', 1, true, '19890815FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (98, 250, 'I Triatlo de Oliveira de Frades', 'Geral', 1, true, '19890820FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (99, 254, 'I Triatlo de Oliveira de Frades', 'Geral', 1, true, '19890820FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (100, 255, 'I Triatlo da Carregueira', 'Geral', 1, true, '19890827FTP001-001A-01.jpg');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (101, 260, 'II Triatlo de Óbidos', 'Geral', 1, true, '19890910FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (102, 261, 'II Triatlo de Óbidos', 'Escalões Femininos', 1, true, '19890910FTP001-002B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (103, 262, 'II Triatlo de Óbidos', 'Escalões Masculinos', 1, true, '19890910FTP001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (104, 265, 'III Triatlo de Lagos', 'Geral', 1, true, '19890924FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (105, 269, 'III Triatlo de Lagos', 'Equipas Masculinas', 1, true, '19890924FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (106, 270, 'I Triatlo de Ferreira do Alentejo', 'Geral', 1, true, '19890930FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (107, 275, 'Triatlo Médio de Ponte de Sôr', 'Geral', 1, true, '19891007FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (108, 276, 'Triatlo Médio de Ponte de Sôr', 'Escalões Femininos', 1, true, '19891007FTP001-002B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (109, 277, 'Triatlo Médio de Ponte de Sôr', 'Escalões Masculinos', 1, true, '19891007FTP001-003B-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (110, 279, 'Triatlo Médio de Ponte de Sôr', 'Equipas Masculinas', 1, true, '19891007FTP001-005A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (111, 280, 'Triatlo de Promoção de Ponte de Sôr', 'Geral', 1, true, '19891007FTP001-006A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (112, 283, 'Triatlo da Golegã', 'Geral', 1, true, '19891014FTP001-001A-01.pdf');
-INSERT INTO endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name) VALUES (113, 286, 'I Triatlo da Figueira da Foz', 'Geral', 1, true, '19891021FTP001-001A-01.pdf');
+INSERT INTO
+  endurancetrio.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
+VALUES
+  (59, 164, '1º Biatlo de Ponte de Sor', 'Geral', 1, true, '19890305APT001-001A-01.pdf'),
+  (60, 166, '1º Biatlo de Ponte de Sor', 'Escalões Masculinos', 1, true, '19890305APT001-003B-01.pdf'),
+  (61, 168, '1º Biatlo de Ponte de Sor', 'Equipas Masculinas', 1, true, '19890305APT001-005A-01.pdf'),
+  (62, 172, '2º Biatlo de Porto de Mós', 'Geral', 1, true, '19890319APT001-001A-01.pdf'),
+  (63, 173, '2º Biatlo de Porto de Mós', 'Escalões Femininos', 1, true, '19890319APT001-002B-01.pdf'),
+  (64, 174, '2º Biatlo de Porto de Mós', 'Escalões Masculinos', 1, true, '19890319APT001-003B-01.pdf'),
+  (65, 176, '2º Biatlo de Porto de Mós', 'Equipas Masculinas', 1, true, '19890319APT001-005A-01.pdf'),
+  (66, 177, '2º Biatlo do Concelho de Loures', 'Geral', 1, true, '19890402APT001-001A-01.pdf'),
+  (67, 181, '2º Biatlo do Concelho de Loures', 'Equipas Masculinas', 1, true, '19890402APT001-005A-01.pdf'),
+  (68, 182, '1º Biatlo de Almodôvar', 'Geral', 1, true, '19890409APT001-001A-01.pdf'),
+  (69, 183, '1º Biatlo de Almodôvar', 'Escalões Femininos', 1, true, '19890409APT001-002B-01.pdf'),
+  (70, 184, '1º Biatlo de Almodôvar', 'Escalões Masculinos', 1, true, '19890409APT001-003B-01.pdf'),
+  (71, 186, '1º Biatlo de Almodôvar', 'Equipas Masculinas', 1, true, '19890409APT001-005A-01.pdf'),
+  (72, 187, '3º Biatlo do Porto', 'Geral', 1, true, '19890416APT001-001A-01.pdf'),
+  (73, 188, '3º Biatlo do Porto', 'Escalões Femininos', 1, true, '19890416APT001-002B-01.pdf'),
+  (74, 189, '3º Biatlo do Porto', 'Escalões Masculinos', 1, true, '19890416APT001-003B-01.pdf'),
+  (75, 191, '3º Biatlo do Porto', 'Equipas Masculinas', 1, true, '19890416APT001-005A-01.pdf'),
+  (76, 192, '1º Triatlo de Alpiarça', 'Geral', 1, true, '19890430FTP001-001A-01.pdf'),
+  (77, 193, '1º Triatlo de Alpiarça', 'Femininos', 1, true, '19890430FTP001-002A-01.pdf'),
+  (78, 196, '1º Triatlo de Alpiarça', 'Equipas Masculinas', 1, true, '19890430FTP001-005A-01.pdf'),
+  (79, 197, '1º Triatlo Cidade de Gaia', 'Geral', 1, true, '19890521FTP001-001A-01.pdf'),
+  (80, 201, '1º Triatlo Cidade de Gaia', 'Equipas Masculinas', 1, true, '19890521FTP001-005A-01.pdf'),
+  (81, 207, '2º Triatlo do Ambiente', 'Geral', 1, true, '19890604FTP001-001A-01.pdf'),
+  (82, 208, '2º Triatlo do Ambiente', 'Escalões Femininos', 1, true, '19890604FTP001-002B-01.pdf'),
+  (83, 209, '2º Triatlo do Ambiente', 'Escalões Masculinos', 1, true, '19890604FTP001-003B-01.pdf'),
+  (84, 211, '2º Triatlo do Ambiente', 'Equipas Masculinas', 1, true, '19890604FTP001-005A-01.pdf'),
+  (85, 212, 'Triatlo Internacional de Promoção', 'Geral', 1, true, '19890611FTP001-001A-01.pdf'),
+  (86, 215, 'I Biatlo do Regimento de Comandos da Amadora', 'Geral', 1, true, '19890625FTP001-001A-01.pdf'),
+  (87, 219, 'I Biatlo do Regimento de Comandos da Amadora', 'Equipas Masculinas', 1, true, '19890625FTP001-005A-01.pdf'),
+  (88, 220, 'Triatlo de Almodôvar', 'Geral', 1, true, '19890625FTP002-001A-01.pdf'),
+  (89, 225, 'Triatlo de Coimbra', 'Geral', 1, true, '19890702FTP001-001A-01.pdf'),
+  (90, 230, 'Biatlo de Oliveira de Azeméis', 'Geral', 1, true, '19890709FTP001-001A-01.pdf'),
+  (91, 234, 'Biatlo de Oliveira de Azeméis', 'Equipas Masculinas', 1, true, '19890709FTP001-005A-01.pdf'),
+  (92, 235, 'I Triatlo Concelho da Lourinhã', 'Geral', 1, true, '19890716FTP001-001A-01.pdf'),
+  (93, 240, 'III Triatlo do Coimbrão', 'Geral', 1, true, '19890722FTP001-001A-01.pdf'),
+  (94, 245, 'VI Triatlo de Peniche', 'Geral', 1, true, '19890815FTP001-001A-01.pdf'),
+  (95, 246, 'VI Triatlo de Peniche', 'Femininos', 1, true, '19890815FTP001-002A-01.pdf'),
+  (96, 247, 'VI Triatlo de Peniche', 'Escalões Masculinos', 1, true, '19890815FTP001-003B-01.pdf'),
+  (97, 249, 'VI Triatlo de Peniche', 'Equipas Masculinas', 1, true, '19890815FTP001-005A-01.pdf'),
+  (98, 250, 'I Triatlo de Oliveira de Frades', 'Geral', 1, true, '19890820FTP001-001A-01.pdf'),
+  (99, 254, 'I Triatlo de Oliveira de Frades', 'Geral', 1, true, '19890820FTP001-005A-01.pdf'),
+  (100, 255, 'I Triatlo da Carregueira', 'Geral', 1, true, '19890827FTP001-001A-01.jpg'),
+  (101, 260, 'II Triatlo de Óbidos', 'Geral', 1, true, '19890910FTP001-001A-01.pdf'),
+  (102, 261, 'II Triatlo de Óbidos', 'Escalões Femininos', 1, true, '19890910FTP001-002B-01.pdf'),
+  (103, 262, 'II Triatlo de Óbidos', 'Escalões Masculinos', 1, true, '19890910FTP001-003B-01.pdf'),
+  (104, 265, 'III Triatlo de Lagos', 'Geral', 1, true, '19890924FTP001-001A-01.pdf'),
+  (105, 269, 'III Triatlo de Lagos', 'Equipas Masculinas', 1, true, '19890924FTP001-005A-01.pdf'),
+  (106, 270, 'I Triatlo de Ferreira do Alentejo', 'Geral', 1, true, '19890930FTP001-001A-01.pdf'),
+  (107, 275, 'Triatlo Médio de Ponte de Sôr', 'Geral', 1, true, '19891007FTP001-001A-01.pdf'),
+  (108, 276, 'Triatlo Médio de Ponte de Sôr', 'Escalões Femininos', 1, true, '19891007FTP001-002B-01.pdf'),
+  (109, 277, 'Triatlo Médio de Ponte de Sôr', 'Escalões Masculinos', 1, true, '19891007FTP001-003B-01.pdf'),
+  (110, 279, 'Triatlo Médio de Ponte de Sôr', 'Equipas Masculinas', 1, true, '19891007FTP001-005A-01.pdf'),
+  (111, 280, 'Triatlo de Promoção de Ponte de Sôr', 'Geral', 1, true, '19891007FTP001-006A-01.pdf'),
+  (112, 283, 'Triatlo da Golegã', 'Geral', 1, true, '19891014FTP001-001A-01.pdf'),
+  (113, 286, 'I Triatlo da Figueira da Foz', 'Geral', 1, true, '19891021FTP001-001A-01.pdf');
