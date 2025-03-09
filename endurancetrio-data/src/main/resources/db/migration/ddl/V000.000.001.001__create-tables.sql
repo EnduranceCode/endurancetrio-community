@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio.race (
     gender_category VARCHAR NOT NULL,
     age_group_id    BIGINT  NOT NULL,
     date            DATE    NOT NULL,
-    time            TIME    NOT NULL,
+    time            TIME,
     race_status     VARCHAR NOT NULL,
     gun_time        TIME,
     air_temperature DOUBLE PRECISION,

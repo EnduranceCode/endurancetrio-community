@@ -182,7 +182,7 @@ public class Race implements Serializable {
   @Column(name = "date", nullable = false)
   LocalDate date;
 
-  @Column(name = "time", nullable = false)
+  @Column(name = "time")
   LocalTime time;
 
   @Column(name = "race_status", nullable = false)
