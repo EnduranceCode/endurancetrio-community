@@ -148,6 +148,13 @@ INSERT INTO endurancetrio.distance (id, distance_type) VALUES (40, 'STANDARD');
 INSERT INTO endurancetrio.biathlon_distance (id, bike_distance, bike_laps, run_distance, run_laps) VALUES (26, 40000, 1, 10000, 1);
 
 
+-- endurancetrio.duathlon_distance table
+-- -------------------------------------
+INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (25, 5200, 1, 42000, 1, 5200, 1);
+INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (27, 4000, 1, 50000, 1, 10000, 1);
+INSERT INTO endurancetrio.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps) VALUES (36, 5200, 1, 31200, 1, 5000, 1);
+
+
 -- endurancetrio.triathlon_distance table
 -- --------------------------------------
 INSERT INTO endurancetrio.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps) VALUES (28, 1000, 1, 43000, 1, 10000, 1);
