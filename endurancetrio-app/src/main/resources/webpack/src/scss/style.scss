@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2011-2025 Ricardo do Canto
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@charset "utf-8";
+
+@use "utilities/custom-variables.scss" as cv;
+
+@use "bulma/sass/utilities" with (
+  $link: cv.$endurancetrio-run,
+  $primary: cv.$endurancetrio-swim,
+  $info: cv.$endurance-swim-900,
+  $success: cv.$endurance-js-600,
+  $warning: cv.$endurancetrio-bike,
+  $danger: cv.$endurance-run-700,
+);
+
+@forward "bulma/sass/base";
+
+/* Bulma Elements */
+/* bulma/sass/elements/block */
+/* bulma/sass/elements/box */
+/* bulma/sass/elements/content; */
+/* bulma/sass/elements/button; */
+/* bulma/sass/elements/delete */
+/* bulma/sass/elements/icon; */
+/* bulma/sass/elements/image; */
+/* bulma/sass/elements/loader */
+/* bulma/sass/elements/notification */
+/* bulma/sass/elements/progress */
+/* bulma/sass/elements/table */
+/* bulma/sass/elements/tag */
+@forward "bulma/sass/elements/title";
+
+/* bulma/sass/form */
+
+/* Bulma Components */
+/* bulma/sass/components/breadcrumb */
+/* bulma/sass/components/card; */
+/* bulma/sass/components/dropdown */
+/* bulma/sass/components/menu */
+/* bulma/sass/components/message */
+/* bulma/sass/components/modal; */
+/* bulma/sass/components/navbar; */
+/* bulma/sass/components/pagination; */
+/* bulma/sass/components/panel */
+/* bulma/sass/components/tabs; */
+
+/* Bulma Grid */
+/* "bulma/sass/grid/columns"; */
+/* bulma/sass/grid/grid */
+
+/* Bulma Layout */
+@forward "bulma/sass/layout/container";
+/* bulma/sass/layout/footer; */
+@forward "bulma/sass/layout/hero";
+/* bulma/sass/layout/level */
+/* bulma/sass/layout/media; */
+@forward "bulma/sass/layout/section";
+
+/* bulma/sass/base/skeleton */
+
+/* Bulma Helpers */
+/* bulma/sass/helpers/aspect-ratio */
+/* bulma/sass/helpers/border */
+/* bulma/sass/helpers/color; */
+/* bulma/sass/helpers/flexbox */
+/* bulma/sass/helpers/float */
+/* bulma/sass/helpers/gap */
+/* bulma/sass/helpers/overflow */
+/* bulma/sass/helpers/position */
+/* bulma/sass/helpers/spacing; */
+/* bulma/sass/helpers/typography; */
+/* bulma/sass/helpers/visibility */
+/* bulma/sass/helpers/other */
+
+/* Import the themes so that all CSS variables have a value */
+@forward "bulma/sass/themes";

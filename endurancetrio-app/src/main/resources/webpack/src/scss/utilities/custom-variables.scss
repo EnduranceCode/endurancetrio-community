@@ -1,0 +1,68 @@
+/*
+ * Copyright (c) 2011-2025 Ricardo do Canto
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@charset "utf-8";
+
+/* Endurance colors shades*/
+
+$endurance-swim-050: hsl(197, 78%, 93%);
+$endurance-swim-100: hsl(197, 76%, 82%);
+$endurance-swim-200: hsl(197, 76%, 70%);
+$endurance-swim-300: hsl(197, 77%, 58%);
+$endurance-swim-400: hsl(195, 100%, 45%);
+$endurance-swim-500: hsl(199, 100%, 44%);
+$endurance-swim-600: hsl(200, 100%, 41%);
+$endurance-swim-700: hsl(201, 100%, 37%);
+$endurance-swim-800: hsl(203, 100%, 33%);
+$endurance-swim-900: hsl(207, 100%, 27%);
+
+$endurance-bike-050: hsl(58, 100%, 95%);
+$endurance-bike-100: hsl(56, 97%, 87%);
+$endurance-bike-200: hsl(56, 96%, 79%);
+$endurance-bike-300: hsl(56, 96%, 70%);
+$endurance-bike-400: hsl(56, 94%, 61%);
+$endurance-bike-500: hsl(57, 100%, 48%);
+$endurance-bike-600: hsl(52, 100%, 50%);
+$endurance-bike-700: hsl(46, 100%, 50%);
+$endurance-bike-800: hsl(40, 100%, 50%);
+$endurance-bike-900: hsl(29, 100%, 50%);
+
+$endurance-run-050: hsl(348, 100%, 96%);
+$endurance-run-100: hsl(354, 100%, 90%);
+$endurance-run-200: hsl(359, 75%, 78%);
+$endurance-run-300: hsl(359, 72%, 68%);
+$endurance-run-400: hsl(0, 87%, 64%);
+$endurance-run-500: hsl(3, 94%, 60%);
+$endurance-run-600: hsl(0, 81%, 57%);
+$endurance-run-700: hsl(359, 68%, 52%);
+$endurance-run-800: hsl(359, 67%, 48%);
+$endurance-run-900: hsl(359, 74%, 42%);
+
+$endurance-js-050: hsl(169, 67%, 91%);
+$endurance-js-100: hsl(168, 64%, 76%);
+$endurance-js-200: hsl(170, 69%, 55%);
+$endurance-js-300: hsl(170, 100%, 39%);
+$endurance-js-400: hsl(168, 100%, 36%);
+$endurance-js-500: hsl(166, 100%, 33%);
+$endurance-js-600: hsl(165, 100%, 31%);
+$endurance-js-700: hsl(162, 100%, 27%);
+$endurance-js-800: hsl(161, 100%, 24%);
+$endurance-js-900: hsl(155, 100%, 18%);
+
+/* Brand colors */
+$endurancetrio-swim: $endurance-swim-300;
+$endurancetrio-bike: $endurance-bike-600;
+$endurancetrio-run: $endurance-run-500;

@@ -14,14 +14,33 @@
   ~ limitations under the License.
   -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.thymeleaf.org ">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title th:text="${applicationName}"></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title data-th-text="${applicationName}"></title>
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+        data-th-href="@{/css/style.css}"
+  >
 </head>
 <body>
-<h1><span th:text="${applicationName}"></span></h1>
+<section class="hero is-primary">
+  <div class="hero-body">
+    <a href="/" data-th-href="@{/}">
+      <p class="title">EnduranceTrio</p>
+    </a>
+    <p class="subtitle">A central hub for endurance sports data and resources</p>
+  </div>
+</section>
+
+<main class="section">
+  <section class="container is-fluid">
+    <h1 class="title is-1" data-th-text="${applicationName}"></h1>
+  </section>
+</main>
 </body>
 </html>
