@@ -53,7 +53,8 @@
 /* bulma/sass/components/menu */
 /* bulma/sass/components/message */
 /* bulma/sass/components/modal; */
-/* bulma/sass/components/navbar; */
+@forward "bulma/sass/components/navbar";
+@forward "components/endurance-navbar";
 /* bulma/sass/components/pagination; */
 /* bulma/sass/components/panel */
 /* bulma/sass/components/tabs; */

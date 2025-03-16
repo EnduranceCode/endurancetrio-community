@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2011-2025 Ricardo do Canto
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@charset "utf-8";
+
+@use "bulma/sass/utilities/initial-variables" as iv;
+@use "bulma/sass/components/navbar";
+
+$endurance-navbar-height: 5.2rem !default;
+$endurance-navbar-item-img-max-height: 2.8rem !default;
+
+.#{iv.$class-prefix}endurance-navbar {
+  @extend .#{iv.$class-prefix}navbar;
+
+  --navbar-height: #{$endurance-navbar-height};
+  --navbar-item-img-max-height: #{$endurance-navbar-item-img-max-height};
+
+  min-height: var(--navbar-height);
+
+  .#{iv.$class-prefix}navbar-item {
+    img,
+    svg {
+      max-height: var(--navbar-item-img-max-height);
+    }
+
+    &.#{iv.$class-prefix}is-tab {
+      min-height: var(--navbar-height);
+    }
+  }
+
+  .#{iv.$class-prefix}navbar-brand,
+  .#{iv.$class-prefix}navbar-tabs {
+    min-height: var(--navbar-height);
+  }
+}
+
+html,
+body {
+  &.#{iv.$class-prefix}has-endurance-navbar-fixed-top {
+    padding-top: $endurance-navbar-height;
+  }
+
+  &.#{iv.$class-prefix}has-endurance-navbar-fixed-bottom {
+    padding-bottom: $endurance-navbar-height;
+  }
+}

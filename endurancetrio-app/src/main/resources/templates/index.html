@@ -14,10 +14,9 @@
   ~ limitations under the License.
   -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="has-endurance-navbar-fixed-top">
 <head>
   <meta charset="UTF-8">
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title data-th-text="${applicationName}"></title>
@@ -26,16 +25,36 @@
         href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
         data-th-href="@{/css/style.css}"
   >
+  <script defer="defer" data-th-src="@{/js/script.js}"></script>
 </head>
 <body>
-<section class="hero is-primary">
-  <div class="hero-body">
-    <a href="/" data-th-href="@{/}">
-      <p class="title">EnduranceTrio</p>
-    </a>
-    <p class="subtitle">A central hub for endurance sports data and resources</p>
+<nav class="endurance-navbar is-fixed-top has-shadow"
+     role="navigation"
+     aria-label="main navigation"
+>
+  <div class="container is-fluid">
+    <div class="navbar-brand">
+      <a data-th-href="@{/}" class="navbar-item">
+        <svg data-th-replace="~{fragments/svg::endurancetrio-logo}"></svg>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+         data-target="main-navbar">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="main-navbar" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item">Events</a>
+        <a class="navbar-item">About</a>
+      </div>
+    </div>
   </div>
-</section>
+</nav>
 
 <main class="section">
   <section class="container is-fluid">
