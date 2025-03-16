@@ -86,5 +86,5 @@
 /* bulma/sass/helpers/visibility */
 /* bulma/sass/helpers/other */
 
-/* Import the themes so that all CSS variables have a value */
-@forward "bulma/sass/themes";
+/* Bulma Themes */
+@forward "themes/light-theme";
