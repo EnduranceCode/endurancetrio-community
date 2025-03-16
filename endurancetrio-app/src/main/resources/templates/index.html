@@ -35,7 +35,7 @@
   <div class="container is-fluid">
     <div class="navbar-brand">
       <a data-th-href="@{/}" class="navbar-item">
-        <svg data-th-replace="~{fragments/svg::endurancetrio-logo}"></svg>
+        <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fixed}"></svg>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
@@ -58,8 +58,30 @@
 
 <main class="section">
   <section class="container is-fluid">
-    <h1 class="title is-1" data-th-text="${applicationName}"></h1>
+    <h1 class="title is-1">Event's years</h1>
+    <div class="fixed-grid">
+      <div class="grid">
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1989</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1988</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1987</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1986</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1985</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1984</div></div>
+      </div>
+    </div>
   </section>
 </main>
+
+<footer class="footer">
+  <div class="section">
+    <div class="hero">
+      <div class="hero-body">
+        <figure class="image" style="width: 15rem; height: auto;">
+          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
+        </figure>
+        <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>

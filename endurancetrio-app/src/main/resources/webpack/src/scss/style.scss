@@ -36,7 +36,7 @@
 /* bulma/sass/elements/button; */
 /* bulma/sass/elements/delete */
 /* bulma/sass/elements/icon; */
-/* bulma/sass/elements/image; */
+@forward "bulma/sass/elements/image";
 /* bulma/sass/elements/loader */
 /* bulma/sass/elements/notification */
 /* bulma/sass/elements/progress */
@@ -61,28 +61,28 @@
 
 /* Bulma Grid */
 /* "bulma/sass/grid/columns"; */
-/* bulma/sass/grid/grid */
+@forward "bulma/sass/grid/grid";
 
 /* Bulma Layout */
 @forward "bulma/sass/layout/container";
-/* bulma/sass/layout/footer; */
+@forward "bulma/sass/layout/footer";
 @forward "bulma/sass/layout/hero";
 /* bulma/sass/layout/level */
 /* bulma/sass/layout/media; */
 @forward "bulma/sass/layout/section";
 
-/* bulma/sass/base/skeleton */
+@forward "bulma/sass/base/skeleton";
 
 /* Bulma Helpers */
 /* bulma/sass/helpers/aspect-ratio */
 /* bulma/sass/helpers/border */
-/* bulma/sass/helpers/color; */
+@forward "bulma/sass/helpers/color";
 /* bulma/sass/helpers/flexbox */
 /* bulma/sass/helpers/float */
 /* bulma/sass/helpers/gap */
 /* bulma/sass/helpers/overflow */
 /* bulma/sass/helpers/position */
-/* bulma/sass/helpers/spacing; */
+@forward "bulma/sass/helpers/spacing";
 /* bulma/sass/helpers/typography; */
 /* bulma/sass/helpers/visibility */
 /* bulma/sass/helpers/other */
