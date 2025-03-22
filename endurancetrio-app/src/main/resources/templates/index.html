@@ -49,8 +49,8 @@
 
     <div id="main-navbar" class="navbar-menu">
       <div class="navbar-end">
-        <a class="navbar-item">Events</a>
-        <a class="navbar-item">About</a>
+        <a data-th-text="#{navbar.option.events}" class="navbar-item">Events</a>
+        <a data-th-text="#{navbar.option.about}" class="navbar-item">About</a>
       </div>
     </div>
   </div>
@@ -58,7 +58,8 @@
 
 <main class="section">
   <section class="container is-fluid">
-    <h1 class="title is-1">Event's years</h1>
+    <h1 data-th-text="#{page.home.title}" class="title is-1">Event's years</h1>
+
     <div class="fixed-grid">
       <div class="grid">
         <div class="cell"><div class="skeleton-block" style="height: 18rem">1989</div></div>

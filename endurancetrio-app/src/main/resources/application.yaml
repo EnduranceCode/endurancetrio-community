@@ -45,6 +45,10 @@ spring:
         trace: false
         web-allow-others: false
 
+  messages:
+    basename: messages
+    encoding: UTF-8
+
   thymeleaf:
     cache: false
     enabled: true

@@ -12,22 +12,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package com.endurancetrio.app.web.controller;
+package com.endurancetrio.app.controller;
 
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class HomeController {
 
+  private static final Locale LOCALE_PORTUGUESE = new Locale("pt", "PT");
+
   @Value("${spring.application.name}")
   private String applicationName;
 
-  @GetMapping("/")
-  public String homePage(Model model) {
+  @GetMapping("/{locale}/")
+  public String homePage(@PathVariable String locale, Model model) {
+    Locale selectedLocale = "pt".equalsIgnoreCase(locale) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+
+    model.addAttribute("locale", selectedLocale);
     model.addAttribute(("applicationName"), applicationName);
 
     return "index";
