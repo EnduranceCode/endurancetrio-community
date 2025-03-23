@@ -44,7 +44,15 @@
 /* bulma/sass/elements/tag */
 @forward "bulma/sass/elements/title";
 
-/* bulma/sass/form */
+/* Bulma Form */
+/* bulma/sass/form/shared; */
+/* bulma/sass/form/input-textarea; */
+/* bulma/sass/form/checkbox-radio; */
+/* bulma/sass/form/select; */
+/* bulma/sass/form/file; */
+/* bulma/sass/form/tools; */
+@forward "form/switch-control";
+@forward "form/switch-inner-label-control";
 
 /* Bulma Components */
 /* bulma/sass/components/breadcrumb */

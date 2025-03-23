@@ -32,6 +32,7 @@ export default [
         module: 'readonly',
         __dirname: 'readonly',
         require: 'readonly',
+        localStorage: 'readonly',
       },
     },
     linterOptions: {

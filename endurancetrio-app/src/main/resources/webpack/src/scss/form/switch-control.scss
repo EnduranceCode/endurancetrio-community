@@ -1,0 +1,330 @@
+/*
+ * This file contains code adapted from the bulma-switch-extension project,
+ * which is licensed under the MIT License.
+ *
+ * Original code: https://github.com/justboil/bulma-switch-control
+ *
+ * MIT License
+ *
+ * Copyright (c) 2017-2020 Rafael Beraldo (https://github.com/rafaelpimpa)
+ * Copyright (c) 2017-2020 Walter Tommasi (https://github.com/jtommy)
+ * Copyright (c) 2022 Viktor Kuzhelny (https://github.com/vikdiesel)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * Modifications and additions:
+ * - Adapted for compatibility with Bulma 1.0.2.
+ *
+ * Copyright (c) 2011-2025 Ricardo do Canto
+ *
+ * This file is part of the EnduranceTrio Community project, which is
+ * licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@charset "utf-8";
+
+@use "sass:list";
+
+@use "bulma/sass/utilities/initial-variables" as iv;
+@use "bulma/sass/utilities/derived-variables" as dv;
+@use "bulma/sass/utilities/controls" as cx;
+@use "bulma/sass/utilities/extends";
+
+$speed-slow: 150ms !default;
+
+$switch-width-number: 2.75 !default;
+$switch-width: $switch-width-number * 1em !default;
+$switch-padding: 0.2em !default;
+$switch-outlined-padding: 0.1em !default;
+$switch-active-background-color: dv.$primary !default;
+
+/* Box-shadow */
+$switch-has-shadows: 0 !default;
+$switch-knob-has-shadows: 0 !default;
+
+.#{iv.$class-prefix}switch {
+  @extend %unselectable;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  margin-right: 0.5em;
+
+  &+.#{iv.$class-prefix}switch:last-child {
+    margin-right: 0;
+  }
+
+  input[type=checkbox] {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    outline: none;
+    z-index: -1;
+
+    +.#{iv.$class-prefix}check {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      width: $switch-width;
+      height: #{$switch-width * .5 + $switch-padding};
+      padding: $switch-padding;
+      background: iv.$grey-light;
+      border-radius: iv.$radius;
+      transition: background $speed-slow iv.$easing, box-shadow $speed-slow iv.$easing;
+
+      @each $name, $pair in dv.$colors {
+        $color: list.nth($pair, 1);
+
+        &.#{iv.$class-prefix}is-#{$name}-passive,
+        &:hover {
+          background: $color;
+        }
+
+        &.#{iv.$class-prefix}input[type=checkbox]+&.#{iv.$class-prefix}check {
+          background: 'pink';
+        }
+      }
+
+      &:before {
+        content: "";
+        display: block;
+        border-radius: iv.$radius;
+        width: #{($switch-width - $switch-padding * 2) * .5};
+        height: #{($switch-width - $switch-padding * 2) * .5};
+        background: dv.$background;
+        transition: transform $speed-slow iv.$easing;
+        will-change: transform;
+        transform-origin: left;
+
+        @if $switch-knob-has-shadows ==1 {
+          box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.05), 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+      }
+
+      &.#{iv.$class-prefix}is-elastic:before {
+        transform: scaleX(1.5);
+        border-radius: iv.$radius;
+      }
+    }
+
+    &:checked+.#{iv.$class-prefix}check {
+      background: $switch-active-background-color;
+
+      @each $name, $pair in dv.$colors {
+        $color: list.nth($pair, 1);
+
+        &.#{iv.$class-prefix}is-#{$name} {
+          background: $color;
+        }
+      }
+
+      &:before {
+        transform: translate3d(100%, 0, 0);
+      }
+
+      &.#{iv.$class-prefix}is-elastic:before {
+        // Might be a little offset if base font is not 16px
+        transform: translate3d(50%, 0, 0) scaleX(1.5);
+      }
+    }
+
+    &:focus,
+    &:active {
+      outline: none;
+
+      +.#{iv.$class-prefix}check {
+        @if $switch-has-shadows ==1 {
+          box-shadow: 0 0 0.5em rgba($grey, 0.6);
+        }
+
+        @each $name, $pair in dv.$colors {
+          $color: list.nth($pair, 1);
+
+          @if $switch-has-shadows ==1 {
+            &.#{iv.$class-prefix}is-#{$name}-passive {
+              box-shadow: 0 0 0.5em rgba($color, 0.8);
+            }
+          }
+        }
+      }
+
+      &:checked+.#{iv.$class-prefix}check {
+        @if $switch-has-shadows ==1 {
+          box-shadow: 0 0 0.5em rgba($switch-active-background-color, 0.8);
+        }
+
+        @each $name, $pair in dv.$colors {
+          $color: list.nth($pair, 1);
+
+          @if $switch-has-shadows ==1 {
+            &.#{iv.$class-prefix}is-#{$name} {
+              box-shadow: 0 0 0.5em rgba($color, 0.8);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .#{iv.$class-prefix}control-label {
+    padding-left: 0.5em;
+  }
+
+  &:hover {
+    input[type=checkbox]+.#{iv.$class-prefix}check {
+      background: rgba(iv.$grey-light, 0.9);
+
+      @each $name, $pair in dv.$colors {
+        $color: list.nth($pair, 1);
+
+        &.#{iv.$class-prefix}is-#{$name}-passive {
+          background: rgba($color, 0.9);
+        }
+      }
+    }
+
+    input[type=checkbox]:checked+.#{iv.$class-prefix}check {
+      background: rgba($switch-active-background-color, 0.9);
+
+      @each $name, $pair in dv.$colors {
+        $color: list.nth($pair, 1);
+
+        &.#{iv.$class-prefix}is-#{$name} {
+          background: rgba($color, 0.9);
+        }
+      }
+    }
+  }
+
+  &.#{iv.$class-prefix}is-rounded {
+    input[type=checkbox] {
+      +.#{iv.$class-prefix}check {
+        border-radius: iv.$radius-rounded;
+
+        &:before {
+          border-radius: iv.$radius-rounded;
+        }
+      }
+
+      &.#{iv.$class-prefix}is-elastic:before {
+        transform: scaleX(1.5);
+        border-radius: iv.$radius-rounded;
+      }
+    }
+  }
+
+  &.#{iv.$class-prefix}is-outlined {
+    input[type=checkbox] {
+      +.#{iv.$class-prefix}check {
+        background: transparent;
+        border: .1rem solid iv.$grey-light;
+        padding: $switch-outlined-padding;
+
+        @each $name, $pair in dv.$colors {
+          $color: list.nth($pair, 1);
+
+          &.#{iv.$class-prefix}is-#{$name}-passive {
+            border: .1rem solid rgba($color, 0.9);
+
+            &:before {
+              background: $color
+            }
+
+            &:hover {
+              border-color: rgba($color, 0.9);
+            }
+          }
+        }
+
+        &:before {
+          background: iv.$grey-light;
+        }
+      }
+
+      &:checked+.#{iv.$class-prefix}check {
+        border-color: $switch-active-background-color;
+
+        @each $name, $pair in dv.$colors {
+          $color: list.nth($pair, 1);
+
+          &.#{iv.$class-prefix}is-#{$name} {
+            background: transparent;
+            border-color: $color;
+
+            &:before {
+              background: $color;
+            }
+          }
+        }
+
+        &:before {
+          background: $switch-active-background-color;
+        }
+      }
+    }
+
+    &:hover {
+      input[type=checkbox]+.check {
+        background: transparent;
+        border-color: rgba(iv.$grey-light, 0.9);
+      }
+
+      input[type=checkbox]:checked+.#{iv.$class-prefix}check {
+        background: transparent;
+        border-color: rgba($switch-active-background-color, 0.9);
+
+        @each $name, $pair in dv.$colors {
+          $color: list.nth($pair, 1);
+
+          &.is-#{$name} {
+            border-color: rgba($color, 0.9);
+          }
+        }
+      }
+    }
+  }
+
+  &.#{iv.$class-prefix}is-small {
+    @include cx.control-small;
+  }
+
+  &.#{iv.$class-prefix}is-medium {
+    @include cx.control-medium;
+  }
+
+  &.#{iv.$class-prefix}is-large {
+    @include cx.control-large;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: iv.$grey;
+  }
+}
