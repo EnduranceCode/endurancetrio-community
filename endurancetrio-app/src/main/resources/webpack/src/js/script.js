@@ -17,9 +17,9 @@
 import '../scss/style.scss';
 
 import bulmaNavbar from './bulma-navbar.js';
-import localeSelector from './locale-selector.js';
+import languageSelector from './language-selector.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   bulmaNavbar.init();
-  localeSelector.init();
+  languageSelector.init();
 });

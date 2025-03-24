@@ -21,10 +21,7 @@
 
   <title data-th-text="${applicationName}"></title>
 
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-        data-th-href="@{/css/style.css}"
-  >
+  <link rel="stylesheet" data-th-href="@{/css/style.css}">
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
 </head>
 <body>
@@ -34,7 +31,7 @@
 >
   <div class="container is-fluid">
     <div class="navbar-brand">
-      <a data-th-href="@{/}" class="navbar-item">
+      <a data-th-href="@{/{language}/(language=${language})}" class="navbar-item">
         <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fixed}"></svg>
       </a>
 
@@ -53,7 +50,7 @@
         <a data-th-text="#{navbar.option.about}" class="navbar-item">About</a>
         <div class="navbar-item">
           <label class="switch-inner-label is-rounded is-outlined">
-            <input id="locale-selector" type="checkbox" value="false">
+            <input id="language-selector" type="checkbox" value="false">
             <span class="check is-link">
               <span data-off-label="EN" data-on-label="PT" class="control-inner-label"></span>
             </span>
