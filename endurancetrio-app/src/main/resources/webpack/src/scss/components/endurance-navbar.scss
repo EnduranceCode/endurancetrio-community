@@ -16,6 +16,7 @@
 
 @charset "utf-8";
 
+@use "bulma/sass/utilities/css-variables" as cv;
 @use "bulma/sass/utilities/initial-variables" as iv;
 @use "bulma/sass/components/navbar";
 
@@ -44,6 +45,16 @@ $endurance-navbar-item-img-max-height: 2.8rem !default;
   .#{iv.$class-prefix}navbar-brand,
   .#{iv.$class-prefix}navbar-tabs {
     min-height: var(--navbar-height);
+  }
+
+  a.#{iv.$class-prefix}navbar-item,
+  .#{iv.$class-prefix}navbar-link {
+    &.#{iv.$class-prefix}is-active,
+    &.#{iv.$class-prefix}is-selected {
+      background-color: cv.getVar("navbar-background-color");
+      color: cv.getVar("navbar-item-color");
+      font-weight: bolder;
+    }
   }
 }
 

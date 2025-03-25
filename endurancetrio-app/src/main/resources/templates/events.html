@@ -1,0 +1,44 @@
+<!--
+  ~ Copyright (c) 2011-2025 Ricardo do Canto
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE html>
+<html lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar}"></nav>
+
+<main class="section">
+  <section class="container is-fluid">
+    <h1 data-th-text="#{page.events.title}" class="title is-1">Event's years</h1>
+
+    <div class="fixed-grid has-1-cols-mobile has-2-cols-tablet has-3-cols-desktop">
+      <div class="grid">
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1989</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1988</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1987</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1986</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1985</div></div>
+        <div class="cell"><div class="skeleton-block" style="height: 18rem">1984</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

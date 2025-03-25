@@ -17,10 +17,9 @@
 package com.endurancetrio.app.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.endurancetrio.app.controller.HomeController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +43,10 @@ class HomeControllerTest {
 
   @Test
   void homePage() throws Exception {
-    mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
+    String language = "en";
+
+    mockMvc.perform(get("/" + language + "/"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/" + language + "/events"));
   }
 }

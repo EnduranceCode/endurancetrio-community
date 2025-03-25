@@ -14,19 +14,23 @@
  * limitations under the License.
  *
  */
-package com.endurancetrio.app.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+package com.endurancetrio.app.component;
 
-@Controller
-public class HomeController {
+import java.util.Locale;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 
-  @GetMapping("/{language}/")
-  public String homePage(@PathVariable String language, Model model) {
+@Component
+public class MessageService {
 
-    return "redirect:/" + language + "/events";
+  private final MessageSource messageSource;
+
+  public MessageService(MessageSource messageSource) {
+    this.messageSource = messageSource;
+  }
+
+  public String getMessage(String key, Object[] args, Locale locale) {
+    return messageSource.getMessage(key, args, locale);
   }
 }

@@ -12,27 +12,24 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
+  ~
   -->
 <!DOCTYPE html>
 <html lang="en" class="has-endurance-navbar-fixed-top">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title data-th-text="${applicationName}"></title>
-
-  <link rel="stylesheet" data-th-href="@{/css/style.css}">
-  <script defer="defer" data-th-src="@{/js/script.js}"></script>
+  <title>Main Navbar</title>
 </head>
+
 <body>
-<nav class="endurance-navbar is-fixed-top has-shadow"
+<nav data-th-fragment="main-navbar"
+     class="endurance-navbar is-fixed-top has-shadow"
      role="navigation"
      aria-label="main navigation"
 >
   <div class="container is-fluid">
     <div class="navbar-brand">
       <a data-th-href="@{/{language}/(language=${language})}" class="navbar-item">
-        <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fixed}"></svg>
+        <svg data-th-replace="~{fragments/svg :: endurancetrio-logo-fixed}"></svg>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
@@ -46,7 +43,13 @@
 
     <div id="main-navbar" class="navbar-menu">
       <div class="navbar-end">
-        <a data-th-text="#{navbar.option.events}" class="navbar-item">Events</a>
+        <a
+            data-th-href="@{/{language}/events(language=${language})}"
+            data-th-text="#{navbar.option.events}"
+            class="navbar-item is-active"
+        >
+          Events
+        </a>
         <a data-th-text="#{navbar.option.about}" class="navbar-item">About</a>
         <div class="navbar-item">
           <label class="switch-inner-label is-rounded is-outlined">
@@ -60,35 +63,5 @@
     </div>
   </div>
 </nav>
-
-<main class="section">
-  <section class="container is-fluid">
-    <h1 data-th-text="#{page.home.title}" class="title is-1">Event's years</h1>
-
-    <div class="fixed-grid has-1-cols-mobile has-2-cols-tablet has-3-cols-desktop">
-      <div class="grid">
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1989</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1988</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1987</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1986</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1985</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1984</div></div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="footer">
-  <section class="section">
-    <div class="hero">
-      <div class="hero-body">
-        <figure class="image" style="width: 15rem; height: auto;">
-          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
-        </figure>
-        <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
-      </div>
-    </div>
-  </section>
-</footer>
 </body>
 </html>

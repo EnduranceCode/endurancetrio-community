@@ -14,19 +14,22 @@
  * limitations under the License.
  *
  */
-package com.endurancetrio.app.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+package com.endurancetrio.app.model;
 
-@Controller
-public class HomeController {
+public class PageMetadata {
 
-  @GetMapping("/{language}/")
-  public String homePage(@PathVariable String language, Model model) {
+  private String title;
 
-    return "redirect:/" + language + "/events";
+  public PageMetadata() {
+    super();
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 }

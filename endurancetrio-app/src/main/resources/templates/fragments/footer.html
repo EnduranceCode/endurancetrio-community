@@ -1,0 +1,37 @@
+<!--
+  ~ Copyright (c) 2011-2025 Ricardo do Canto
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+<!DOCTYPE html>
+<html lang="en" class="has-endurance-navbar-fixed-top">
+<head>
+  <title>Footer</title>
+</head>
+
+<body>
+<footer data-th-fragment="footer" class="footer">
+  <section class="section">
+    <div class="hero">
+      <div class="hero-body">
+        <figure class="image" style="width: 15rem; height: auto;">
+          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
+        </figure>
+        <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+      </div>
+    </div>
+  </section>
+</footer>
+</body>
+</html>
