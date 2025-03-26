@@ -19,10 +19,19 @@ package com.endurancetrio.app.model;
 
 public class PageMetadata {
 
+  private String view;
   private String title;
 
   public PageMetadata() {
     super();
+  }
+
+  public String getView() {
+    return view;
+  }
+
+  public void setView(String view) {
+    this.view = view;
   }
 
   public String getTitle() {

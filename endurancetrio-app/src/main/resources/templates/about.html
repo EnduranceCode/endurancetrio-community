@@ -24,18 +24,33 @@
 
 <main class="section">
   <section class="container is-fluid">
-    <h1 data-th-text="#{page.events.title}" class="title is-1">Event's years</h1>
-
-    <div class="fixed-grid has-1-cols-mobile has-2-cols-tablet has-3-cols-desktop">
-      <div class="grid">
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1989</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1988</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1987</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1986</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1985</div></div>
-        <div class="cell"><div class="skeleton-block" style="height: 18rem">1984</div></div>
-      </div>
+    <div class="box">
+      <section class="hero">
+        <div class="hero-body">
+          <figure class="image" style="width: 12rem; height: auto;">
+            <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
+          </figure>
+          <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+        </div>
+      </section>
     </div>
+
+    <section class="content">
+      <div class="skeleton-lines">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </section>
   </section>
 </main>
 

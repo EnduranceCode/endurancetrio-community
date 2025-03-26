@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<nav data-th-fragment="main-navbar"
+<nav data-th-fragment="main-navbar(metadata)"
      class="endurance-navbar is-fixed-top has-shadow"
      role="navigation"
      aria-label="main navigation"
@@ -46,11 +46,19 @@
         <a
             data-th-href="@{/{language}/events(language=${language})}"
             data-th-text="#{navbar.option.events}"
-            class="navbar-item is-active"
+            data-th-classappend="${metadata.view == 'events'} ? 'is-active'"
+            class="navbar-item"
         >
           Events
         </a>
-        <a data-th-text="#{navbar.option.about}" class="navbar-item">About</a>
+        <a
+            data-th-href="@{/{language}/about(language=${language})}"
+            data-th-text="#{navbar.option.about}"
+            data-th-classappend="${metadata.view == 'about'} ? 'is-active'"
+            class="navbar-item"
+        >
+          About
+        </a>
         <div class="navbar-item">
           <label class="switch-inner-label is-rounded is-outlined">
             <input id="language-selector" type="checkbox" value="false">

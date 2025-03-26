@@ -31,7 +31,7 @@
 
 /* Bulma Elements */
 /* bulma/sass/elements/block */
-/* bulma/sass/elements/box */
+@forward "bulma/sass/elements/box";
 /* bulma/sass/elements/content; */
 /* bulma/sass/elements/button; */
 /* bulma/sass/elements/delete */

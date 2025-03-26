@@ -26,25 +26,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class EventsController {
+public class AboutController {
 
-  private static final String VIEW = "events";
+  private static final String VIEW = "about";
   private static final Locale PORTUGUESE_LOCALE = new Locale("pt", "PT");
 
   private final MessageService messageService;
 
   @Autowired
-  public EventsController(MessageService messageService) {
+  public AboutController(MessageService messageService) {
     this.messageService = messageService;
   }
 
-  @GetMapping("/{language}/events")
-  public String eventsYears(@PathVariable String language, Model model) {
+  @GetMapping("/{language}/about")
+  public String about(@PathVariable String language, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
 
     PageMetadata metadata = new PageMetadata();
     metadata.setView(VIEW);
-    metadata.setTitle(messageService.getMessage("page.events.metadata.title", null, locale));
+    metadata.setTitle(messageService.getMessage("page.about.metadata.title", null, locale));
 
     model.addAttribute("language", locale.getLanguage());
     model.addAttribute("metadata", metadata);
