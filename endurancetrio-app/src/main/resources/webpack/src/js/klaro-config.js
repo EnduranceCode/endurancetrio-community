@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-import '../scss/style.scss';
-
-import * as klaro from 'klaro/dist/klaro-no-css.js';
-import klaroConfig from './klaro-config.js';
-
-import bulmaNavbar from './bulma-navbar.js';
-import languageSelector from './language-selector.js';
-
-document.addEventListener('DOMContentLoaded', () => {
-  klaro.setup(klaroConfig);
-
-  bulmaNavbar.init();
-  languageSelector.init();
-});
+export default {
+  styling: {
+    theme: ['light', 'bottom', 'wide'],
+  },
+};
