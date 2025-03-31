@@ -56,31 +56,27 @@
 
 @charset "utf-8";
 
-@use './klaro-variables-endurance' as kv;
+@use "bulma/sass/utilities/css-variables" as cv;
 
 @mixin modal($centerWidth, $windowWidth) {
 
-  @include kv.var(background-color, dark1);
-  @include kv.var(color, light1);
-
-  z-index: 1001;
-  box-shadow: kv.$cm-box-shadow-dark-md;
-
-  width: 100%;
   max-height: 98%;
-
+  position: fixed;
   top: 50%;
+  width: 100%;
+  z-index: 1001;
+
+  background-color: cv.getVar("body-background-color");
+  box-shadow: cv.getVar("shadow");
+  overflow: auto;
   transform: translateY(-50%);
 
-  position: fixed;
-  overflow: auto;
-
   @media (min-width: $centerWidth) {
-    @include kv.var(border-radius, border-radius);
-    position: relative;
+    border-radius: cv.getVar("radius-large");
+    height: auto;
     margin: 0 auto;
     max-width: $windowWidth;
-    height: auto;
+    position: relative;
     width: auto;
   }
 }

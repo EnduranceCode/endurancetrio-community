@@ -60,52 +60,24 @@
 
 @use "bulma/sass/utilities/css-variables" as cv;
 @use "bulma/sass/utilities/initial-variables" as iv;
+@use "bulma/sass/utilities/mixins" as mx;
 @use "bulma/sass/elements/button";
 
-@use "./klaro-modal-endurance" as kx;
 @use './klaro-variables-endurance' as kv;
+@use "./klaro-modal-endurance" as kx;
 @use './klaro-switch-endurance';
 
 .klaro {
 
-  $btn-margin-right: 0.5em;
-
-  @include kv.var(font-family, font-family);
-  @include kv.var(font-size, font-size);
-
-  // buttons use their own font-family setting so we need to override it explicitly...
-  button {
-    @include kv.var(font-family, font-family);
-    @include kv.var(font-size, font-size);
-  }
-
   &.cm-as-context-notice {
     height: 100%;
-    padding-bottom: map.get(kv.$cm-space, md);
-    padding-top: map.get(kv.$cm-space, md);
+    padding-bottom: 1em;
+    padding-top: 1em;
   }
 
   .cookie-modal,
   .context-notice,
   .cookie-notice {
-
-    .slider {
-      box-shadow: kv.$cm-box-shadow-dark-md;
-    }
-
-    a {
-      @include kv.var(color, green1);
-      text-decoration: none;
-    }
-
-    p,
-    strong,
-    h1,
-    h2,
-    ul,
-    li {
-      @include kv.var(color, light1);
-    }
 
     p,
     h1,
@@ -113,19 +85,9 @@
     ul,
     li {
       display: block;
-      text-align: left;
-      margin: 0;
+      margin: 1em 0 0;
       padding: 0;
-      margin-top: 0.7em;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      @include kv.var(font-family, title-font-family);
+      text-align: left;
     }
 
     .cm-link {
@@ -134,106 +96,73 @@
     }
 
     .cm-btn {
+      @extend .#{iv.$class-prefix}button;
 
-      @include kv.var(color, button-text-color);
-      @include kv.var(background-color, dark2);
-      @include kv.var(border-radius, border-radius);
-      padding: 6px 10px;
-      margin-right: $btn-margin-right;
-      border-style: none;
-      padding: 0.4em;
-      font-size: 1em;
-      cursor: pointer;
 
       &:disabled {
         opacity: 0.5;
       }
 
-      &.cm-btn-close {
-        @include kv.var(background-color, light2);
+      &.cn-decline {
+        margin-right: kv.$button-margin-right;
       }
 
-      &.cm-btn-success {
-        @include kv.var(background-color, green1);
+      &.cn-decline,
+      &.cm-btn-accept {
+        @extend .#{iv.$class-prefix}is-light;
       }
 
-      &.cm-btn-success-var {
-        @include kv.var(background-color, green2);
-      }
-
-      &.cm-btn-info {
-        @include kv.var(background-color, blue1);
+      &.cm-btn-accept-all,
+      &.cm-btn-success:not(.cm-btn-accept) {
+        @extend .#{iv.$class-prefix}is-primary;
       }
     }
   }
 
   .context-notice {
-    @include kv.var(border-radius, border-radius);
-    @include kv.var(border-style, border-style);
-    @include kv.var(border-width, border-width);
-    @include kv.var(border-color, light2);
-    @include kv.var(background-color, light1);
+    border: 1px solid cv.getVar("border-active");
+    border-radius: iv.$radius;
 
+    align-items: center;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    align-items: center;
     justify-content: center;
-    padding: map.get(kv.$cm-space, md);
     height: 100%;
-
-    &.cm-dark {
-      @include kv.var(background-color, dark1);
-      @include kv.var(border-color, dark2);
-
-      p {
-        @include kv.var(color, light1);
-
-        a {
-          @include kv.var(color, blue2);
-        }
-      }
-    }
+    padding: 1em;
 
     p {
-      @include kv.var(color, dark1);
-
       flex-grow: 0;
-      text-align: center;
-      padding-top: 0;
       margin-top: 0;
-
-      a {
-        @include kv.var(color, green2);
-      }
+      padding-top: 0;
+      text-align: center;
     }
 
     p.cm-buttons {
-      margin-top: map.get(kv.$cm-space, md);
+      margin-top: 1em;
     }
 
-    // contextual consent notice
+    // Contextual consent notice
     p.ccn-description-empty-store {
-      margin-top: map.get(kv.$cm-space, lg);
-      @include kv.var(font-size, font-size);
+      margin-top: 1.5em;
     }
   }
 
   .cookie-modal {
-    width: 100%;
     height: 100%;
-    position: fixed;
-    overflow: hidden;
     left: 0;
+    overflow: hidden;
+    position: fixed;
     top: 0;
+    width: 100%;
     z-index: 1000;
 
     &.cm-embedded {
-      position: relative;
       height: inherit;
-      width: inherit;
       left: inherit;
+      position: relative;
       right: inherit;
+      width: inherit;
       z-index: 0;
 
       .cm-modal.cm-klaro {
@@ -243,12 +172,17 @@
     }
 
     .cm-bg {
-      background: rgba(0, 0, 0, 0.5);
+      background: hsla(
+        #{cv.getVar("scheme-h")},
+        #{cv.getVar("scheme-s")},
+        #{cv.getVar("scheme-invert-l")},
+        0.86
+      );
       height: 100%;
-      width: 100%;
+      left: 0;
       position: fixed;
       top: 0;
-      left: 0;
+      width: 100%;
     }
 
     .cm-modal {
@@ -261,52 +195,24 @@
         background: none;
         cursor: pointer;
         position: absolute;
-        top: 20px;
         right: 20px;
+        top: 20px;
         z-index: 1;
 
         svg {
-          @include kv.var(stroke, light1);
-        }
-      }
-
-      .cm-footer {
-        @include kv.var(border-top-color, dark2);
-        @include kv.var(border-top-width, border-width);
-        @include kv.var(border-top-style, border-style);
-
-        padding: 1em;
-
-        &-buttons {
-          display: flex;
-          flex-flow: row;
-          justify-content: space-between;
-        }
-
-        .cm-powered-by {
-          font-size: 0.8em;
-          padding-top: 4px;
-          text-align: right;
-          padding-right: 8px;
-
-          a {
-            @include kv.var(color, dark2);
-          }
+          stroke: cv.getVar("text");
         }
       }
 
       .cm-header {
-        @include kv.var(border-bottom-width, border-width);
-        @include kv.var(border-bottom-style, border-style);
-        @include kv.var(border-bottom-color, dark2);
+        border-bottom: 1px solid cv.getVar("border-active");
 
-        padding: 1em;
-        padding-right: 24px;
+        padding: 1.5em;
 
         h1 {
-          margin: 0;
-          font-size: 2em;
           display: block;
+          font-size: 2em;
+          margin: 0;
 
           &.title {
             padding-right: 20px;
@@ -315,7 +221,7 @@
       }
 
       .cm-body {
-        padding: 1em;
+        padding: 1.5em;
 
         ul {
           display: block;
@@ -333,17 +239,14 @@
 
           li.cm-purpose {
             .cm-services {
-              .cm-caret {
-                @include kv.var(color, light3);
-              }
 
               .cm-content {
-                margin-left: -40px;
                 display: none;
+                margin-left: -40px;
 
                 &.expanded {
-                  margin-top: 10px;
                   display: block;
+                  margin-top: 10px;
                 }
               }
             }
@@ -351,11 +254,11 @@
 
           li.cm-service,
           li.cm-purpose {
-            position: relative;
             line-height: 20px;
-            vertical-align: middle;
-            padding-left: 60px;
             min-height: 40px;
+            padding-left: 60px;
+            position: relative;
+            vertical-align: middle;
 
             &:first-child {
               margin-top: 0;
@@ -366,16 +269,11 @@
             }
 
             p.purposes {
-              @include kv.var(color, light3);
               font-size: 0.8em;
             }
 
             &.cm-toggle-all {
-
-              @include kv.var(border-top-width, border-width);
-              @include kv.var(border-top-style, border-style);
-              @include kv.var(border-top-color, dark2);
-
+              border-top: 1px solid cv.getVar("border-active");
               padding-top: 1em;
             }
 
@@ -385,10 +283,30 @@
 
             span.cm-opt-out,
             span.cm-required {
-              @include kv.var(color, dark2);
-              padding-left: 0.2em;
               font-size: 0.8em;
+              padding-left: 0.2em;
             }
+          }
+        }
+      }
+
+      .cm-footer {
+        border-top: 1px solid cv.getVar("border-active");
+        padding: 1.5em;
+
+        &-buttons {
+          display: flex;
+          flex-flow: row;
+          justify-content: space-between;
+        }
+
+        .cm-powered-by {
+          font-size: 0.8em;
+          padding: 4px;
+          text-align: center;
+
+          a {
+            color: cv.getVar("text-60");
           }
         }
       }
@@ -396,37 +314,24 @@
   }
 
   .cookie-notice:not(.cookie-modal-notice) {
-    @include kv.var(background-color, dark1);
-    z-index: 999;
 
+    background-color: kv.$cookie-notice-body-color;
+    border-radius: 0;
+    border-style: none;
+    color: kv.$cookie-notice-text-color;
+
+    bottom: 0;
     position: fixed;
     width: 100%;
-    bottom: 0;
-    right: 0;
-
-    @media (min-width: kv.$cm-desktop) {
-      @include kv.var(border-radius, border-radius);
-      @include kv.var(position, notice-position);
-      @include kv.var(right, notice-right);
-      @include kv.var(left, notice-left);
-      @include kv.var(bottom, notice-bottom);
-      @include kv.var(top, notice-top);
-      @include kv.var(max-width, notice-max-width);
-      box-shadow: kv.$cm-box-shadow-dark-md;
-    }
-
-    @media (max-width: (kv.$cm-desktop - 1)) {
-      border-style: none;
-      border-radius: 0;
-    }
+    z-index: 999;
 
     &.cn-embedded {
-      position: relative;
-      height: inherit;
-      width: inherit;
-      left: inherit;
-      right: inherit;
       bottom: inherit;
+      height: inherit;
+      left: inherit;
+      position: relative;
+      right: inherit;
+      width: inherit;
       z-index: 0;
 
       .cn-body {
@@ -435,12 +340,10 @@
     }
 
     .cn-body {
+      bottom: 0;
       margin-bottom: 0;
       margin-right: 0;
-      bottom: 0;
-
-      padding: 1em;
-      padding-top: 0;
+      padding: 1.5em;
 
       p {
         margin-bottom: 0.5em;
@@ -459,49 +362,43 @@
         display: inline-block;
         margin-top: -0.5em;
 
-        @media (max-width: kv.$cm-mobile) {
-          width: 100%;
-        }
-
         button.cm-btn {
           margin-top: 0.5em;
-
-          @media (max-width: kv.$cm-mobile) {
-            width: calc(50% - #{$btn-margin-right});
-          }
         }
       }
 
       .cn-ok {
         // we add a margin that cancels out unless the items are wrapped
         // in which case it will add some spacing between them
-        margin-top: -0.5em;
+        align-items: center;
         display: flex;
         flex-flow: row;
         flex-wrap: wrap;
         justify-content: right;
-        align-items: baseline;
+        margin-top: -0.5em;
 
         a,
         div {
           margin-top: 0.5em;
         }
       }
+
+      @include mx.until(iv.$desktop) {
+        padding: 1em;
+      }
     }
   }
 
   .cookie-modal-notice {
-    padding: 1em;
-    padding-top: 0.2em;
+    padding: 0.2em 1em 1em;
 
     @include kx.modal(400px, 400px);
 
     .cn-ok {
+      align-items: center;
       display: flex;
       flex-flow: row;
       justify-content: space-between;
-      align-items: center;
-
       margin-top: 1em;
     }
   }

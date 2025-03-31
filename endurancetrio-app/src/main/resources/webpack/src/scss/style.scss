@@ -23,7 +23,7 @@
   $primary: cv.$endurancetrio-swim,
   $info: cv.$endurance-swim-900,
   $success: cv.$endurance-js-600,
-  $warning: cv.$endurance-bike-400,
+  $warning: cv.$endurance-bike-300,
   $danger: cv.$endurance-run-700,
 );
 
@@ -33,7 +33,7 @@
 /* bulma/sass/elements/block */
 @forward "bulma/sass/elements/box";
 /* bulma/sass/elements/content; */
-/* bulma/sass/elements/button; */
+@forward "bulma/sass/elements/button";
 /* bulma/sass/elements/delete */
 /* bulma/sass/elements/icon; */
 @forward "bulma/sass/elements/image";
@@ -52,7 +52,7 @@
 /* bulma/sass/form/file; */
 /* bulma/sass/form/tools; */
 @forward "form/switch-control";
-@forward "form/switch-inner-label-control";
+@forward "form/switch-control-inner-label";
 
 /* Bulma Components */
 /* bulma/sass/components/breadcrumb */

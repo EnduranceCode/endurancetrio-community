@@ -15,7 +15,12 @@
  */
 
 export default {
-  styling: {
-    theme: ['light', 'bottom', 'wide'],
-  },
+  version: 1,
+  groupByPurpose: true,
+  autoFocus: true,
+  storageMethod: 'cookie',
+  cookieName: 'endurancetrio-consent',
+  cookieExpiresAfterDays: 365,
+  default: true,
+  acceptAll: true,
 };

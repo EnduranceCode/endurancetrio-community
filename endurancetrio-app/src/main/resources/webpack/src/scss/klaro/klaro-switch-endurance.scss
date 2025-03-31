@@ -56,21 +56,23 @@
 
 @charset "utf-8";
 
+@use "bulma/sass/utilities/css-variables" as cv;
+@use "bulma/sass/utilities/initial-variables" as iv;
+@use "bulma/sass/utilities/derived-variables" as dv;
+
+@use "../form/switch-control-variables.scss" as sv;
+
 @use './klaro-variables-endurance' as kv;
 
-/* The switch - the box around the slider */
-
 .cm-switch-container {
-  @include kv.var(border-bottom-style, border-style);
-  @include kv.var(border-bottom-width, border-width);
-  @include kv.var(border-bottom-color, light2);
+  border: 1px solid cv.getVar("border-active");
 
   display: block;
-  position: relative;
-  padding: 10px;
-  padding-left: 66px;
   line-height: 20px;
   min-height: 40px;
+  padding: 10px;
+  padding-left: 66px;
+  position: relative;
 
   &:last-child {
     border-bottom: 0;
@@ -86,55 +88,47 @@
 }
 
 .cm-switch {
-  position: relative;
   display: inline-block;
-  width: 50px;
   height: 30px;
+  position: relative;
+  width: 50px;
 }
 
 .cm-list-input:checked+.cm-list-label .slider {
-  @include kv.var(background-color, green1);
+  background-color: kv.$agreement-color;
 }
 
 .cm-list-input.half-checked:checked+.cm-list-label .slider {
-  @include kv.var(background-color, green1);
+  background-color: kv.$agreement-color;
   opacity: 0.6;
 
   &::before {
-    -webkit-transform: translateX(10px);
-    -ms-transform: translateX(10px);
     transform: translateX(10px);
   }
 }
 
 .cm-list-input.only-required+.cm-list-label .slider {
-  @include kv.var(background-color, green2);
+  background-color: kv.$agreement-color;
   opacity: 0.8;
 
   &::before {
-    -webkit-transform: translateX(10px);
-    -ms-transform: translateX(10px);
     transform: translateX(10px);
   }
 }
 
 .cm-list-input.required:checked+.cm-list-label .slider {
-  @include kv.var(background-color, green2);
+  background-color: kv.$agreement-color;
   opacity: 0.8;
   cursor: not-allowed;
 }
 
-.slider {
-  box-shadow: kv.$cm-box-shadow-dark-md;
-}
-
 .cm-list-input {
-  position: absolute;
-  top: 0;
+  height: 30px;
   left: 0;
   opacity: 0;
+  position: absolute;
+  top: 0;
   width: 50px;
-  height: 30px;
 }
 
 .cm-list-title {
@@ -143,77 +137,42 @@
 }
 
 .cm-list-description {
-  @include kv.var(color, dark3);
   font-size: 0.9em;
   padding-top: 4px;
 }
 
 .cm-list-label {
-  /* The slider */
 
   .cm-switch {
-    position: absolute;
     left: 0;
+    position: absolute;
   }
 
   .slider {
-
-    @include kv.var(background-color, white2);
-
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    width: 50px;
-    display: inline-block;
+      align-items: center;
+      background: iv.$grey-light;
+      border-radius: iv.$radius-rounded;
+      display: flex;
+      flex-shrink: 0;
+      height: #{sv.$switch-width * .5 + sv.$switch-padding};
+      padding: sv.$switch-padding;
+      transition: background sv.$speed-slow iv.$easing, box-shadow sv.$speed-slow iv.$easing;
+      width: sv.$switch-width;
   }
 
   .slider::before {
-
-    @include kv.var(background-color, white3);
-
-    position: absolute;
-    content: '';
-    height: 20px;
-    width: 20px;
-    left: 5px;
-    bottom: 5px;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+    content: "";
+    background: dv.$background;
+    border-radius: iv.$radius-rounded;
+    display: block;
+    height: #{(sv.$switch-width - sv.$switch-padding * 2) * .5};
+    transform-origin: left;
+    transition: transform sv.$speed-slow iv.$easing;
+    will-change: transform;
+    width: #{(sv.$switch-width - sv.$switch-padding * 2) * .5};
   }
-
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 30px;
-  }
-
-  .slider.round::before {
-    border-radius: 50%;
-  }
-
-  input:focus+.slider {
-    @include kv.var(box-shadow-color, green3);
-    box-shadow: 0 0 1px var(--box-shadow-color, green3);
-  }
-
-  input:checked+.slider::before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
-  }
-}
-
-.cm-list-input:focus+.cm-list-label .slider {
-  box-shadow: 0 4px 6px 0 rgba(125, 125, 125, 0.2),
-    5px 5px 10px 0 rgba(125, 125, 125, 0.19);
 }
 
 .cm-list-input:checked+.cm-list-label .slider::before {
-  -webkit-transform: translateX(20px);
-  -ms-transform: translateX(20px);
   transform: translateX(20px);
 }
