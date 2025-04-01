@@ -23,4 +23,6 @@ export default {
   cookieExpiresAfterDays: 365,
   default: true,
   acceptAll: true,
+
+  privacyPolicy: '/policy',
 };
