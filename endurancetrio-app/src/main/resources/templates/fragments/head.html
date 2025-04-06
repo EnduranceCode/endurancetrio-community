@@ -22,10 +22,34 @@
 
   <title data-th-text="${metadata.title}"></title>
 
+  <!-- Google Tag Manager -->
+  <script data-type="application/javascript" type="text/plain" data-name="google-tag-manager">
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KK23WCG6');
+  </script>
+  <!-- End Google Tag Manager -->
+
   <link rel="stylesheet" data-th-href="@{/css/style.css}">
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
 </head>
 
 <body>
+<template data-th-fragment="googleTagManager">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe
+        data-name="google-tag-manager"
+        data-src="https://www.googletagmanager.com/ns.html?id=GTM-KK23WCG6"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+    >
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+</template>
 </body>
 </html>
