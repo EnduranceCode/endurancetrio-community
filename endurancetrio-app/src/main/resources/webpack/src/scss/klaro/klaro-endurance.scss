@@ -103,10 +103,6 @@
         opacity: 0.5;
       }
 
-      &.cn-decline {
-        margin-right: kv.$button-margin-right;
-      }
-
       &.cn-decline,
       &.cm-btn-accept {
         @extend .#{iv.$class-prefix}is-light;
@@ -115,6 +111,12 @@
       &.cm-btn-accept-all,
       &.cm-btn-success:not(.cm-btn-accept) {
         @extend .#{iv.$class-prefix}is-primary;
+      }
+    }
+
+    .cn-buttons {
+      .cn-decline {
+        margin-right: kv.$button-margin;
       }
     }
   }
@@ -298,6 +300,22 @@
           display: flex;
           flex-flow: row;
           justify-content: space-between;
+        }
+
+        @include mx.mobile {
+          &-buttons {
+            display: block;
+
+            .cm-btn {
+              display: block;
+              margin-bottom: kv.$button-margin;
+              width: 100%;
+            }
+
+            .cm-btn:last-child {
+              margin-bottom: 0;
+            }
+          }
         }
 
         .cm-powered-by {
