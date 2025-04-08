@@ -17,6 +17,7 @@
 import { URL } from 'url';
 import path from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 
 const __dirname = new URL('.', import.meta.url).pathname;
 
@@ -32,6 +33,13 @@ export default {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'css/style.css',
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/favicon.ico', to: 'favicon.ico' },
+        { from: 'src/favicon.svg', to: 'favicon.svg' },
+        { from: 'src/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+      ],
     }),
   ],
 

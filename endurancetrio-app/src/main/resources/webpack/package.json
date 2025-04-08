@@ -18,6 +18,7 @@
   "author": "Ricardo do Canto <endurancecode@endurancecode.com>",
   "license": "Apache-2.0",
   "devDependencies": {
+    "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.2",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",

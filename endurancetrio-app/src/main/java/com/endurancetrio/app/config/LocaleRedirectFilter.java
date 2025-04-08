@@ -25,8 +25,12 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 public class LocaleRedirectFilter implements Filter {
+
+  private static final Set<String> STATIC_ROOT_FILES = Set.of(
+      "/favicon.ico", "/favicon.svg", "/apple-touch-icon.png");
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -36,7 +40,8 @@ public class LocaleRedirectFilter implements Filter {
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
     String uri = httpRequest.getRequestURI();
-    if (uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")) {
+    if (uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")
+        || STATIC_ROOT_FILES.contains(uri)) {
       chain.doFilter(request, response);
       return;
     }
