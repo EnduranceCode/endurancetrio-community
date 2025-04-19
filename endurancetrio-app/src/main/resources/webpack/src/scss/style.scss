@@ -16,33 +16,33 @@
 
 @charset "utf-8";
 
-@use "utilities/custom-variables.scss" as cv;
+@use 'utilities/custom-variables.scss' as cv;
 
-@use "bulma/sass/utilities" with (
+@use 'bulma/sass/utilities' with (
   $link: cv.$endurancetrio-run,
   $primary: cv.$endurancetrio-swim,
   $info: cv.$endurance-swim-900,
   $success: cv.$endurance-js-600,
   $warning: cv.$endurance-bike-300,
-  $danger: cv.$endurance-run-700,
+  $danger: cv.$endurance-run-700
 );
 
-@forward "bulma/sass/base";
+@forward 'bulma/sass/base';
 
 /* Bulma Elements */
 /* bulma/sass/elements/block */
-@forward "bulma/sass/elements/box";
+@forward 'bulma/sass/elements/box';
 /* bulma/sass/elements/content; */
-@forward "bulma/sass/elements/button";
+@forward 'bulma/sass/elements/button';
 /* bulma/sass/elements/delete */
 /* bulma/sass/elements/icon; */
-@forward "bulma/sass/elements/image";
+@forward 'bulma/sass/elements/image';
 /* bulma/sass/elements/loader */
 /* bulma/sass/elements/notification */
 /* bulma/sass/elements/progress */
 /* bulma/sass/elements/table */
 /* bulma/sass/elements/tag */
-@forward "bulma/sass/elements/title";
+@forward 'bulma/sass/elements/title';
 
 /* Bulma Form */
 /* bulma/sass/form/shared; */
@@ -51,8 +51,8 @@
 /* bulma/sass/form/select; */
 /* bulma/sass/form/file; */
 /* bulma/sass/form/tools; */
-@forward "form/switch-control";
-@forward "form/switch-control-inner-label";
+@forward 'form/switch-control';
+@forward 'form/switch-control-inner-label';
 
 /* Bulma Components */
 /* bulma/sass/components/breadcrumb */
@@ -61,42 +61,42 @@
 /* bulma/sass/components/menu */
 /* bulma/sass/components/message */
 /* bulma/sass/components/modal; */
-@forward "bulma/sass/components/navbar";
-@forward "components/endurance-navbar";
+@forward 'bulma/sass/components/navbar';
+@forward 'components/endurance-navbar';
 /* bulma/sass/components/pagination; */
 /* bulma/sass/components/panel */
 /* bulma/sass/components/tabs; */
 
 /* Klaro */
-@forward "klaro/klaro-endurance";
+@forward 'klaro/klaro-endurance';
 
 /* Bulma Grid */
 /* "bulma/sass/grid/columns"; */
-@forward "bulma/sass/grid/grid";
+@forward 'bulma/sass/grid/grid';
 
 /* Bulma Layout */
-@forward "bulma/sass/layout/container";
-@forward "bulma/sass/layout/footer";
-@forward "bulma/sass/layout/hero";
+@forward 'bulma/sass/layout/container';
+@forward 'bulma/sass/layout/footer';
+@forward 'bulma/sass/layout/hero';
 /* bulma/sass/layout/level */
 /* bulma/sass/layout/media; */
-@forward "bulma/sass/layout/section";
+@forward 'bulma/sass/layout/section';
 
-@forward "bulma/sass/base/skeleton";
+@forward 'bulma/sass/base/skeleton';
 
 /* Bulma Helpers */
 /* bulma/sass/helpers/aspect-ratio */
 /* bulma/sass/helpers/border */
-@forward "bulma/sass/helpers/color";
+@forward 'bulma/sass/helpers/color';
 /* bulma/sass/helpers/flexbox */
 /* bulma/sass/helpers/float */
 /* bulma/sass/helpers/gap */
 /* bulma/sass/helpers/overflow */
 /* bulma/sass/helpers/position */
-@forward "bulma/sass/helpers/spacing";
+@forward 'bulma/sass/helpers/spacing';
 /* bulma/sass/helpers/typography; */
 /* bulma/sass/helpers/visibility */
 /* bulma/sass/helpers/other */
 
 /* Bulma Themes */
-@forward "themes/light-theme";
+@forward 'themes/light-theme';

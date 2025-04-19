@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-@charset "utf-8";
-
-@use 'bulma/sass/utilities/css-variables' as cv;
-
-$cookie-notice-body-color: hsl(cv.getVar('warning-h'), cv.getVar('warning-s'), cv.getVar('warning-l'));
-$cookie-notice-text-color: hsl(cv.getVar('warning-h'), cv.getVar('warning-s'), cv.getVar('warning-on-scheme-l'));
-
-$agreement-color: hsl(cv.getVar('primary-h'), cv.getVar('primary-s'), cv.getVar('primary-l'));
-
-$button-margin: 1em;
+export default {
+  printWidth: 120,
+  singleQuote: true,
+  trailingComma: 'es5',
+  bracketSpacing: true,
+  arrowParens: 'always',
+  endOfLine: 'auto',
+};

@@ -56,23 +56,22 @@
 
 @charset "utf-8";
 
-@use "bulma/sass/utilities/css-variables" as cv;
+@use 'bulma/sass/utilities/css-variables' as cv;
 
 @mixin modal($centerWidth, $windowWidth) {
-
   max-height: 98%;
   position: fixed;
   top: 50%;
   width: 100%;
   z-index: 1001;
 
-  background-color: cv.getVar("body-background-color");
-  box-shadow: cv.getVar("shadow");
+  background-color: cv.getVar('body-background-color');
+  box-shadow: cv.getVar('shadow');
   overflow: auto;
   transform: translateY(-50%);
 
   @media (min-width: $centerWidth) {
-    border-radius: cv.getVar("radius-large");
+    border-radius: cv.getVar('radius-large');
     height: auto;
     margin: 0 auto;
     max-width: $windowWidth;

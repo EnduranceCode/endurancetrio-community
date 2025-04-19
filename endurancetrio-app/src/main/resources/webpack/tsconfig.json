@@ -22,11 +22,5 @@
     "noEmit": true,
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": [
-    "webpack.config.js",
-    "eslint.config.js",
-    "sass.config.js",
-    "postcss.config.js",
-    "src"
-  ]
+  "include": ["webpack.config.js", "eslint.config.js", "sass.config.js", "postcss.config.js", "src"]
 }

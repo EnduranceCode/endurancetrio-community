@@ -56,19 +56,18 @@
 
 @charset "utf-8";
 
-@use "sass:map";
+@use 'sass:map';
 
-@use "bulma/sass/utilities/css-variables" as cv;
-@use "bulma/sass/utilities/initial-variables" as iv;
-@use "bulma/sass/utilities/mixins" as mx;
-@use "bulma/sass/elements/button";
+@use 'bulma/sass/utilities/css-variables' as cv;
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/utilities/mixins' as mx;
+@use 'bulma/sass/elements/button';
 
 @use './klaro-variables-endurance' as kv;
-@use "./klaro-modal-endurance" as kx;
+@use './klaro-modal-endurance' as kx;
 @use './klaro-switch-endurance';
 
 .klaro {
-
   &.cm-as-context-notice {
     height: 100%;
     padding-bottom: 1em;
@@ -78,7 +77,6 @@
   .cookie-modal,
   .context-notice,
   .cookie-notice {
-
     p,
     h1,
     h2,
@@ -97,7 +95,6 @@
 
     .cm-btn {
       @extend .#{iv.$class-prefix}button;
-
 
       &:disabled {
         opacity: 0.5;
@@ -122,7 +119,7 @@
   }
 
   .context-notice {
-    border: 1px solid cv.getVar("border-active");
+    border: 1px solid cv.getVar('border-active');
     border-radius: iv.$radius;
 
     align-items: center;
@@ -174,12 +171,7 @@
     }
 
     .cm-bg {
-      background: hsla(
-        #{cv.getVar("scheme-h")},
-        #{cv.getVar("scheme-s")},
-        #{cv.getVar("scheme-invert-l")},
-        0.86
-      );
+      background: hsla(#{cv.getVar('scheme-h')}, #{cv.getVar('scheme-s')}, #{cv.getVar('scheme-invert-l')}, 0.86);
       height: 100%;
       left: 0;
       position: fixed;
@@ -202,12 +194,12 @@
         z-index: 1;
 
         svg {
-          stroke: cv.getVar("text");
+          stroke: cv.getVar('text');
         }
       }
 
       .cm-header {
-        border-bottom: 1px solid cv.getVar("border-active");
+        border-bottom: 1px solid cv.getVar('border-active');
 
         padding: 1.5em;
 
@@ -241,7 +233,6 @@
 
           li.cm-purpose {
             .cm-services {
-
               .cm-content {
                 display: none;
                 margin-left: -40px;
@@ -275,7 +266,7 @@
             }
 
             &.cm-toggle-all {
-              border-top: 1px solid cv.getVar("border-active");
+              border-top: 1px solid cv.getVar('border-active');
               padding-top: 1em;
             }
 
@@ -293,7 +284,7 @@
       }
 
       .cm-footer {
-        border-top: 1px solid cv.getVar("border-active");
+        border-top: 1px solid cv.getVar('border-active');
         padding: 1.5em;
 
         &-buttons {
@@ -324,7 +315,7 @@
           text-align: center;
 
           a {
-            color: cv.getVar("text-60");
+            color: cv.getVar('text-60');
           }
         }
       }
@@ -332,7 +323,6 @@
   }
 
   .cookie-notice:not(.cookie-modal-notice) {
-
     background-color: kv.$cookie-notice-body-color;
     border-radius: 0;
     border-style: none;

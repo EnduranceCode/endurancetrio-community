@@ -50,14 +50,14 @@
 
 @charset "utf-8";
 
-@use "sass:list";
+@use 'sass:list';
 
-@use "bulma/sass/utilities/initial-variables" as iv;
-@use "bulma/sass/utilities/derived-variables" as dv;
-@use "bulma/sass/utilities/controls" as cx;
-@use "bulma/sass/utilities/extends";
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/utilities/derived-variables' as dv;
+@use 'bulma/sass/utilities/controls' as cx;
+@use 'bulma/sass/utilities/extends';
 
-@use "./switch-control-variables" as sv;
+@use './switch-control-variables' as sv;
 
 .#{iv.$class-prefix}switch {
   @extend %unselectable;
@@ -67,27 +67,29 @@
   position: relative;
   margin-right: 0.5em;
 
-  &+.#{iv.$class-prefix}switch:last-child {
+  & + .#{iv.$class-prefix}switch:last-child {
     margin-right: 0;
   }
 
-  input[type=checkbox] {
+  input[type='checkbox'] {
     position: absolute;
     left: 0;
     opacity: 0;
     outline: none;
     z-index: -1;
 
-    +.#{iv.$class-prefix}check {
+    + .#{iv.$class-prefix}check {
       display: flex;
       align-items: center;
       flex-shrink: 0;
       width: sv.$switch-width;
-      height: #{sv.$switch-width * .5 + sv.$switch-padding};
+      height: #{sv.$switch-width * 0.5 + sv.$switch-padding};
       padding: sv.$switch-padding;
       background: iv.$grey-light;
       border-radius: iv.$radius;
-      transition: background sv.$speed-slow iv.$easing, box-shadow sv.$speed-slow iv.$easing;
+      transition:
+        background sv.$speed-slow iv.$easing,
+        box-shadow sv.$speed-slow iv.$easing;
 
       @each $name, $pair in dv.$colors {
         $color: list.nth($pair, 1);
@@ -97,24 +99,27 @@
           background: $color;
         }
 
-        &.#{iv.$class-prefix}input[type=checkbox]+&.#{iv.$class-prefix}check {
+        &.#{iv.$class-prefix}input[type='checkbox'] + &.#{iv.$class-prefix}check {
           background: 'pink';
         }
       }
 
       &:before {
-        content: "";
+        content: '';
         display: block;
         border-radius: iv.$radius;
-        width: #{(sv.$switch-width - sv.$switch-padding * 2) * .5};
-        height: #{(sv.$switch-width - sv.$switch-padding * 2) * .5};
+        width: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
+        height: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
         background: dv.$background;
         transition: transform sv.$speed-slow iv.$easing;
         will-change: transform;
         transform-origin: left;
 
         @if sv.$switch-knob-has-shadows ==1 {
-          box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.05), 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
+          box-shadow:
+            0 3px 1px 0 rgba(0, 0, 0, 0.05),
+            0 2px 2px 0 rgba(0, 0, 0, 0.1),
+            0 3px 3px 0 rgba(0, 0, 0, 0.05);
         }
       }
 
@@ -124,7 +129,7 @@
       }
     }
 
-    &:checked+.#{iv.$class-prefix}check {
+    &:checked + .#{iv.$class-prefix}check {
       background: sv.$switch-active-background-color;
 
       @each $name, $pair in dv.$colors {
@@ -149,7 +154,7 @@
     &:active {
       outline: none;
 
-      +.#{iv.$class-prefix}check {
+      + .#{iv.$class-prefix}check {
         @if sv.$switch-has-shadows ==1 {
           box-shadow: 0 0 0.5em rgba($grey, 0.6);
         }
@@ -165,7 +170,7 @@
         }
       }
 
-      &:checked+.#{iv.$class-prefix}check {
+      &:checked + .#{iv.$class-prefix}check {
         @if sv.$switch-has-shadows ==1 {
           box-shadow: 0 0 0.5em rgba(sv.$switch-active-background-color, 0.8);
         }
@@ -188,7 +193,7 @@
   }
 
   &:hover {
-    input[type=checkbox]+.#{iv.$class-prefix}check {
+    input[type='checkbox'] + .#{iv.$class-prefix}check {
       background: rgba(iv.$grey-light, 0.9);
 
       @each $name, $pair in dv.$colors {
@@ -200,7 +205,7 @@
       }
     }
 
-    input[type=checkbox]:checked+.#{iv.$class-prefix}check {
+    input[type='checkbox']:checked + .#{iv.$class-prefix}check {
       background: rgba(sv.$switch-active-background-color, 0.9);
 
       @each $name, $pair in dv.$colors {
@@ -214,8 +219,8 @@
   }
 
   &.#{iv.$class-prefix}is-rounded {
-    input[type=checkbox] {
-      +.#{iv.$class-prefix}check {
+    input[type='checkbox'] {
+      + .#{iv.$class-prefix}check {
         border-radius: iv.$radius-rounded;
 
         &:before {
@@ -231,20 +236,20 @@
   }
 
   &.#{iv.$class-prefix}is-outlined {
-    input[type=checkbox] {
-      +.#{iv.$class-prefix}check {
+    input[type='checkbox'] {
+      + .#{iv.$class-prefix}check {
         background: transparent;
-        border: .1rem solid iv.$grey-light;
+        border: 0.1rem solid iv.$grey-light;
         padding: sv.$switch-outlined-padding;
 
         @each $name, $pair in dv.$colors {
           $color: list.nth($pair, 1);
 
           &.#{iv.$class-prefix}is-#{$name}-passive {
-            border: .1rem solid rgba($color, 0.9);
+            border: 0.1rem solid rgba($color, 0.9);
 
             &:before {
-              background: $color
+              background: $color;
             }
 
             &:hover {
@@ -258,7 +263,7 @@
         }
       }
 
-      &:checked+.#{iv.$class-prefix}check {
+      &:checked + .#{iv.$class-prefix}check {
         border-color: sv.$switch-active-background-color;
 
         @each $name, $pair in dv.$colors {
@@ -281,12 +286,12 @@
     }
 
     &:hover {
-      input[type=checkbox]+.check {
+      input[type='checkbox'] + .check {
         background: transparent;
         border-color: rgba(iv.$grey-light, 0.9);
       }
 
-      input[type=checkbox]:checked+.#{iv.$class-prefix}check {
+      input[type='checkbox']:checked + .#{iv.$class-prefix}check {
         background: transparent;
         border-color: rgba(sv.$switch-active-background-color, 0.9);
 

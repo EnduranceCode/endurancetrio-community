@@ -56,16 +56,16 @@
 
 @charset "utf-8";
 
-@use "bulma/sass/utilities/css-variables" as cv;
-@use "bulma/sass/utilities/initial-variables" as iv;
-@use "bulma/sass/utilities/derived-variables" as dv;
+@use 'bulma/sass/utilities/css-variables' as cv;
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/utilities/derived-variables' as dv;
 
-@use "../form/switch-control-variables.scss" as sv;
+@use '../form/switch-control-variables.scss' as sv;
 
 @use './klaro-variables-endurance' as kv;
 
 .cm-switch-container {
-  border: 1px solid cv.getVar("border-active");
+  border: 1px solid cv.getVar('border-active');
 
   display: block;
   line-height: 20px;
@@ -94,11 +94,11 @@
   width: 50px;
 }
 
-.cm-list-input:checked+.cm-list-label .slider {
+.cm-list-input:checked + .cm-list-label .slider {
   background-color: kv.$agreement-color;
 }
 
-.cm-list-input.half-checked:checked+.cm-list-label .slider {
+.cm-list-input.half-checked:checked + .cm-list-label .slider {
   background-color: kv.$agreement-color;
   opacity: 0.6;
 
@@ -107,7 +107,7 @@
   }
 }
 
-.cm-list-input.only-required+.cm-list-label .slider {
+.cm-list-input.only-required + .cm-list-label .slider {
   background-color: kv.$agreement-color;
   opacity: 0.8;
 
@@ -116,7 +116,7 @@
   }
 }
 
-.cm-list-input.required:checked+.cm-list-label .slider {
+.cm-list-input.required:checked + .cm-list-label .slider {
   background-color: kv.$agreement-color;
   opacity: 0.8;
   cursor: not-allowed;
@@ -142,37 +142,38 @@
 }
 
 .cm-list-label {
-
   .cm-switch {
     left: 0;
     position: absolute;
   }
 
   .slider {
-      align-items: center;
-      background: iv.$grey-light;
-      border-radius: iv.$radius-rounded;
-      display: flex;
-      flex-shrink: 0;
-      height: #{sv.$switch-width * .5 + sv.$switch-padding};
-      padding: sv.$switch-padding;
-      transition: background sv.$speed-slow iv.$easing, box-shadow sv.$speed-slow iv.$easing;
-      width: sv.$switch-width;
+    align-items: center;
+    background: iv.$grey-light;
+    border-radius: iv.$radius-rounded;
+    display: flex;
+    flex-shrink: 0;
+    height: #{sv.$switch-width * 0.5 + sv.$switch-padding};
+    padding: sv.$switch-padding;
+    transition:
+      background sv.$speed-slow iv.$easing,
+      box-shadow sv.$speed-slow iv.$easing;
+    width: sv.$switch-width;
   }
 
   .slider::before {
-    content: "";
+    content: '';
     background: dv.$background;
     border-radius: iv.$radius-rounded;
     display: block;
-    height: #{(sv.$switch-width - sv.$switch-padding * 2) * .5};
+    height: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
     transform-origin: left;
     transition: transform sv.$speed-slow iv.$easing;
     will-change: transform;
-    width: #{(sv.$switch-width - sv.$switch-padding * 2) * .5};
+    width: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
   }
 }
 
-.cm-list-input:checked+.cm-list-label .slider::before {
+.cm-list-input:checked + .cm-list-label .slider::before {
   transform: translateX(20px);
 }

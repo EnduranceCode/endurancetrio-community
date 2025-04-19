@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 @charset "utf-8";
 
-@use "bulma/sass/themes/light";
-@use "bulma/sass/themes/setup";
+@use 'bulma/sass/themes/light';
+@use 'bulma/sass/themes/setup';
 
 :root {
   @include light.light-theme;

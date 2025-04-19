@@ -16,11 +16,11 @@
 
 @charset "utf-8";
 
-@use "sass:list";
+@use 'sass:list';
 
-@use "bulma/sass/utilities/initial-variables" as iv;
-@use "bulma/sass/utilities/derived-variables" as dv;
-@use "./switch-control";
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/utilities/derived-variables' as dv;
+@use './switch-control';
 
 $switch-inner-label-width-number: 3.5 !default;
 $switch-inner-label-width: $switch-inner-label-width-number * 1em !default;
@@ -29,13 +29,12 @@ $switch-inner-label-padding: 0.2em !default;
 .#{iv.$class-prefix}switch-inner-label {
   @extend .#{iv.$class-prefix}switch;
 
-  #{iv.$class-prefix}input[type=checkbox] {
-
-    +.#{iv.$class-prefix}check {
+  #{iv.$class-prefix}input[type='checkbox'] {
+    + .#{iv.$class-prefix}check {
       width: $switch-inner-label-width;
 
       &:before {
-        width: #{($switch-inner-label-width - $switch-inner-label-padding * 2) * .5};
+        width: #{($switch-inner-label-width - $switch-inner-label-padding * 2) * 0.5};
       }
     }
   }
@@ -60,8 +59,7 @@ $switch-inner-label-padding: 0.2em !default;
     }
   }
 
-  input[type="checkbox"]:checked~.#{iv.$class-prefix}check {
-
+  input[type='checkbox']:checked ~ .#{iv.$class-prefix}check {
     @each $name, $pair in dv.$colors {
       $color: list.nth($pair, 1);
 
