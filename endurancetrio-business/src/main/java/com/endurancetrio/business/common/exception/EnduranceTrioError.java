@@ -62,7 +62,7 @@ public enum EnduranceTrioError {
 
   BAD_REQUEST(400, "The request was made with invalid or incomplete data"),
   NOT_FOUND(404, "The requested resource was not found"),
-  CONCURRENT_UPDATE(409, "The data was concurrently modified by another transaction"),
+  CONFLICT(409, "A conflict occurred with the current state of the resource"),
   INTERNAL_ERROR(500, "An internal server error occurred");
 
   private static final Map<Integer, EnduranceTrioError> BY_CODE = Arrays.stream(values())
