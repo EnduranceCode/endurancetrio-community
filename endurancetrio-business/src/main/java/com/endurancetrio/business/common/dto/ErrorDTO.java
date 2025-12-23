@@ -20,20 +20,63 @@
 
 package com.endurancetrio.business.common.dto;
 
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The {@link ErrorDTO} class represents an error response with an error code and a descriptive
- * message.
+ * The {@link ErrorDTO} class represents structured error information returned to API clients.
+ * It carries an HTTP status code, a machine-readable error key, and a human-readable message.
+ *
+ * <h2>Constructor Usage</h2>
+ *
+ * <h3>Generic Error (Enum Message)</h3>
+ * <p>
+ * Use when the enum's default message is sufficient:
+ * <pre>
+ *   {@code new ErrorDTO(EnduranceTrioError.NOT_FOUND)}
+ * </pre>
+ *
+ * <h3>Specific Error (Custom Message)</h3>
+ * <p>
+ * Use when providing request-specific context improves client error handling:
+ *
+ * <pre>
+ *   {@code new ErrorDTO(EnduranceTrioError.NOT_FOUND, "No route found with ID 42")}
+ * </pre>
+ *
+ * <h2>Field Semantics</h2>
+ *
+ * <ul>
+ *   <li>
+ *     <b>code</b>: HTTP status code (e.g., 404). Aligns with response-level {@code status}
+ *     but included for self-contained error objects in multi-error scenarios.
+ *   </li>
+ *   <li>
+ *     <b>error</b>: Stable enum name (e.g., "NOT_FOUND"). Machine-readable;
+ *     clients can switch/match on this for programmatic handling.
+ *   </li>
+ *   <li>
+ *     <b>message</b>: Human-readable description. May be generic (from enum) or specific
+ *     (from context). Intended for display or logging.
+ *   </li>
+ * </ul>
+ *
+ * @see EnduranceTrioError for predefined error types
+ * @see EnduranceTrioException for exception usage patterns
  */
-public record ErrorDTO(String error, String message) implements Serializable {
+public record ErrorDTO(@JsonIgnore int code, String error, String message) implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
 
   public ErrorDTO(EnduranceTrioError error) {
-    this(error.name(), error.getMessage());
+    this(error.getCode(), error.name(), error.getMessage());
+  }
+
+  public ErrorDTO(EnduranceTrioError error, String message) {
+    this(error.getCode(), error.name(), message);
   }
 }

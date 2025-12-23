@@ -21,16 +21,16 @@
 package com.endurancetrio.app.tracker.api;
 
 import static com.endurancetrio.app.common.constants.ControllerConstants.API_PATH;
-import static com.endurancetrio.app.common.constants.ControllerConstants.DETAILS_SUCCESS;
+import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_SUCCESS;
 import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_DOMAIN;
 import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_RESOURCE_DEVICES;
 import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_V1;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioRestController;
 import com.endurancetrio.app.common.response.EnduranceTrioResponse;
-import com.endurancetrio.business.common.exception.BadRequestException;
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.DeviceTelemetryDTO;
 import com.endurancetrio.business.tracker.service.DeviceTelemetryService;
 import jakarta.validation.Valid;
@@ -74,7 +74,7 @@ public class DeviceTelemetryRestController implements DeviceTelemetryAPI {
     List<DeviceTelemetryDTO> data = deviceTelemetryService.findMostRecentRecordForEachDevice();
 
     EnduranceTrioResponse<List<DeviceTelemetryDTO>> response = new EnduranceTrioResponse<>(
-        status.value(), status.getReasonPhrase(), DETAILS_SUCCESS, data);
+        status.value(), status.getReasonPhrase(), MSG_SUCCESS, data);
 
     return ResponseEntity.status(status).body(response);
   }
@@ -90,26 +90,28 @@ public class DeviceTelemetryRestController implements DeviceTelemetryAPI {
   ) {
 
     if (deviceTelemetryDTO == null) {
-      LOG.warn("The request made to save telemetry data is invalid (null)");
-      throw new BadRequestException(EnduranceTrioError.BAD_REQUEST);
+      String errorMsg = "The request made to save telemetry data is invalid (null)";
+      LOG.error(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.BAD_REQUEST, errorMsg));
     }
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {
-      throw new NotFoundException(EnduranceTrioError.NOT_FOUND);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND));
     }
     String owner = authentication.getName();
 
     if (owner == null || owner.isBlank()) {
-      LOG.error("There is no authenticated owner for saving telemetry data");
-      throw new NotFoundException(EnduranceTrioError.NOT_FOUND);
+      String errorMsg = "The authenticated owner is null or blank";
+      LOG.error(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     }
 
     HttpStatus status = HttpStatus.CREATED;
     DeviceTelemetryDTO data = deviceTelemetryService.save(owner, deviceTelemetryDTO);
 
     EnduranceTrioResponse<DeviceTelemetryDTO> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_SUCCESS, data
+        status.getReasonPhrase(), MSG_SUCCESS, data
     );
 
     return ResponseEntity.status(status).body(response);

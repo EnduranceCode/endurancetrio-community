@@ -20,12 +20,11 @@
 
 package com.endurancetrio.app.common.response;
 
-import static com.endurancetrio.app.common.constants.ControllerConstants.DETAILS_SUCCESS;
-import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_200;
+import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_SUCCESS;
+import static com.endurancetrio.app.common.constants.ControllerConstants.REASON_200;
 import static com.endurancetrio.app.common.constants.ControllerConstants.STATUS_200;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.endurancetrio.app.common.constants.ControllerConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,23 +38,23 @@ import org.junit.jupiter.api.Test;
 class EnduranceTrioResponseTest {
 
   private static final int TEST_STATUS = STATUS_200;
-  private static final String TEST_MESSAGE = MSG_200;
-  private static final String TEST_DETAILS = DETAILS_SUCCESS;
+  private static final String TEST_REASON = REASON_200;
+  private static final String TEST_MESSAGE = MSG_SUCCESS;
   private static final String MSG_DATA = "Success Data";
 
   private EnduranceTrioResponse<String> underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new EnduranceTrioResponse<>(TEST_STATUS, TEST_MESSAGE, TEST_DETAILS, MSG_DATA);
+    underTest = new EnduranceTrioResponse<>(TEST_STATUS, TEST_REASON, TEST_MESSAGE, MSG_DATA);
   }
 
   @Test
   void entityShouldRetainValues() {
 
     assertEquals(TEST_STATUS, underTest.status());
+    assertEquals(TEST_REASON, underTest.reason());
     assertEquals(TEST_MESSAGE, underTest.message());
-    assertEquals(TEST_DETAILS, underTest.details());
     assertEquals(MSG_DATA, underTest.data());
   }
 }

@@ -20,8 +20,8 @@
 
 package com.endurancetrio.app.common.handler;
 
-import static com.endurancetrio.app.common.constants.ControllerConstants.DETAILS_AUTH_DENIED;
-import static com.endurancetrio.app.common.constants.ControllerConstants.DETAILS_AUTH_FAILURE;
+import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_AUTH_DENIED;
+import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_AUTH_FAILURE;
 
 import com.endurancetrio.app.common.response.EnduranceTrioResponse;
 import org.jspecify.annotations.NonNull;
@@ -64,7 +64,7 @@ public class EnduranceTrioExceptionHandlerAuth {
     LOG.warn("Authentication Failure ({}): {}", status.value(), exception.getMessage());
 
     EnduranceTrioResponse<String> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_AUTH_FAILURE
+        status.getReasonPhrase(), MSG_AUTH_FAILURE
     );
 
     return ResponseEntity.status(status).body(response);
@@ -85,7 +85,7 @@ public class EnduranceTrioExceptionHandlerAuth {
     LOG.warn("Authorization Failure ({}): {}", status.value(), exception.getMessage());
 
     EnduranceTrioResponse<String> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_AUTH_DENIED
+        status.getReasonPhrase(), MSG_AUTH_DENIED
     );
 
     return ResponseEntity.status(status).body(response);

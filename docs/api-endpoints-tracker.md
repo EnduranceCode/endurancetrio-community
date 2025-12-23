@@ -27,9 +27,9 @@ ET-Owner: account-name-here
 
 ```json
 {
-  "code": 200,
-  "status": "OK",
-  "details": "Request handled successfully",
+  "status": 200,
+  "reason": "OK",
+  "message": "Request handled successfully",
   "data": [
     {
       "device": "SDABC",
@@ -93,9 +93,9 @@ ET-Owner: account-name-here
 
 ```json
 {
-  "code": 201,
-  "status": "Created",
-  "details": "Request handled successfully",
+  "status": 201,
+  "reason": "Created",
+  "message": "Request handled successfully",
   "data": {
     "device": "SDABC",
     "time": "2026-09-19T06:00:00Z",
@@ -137,9 +137,9 @@ ET-Owner: account-name-here
 
 ```json
 {
-  "code": 200,
-  "status": "OK",
-  "details": "Request handled successfully",
+  "status": 200,
+  "reason": "OK",
+  "message": "Request handled successfully",
   "data": [
     {
       "device": "SDABC",
@@ -192,9 +192,9 @@ ET-Owner: account-name-here
 
 ```json
 {
-  "code": 200,
-  "status": "OK",
-  "details": "Request handled successfully",
+  "status": 200,
+  "reason": "OK",
+  "message": "Request handled successfully",
   "data": [
     {
       "id": 1,
@@ -291,9 +291,9 @@ ET-Owner: account-name-here
 
 ```json
 {
-  "code": 201,
-  "status": "Created",
-  "details": "Request handled successfully",
+  "status": 201,
+  "reason": "Created",
+  "message": "Request handled successfully",
   "data": {
     "id": 1,
     "reference": "20260921ETU001-001S",
@@ -363,9 +363,9 @@ ET-Owner: account-name-here
 
 ```json
 {
-  "code": 200,
-  "status": "OK",
-  "details": "Request handled successfully",
+  "status": 200,
+  "reason": "OK",
+  "message": "Request handled successfully",
   "data": {
     "id": 1,
     "reference": "20260921ETU001-001S",
@@ -416,8 +416,8 @@ ET-Owner: account-name-here
 ```json
 {
   "status": 200,
-  "message": "OK",
-  "details": "Request handled successfully",
+  "reason": "OK",
+  "message": "Request handled successfully",
   "data": {
     "type": "FeatureCollection",
     "features": [

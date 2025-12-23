@@ -75,8 +75,8 @@ public interface RouteApi {
                   value = """
                       {
                         "status": 200,
-                        "message": "OK",
-                        "details": "Request handled successfully",
+                        "reason": "OK",
+                        "message": "Request handled successfully",
                         "data": [
                           {
                             "id": 1,
@@ -112,8 +112,8 @@ public interface RouteApi {
                   value = """
                       {
                         "status": 200,
-                        "message": "OK",
-                        "details": "Request handled successfully",
+                        "reason": "OK",
+                        "message": "Request handled successfully",
                         "data": [
                         ]
                       }
@@ -152,8 +152,8 @@ public interface RouteApi {
                   value = """
                       {
                         "status": 201,
-                        "message": "Created",
-                        "details": "Request handled successfully",
+                        "reason": "Created",
+                        "message": "Request handled successfully",
                         "data": {
                           "id": 1,
                           "reference": "20260921ETU001-001S",
@@ -265,8 +265,8 @@ public interface RouteApi {
                   value = """
                       {
                         "status": 200,
-                        "message": "OK",
-                        "details": "Request handled successfully",
+                        "reason": "OK",
+                        "message": "Request handled successfully",
                         "data": {
                           "id": 1,
                           "reference": "20260921ETU001-001S",
@@ -329,8 +329,8 @@ public interface RouteApi {
                   value = """
                       {
                         "status": 200,
-                        "message": "OK",
-                        "details": "Request handled successfully",
+                        "reason": "OK",
+                        "message": "Request handled successfully",
                         "data": {
                           "type": "FeatureCollection",
                           "features": [

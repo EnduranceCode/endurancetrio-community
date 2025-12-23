@@ -30,14 +30,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.DeviceTelemetryDTO;
 import com.endurancetrio.business.tracker.mapper.DeviceTelemetryMapper;
-import com.endurancetrio.data.tracker.model.entity.TrackerAccount;
 import com.endurancetrio.data.tracker.model.entity.DeviceTelemetry;
-import com.endurancetrio.data.tracker.repository.TrackerAccountRepository;
+import com.endurancetrio.data.tracker.model.entity.TrackerAccount;
 import com.endurancetrio.data.tracker.repository.DeviceTelemetryRepository;
+import com.endurancetrio.data.tracker.repository.TrackerAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -140,8 +140,8 @@ class DeviceTelemetryServiceMainTest {
     when(deviceTelemetryMapper.map(inputDTO, null)).thenReturn(mockDeviceTelemetry);
     when(deviceTelemetryRepository.save(mockDeviceTelemetry)).thenThrow(new EntityNotFoundException());
 
-    NotFoundException result = assertThrows(NotFoundException.class,
-        () -> underTest.save(owner, inputDTO)
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.save(owner, inputDTO)
     );
 
     verify(trackerAccountRepository, times(1)).getReferenceById(owner);

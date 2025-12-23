@@ -20,8 +20,9 @@
 
 package com.endurancetrio.business.tracker.service;
 
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.DeviceTelemetryDTO;
 import com.endurancetrio.business.tracker.mapper.DeviceTelemetryMapper;
 import com.endurancetrio.data.tracker.model.entity.DeviceTelemetry;
@@ -61,7 +62,7 @@ public class DeviceTelemetryServiceMain implements DeviceTelemetryService {
     try {
       return deviceTelemetryMapper.map(deviceTelemetryRepository.save(deviceTelemetry));
     } catch (EntityNotFoundException exception) {
-      throw new NotFoundException(EnduranceTrioError.NOT_FOUND);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND));
     }
   }
 

@@ -20,9 +20,9 @@
 
 package com.endurancetrio.business.tracker.service;
 
-import com.endurancetrio.business.common.exception.BadRequestException;
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.RouteDTO;
 import com.endurancetrio.business.tracker.dto.RouteMetricsDTO;
 import com.endurancetrio.business.tracker.dto.RouteSegmentDTO;
@@ -82,12 +82,10 @@ public class RouteServiceMain implements RouteService {
     if (routeDTO.id() != null) {
 
       entity = routeRepository.findById(routeDTO.id()).orElseThrow(() -> {
-        String errorMessage = String.format("Route update failed: No route found with ID %d",
-            routeDTO.id()
-        );
+        String errorMsg = String.format("Route update failed: No route found with ID %d", routeDTO.id());
 
-        LOG.warn(errorMessage);
-        return new NotFoundException(errorMessage, EnduranceTrioError.NOT_FOUND);
+        LOG.warn(errorMsg);
+        return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
       });
 
       routeMapper.updateEntity(routeDTO, entity);
@@ -204,14 +202,14 @@ public class RouteServiceMain implements RouteService {
    * @param start The starting coordinates [longitude, latitude].
    * @param end   The ending coordinates [longitude, latitude].
    * @return The half-chord length (value between 0.0 and 1.0).
-   * @throws BadRequestException if coordinates are null or strictly not a pair of values.
+   * @throws EnduranceTrioException if coordinates are null or strictly not a pair of values.
    */
   private static double calculateHalfChordLength(List<Double> start, List<Double> end) {
 
     if (start == null || end == null || start.size() != 2 || end.size() != 2) {
-      String errorMessage = "Coordinates must be non-null and contain exactly [longitude, latitude]";
-      LOG.error(errorMessage);
-      throw new BadRequestException(errorMessage, EnduranceTrioError.BAD_REQUEST);
+      String errorMsg = "Coordinates must be non-null and contain exactly [longitude, latitude]";
+      LOG.error(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.BAD_REQUEST, errorMsg));
     }
 
     // GeoJSON index 1 is Latitude
@@ -296,14 +294,14 @@ public class RouteServiceMain implements RouteService {
    *
    * @param id The unique identifier of the route.
    * @return The mapped {@link RouteDTO}.
-   * @throws NotFoundException if no route exists with the given ID.
+   * @throws EnduranceTrioException if no route exists with the given ID.
    */
   private RouteDTO getRouteDTO(Long id) {
 
     Route route = routeRepository.findById(id).orElseThrow(() -> {
-      String errorMessage = String.format("No route found with ID %d", id);
-      LOG.warn(errorMessage);
-      return new NotFoundException(errorMessage, EnduranceTrioError.NOT_FOUND);
+      String errorMsg = String.format("No route found with ID %d", id);
+      LOG.warn(errorMsg);
+      return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     });
 
     return routeMapper.map(route);
@@ -316,7 +314,7 @@ public class RouteServiceMain implements RouteService {
    *
    * @param devices The list of device identifiers to query.
    * @return A list of {@link DeviceTelemetry} objects corresponding to the devices.
-   * @throws NotFoundException if telemetry data is missing for any of the requested devices.
+   * @throws EnduranceTrioException if telemetry data is missing for any of the requested devices.
    */
   private List<DeviceTelemetry> getDevicesTelemetry(ArrayList<String> devices) {
 
@@ -331,9 +329,9 @@ public class RouteServiceMain implements RouteService {
           .filter(device -> !foundDevices.contains(device))
           .toList();
 
-      String errorMessage = String.format("Telemetry data missing for devices: %s", missingDevices);
-      LOG.error(errorMessage);
-      throw new NotFoundException(errorMessage, EnduranceTrioError.NOT_FOUND);
+      String errorMsg = String.format("Telemetry data missing for devices: %s", missingDevices);
+      LOG.error(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     }
 
     return telemetry;
@@ -343,7 +341,7 @@ public class RouteServiceMain implements RouteService {
    * Validates that all devices referenced in the RouteDTO exist in the system.
    *
    * @param routeDTO the RouteDTO containing segments with device information
-   * @throws NotFoundException if any device is not found in the system
+   * @throws EnduranceTrioException if any device is not found in the system
    */
   private void validateRouteDevices(RouteDTO routeDTO) {
     Set<String> routeDevices = extractDevices(routeDTO);
@@ -354,13 +352,13 @@ public class RouteServiceMain implements RouteService {
           .filter(device -> !existingDevices.contains(device))
           .collect(Collectors.toSet());
 
-      String errorMessage = String.format(
+      String errorMsg = String.format(
           "Cannot process route. The following devices are not registered: %s",
           String.join(", ", missingDevices)
       );
 
-      LOG.warn(errorMessage);
-      throw new BadRequestException(errorMessage, EnduranceTrioError.BAD_REQUEST);
+      LOG.warn(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.BAD_REQUEST, errorMsg));
     }
   }
 }

@@ -31,9 +31,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.endurancetrio.business.common.exception.BadRequestException;
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.RouteDTO;
 import com.endurancetrio.business.tracker.dto.RouteMetricsDTO;
 import com.endurancetrio.business.tracker.dto.RouteSegmentDTO;
@@ -175,8 +174,8 @@ class RouteServiceMainTest {
 
     when(deviceTelemetryRepository.findExistingDevicesFrom(anySet())).thenReturn(Set.of());
 
-    BadRequestException result = assertThrows(BadRequestException.class,
-        () -> underTest.save(invalidDTO)
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.save(invalidDTO)
     );
 
     verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());
@@ -193,7 +192,9 @@ class RouteServiceMainTest {
         Set.of(START_DEVICE, END_DEVICE));
     when(routeRepository.findById(ROUTE_ID)).thenReturn(Optional.empty());
 
-    NotFoundException result = assertThrows(NotFoundException.class, () -> underTest.save(testDTO));
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.save(testDTO)
+    );
 
     verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());
     verify(routeRepository, times(1)).findById(ROUTE_ID);
@@ -254,8 +255,8 @@ class RouteServiceMainTest {
   void findByIdWhenRouteDoesNotExist() {
     when(routeRepository.findById(ROUTE_ID)).thenReturn(Optional.empty());
 
-    NotFoundException result = assertThrows(NotFoundException.class,
-        () -> underTest.findById(ROUTE_ID)
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.findById(ROUTE_ID)
     );
 
     verify(routeRepository, times(1)).findById(ROUTE_ID);
@@ -299,8 +300,8 @@ class RouteServiceMainTest {
 
     when(routeRepository.findById(ROUTE_ID)).thenReturn(Optional.empty());
 
-    NotFoundException result = assertThrows(NotFoundException.class,
-        () -> underTest.getRouteMetrics(ROUTE_ID)
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.getRouteMetrics(ROUTE_ID)
     );
 
     verify(routeRepository, times(1)).findById(ROUTE_ID);
@@ -319,8 +320,8 @@ class RouteServiceMainTest {
     when(routeMapper.map(testEntity)).thenReturn(testDTO);
     when(deviceTelemetryRepository.findMostRecentByDevices(any())).thenReturn(testTelemetry);
 
-    NotFoundException result = assertThrows(NotFoundException.class,
-        () -> underTest.getRouteMetrics(ROUTE_ID)
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.getRouteMetrics(ROUTE_ID)
     );
 
     verify(routeRepository, times(1)).findById(ROUTE_ID);

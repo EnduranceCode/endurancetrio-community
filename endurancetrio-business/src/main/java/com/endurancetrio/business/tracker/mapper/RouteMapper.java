@@ -20,8 +20,9 @@
 
 package com.endurancetrio.business.tracker.mapper;
 
-import com.endurancetrio.business.common.exception.BadRequestException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.RouteDTO;
 import com.endurancetrio.business.tracker.dto.RouteSegmentDTO;
 import com.endurancetrio.data.tracker.model.entity.Route;
@@ -113,13 +114,13 @@ public class RouteMapper {
           routeSegmentMapper.updateEntity(segmentDTO, existingSegment);
           processedIds.add(segmentDTO.id());
         } else {
-          String errorMessage = String.format(
+          String errorMsg = String.format(
               "Segment with ID %d cannot be updated as it was not found on Route %d.",
               segmentDTO.id(), entity.getId()
           );
 
-          LOG.error(errorMessage);
-          throw new BadRequestException(errorMessage, EnduranceTrioError.BAD_REQUEST);
+          LOG.error(errorMsg);
+          throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.BAD_REQUEST, errorMsg));
         }
       }
     }

@@ -21,7 +21,7 @@
 package com.endurancetrio.app.tracker.api;
 
 import static com.endurancetrio.app.common.constants.ControllerConstants.API_PATH;
-import static com.endurancetrio.app.common.constants.ControllerConstants.DETAILS_SUCCESS;
+import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_SUCCESS;
 import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_DOMAIN;
 import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_RESOURCE_ROUTES;
 import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_V1;
@@ -64,7 +64,7 @@ public class RouteRestController implements RouteApi {
     HttpStatus status = HttpStatus.OK;
 
     EnduranceTrioResponse<List<RouteDTO>> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_SUCCESS, data
+        status.getReasonPhrase(), MSG_SUCCESS, data
     );
 
     return ResponseEntity.status(status).body(response);
@@ -91,7 +91,7 @@ public class RouteRestController implements RouteApi {
     }
 
     EnduranceTrioResponse<RouteDTO> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_SUCCESS, data
+        status.getReasonPhrase(), MSG_SUCCESS, data
     );
 
     return ResponseEntity.status(status).body(response);
@@ -110,7 +110,7 @@ public class RouteRestController implements RouteApi {
     HttpStatus status = HttpStatus.OK;
 
     EnduranceTrioResponse<RouteDTO> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_SUCCESS, data
+        status.getReasonPhrase(), MSG_SUCCESS, data
     );
 
     return ResponseEntity.status(status).body(response);
@@ -131,7 +131,7 @@ public class RouteRestController implements RouteApi {
     HttpStatus status = HttpStatus.OK;
 
     EnduranceTrioResponse<RouteMetricsDTO> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), DETAILS_SUCCESS, data
+        status.getReasonPhrase(), MSG_SUCCESS, data
     );
 
     return ResponseEntity.status(status).body(response);

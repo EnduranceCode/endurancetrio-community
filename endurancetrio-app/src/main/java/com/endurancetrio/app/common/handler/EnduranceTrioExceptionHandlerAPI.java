@@ -20,14 +20,15 @@
 
 package com.endurancetrio.app.common.handler;
 
-import static com.endurancetrio.app.common.constants.ControllerConstants.DETAILS_SERVER_ERROR;
-import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_500;
+import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_SERVER_ERROR;
+import static com.endurancetrio.app.common.constants.ControllerConstants.REASON_500;
 import static com.endurancetrio.app.common.constants.ControllerConstants.STATUS_500;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioRestController;
 import com.endurancetrio.app.common.response.EnduranceTrioResponse;
 import com.endurancetrio.business.common.dto.ErrorDTO;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioException;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -58,10 +59,19 @@ public class EnduranceTrioExceptionHandlerAPI extends ResponseEntityExceptionHan
       status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    LOG.warn("Handled Exception ({}): {}", status.value(), exception.getMessage());
+    String errorMessageTemplate = "Handled Exception ({}): {}";
+    if (status.is5xxServerError() || exception.getCause() != null) {
+      LOG.error(errorMessageTemplate, status.value(), exception.getMessage(), exception);
+    } else {
+      LOG.error(errorMessageTemplate, status.value(), exception.getMessage());
+    }
+
+    String responseMessage = EnduranceTrioError.fromCode(exception.getCode())
+        .orElse(EnduranceTrioError.INTERNAL_ERROR)
+        .getMessage();
 
     EnduranceTrioResponse<List<ErrorDTO>> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), exception.getMessage(), exception.getErrors()
+        status.getReasonPhrase(), responseMessage, exception.getErrors()
     );
 
     return new ResponseEntity<>(response, status);
@@ -70,10 +80,10 @@ public class EnduranceTrioExceptionHandlerAPI extends ResponseEntityExceptionHan
   @ExceptionHandler(Exception.class)
   public ResponseEntity<@NonNull EnduranceTrioResponse<String>> unhandledException(Exception exception) {
 
-    LOG.error("Unhandled exception ({}); {}", STATUS_500, exception.getMessage());
+    LOG.error("Unhandled exception ({}); {}", STATUS_500, exception.getMessage(), exception);
 
-    EnduranceTrioResponse<String> response = new EnduranceTrioResponse<>(STATUS_500, MSG_500,
-        DETAILS_SERVER_ERROR
+    EnduranceTrioResponse<String> response = new EnduranceTrioResponse<>(STATUS_500, REASON_500,
+        MSG_SERVER_ERROR
     );
 
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

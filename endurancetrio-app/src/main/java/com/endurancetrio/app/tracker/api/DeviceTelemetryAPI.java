@@ -72,8 +72,8 @@ public interface DeviceTelemetryAPI {
                   value = """
                       {
                         "status": 200,
-                        "message": "OK",
-                        "details": "Request handled successfully",
+                        "reason": "OK",
+                        "message": "Request handled successfully",
                         "data": [
                           {
                             "device": "SDABC",
@@ -113,8 +113,8 @@ public interface DeviceTelemetryAPI {
                   value = """
                       {
                         "status": 200,
-                        "message": "OK",
-                        "details": "Request handled successfully",
+                        "reason": "OK",
+                        "message": "Request handled successfully",
                         "data": [
                         ]
                       }
@@ -152,8 +152,8 @@ public interface DeviceTelemetryAPI {
                   value = """
                       {
                         "status": 201,
-                        "message": "Created",
-                        "details": "Request handled successfully",
+                        "reason": "Created",
+                        "message": "Request handled successfully",
                         "data": {
                           "device": "SDABC",
                           "time": "2026-09-19T06:00:00Z",

@@ -33,13 +33,13 @@ public class ControllerConstants {
   public static final int STATUS_200 = HttpStatus.OK.value();
   public static final int STATUS_500 = HttpStatus.INTERNAL_SERVER_ERROR.value();
 
-  public static final String MSG_200 = HttpStatus.OK.getReasonPhrase();
-  public static final String MSG_500 = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+  public static final String REASON_200 = HttpStatus.OK.getReasonPhrase();
+  public static final String REASON_500 = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
 
-  public static final String DETAILS_AUTH_DENIED = "Access Denied: Missing required permissions";
-  public static final String DETAILS_AUTH_FAILURE = "Authentication failed";
-  public static final String DETAILS_SERVER_ERROR = "An internal server error occurred";
-  public static final String DETAILS_SUCCESS = "Request handled successfully";
+  public static final String MSG_AUTH_DENIED = "Access Denied: Missing required permissions";
+  public static final String MSG_AUTH_FAILURE = "Authentication failed";
+  public static final String MSG_SERVER_ERROR = "An internal server error occurred";
+  public static final String MSG_SUCCESS = "Request handled successfully";
 
   private ControllerConstants() {
     throw new IllegalStateException("Utility Class");

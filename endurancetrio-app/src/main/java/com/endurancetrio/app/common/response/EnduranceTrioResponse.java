@@ -29,9 +29,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @param <T> the type of the data payload contained in the response
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record EnduranceTrioResponse<T>(int status, String message, String details, T data) {
+public record EnduranceTrioResponse<T>(int status, String reason, String message, T data) {
 
-  public EnduranceTrioResponse(int status, String message, String details) {
-    this(status, message, details, null);
+  public EnduranceTrioResponse(int status, String reason, String message) {
+    this(status, reason, message, null);
   }
 }

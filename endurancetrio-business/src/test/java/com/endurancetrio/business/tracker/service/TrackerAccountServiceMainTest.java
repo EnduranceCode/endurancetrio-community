@@ -30,8 +30,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.TrackerAccountDTO;
 import com.endurancetrio.business.tracker.mapper.TrackerAccountMapper;
 import com.endurancetrio.data.tracker.model.entity.TrackerAccount;
@@ -160,14 +160,12 @@ class TrackerAccountServiceMainTest {
 
     when(trackerAccountRepository.findByOwner(unknownOwner)).thenReturn(Optional.empty());
 
-    NotFoundException result = assertThrows(NotFoundException.class,
-        () -> underTest.getByOwner(unknownOwner)
-    );
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.getByOwner(unknownOwner));
 
     verify(trackerAccountRepository, times(1)).findByOwner(unknownOwner);
     verify(trackerAccountMapper, never()).map(mockTrackerAccount);
 
     assertEquals(EnduranceTrioError.NOT_FOUND.getCode(), result.getCode());
-    assertEquals(EnduranceTrioError.NOT_FOUND.getMessage(), result.getMessage());
   }
 }

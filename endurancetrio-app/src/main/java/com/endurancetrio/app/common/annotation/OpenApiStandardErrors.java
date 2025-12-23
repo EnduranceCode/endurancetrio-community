@@ -46,8 +46,8 @@ import org.springframework.http.MediaType;
                 value = """
                     {
                       "status": 401,
-                      "message": "Unauthorized",
-                      "details": "Authentication failed"
+                      "reason": "Unauthorized",
+                      "message": "Authentication failed"
                     }
                     """
             )
@@ -67,8 +67,8 @@ import org.springframework.http.MediaType;
                 value = """
                     {
                       "status": 400,
-                      "message": "Bad Request",
-                      "details": "The request was made with invalid or incomplete data"
+                      "reason": "Bad Request",
+                      "message": "The request was made with invalid or incomplete data"
                     }
                     """
             )
@@ -88,12 +88,14 @@ import org.springframework.http.MediaType;
                 value = """
                     {
                       "status": 404,
-                      "message": "Not Found",
-                      "details": "No route found with ID {id}",
-                      "data": {
-                        "error": "NOT_FOUND",
-                        "message": "The requested resource was not found"
-                      }
+                      "reason": "Not Found",
+                      "message": "The requested resource was not found",
+                      "data": [
+                        {
+                          "error": "NOT_FOUND",
+                          "message": "No route found with ID 111"
+                        }
+                      ]
                     }
                     """
             )
@@ -113,8 +115,8 @@ import org.springframework.http.MediaType;
                 value = """
                     {
                       "status": 500,
-                      "message": "Internal Server Error",
-                      "details": "An internal server error occurred"
+                      "reason": "Internal Server Error",
+                      "message": "An internal server error occurred"
                     }
                     """
             )

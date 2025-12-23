@@ -20,8 +20,9 @@
 
 package com.endurancetrio.business.tracker.service;
 
-import com.endurancetrio.business.common.exception.NotFoundException;
-import com.endurancetrio.business.common.exception.base.EnduranceTrioError;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.TrackerAccountDTO;
 import com.endurancetrio.business.tracker.mapper.TrackerAccountMapper;
 import com.endurancetrio.data.tracker.model.entity.TrackerAccount;
@@ -63,8 +64,9 @@ public class TrackerAccountServiceMain implements TrackerAccountService {
     Optional<TrackerAccount> accountOptional = findByOwner(owner);
 
     if (accountOptional.isEmpty()) {
-      LOG.warn("No account found for owner '{}'", owner);
-      throw new NotFoundException(EnduranceTrioError.NOT_FOUND);
+      String errorMsg = String.format("No account found for owner '%s'", owner);
+      LOG.error(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     }
 
     return trackerAccountMapper.map(accountOptional.get());
