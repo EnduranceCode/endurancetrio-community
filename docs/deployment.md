@@ -289,6 +289,13 @@ RequestHeader set X-Forwarded-Proto "https"
 RequestHeader set X-Forwarded-Port "443"
 ```
 
+Ensure that the WWW to non-WWW redirection is set using https instead of http, as shown
+in the following snippet:
+
+```text
+Redirect permanent / https://<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD>/
+```
+
 Check if it's necessary any further modifications, implement it if required and when finished, save
 the file with the command `CTRL + O` and then exit the text editor  with the command `CTRL + X`.
 
