@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class EventsController {
 
   private static final String VIEW = "events";
-  private static final Locale PORTUGUESE_LOCALE = new Locale("pt", "PT");
+  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private final MessageService messageService;
 

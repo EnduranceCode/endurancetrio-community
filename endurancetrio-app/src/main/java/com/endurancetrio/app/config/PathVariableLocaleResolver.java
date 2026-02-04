@@ -39,13 +39,13 @@ public class PathVariableLocaleResolver implements LocaleResolver {
     if (parts.length > 1) {
       String localePart = parts[1];
       if ("pt".equalsIgnoreCase(localePart)) {
-        return new Locale("pt", "PT");
+        return Locale.of("pt", "PT");
       }
     }
 
     String acceptLang = request.getHeader("Accept-Language");
     if (acceptLang != null && acceptLang.startsWith("pt")) {
-      return new Locale("pt", "PT");
+      return Locale.of("pt", "PT");
     }
 
     return DEFAULT_LOCALE;
