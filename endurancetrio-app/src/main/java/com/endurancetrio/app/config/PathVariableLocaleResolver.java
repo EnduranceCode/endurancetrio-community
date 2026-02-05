@@ -23,7 +23,7 @@ package com.endurancetrio.app.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Locale;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.web.servlet.LocaleResolver;
 
 public class PathVariableLocaleResolver implements LocaleResolver {
