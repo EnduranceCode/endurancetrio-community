@@ -184,10 +184,10 @@ public class Race implements Serializable {
   @JoinColumn(name = "age_group_id", nullable = false)
   private AgeGroup ageGroup;
 
-  @Column(name = "date", nullable = false)
+  @Column(name = "race_date", nullable = false)
   LocalDate date;
 
-  @Column(name = "time")
+  @Column(name = "race_time")
   LocalTime time;
 
   @Column(name = "race_status", nullable = false)

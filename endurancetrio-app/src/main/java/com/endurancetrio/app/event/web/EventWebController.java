@@ -42,7 +42,7 @@ public class EventWebController {
     this.messageService = messageService;
   }
 
-  @GetMapping("/{language}/events")
+  @GetMapping("/{language:en|pt}/events")
   public String eventsYears(@PathVariable String language, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
 

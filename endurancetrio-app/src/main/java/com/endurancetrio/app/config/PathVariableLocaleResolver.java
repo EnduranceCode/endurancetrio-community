@@ -34,6 +34,11 @@ public class PathVariableLocaleResolver implements LocaleResolver {
   @NonNull
   public Locale resolveLocale(HttpServletRequest request) {
     String uri = request.getRequestURI();
+
+    if (uri.startsWith("/api/")) {
+      return DEFAULT_LOCALE;
+    }
+
     String[] parts = uri.split("/");
 
     if (parts.length > 1) {

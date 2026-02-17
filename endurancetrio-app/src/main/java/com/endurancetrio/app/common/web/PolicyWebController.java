@@ -42,7 +42,7 @@ public class PolicyWebController {
     this.messageService = messageService;
   }
 
-  @GetMapping("/{language}/policy")
+  @GetMapping("/{language:en|pt}/policy")
   public String policy(@PathVariable String language, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
 

@@ -1,5 +1,6 @@
 # Project Specific
 # ----------------
+application-secrets.yaml
 endurancetrio-app/src/main/resources/static
 
 # Spring Boot
