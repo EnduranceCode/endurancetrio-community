@@ -62,6 +62,8 @@ public class WebConfig implements WebMvcConfigurer {
    */
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addRedirectViewController("/en", "/en/");
+    registry.addRedirectViewController("/pt", "/pt/");
     registry.addRedirectViewController("/swagger-ui", "/swagger-ui/index.html");
     registry.addRedirectViewController("/swagger-ui/", "/swagger-ui/index.html");
   }
