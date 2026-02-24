@@ -44,7 +44,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -57,6 +56,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class AppSecurityConfig {
 
   private static final Logger LOG = LoggerFactory.getLogger(AppSecurityConfig.class);
+
+  private static final String API_PATTERN = "/api/**";
+  private static final String API_DOCS_PATTERN = "/v3/api-docs/**";
+  private static final String SWAGGER_UI_PATTERN = "/swagger-ui/**";
 
   private final String allowedOrigins;
   private final EnduranceTrioAuthProvider authProvider;
@@ -89,7 +92,9 @@ public class AppSecurityConfig {
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
+    source.registerCorsConfiguration(API_PATTERN, configuration);
+    source.registerCorsConfiguration(API_DOCS_PATTERN, configuration);
+    source.registerCorsConfiguration(SWAGGER_UI_PATTERN, configuration);
 
     return source;
   }
@@ -131,25 +136,6 @@ public class AppSecurityConfig {
   }
 
   /**
-   * Ignore static resources from Spring Security filter chain completely. This is limited to true
-   * static assets (no swagger/openapi) so CORS and other filters can still run for API/docs
-   * endpoints when needed.
-   */
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer() {
-    return web -> web.ignoring().requestMatchers(
-        "/static/**",
-        "/css/**",
-        "/js/**",
-        "/img/**",
-        "/webjars/**",
-        "/apple-touch-icon.png",
-        "/favicon.ico",
-        "/favicon.svg"
-    );
-  }
-
-  /**
    * Security filter chain for API endpoints.
    *
    * @param http the HttpSecurity to configure
@@ -160,7 +146,7 @@ public class AppSecurityConfig {
   public SecurityFilterChain securityFilterChainAPI(HttpSecurity http) {
 
     http.cors(Customizer.withDefaults())
-        .securityMatcher("/api/**")
+        .securityMatcher(API_PATTERN)
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -187,7 +173,10 @@ public class AppSecurityConfig {
   @Order(2)
   public SecurityFilterChain securityFilterChainWeb(HttpSecurity http) {
     http.authorizeHttpRequests(
-            authorization -> authorization.requestMatchers(HttpMethod.OPTIONS, "/**")
+            authorization -> authorization.requestMatchers(HttpMethod.OPTIONS,
+                    API_DOCS_PATTERN,
+                    SWAGGER_UI_PATTERN
+                )
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                     "/",
@@ -200,8 +189,8 @@ public class AppSecurityConfig {
                     "/favicon.ico",
                     "/favicon.svg",
                     "/swagger-ui.html",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
+                    SWAGGER_UI_PATTERN,
+                    API_DOCS_PATTERN,
                     "/swagger-resources/**",
                     "/webjars/**",
                     "/css/**",
