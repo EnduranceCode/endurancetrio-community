@@ -8,9 +8,10 @@ an overview of the project, see the [main README.md](../README.md).
 1. [Technology Stack](#technology-stack)
 2. [API Key Management](#api-key-management)
 3. [Database](#database)
-4. [Installation](#installation)
-5. [Code & Naming Conventions](#code--naming-conventions)
-6. [Programmatic Version Management](#programmatic-version-management)
+4. [Tracker Domain Development](#tracker-domain-development)
+5. [Installation](#installation)
+6. [Code & Naming Conventions](#code--naming-conventions)
+7. [Programmatic Version Management](#programmatic-version-management)
 
 ## Technology Stack
 
@@ -254,6 +255,52 @@ sudo systemctl status postgresql
 ```sql
 SELECT * FROM information_schema.role_table_grants  WHERE grantee = '{USERNAME}';
 ```
+
+## Tracker Domain Development
+
+The Tracker domain (IoT telemetry ingestion and GeoJSON route management) is developed in its own
+[`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) repository and
+incorporated into this project via `git merge`.
+
+This dual-repo approach allows the Tracker to evolve independently while its code is periodically
+merged back into this repository.
+
+### Merge Workflow
+
+To pull in new Tracker code:
+
+1. Create a feature branch off `master`:
+   ```shell
+   git checkout master
+   git pull
+   git checkout -b feature/tracker-<version>
+   ```
+2. Fetch the tracker remote:
+   ```shell
+   git fetch tracker
+   ```
+3. Merge `tracker/tracker` into the feature branch:
+   ```shell
+   git merge tracker/tracker
+   ```
+4. **Resolve conflicts** case-by-case using these rules (community infrastructure wins):
+   - `pom.xml` — dependency additions from Tracker must be reconciled with the multi-module structure
+   - `endurancetrio-app/src/main/resources/application*.yaml` — Tracker may add entries; host app's
+     config structure takes precedence
+   - `endurancetrio-app/.../config/AppSecurityConfig.java` — security filter chains, CORS, and
+     permit rules are owned by the community app
+   - `Dockerfile`, `launch-app.sh`, `docs/` — Tracker had its own versions; use community versions
+5. Implement any necessary adaptations for the merged code
+6. Run the full test suite:
+   ```shell
+   ./mvnw clean install
+   ```
+7. Merge the feature branch into `master` (via PR or local merge) and push
+
+### Issue Tracking
+
+Issues discovered in Tracker-domain code during integration should be filed in the
+[`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) issue tracker.
 
 ## Installation
 

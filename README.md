@@ -150,6 +150,19 @@ to the [Development Guide](./docs/development.md).
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 
+### Tracker Domain Development Model
+
+The Tracker functionality (IoT telemetry ingestion and GeoJSON route management) is developed
+in its own [`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker)
+repository and incorporated into this project via `git merge`.
+
+This dual-repo approach allows the Tracker to evolve independently while its code is periodically
+merged back into this repository. Issues discovered in Tracker-domain code during integration
+are filed in the tracker repository.
+
+See [`docs/development.md`](./docs/development.md#tracker-domain-development) for the full merge
+workflow and operational instructions.
+
 ## Deployment
 
 For deployment instructions (container architecture, server and reverse proxy setup,
