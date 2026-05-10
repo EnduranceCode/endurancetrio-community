@@ -20,6 +20,7 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.event.model.converter.GenderCategoryConverter;
 import com.endurancetrio.data.event.model.converter.RaceStatusConverter;
 import com.endurancetrio.data.event.model.converter.RaceTypeConverter;
@@ -31,9 +32,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
@@ -45,11 +43,9 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -138,15 +134,11 @@ import java.util.StringJoiner;
 @Entity(name = "Race")
 @Table(name = "race")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Race implements Serializable {
+@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_race_id", allocationSize = 1)
+public class Race extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_race")
-  @SequenceGenerator(name = "sq_race", sequenceName = "sq_race", allocationSize = 1)
-  private Long id;
 
   @Column(name = "race_reference", unique = true, nullable = false)
   @Pattern(
@@ -272,14 +264,6 @@ public class Race implements Serializable {
     }
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public String getRaceReference() {
     return raceReference;
   }
@@ -394,25 +378,18 @@ public class Race implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Race race = (Race) o;
-    return id != null && Objects.equals(id, race.id);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", Race.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
+        .add("id=" + this.getId())
         .add("raceReference='" + raceReference + "'")
         .add("raceType=" + raceType.getCode())
         .add("title='" + title + "'")

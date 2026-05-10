@@ -20,21 +20,17 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.event.model.converter.DistanceTypeConverter;
 import com.endurancetrio.data.event.model.enumerator.DistanceType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serial;
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -55,15 +51,11 @@ import java.util.StringJoiner;
 @Entity(name = "Distance")
 @Table(name = "distance")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Distance implements Serializable {
+@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_distance_id", allocationSize = 1)
+public class Distance extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_distance")
-  @SequenceGenerator(name = "sq_distance", sequenceName = "sq_distance", allocationSize = 1)
-  private Long id;
 
   @Column(name = "distance_type", nullable = false)
   @Convert(converter = DistanceTypeConverter.class)
@@ -76,14 +68,6 @@ public class Distance implements Serializable {
     super();
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public DistanceType getDistanceType() {
     return distanceType;
   }
@@ -94,25 +78,18 @@ public class Distance implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Distance distance = (Distance) o;
-    return id != null && Objects.equals(id, distance.id);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", Distance.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
+        .add("id=" + this.getId())
         .add("type=" + distanceType)
         .toString();
   }

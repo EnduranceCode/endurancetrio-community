@@ -20,19 +20,15 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.event.model.converter.OrganizerTypeConverter;
 import com.endurancetrio.data.event.model.enumerator.OrganizerType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serial;
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -60,15 +56,11 @@ import java.util.StringJoiner;
  */
 @Entity(name = "Organizer")
 @Table(name = "organizer")
-public class Organizer implements Serializable {
+@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_organizer_id", allocationSize = 1)
+public class Organizer extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_organizer")
-  @SequenceGenerator(name = "sq_organizer", sequenceName = "sq_organizer", allocationSize = 1)
-  private Long id;
 
   @Column(name = "name", nullable = false)
   private String name;
@@ -91,14 +83,6 @@ public class Organizer implements Serializable {
    */
   public Organizer() {
     super();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getName() {
@@ -143,25 +127,18 @@ public class Organizer implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Organizer organizer = (Organizer) o;
-    return id != null && Objects.equals(id, organizer.id);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", Organizer.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
+        .add("id=" + this.getId())
         .add("name='" + name + "'")
         .add("district='" + district + "'")
         .add("county='" + county + "'")

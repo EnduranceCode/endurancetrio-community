@@ -148,3 +148,9 @@ The migration scripts are duplicated, when necessary for tests, for each support
 12. Inserts *Tracker* test data into **EnduranceTrio** application route database tables:
     - [V000.002.002.002__insert-route-test-data-h2.sql](migration/dml/h2/V000.002.000.004__insert-route-test-data-h2.sql)
     - [V000.002.002.002__insert-route-test-data-postgres.sql](migration/dml/postgres/V000.002.000.004__insert-route-test-data-postgres.sql)
+13. Adds auditable columns to the **EnduranceTrio** application event domain database tables:
+    - [V000.004.000.001__add-auditable-columns-to-event-tables-h2.sql](migration/ddl/h2/V000.004.000.001__add-auditable-columns-to-event-tables-h2.sql)
+    - [V000.004.000.001__add-auditable-columns-to-event-tables-postgres.sql](migration/ddl/postgres/V000.004.000.001__add-auditable-columns-to-event-tables-postgres.sql)
+14. Removes the `DEFAULT CURRENT_TIMESTAMP` from the `created_at` column on event domain tables:
+    - [V000.004.000.002__remove-created-at-default-from-event-tables-h2.sql](migration/ddl/h2/V000.004.000.002__remove-created-at-default-from-event-tables-h2.sql)
+    - [V000.004.000.002__remove-created-at-default-from-event-tables-postgres.sql](migration/ddl/postgres/V000.004.000.002__remove-created-at-default-from-event-tables-postgres.sql)
