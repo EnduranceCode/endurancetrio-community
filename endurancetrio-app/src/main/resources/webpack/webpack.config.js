@@ -43,6 +43,7 @@ export default {
         { from: 'src/favicon.ico', to: 'favicon.ico' },
         { from: 'src/favicon.svg', to: 'favicon.svg' },
         { from: 'src/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+        { from: 'src/img', to: 'img' },
       ],
     }),
   ],

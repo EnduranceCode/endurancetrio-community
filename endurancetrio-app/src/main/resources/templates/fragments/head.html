@@ -26,6 +26,24 @@
 
   <title data-th-text="${metadata.title}"></title>
 
+  <meta name="description" data-th-content="${metadata.description}">
+  <meta name="robots" content="index,follow">
+  <meta name="color-scheme" content="light">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta property="og:title" data-th-content="${metadata.title}">
+  <meta property="og:description" data-th-content="${metadata.description}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" data-th-content="${metadata.canonicalUrl}">
+  <meta property="og:site_name" content="EnduranceTrio">
+  <meta property="og:locale" data-th-content="${#locale}">
+  <meta property="og:image" data-th-content="${metadata.ogImage}">
+  <meta property="og:image:width" data-th-content="${metadata.ogImageWidth}">
+  <meta property="og:image:height" data-th-content="${metadata.ogImageHeight}">
+  <meta property="fb:pages" data-th-content="${metadata.facebookPageId}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" data-th-content="${metadata.twitterSite}">
+
   <!-- Google Tag Manager -->
   <script data-type="application/javascript" type="text/plain" data-name="google-tag-manager">
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -36,6 +54,7 @@
   </script>
   <!-- End Google Tag Manager -->
 
+  <link rel="canonical" data-th-href="${metadata.canonicalUrl}">
   <link rel="icon" data-th-href="@{/favicon.ico}" sizes="32x32">
   <link rel="icon" data-th-href="@{/favicon.svg}" type="image/svg+xml">
   <link rel="apple-touch-icon" data-th-href="@{/apple-touch-icon.png}">
@@ -49,6 +68,7 @@
   <!-- Google Tag Manager (noscript) -->
   <noscript>
     <iframe
+        title="Google Tag Manager"
         data-name="google-tag-manager"
         data-src="https://www.googletagmanager.com/ns.html?id=GTM-KK23WCG6"
         height="0"

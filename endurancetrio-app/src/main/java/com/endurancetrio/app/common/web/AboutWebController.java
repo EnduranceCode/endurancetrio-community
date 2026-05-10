@@ -20,8 +20,11 @@
 
 package com.endurancetrio.app.common.web;
 
-import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.model.PageMetadata;
+import com.endurancetrio.app.common.service.MessageService;
+import com.endurancetrio.app.common.utils.PageMetadataUtils;
+import com.endurancetrio.app.config.AppProperties;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,19 +39,23 @@ public class AboutWebController {
   private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private final MessageService messageService;
+  private final AppProperties appProperties;
 
   @Autowired
-  public AboutWebController(MessageService messageService) {
+  public AboutWebController(MessageService messageService, AppProperties appProperties) {
     this.messageService = messageService;
+    this.appProperties = appProperties;
   }
 
   @GetMapping("/{language:en|pt}/about")
-  public String about(@PathVariable String language, Model model) {
+  public String about(@PathVariable String language, HttpServletRequest request, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
 
-    PageMetadata metadata = new PageMetadata();
-    metadata.setView(VIEW);
-    metadata.setTitle(messageService.getMessage("page.about.metadata.title", null, locale));
+    PageMetadata metadata = PageMetadataUtils.create(VIEW,
+        messageService.getMessage("page.about.metadata.title", null, locale),
+        messageService.getMessage("page.about.metadata.description", null, locale), request,
+        appProperties
+    );
 
     model.addAttribute("language", locale.getLanguage());
     model.addAttribute("metadata", metadata);
