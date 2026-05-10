@@ -25,9 +25,19 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Web configuration class that customizes Spring MVC configuration. This class implements
+ * {@link WebMvcConfigurer} to customize various aspects of Spring MVC, including view controllers,
+ * resource handlers, and interceptors.
+ *
+ * @see WebMvcConfigurer
+ * @see ViewControllerRegistry
+ */
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public LocaleResolver localeResolver() {
@@ -40,5 +50,21 @@ public class WebConfig {
     registrationBean.setFilter(new LocaleRedirectFilter());
     registrationBean.addUrlPatterns("/*");
     return registrationBean;
+  }
+
+  /**
+   * Registers view controllers to handle direct URL-to-view mapping without requiring explicit
+   * controller methods.
+   *
+   * @param registry the ViewControllerRegistry to which view controllers will be added, allowing
+   *                 for URL path to view name mappings and redirect configurations
+   * @see ViewControllerRegistry
+   */
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addRedirectViewController("/en", "/en/");
+    registry.addRedirectViewController("/pt", "/pt/");
+    registry.addRedirectViewController("/swagger-ui", "/swagger-ui/index.html");
+    registry.addRedirectViewController("/swagger-ui/", "/swagger-ui/index.html");
   }
 }

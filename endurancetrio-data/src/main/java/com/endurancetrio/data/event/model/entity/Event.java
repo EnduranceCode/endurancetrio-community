@@ -20,13 +20,11 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -36,10 +34,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -96,15 +92,11 @@ import java.util.StringJoiner;
  */
 @Entity(name = "Event")
 @Table(name = "event")
-public class Event implements Serializable {
+@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_event_id", allocationSize = 1)
+public class Event extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_event")
-  @SequenceGenerator(name = "sq_event", sequenceName = "sq_event", allocationSize = 1)
-  private Long id;
 
   @Column(name = "event_reference", unique = true, nullable = false)
   @Pattern(
@@ -183,14 +175,6 @@ public class Event implements Serializable {
     if (course != null && this.courses.remove(course)) {
       course.setEvent(null);
     }
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getEventReference() {
@@ -275,25 +259,18 @@ public class Event implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Event event = (Event) o;
-    return id != null && Objects.equals(id, event.id);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", Event.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
+        .add("id=" + this.getId())
         .add("eventReference='" + eventReference + "'")
         .add("title='" + title + "'")
         .add("startDate=" + startDate)

@@ -1,0 +1,96 @@
+#
+# Copyright (c) 2011-2026 Ricardo do Canto
+#
+# This file is part of the EnduranceTrio project.
+#
+# Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+# (the "License");
+#
+# You may not use this file except in compliance with the License. You may obtain a copy
+# of the License at https://fsl.software/
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+# PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+#
+# IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+# SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+# EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+#
+
+# Build and publish Docker image to the repository owner (organization) GHCR namespace.
+# Requirements:
+#  - Add GHCR_USERNAME and GHCR_SECRET as repository secrets in the fork.
+#  - GHCR_SECRET must have permission to write packages in the target org namespace.
+#
+
+name: Build and Publish Docker Image
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      build-tag-suffix:
+        description: 'Suffix to append to the image tag (e.g., bugfix-123)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: ./mvnw package
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_SECRET }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # 1. Release Tag (Semantic Versioning - 0.0.0)
+            # Conditions: ONLY run if the event is 'release'.
+            type=semver,pattern={{version}},enable=${{ github.event_name == 'release' }}
+
+            # 2. Short SHA Tag (Manual builds)
+            # Conditions: ONLY run if the event is 'workflow_dispatch'
+            type=raw,value=sha-{{sha}}-${{ github.event.inputs.build-tag-suffix }},enable=${{ github.event_name == 'workflow_dispatch' }}
+          labels: |
+            org.opencontainers.image.vendor=EnduranceTrio
+            org.opencontainers.image.authors=Ricardo do Canto <https://github.com/EnduranceCode>
+            org.opencontainers.image.source=https://github.com/endurancetrio/endurancetrio-community
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

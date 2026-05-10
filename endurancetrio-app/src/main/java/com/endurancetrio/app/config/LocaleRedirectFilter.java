@@ -44,7 +44,8 @@ public class LocaleRedirectFilter implements Filter {
 
     String uri = httpRequest.getRequestURI();
     if (uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")
-        || STATIC_ROOT_FILES.contains(uri)) {
+        || uri.startsWith("/webjars/") || STATIC_ROOT_FILES.contains(uri) || uri.startsWith("/api/")
+        || uri.startsWith("/v3/api-docs/") || uri.startsWith("/swagger-ui")) {
       chain.doFilter(request, response);
       return;
     }

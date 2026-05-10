@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class HomeWebController {
 
-  @GetMapping("/{language}/")
+  @GetMapping("/{language:en|pt}/")
   public String homePage(@PathVariable String language, Model model) {
 
     return "redirect:/" + language + "/events";

@@ -23,9 +23,18 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.0.2</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
   <groupId>com.endurancetrio</groupId>
   <artifactId>endurancetrio-community</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
+
+  <packaging>pom</packaging>
 
   <name>EnduranceTrio Community</name>
   <description>A central hub for endurance sports data and resources</description>
@@ -60,26 +69,29 @@
     <tag>HEAD</tag>
   </scm>
 
-  <packaging>pom</packaging>
-
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.2</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
-
   <modules>
     <module>endurancetrio-app</module>
+    <module>endurancetrio-business</module>
     <module>endurancetrio-data</module>
   </modules>
 
   <properties>
     <java.version>21</java.version>
     <argLine />
+    <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>3.0.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <pluginManagement>
@@ -87,6 +99,14 @@
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <release>${maven.compiler.release}</release>
+          </configuration>
         </plugin>
 
         <plugin>

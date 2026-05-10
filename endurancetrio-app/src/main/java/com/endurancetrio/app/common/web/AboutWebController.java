@@ -42,7 +42,7 @@ public class AboutWebController {
     this.messageService = messageService;
   }
 
-  @GetMapping("/{language}/about")
+  @GetMapping("/{language:en|pt}/about")
   public String about(@PathVariable String language, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
 

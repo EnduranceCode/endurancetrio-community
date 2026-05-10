@@ -20,17 +20,13 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -80,15 +76,11 @@ import java.util.StringJoiner;
  */
 @Entity(name = "ResultsFile")
 @Table(name = "results_file")
-public class ResultsFile implements Serializable {
+@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_results_file_id", allocationSize = 1)
+public class ResultsFile extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_results_file")
-  @SequenceGenerator(name = "sq_results_file", sequenceName = "sq_results_file", allocationSize = 1)
-  private Long id;
 
   @Column(name = "title", nullable = false)
   private String title;
@@ -114,14 +106,6 @@ public class ResultsFile implements Serializable {
    */
   public ResultsFile() {
     super();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getTitle() {
@@ -166,25 +150,18 @@ public class ResultsFile implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ResultsFile resultsFile = (ResultsFile) o;
-    return id != null && Objects.equals(id, resultsFile.id);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", ResultsFile.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
+        .add("id=" + this.getId())
         .add("title='" + title + "'")
         .add("subtitle='" + subtitle + "'")
         .add("fileName='" + fileName + "'")

@@ -18,40 +18,98 @@
 # EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
 #
 
+app:
+  initialization:
+    first-account-owner: ${FIRST_OWNER:}
+    first-account-key-hash: ${FIRST_HASH:}
+  version: @project.version@
+
+cors:
+  # IMPORTANT: Use a comma-separated string for deployment flexibility.
+  # This value is easily overridden by the environment variable CORS_ALLOWED_ORIGINS
+  allowed-origins: "http://localhost:3000,http://localhost:8080"
+
+logging:
+  level:
+    org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+
+server:
+  forward-headers-strategy: native
+  port: 8080
+
 spring:
   application:
     name: EnduranceTrio Community
 
+  config:
+    import: optional:application-secrets.yaml
+
   datasource:
-    url: jdbc:h2:mem:endurancetrio;MODE=PostgreSQL
-    driverClassName: org.h2.Driver
-    username: EnduranceCode
-    password: EnduranceTrio
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: EnduranceTrio-HikariPool
+      auto-commit: false
+      connection-test-query: SELECT 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      keepalive-time: 300000
+      maximum-pool-size: 3
+      max-lifetime: 1800000
+      minimum-idle: 1
+      transaction-isolation: TRANSACTION_READ_COMMITTED
 
   flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
     enabled: true
     locations:
-      - classpath:db/migration/ddl
-      - classpath:db/migration/dml
-    schemas: endurancetrio
+      - classpath:db/migration/ddl/postgres
+      - classpath:db/migration/dml/postgres
+    out-of-order: false
+    placeholders:
+      timezone: UTC
+    schemas: endurancetrio_community
     table: flyway_schema_history
+    validate-on-migrate: true
 
   jpa:
     hibernate:
       ddl-auto: none
+      naming:
+        physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     open-in-view: false
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: false
-        web-allow-others: false
+    properties:
+      hibernate:
+        default_schema: endurancetrio_community
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+        show_sql: false
+        transaction:
+          jta:
+            coordinator_class: jdbc
+        use_sql_comments: true
 
   messages:
     basename: messages
     encoding: UTF-8
+
+  sql:
+    init:
+      mode: never
 
   thymeleaf:
     cache: false

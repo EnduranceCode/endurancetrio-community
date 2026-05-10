@@ -20,16 +20,12 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serial;
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -50,15 +46,11 @@ import java.util.StringJoiner;
  */
 @Entity(name = "AgeGroup")
 @Table(name = "age_group")
-public class AgeGroup implements Serializable {
+@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_age_group_id", allocationSize = 1)
+public class AgeGroup extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_age_group")
-  @SequenceGenerator(name = "sq_age_group", sequenceName = "sq_age_group", allocationSize = 1)
-  private Long id;
 
   @Column(name = "title", nullable = false)
   private String title;
@@ -71,14 +63,6 @@ public class AgeGroup implements Serializable {
    */
   public AgeGroup() {
     super();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getTitle() {
@@ -99,25 +83,18 @@ public class AgeGroup implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    AgeGroup ageGroup = (AgeGroup) o;
-    return id != null && Objects.equals(id, ageGroup.id);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return getClass().hashCode();
+    return super.hashCode();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", AgeGroup.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
+        .add("id=" + this.getId())
         .add("title='" + title + "'")
         .add("shortTitle='" + shortTitle + "'")
         .toString();
