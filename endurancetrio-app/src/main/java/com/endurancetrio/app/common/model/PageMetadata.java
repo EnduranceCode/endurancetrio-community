@@ -20,10 +20,22 @@
 
 package com.endurancetrio.app.common.model;
 
+/**
+ * The {@link PageMetadata} class holds metadata used to populate HTML {@code <head>} elements such
+ * as title, description, canonical URL, and Open Graph image for each page rendered in the
+ * application.
+ */
 public class PageMetadata {
 
   private String view;
   private String title;
+  private String description;
+  private String canonicalUrl;
+  private String ogImage;
+  private Integer ogImageWidth;
+  private Integer ogImageHeight;
+  private String facebookPageId;
+  private String twitterSite;
 
   public PageMetadata() {
     super();
@@ -43,5 +55,61 @@ public class PageMetadata {
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getCanonicalUrl() {
+    return canonicalUrl;
+  }
+
+  public void setCanonicalUrl(String canonicalUrl) {
+    this.canonicalUrl = canonicalUrl;
+  }
+
+  public String getOgImage() {
+    return ogImage;
+  }
+
+  public void setOgImage(String ogImage) {
+    this.ogImage = ogImage;
+  }
+
+  public Integer getOgImageWidth() {
+    return ogImageWidth;
+  }
+
+  public void setOgImageWidth(Integer ogImageWidth) {
+    this.ogImageWidth = ogImageWidth;
+  }
+
+  public Integer getOgImageHeight() {
+    return ogImageHeight;
+  }
+
+  public String getFacebookPageId() {
+    return facebookPageId;
+  }
+
+  public void setFacebookPageId(String facebookPageId) {
+    this.facebookPageId = facebookPageId;
+  }
+
+  public void setOgImageHeight(Integer ogImageHeight) {
+    this.ogImageHeight = ogImageHeight;
+  }
+
+  public String getTwitterSite() {
+    return twitterSite;
+  }
+
+  public void setTwitterSite(String twitterSite) {
+    this.twitterSite = twitterSite;
   }
 }
