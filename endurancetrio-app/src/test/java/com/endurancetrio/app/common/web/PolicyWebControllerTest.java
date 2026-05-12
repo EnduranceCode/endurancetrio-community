@@ -75,13 +75,13 @@ class PolicyWebControllerTest {
   @Test
   void policyPageWithEnglishLocale() throws Exception {
     when(messageService.getMessage(eq("page.policy.metadata.title"), any(), any()))
-        .thenReturn("Privacy Policy - EnduranceTrio");
+        .thenReturn("Privacy and Cookies Policy - EnduranceTrio");
     when(messageService.getMessage(eq("page.policy.metadata.description"), any(), any()))
-        .thenReturn("EnduranceTrio privacy policy and data handling practices");
+        .thenReturn("EnduranceTrio privacy and cookies policy");
 
-    mockMvc.perform(get("/en/policy"))
+    mockMvc.perform(get("/en/privacy-policy"))
         .andExpect(status().isOk())
-        .andExpect(view().name("policy"))
+        .andExpect(view().name("privacy-policy"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"));
   }
@@ -89,13 +89,13 @@ class PolicyWebControllerTest {
   @Test
   void policyPageWithPortugueseLocale() throws Exception {
     when(messageService.getMessage(eq("page.policy.metadata.title"), any(), any()))
-        .thenReturn("Política de Privacidade - EnduranceTrio");
+        .thenReturn("Política de Privacidade e Cookies - EnduranceTrio");
     when(messageService.getMessage(eq("page.policy.metadata.description"), any(), any()))
-        .thenReturn("Política de privacidade e práticas de tratamento de dados da EnduranceTrio");
+        .thenReturn("Política de Privacidade e Cookies da EnduranceTrio");
 
-    mockMvc.perform(get("/pt/policy"))
+    mockMvc.perform(get("/pt/privacy-policy"))
         .andExpect(status().isOk())
-        .andExpect(view().name("policy"))
+        .andExpect(view().name("privacy-policy"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"));
   }
@@ -103,13 +103,13 @@ class PolicyWebControllerTest {
   @Test
   void policyPageMetadataHasCorrectTitle() throws Exception {
     when(messageService.getMessage(eq("page.policy.metadata.title"), any(), any()))
-        .thenReturn("Privacy Policy - EnduranceTrio");
+        .thenReturn("Privacy and Cookies Policy - EnduranceTrio");
     when(messageService.getMessage(eq("page.policy.metadata.description"), any(), any()))
-        .thenReturn("EnduranceTrio privacy policy and data handling practices");
+        .thenReturn("EnduranceTrio privacy and cookies policy");
 
-    mockMvc.perform(get("/en/policy"))
+    mockMvc.perform(get("/en/privacy-policy"))
         .andExpect(model().attribute("metadata",
             org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is("Privacy Policy - EnduranceTrio"))));
+                org.hamcrest.Matchers.is("Privacy and Cookies Policy - EnduranceTrio"))));
   }
 }

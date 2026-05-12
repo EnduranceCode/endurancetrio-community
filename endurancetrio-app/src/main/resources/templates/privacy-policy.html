@@ -1,0 +1,646 @@
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main class="section">
+  <div class="container">
+    <div class="content">
+      <h1 data-th-text="#{page.policy.title}" class="title is-1">Privacy and Cookies Policy</h1>
+
+      <div data-th-if="${language == 'pt'}">
+        <p>
+          <strong>EnduranceTrio</strong> é a plataforma central para dados e recursos de desportos
+          de endurance. Desenvolvido como projeto pessoal, sem fins corporativos, foi concebido
+          como um ecossistema abrangente focado no triatlo e nas suas disciplinas-base, bem como
+          em todos os multidesportos relacionados; a plataforma combina um arquivo de dados
+          históricos com capacidades modernas em tempo real. Qualquer publicidade exibida neste
+          sítio web é utilizada exclusivamente para suportar custos de alojamento, servidor
+          e outros custos operacionais relacionados.
+        </p>
+
+        <hr>
+
+        <article class="section">
+          <h2 id="cookies-policy" data-th-text="#{page.policy.section.cookies}">
+            Política de Cookies
+          </h2>
+
+          <p>
+            Esta secção explica como a <strong>EnduranceTrio</strong> utiliza cookies e tecnologias
+            semelhantes no sítio web, conforme o RGPD e com a Lei n.º 41/2004, na sua redação atual.
+          </p>
+
+          <h3>1. O que são cookies</h3>
+
+          <p>
+            Cookies são pequenos ficheiros de texto armazenados no seu equipamento quando visita um
+            sítio web. Podem servir para garantir o funcionamento técnico do sítio web, memorizar
+            escolhas do utilizador, medir audiências ou suportar publicidade.
+          </p>
+
+          <h3>2. Como gerimos o consentimento</h3>
+
+          <p>
+            Este sítio web utiliza mecanismos de gestão de consentimento para recolher
+            o consentimento explícito do utilizador antes da ativação de cookies não essenciais.
+            O utilizador pode aceitar, recusar ou alterar as suas preferências a qualquer momento.
+          </p>
+
+          <h3>3. Categorias de cookies utilizadas</h3>
+
+          <ul>
+            <li>
+              <strong>Essenciais:</strong> necessários para memorizar as suas escolhas de
+              consentimento e assegurar funcionalidades básicas do sítio web.
+            </li>
+            <li>
+              <strong>Analítica:</strong> utilizados para medir utilização, desempenho e melhorar
+              o sítio web, nomeadamente através do Google Analytics.
+            </li>
+            <li><strong>Publicidade e marketing:</strong> utilizados para apresentar publicidade e
+              medir resultados publicitários, nomeadamente através do Google AdSense.
+            </li>
+          </ul>
+
+          <h3>4. Cookies e tecnologias atualmente utilizados</h3>
+
+          <p>Este sítio web utiliza as seguintes tecnologias e serviços:</p>
+
+          <ul>
+            <li>
+              <strong>endurancetrio-consent</strong>: cookie de consentimento utilizado para guardar
+              as preferências escolhidas pelo utilizador. Prazo de conservação previsto: até
+              365 dias.
+            </li>
+            <li>
+              <strong>Google Tag Manager</strong>: utilizado para carregar e gerir scripts e
+              etiquetas. O Google Tag Manager é usado como mecanismo de implementação técnica
+              e funciona conforme as preferências de consentimento escolhidas.
+            </li>
+            <li>
+              <strong>Google Analytics</strong>: utiliza cookies como <code>_ga</code>,
+              <code>_gid</code> e <code>_gat</code> para medir visitas, páginas visualizadas
+              e interação com o sítio web.
+            </li>
+            <li>
+              <strong>Google AdSense</strong>: utiliza cookies e tecnologias semelhantes para
+              apresentar anúncios, limitar repetições, medir desempenho publicitário e, quando
+              permitido, personalizar publicidade.
+            </li>
+          </ul>
+
+          <h3>5. Base legal para utilização de cookies</h3>
+
+          <p>
+            Os cookies estritamente necessários podem ser utilizados sem consentimento prévio quando
+            tal seja indispensável ao funcionamento do sítio web. Os cookies de analítica
+            e de publicidade são utilizados com base no consentimento do utilizador.
+          </p>
+
+          <h3>6. Como alterar ou retirar o consentimento</h3>
+
+          <p>
+            Pode alterar as suas preferências de cookies ou retirar o seu consentimento a qualquer
+            momento através dos mecanismos de gestão de consentimento disponibilizados no sítio web.
+            Também pode configurar o seu navegador para bloquear ou eliminar cookies, embora tal
+            possa
+            afetar o funcionamento de algumas funcionalidades.
+          </p>
+
+          <h3>7. Informação específica sobre publicidade Google</h3>
+
+          <p>
+            A Google e outros fornecedores terceiros podem utilizar cookies para apresentar anúncios
+            com base em visitas anteriores a este sítio web ou a outros sítios web. A utilização
+            de cookies de publicidade pela Google permite apresentar anúncios com base nos
+            interesses
+            inferidos do utilizador.
+          </p>
+          <p>
+            O utilizador pode saber mais sobre como a Google utiliza os dados e gerir preferências
+            de publicidade através da
+            <a href="https://policies.google.com/privacy" rel="noopener noreferrer">
+              Política de Privacidade da Google
+            </a>
+            e das
+            <a href="https://adssettings.google.com/" rel="noopener noreferrer">
+              Definições de Anúncios da Google
+            </a>.
+          </p>
+
+          <h3>8. Mais informação sobre privacidade</h3>
+
+          <p>
+            Para mais informação sobre o tratamento de dados pessoais neste sítio web, consulte
+            a secção
+            <a href="#privacy-policy" data-th-text="#{page.policy.section.privacy}">
+              Política de Privacidade
+            </a>.
+          </p>
+        </article>
+
+        <hr>
+
+        <article class="section">
+          <h2 id="privacy-policy" data-th-text="#{page.policy.section.privacy}">
+            Política de Privacidade</h2>
+
+
+          <h3>1. Âmbito desta política</h3>
+
+          <p>
+            Esta Política de Privacidade descreve como a <strong>EnduranceTrio</strong> trata dados
+            pessoais no âmbito da utilização do sítio web, conforme o Regulamento (UE) 2016/679
+            (RGPD) e com a legislação portuguesa aplicável, incluindo a Lei n.º 41/2004,
+            na sua redação atual.
+          </p>
+          <p>
+            Este sítio web não disponibiliza contas de utilizador nem recolhe intencionalmente dados
+            de registo ou de perfil. Ainda assim, a utilização do sítio web pode implicar
+            o tratamento de determinados dados técnicos e identificadores em linha, incluindo
+            endereços IP, identificadores de cookies, escolhas de consentimento, informação sobre
+            o navegador e o dispositivo, bem como identificadores relacionados com medição
+            estatística e publicidade.
+          </p>
+
+          <h3>2. Dados que podem ser tratados</h3>
+
+           <p>Consoante a utilização do sítio web, podem ser tratados os seguintes dados:</p>
+
+          <ul>
+            <li>
+               Dados técnicos necessários ao carregamento e funcionamento do sítio web;
+            </li>
+            <li>
+              Endereços IP e registos técnicos ligados à segurança e disponibilidade do serviço;
+            </li>
+            <li>
+              Preferências de consentimento registadas através dos mecanismos de gestão de
+              consentimento do sítio web;
+            </li>
+            <li>
+              Dados estatísticos e identificadores associados ao Google Analytics;
+            </li>
+            <li>
+              Dados e identificadores publicitários associados ao Google AdSense e ao Google Tag
+              Manager.
+            </li>
+          </ul>
+
+          <h3>3. Finalidades do tratamento</h3>
+
+          <p>Os dados podem ser tratados para as seguintes finalidades:</p>
+
+          <ul>
+            <li>
+              Assegurar o funcionamento técnico, segurança e estabilidade do sítio web;
+            </li>
+            <li>
+              Gerir e comprovar as escolhas de consentimento relativas a cookies e tecnologias
+              similares;
+            </li>
+            <li>
+              Medir audiências, desempenho e utilização do sítio web através do Google
+              Analytics;
+            </li>
+            <li>
+              Apresentar publicidade através do Google AdSense;
+            </li>
+            <li>
+              Cumprir obrigações legais e responder a pedidos ou exercício de direitos.
+            </li>
+          </ul>
+
+          <h3>4. Fundamentos de licitude</h3>
+
+          <p>O tratamento de dados pessoais é efetuado com base nos seguintes fundamentos:</p>
+
+          <ul>
+            <li>
+              <strong>Consentimento</strong>, para a utilização de cookies e tecnologias
+              não essenciais, incluindo os associados a analítica e publicidade;
+            </li>
+            <li>
+              <strong>Interesse legítimo</strong>, quando estritamente necessário para segurança,
+              prevenção de abuso, diagnóstico técnico e administração básica do sítio web;
+            </li>
+            <li>
+              <strong>Cumprimento de obrigação legal</strong>, quando aplicável.
+            </li>
+          </ul>
+
+           <h3>5. Ferramentas utilizadas no sítio web</h3>
+
+           <p>Este sítio web utiliza as seguintes ferramentas e serviços:</p>
+
+          <ul>
+            <li>
+              Mecanismos de gestão de consentimento do sítio web;
+            </li>
+            <li>
+              <strong>Google Tag Manager</strong>, para carregar e gerir etiquetas e serviços;
+            </li>
+            <li>
+               <strong>Google Analytics</strong>, para análise estatística do uso do sítio web;
+            </li>
+            <li>
+              <strong>Google AdSense</strong>, para apresentação de publicidade.
+            </li>
+          </ul>
+          <p>
+            Os serviços Google podem tratar dados pessoais conforme as respetivas políticas de
+            privacidade e com as configurações de consentimento escolhidas pelo utilizador.
+          </p>
+
+          <h3>6. Transferências internacionais de dados</h3>
+
+          <p>
+            Alguns dos prestadores utilizados, nomeadamente serviços da Google, podem implicar
+            transferências de dados para países fora do Espaço Económico Europeu. Quando tal sucede,
+            essas transferências são enquadradas nos mecanismos jurídicos considerados adequados
+            pela legislação aplicável, incluindo as cláusulas contratuais-tipo aprovadas pela
+            Comissão Europeia ou outros mecanismos válidos nos termos do RGPD.
+          </p>
+
+          <h3>7. Conservação dos dados</h3>
+
+          <p>
+            Os dados pessoais são conservados apenas pelo período necessário para cumprir as
+            finalidades identificadas nesta política, tendo em conta a natureza de cada dado,
+            os prazos técnicos de cada serviço e as obrigações legais aplicáveis. As preferências
+            de consentimento podem ser mantidas enquanto o cookie de consentimento permanecer
+            válido. Os prazos específicos de conservação de cookies encontram-se descritos na secção
+            <a href="#cookies-policy" data-th-text="#{page.policy.section.cookies}">
+              Política de Cookies
+            </a>.
+          </p>
+
+          <h3>8. Direitos dos titulares dos dados</h3>
+          <p>
+            Nos termos do RGPD, os titulares dos dados podem, consoante o caso, exercer os direitos
+            de acesso, retificação, apagamento, limitação do tratamento, oposição e retirada do
+            consentimento previamente prestado.
+          </p>
+          <p>
+            O consentimento pode ser retirado a qualquer momento através dos mecanismos de gestão de
+            consentimento disponibilizados no sítio web, sem comprometer a licitude do tratamento
+            realizado até essa data com base no consentimento anteriormente dado.
+          </p>
+
+          <h3>9. Contacto para privacidade</h3>
+          <p>
+            Para questões relacionadas com privacidade e proteção de dados relativas a este sítio
+            web, pode contactar
+            <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+            (contacto gerido por Ricardo do Canto).
+          </p>
+
+          <h3>10. Reclamações</h3>
+
+          <p>
+            Sem prejuízo de qualquer outro meio administrativo ou judicial, o titular dos dados tem
+            o direito de apresentar reclamação junto da Comissão Nacional de Proteção de Dados
+            (CNPD), autoridade de controlo competente em Portugal, se considerar que o tratamento
+            dos seus dados viola a legislação aplicável.
+          </p>
+
+          <h3>11. Alterações a esta política</h3>
+
+          <p>
+            Esta Política de Privacidade pode ser atualizada a qualquer momento para refletir
+            alterações legais, técnicas ou operacionais. A versão mais recente estará sempre
+            disponível nesta página.
+          </p>
+        </article>
+
+        <hr>
+
+      </div>
+
+      <div class="section" data-th-unless="${language == 'pt'}">
+        <p>
+          <strong>EnduranceTrio</strong> is the central hub for endurance sports data and resources.
+          Developed as a personal, non-corporate hobby project, it is designed as a comprehensive
+          ecosystem focused on triathlon, its core disciplines, and related multisports, combining a
+          historical data archive with modern real-time capabilities. Any advertising displayed
+          on this website is used solely to help cover hosting, server, and other related
+          operating costs.
+        </p>
+
+        <hr>
+
+        <article class="section">
+          <h2 id="cookies-policy" data-th-text="#{page.policy.section.cookies}">Cookies Policy</h2>
+
+          <p>
+            This section explains how <strong>EnduranceTrio</strong> uses cookies and similar
+            technologies on the website, in accordance with the GDPR
+            and Portuguese Law no. 41/2004, as amended.
+          </p>
+
+          <h3>1. What cookies are</h3>
+
+          <p>
+            Cookies are small text files stored on your device when you visit a website. They may be
+            used to ensure technical operation, remember user choices, measure traffic, or support
+            advertising.
+          </p>
+
+          <h3>2. How consent is managed</h3>
+
+          <p>
+            This website uses consent management mechanisms to obtain the user's explicit consent
+            before non-essential cookies are activated. Users can accept, refuse, or change their
+            preferences at any time.
+          </p>
+
+          <h3>3. Categories of cookies used</h3>
+
+          <ul>
+            <li>
+              <strong>Essential:</strong> required to remember your consent choices and support
+              basic website functionality.
+            </li>
+            <li>
+              <strong>Analytics:</strong> used to measure traffic, usage, and website performance,
+              including through Google Analytics.
+            </li>
+            <li>
+              <strong>Advertising and marketing:</strong> used to display ads and measure
+              advertising performance, including through Google AdSense.
+            </li>
+          </ul>
+
+          <h3>4. Cookies and technologies currently used</h3>
+
+          <p>This website uses the following technologies and services:</p>
+
+          <ul>
+            <li>
+              <strong>endurancetrio-consent</strong>: the consent cookie used to store the user's
+              choices.
+              Expected retention period: up to 365 days.
+            </li>
+            <li>
+              <strong>Google Tag Manager</strong>: used to load and manage scripts and tags. Google
+              Tag Manager is used as a technical deployment tool and operates in accordance with
+              the consent preferences chosen by the user.
+            </li>
+            <li>
+              <strong>Google Analytics</strong>: uses cookies such as <code>_ga</code>,
+              <code>_gid</code>, and <code>_gat</code> to measure visits, page views, and website
+              interaction.
+            </li>
+            <li>
+              <strong>Google AdSense</strong>: uses cookies and similar technologies to display ads,
+              limit
+              repetition, measure advertising performance, and, where permitted, personalize ads.
+            </li>
+          </ul>
+
+          <h3>5. Legal basis for the use of cookies</h3>
+
+          <p>
+            Strictly necessary cookies may be used without prior consent where they are essential
+            for the operation of the website. Analytics and advertising cookies are used
+            on the basis of the user's consent.
+          </p>
+
+          <h3>6. How to change or withdraw consent</h3>
+
+          <p>
+            You may change your cookie preferences or withdraw your consent at any time through the
+            consent management mechanisms made available on the website. You can also configure your
+            browser to block or delete cookies, although this may affect the proper operation of
+            some website features.
+          </p>
+
+          <h3>7. Specific information about Google advertising</h3>
+
+          <p>
+            Google and other third-party vendors may use cookies to serve ads based on previous
+            visits to this website or other websites. Google's use of advertising cookies enables
+            it and its partners to serve ads based on a user's visits to this site and/or other
+            sites on the internet.
+          </p>
+          <p>
+            Users can learn more about how Google uses data and manage advertising preferences
+            through Google's
+            <a href="https://policies.google.com/privacy" rel="noopener noreferrer">
+              Privacy Policy
+            </a>
+            and
+            <a href="https://adssettings.google.com/" rel="noopener noreferrer">Ads Settings</a>.
+          </p>
+
+          <h3>8. More information about privacy</h3>
+
+          <p>
+            For more information about the processing of personal data on this website, please see
+            the
+            <a href="#privacy-policy" data-th-text="#{page.policy.section.privacy}">
+              Privacy Policy
+            </a>
+            section.
+          </p>
+        </article>
+
+        <hr>
+
+        <article class="section">
+          <h2 id="privacy-policy" data-th-text="#{page.policy.section.privacy}">Privacy Policy</h2>
+
+          <h3>1. Scope of this policy</h3>
+
+          <p>
+            This Privacy Policy explains how <strong>EnduranceTrio</strong> processes personal data
+            in connection with the use of this website, in accordance with Regulation (EU) 2016/679
+            (GDPR) and applicable Portuguese law, including Law no. 41/2004, as amended.
+          </p>
+          <p>
+            This website does not provide user accounts and does not intentionally collect
+            registration or profile data. Even so, use of the website may involve the processing
+            of certain technical data and online identifiers, including IP addresses, cookie
+            identifiers, consent choices, browser and device information, and identifiers related
+            to analytics and advertising.
+          </p>
+
+          <h3>2. Personal data that may be processed</h3>
+
+          <p>
+            Depending on how you use the website, the following categories of data may be processed:
+          </p>
+
+          <ul>
+            <li>
+              Technical data required to load and operate the website;
+            </li>
+            <li>
+              IP addresses and technical logs related to security and service availability;
+            </li>
+            <li>
+              Consent preferences recorded through the website consent management mechanisms;
+            </li>
+            <li>
+              Analytics data and identifiers associated with Google Analytics;
+            </li>
+            <li>
+              Advertising data and identifiers associated with Google AdSense and Google Tag
+              Manager.
+            </li>
+          </ul>
+
+          <h3>3. Purposes of processing</h3>
+
+          <p>Personal data may be processed for the following purposes:</p>
+
+          <ul>
+            <li>
+              To operate, secure, and maintain the website;
+            </li>
+            <li>
+              To manage and document consent choices regarding cookies and similar technologies;
+            </li>
+            <li>
+              To measure traffic, performance, and website usage through Google Analytics;
+            </li>
+            <li>
+              To display advertising through Google AdSense;
+            </li>
+            <li>
+              To comply with legal obligations and respond to rights requests.
+            </li>
+          </ul>
+
+          <h3>4. Legal bases</h3>
+
+          <p>Personal data is processed on one or more of the following legal bases:</p>
+
+          <ul>
+            <li>
+              <strong>Consent</strong>, for non-essential cookies and similar technologies,
+              including analytics and advertising cookies;
+            </li>
+            <li>
+              <strong>Legitimate interest</strong>, where strictly necessary for security, abuse
+              prevention, technical diagnostics, and basic website administration;
+            </li>
+            <li>
+              <strong>Compliance with legal obligations</strong>, where applicable.
+            </li>
+          </ul>
+
+          <h3>5. Tools and services used on the website</h3>
+
+          <p>This website uses the following tools and services:</p>
+
+          <ul>
+            <li><strong>EnduranceTrio</strong> consent management mechanisms;</li>
+            <li><strong>Google Tag Manager</strong>, to load and manage tags and services;</li>
+            <li><strong>Google Analytics</strong>, for website analytics;</li>
+            <li><strong>Google AdSense</strong>, to display advertising.</li>
+          </ul>
+
+          <p>
+            Google services may process personal data in accordance with their own privacy policies
+            and the consent settings chosen by the user.
+          </p>
+
+          <h3>6. International data transfers</h3>
+
+          <p>
+            Some service providers used by this website, especially Google services, may involve
+            transfers of personal data to countries outside the European Economic Area. Where that
+            occurs, such transfers are subject to the legal safeguards required by applicable law,
+            including European Commission standard contractual clauses or other valid transfer
+            mechanisms under the GDPR.
+          </p>
+
+          <h3>7. Data retention</h3>
+
+          <p>
+            Personal data is kept only for as long as necessary to fulfil the purposes described in
+            this policy, taking into account the nature of the data, the technical retention periods
+            of the services involved, and any applicable legal obligations. Consent preferences may
+            be retained while the consent cookie remains valid. More specific information about
+            cookies is available in the
+            <a href="#cookies-policy" data-th-text="#{page.policy.section.cookies}">
+              Cookies Policy
+            </a>
+            section.
+          </p>
+
+          <h3>8. Your rights under the GDPR</h3>
+
+          <p>
+            Under the GDPR, data subjects may, where applicable, exercise their rights of access,
+            rectification, erasure, restriction of processing, objection, and withdrawal of consent.
+          </p>
+          <p>
+            Consent can be withdrawn at any time through the consent management mechanisms made
+            available on the website, without affecting the lawfulness of processing carried out
+            before that withdrawal.
+          </p>
+
+          <h3>9. Privacy contact</h3>
+
+          <p>
+            For privacy and data protection matters relating to this website, you may contact
+            <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+            (contact managed by Ricardo do Canto).
+          </p>
+
+          <h3>10. Complaints</h3>
+
+          <p>
+            Without prejudice to any other administrative or judicial remedy, data subjects have the
+            right to lodge a complaint with the Portuguese supervisory authority, the <em>Comissão
+            Nacional de Proteção de Dados (CNPD)</em>, if they believe their personal data is being
+            processed in breach of applicable law.
+          </p>
+
+          <h3>11. Changes to this policy</h3>
+
+          <p>
+            This Privacy Policy may be updated from time to time to reflect legal, technical, or
+            operational changes. The most recent version will always be available on this page.
+          </p>
+        </article>
+
+        <hr>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

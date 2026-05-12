@@ -29,8 +29,6 @@ export default {
   showNoticeTitle: true,
   storageMethod: 'cookie',
 
-  privacyPolicy: '/policy',
-
   services: [
     {
       name: 'enduranceTrio-consent',
