@@ -27,7 +27,12 @@ import bulmaNavbar from './bulma-navbar.js';
 import languageSelector from './language-selector.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  klaro.setup(klaroConfig);
+  const currentLanguage = document.documentElement.lang === 'pt' ? 'pt' : 'en';
+
+  klaro.setup({
+    ...klaroConfig,
+    privacyPolicy: `/${currentLanguage}/privacy-policy#cookies-policy`,
+  });
 
   bulmaNavbar.init();
   languageSelector.init();

@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class PolicyWebController {
 
-  private static final String VIEW = "policy";
+  private static final String VIEW = "privacy-policy";
   private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private final MessageService messageService;
@@ -47,7 +47,7 @@ public class PolicyWebController {
     this.appProperties = appProperties;
   }
 
-  @GetMapping("/{language:en|pt}/policy")
+  @GetMapping("/{language:en|pt}/privacy-policy")
   public String policy(@PathVariable String language, HttpServletRequest request, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
 
