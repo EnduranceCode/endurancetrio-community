@@ -1,12 +1,13 @@
 {
   "name": "endurancetrio-community",
-  "version": "0.0.1",
+  "version": "0.4.0",
   "description": "A central hub for endurance sports data and resources",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "build:dev": "webpack --mode development",
     "build:prod": "webpack --mode production",
+    "build:watch": "webpack --mode development --watch",
     "format": "npm run format:prettier && npm run format:eslint",
     "format:prettier": "prettier --write '**/*.{css,scss,json,md}'",
     "format:eslint": "eslint . --ext .js --fix"
@@ -26,6 +27,7 @@
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
+    "image-minimizer-webpack-plugin": "^5.0.0",
     "mini-css-extract-plugin": "^2.10.2",
     "postcss": "^8.5.14",
     "postcss-loader": "^8.2.1",
@@ -33,6 +35,7 @@
     "prettier": "^3.8.3",
     "sass": "^1.99.0",
     "sass-loader": "^16.0.8",
+    "sharp": "^0.34.4",
     "webpack": "^5.106.2",
     "webpack-cli": "^7.0.2"
   },

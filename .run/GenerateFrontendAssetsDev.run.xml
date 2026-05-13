@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="GenerateFrontendAssets" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="GenerateFrontendAssetsDev" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -8,6 +8,7 @@
           <option name="goals">
             <list>
               <option value="process-resources" />
+              <option value="-Dfrontend.build.script=build:dev" />
             </list>
           </option>
           <option name="pomFileName" value="endurancetrio-app/pom.xml" />

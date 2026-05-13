@@ -22,43 +22,72 @@ import { URL } from 'url';
 import path from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
+import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const __dirname = new URL('.', import.meta.url).pathname;
 const outputPath = process.env.WEBPACK_OUTPUT_DIR
   ? path.resolve(process.env.WEBPACK_OUTPUT_DIR)
   : path.resolve(__dirname, '../static');
 
-export default {
-  entry: { index: path.resolve(__dirname, 'src', 'js', 'script.js') },
+export default function webpackConfig(_, argv = {}) {
+  const isProduction = argv.mode === 'production';
 
-  output: {
-    clean: true,
-    filename: 'js/script.js',
-    path: outputPath,
-  },
+  return {
+    entry: { index: path.resolve(__dirname, 'src', 'js', 'script.js') },
 
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'css/style.css',
-    }),
-    new CopyPlugin({
-      patterns: [
-        { from: 'src/favicon.ico', to: 'favicon.ico' },
-        { from: 'src/favicon.svg', to: 'favicon.svg' },
-        { from: 'src/apple-touch-icon.png', to: 'apple-touch-icon.png' },
-        { from: 'src/img', to: 'img' },
-      ],
-    }),
-  ],
+    output: {
+      clean: true,
+      filename: 'js/script.js',
+      path: outputPath,
+    },
 
-  module: {
-    rules: [
-      {
-        test: /\.(s[ac]|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', 'postcss-loader'],
-      },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'css/style.css',
+      }),
+      new CopyPlugin({
+        patterns: [
+          { from: 'src/favicon.ico', to: 'favicon.ico' },
+          { from: 'src/favicon.svg', to: 'favicon.svg' },
+          { from: 'src/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+          { from: 'src/img', to: 'img' },
+        ],
+      }),
     ],
-  },
 
-  devtool: 'source-map',
-};
+    module: {
+      rules: [
+        {
+          test: /\.(s[ac]|c)ss$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', 'postcss-loader'],
+        },
+      ],
+    },
+
+    optimization: {
+      minimizer: [
+        '...',
+        ...(isProduction
+          ? [
+              new ImageMinimizerPlugin({
+                test: /\.(png|jpe?g|webp|avif)$/i,
+                minimizer: {
+                  implementation: ImageMinimizerPlugin.sharpMinify,
+                  options: {
+                    encodeOptions: {
+                      avif: { effort: 4 },
+                      jpeg: { mozjpeg: true, quality: 85 },
+                      png: { quality: 90 },
+                      webp: { quality: 85 },
+                    },
+                  },
+                },
+              }),
+            ]
+          : []),
+      ],
+    },
+
+    devtool: isProduction ? false : 'source-map',
+  };
+}

@@ -145,9 +145,20 @@ to the [Development Guide](./docs/development.md).
 1. **Prerequisites**: Java 21, Maven, PostgreSQL
 2. **Clone**: `git clone git@github.com:EnduranceCode/endurancetrio-community.git`
 3. **Configure**: Set up `application-secrets.yaml` from template
-4. **Build**: `./mvnw clean install` (frontend assets are generated automatically)
+4. **Build**: `./mvnw clean install` (frontend assets are generated automatically in production mode)
 5. **Run**: Use `./launch-app.sh` or the provided IntelliJ run configuration, which triggers the
-   shared `GenerateFrontendAssets` Maven step before startup
+   shared `GenerateFrontendAssetsDev` run configuration before startup so browser source maps are
+   available
+
+Frontend assets are generated into
+`endurancetrio-app/target/generated-resources/frontend/static/`.
+
+- Maven package builds use the production Webpack mode: minified assets, no source maps, raster
+  image optimization, and runtime assets packaged under `BOOT-INF/classes/static/`.
+- `EnduranceTrioApplication` uses `GenerateFrontendAssetsDev` before startup so frontend debugging
+  works out of the box.
+- `EnduranceTrioApplicationWithFrontendWatch` starts both `EnduranceTrioApplication` and
+  `FrontendAssetsWatch` for live frontend rebuilds.
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 

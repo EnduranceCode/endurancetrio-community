@@ -351,9 +351,24 @@ The Maven build automatically installs the required Node.js/npm toolchain for th
 executes `npm ci`, bundles the frontend with Webpack, and packages the generated assets under the
 Spring Boot static resource path in the final JAR.
 
+The default Maven frontend build uses the production Webpack mode. Production assets are minified,
+do not emit source maps, and optimize raster images copied by Webpack. Development builds keep
+source maps enabled for browser debugging.
+
+The selected Webpack script is controlled by the Maven property `frontend.build.script`.
+The app module defaults it to `build:prod`, which keeps standard Maven packaging and
+`./launch-app.sh` aligned with production-safe frontend output.
+
 Frontend source files live in `endurancetrio-app/src/main/resources/webpack/`.
 Generated frontend assets are written to
 `endurancetrio-app/target/generated-resources/frontend/static/` during the build.
+
+For standalone frontend work inside `endurancetrio-app/src/main/resources/webpack/`, the available
+npm scripts are:
+
+- `npm run build:dev` - development bundle with source maps
+- `npm run build:prod` - production bundle without source maps
+- `npm run build:watch` - continuous development rebuilds with source maps
 
 ### 5. Run the application
 
@@ -390,9 +405,25 @@ application with
 `Shift + F10`, or use `Shift + F9` to run the application in debug mode.
 
 The run configuration uses the `local` Spring profile (`application-local.yaml`) and invokes the
-shared Maven run configuration `.run/GenerateFrontendAssets.run.xml` before startup. That Maven
-step runs `./mvnw -pl endurancetrio-app generate-resources`, so IntelliJ generates the frontend assets
-automatically without any manual Webpack step.
+shared run configuration `.run/GenerateFrontendAssetsDev.run.xml` before startup. That run
+configuration executes `./mvnw compile -Dfrontend.build.script=build:dev
+-f endurancetrio-app/pom.xml`, which builds the frontend with source maps, copies the assets to
+`target/classes/static/`, and compiles the Java sources — all in a single step without any manual
+Webpack step.
+
+For faster frontend iteration, the shared `.run/FrontendAssetsWatch.run.xml` configuration runs
+`npm run build:watch` against the generated resources output directory, and the shared
+`.run/EnduranceTrioApplicationWithFrontendWatch.run.xml` compound configuration starts both the
+Spring Boot application and the frontend watch process together.
+
+The shared `.run/` frontend-related configurations are:
+
+- `GenerateFrontendAssets` - Maven production asset generation
+- `GenerateFrontendAssetsDev` - Maven development asset generation with source maps + Java compilation
+- `FrontendAssetsWatch` - Webpack development watch process targeting the generated resources folder
+- `EnduranceTrioApplication` - Spring Boot app run config using `GenerateFrontendAssetsDev`
+- `EnduranceTrioApplicationWithFrontendWatch` - compound run config that starts
+  `EnduranceTrioApplication` and `FrontendAssetsWatch` together
 
 ## Code & Naming Conventions
 

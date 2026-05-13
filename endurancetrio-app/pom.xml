@@ -33,6 +33,7 @@
   <artifactId>endurancetrio-app</artifactId>
 
   <properties>
+    <frontend.build.script>build:prod</frontend.build.script>
     <frontend.workingDirectory>${project.basedir}/src/main/resources/webpack</frontend.workingDirectory>
     <frontend.generatedResourcesDirectory>${project.build.directory}/generated-resources/frontend</frontend.generatedResourcesDirectory>
     <frontend.outputDirectory>${project.build.directory}/generated-resources/frontend/static</frontend.outputDirectory>
@@ -173,7 +174,7 @@
               <goal>npm</goal>
             </goals>
             <configuration>
-              <arguments>run build:prod</arguments>
+              <arguments>run ${frontend.build.script}</arguments>
               <environmentVariables>
                 <WEBPACK_OUTPUT_DIR>${frontend.outputDirectory}</WEBPACK_OUTPUT_DIR>
               </environmentVariables>
