@@ -24,6 +24,9 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
 const __dirname = new URL('.', import.meta.url).pathname;
+const outputPath = process.env.WEBPACK_OUTPUT_DIR
+  ? path.resolve(process.env.WEBPACK_OUTPUT_DIR)
+  : path.resolve(__dirname, '../static');
 
 export default {
   entry: { index: path.resolve(__dirname, 'src', 'js', 'script.js') },
@@ -31,7 +34,7 @@ export default {
   output: {
     clean: true,
     filename: 'js/script.js',
-    path: path.resolve(__dirname, '../static'),
+    path: outputPath,
   },
 
   plugins: [
