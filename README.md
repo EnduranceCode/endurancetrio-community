@@ -28,38 +28,52 @@
 
 ## Introduction
 
-**EnduranceTrio** is the central hub for endurance sports data and resources.
+**EnduranceTrio** is a web platform and REST API for endurance sports data and resources.
 
-Designed as a comprehensive ecosystem focusing on triathlon and its core disciplines, as well as all
-related multisports, the platform combines a historical data archive with modern real-time
-capabilities. The project is built on a robust **Java 21** and **Spring Boot 4** foundation, serving
-as both a public-facing web application and a programmatic REST API.
+The project is centered on triathlon and related multisport disciplines, with an initial focus on
+Portugal. Its main long-term objective is to build a structured and reliable dataset of Portuguese
+triathlon events, results, athletes, and related content, starting from the earliest years of the
+sport and expanding over time toward broader historical coverage and more current competition data.
+
+The platform combines a public-facing web application with a programmatic REST API. It is built on
+a **Java 21** and **Spring Boot 4** foundation and is designed to support both archival use cases,
+such as preserving and organizing historical race information, and operational use cases, such as
+telemetry ingestion and route management for live event scenarios.
 
 ### Development Team
 
-This project was created by **Ricardo do Canto**, who is the lead developer and maintainer.
+**EnduranceTrio** is a personal project created and maintained by **Ricardo do Canto**.
 
 [![GitHub](https://img.shields.io/badge/GitHub-EnduranceCode-black?logo=github&logoColor=white)](https://github.com/EnduranceCode)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Ricardo_do_Canto-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ricardodocanto/)
 
 ## Platform Features
 
+The platform is developed as a public-facing endurance sports website backed by a structured data
+model and supported by a dedicated API surface for tracker-domain functionality.
+
 ### Core Functionality
 
-**EnduranceTrio** is designed to serve athletes, coaches, and endurance sports enthusiasts through
-two primary interfaces:
+**EnduranceTrio** currently provides two complementary platform surfaces:
 
-- **Web Application**: A user-friendly interface for browsing race results, currently focused
-  on the history of Triathlon in Portugal. It provides athlete analytics and access to a curated
-  database of endurance sports resources.
+- **Web Application**: A browser-based interface for exploring endurance sports data and related
+  resources. The primary product direction is a structured database of Portuguese triathlon and
+  related multisport events, results, athletes, and connected content. Development begins with a
+  strong historical foundation and progressively expands toward more recent competitions and more
+  timely race data as the underlying data model and ingestion workflows mature.
 
-- **REST API**: A secure and well-documented programmatic gateway to the platform. It offers a
-  specialized subset of the web application's resources, featuring a scalable solution
-  for **IoT telemetry ingestion** and **GeoJSON route management** for race courses.
+- **REST API**: A secure and documented API surface that currently exposes the platform's tracker
+  domain. It provides scalable support for **IoT telemetry ingestion**, retrieval of device
+  telemetry history, and **GeoJSON route management**, enabling live tracking and route-oriented
+  integrations for endurance sports use cases.
+
+Together, these two interfaces support the broader platform goal: combining structured endurance
+sports data, historical preservation, analytical potential, and practical event technology in a
+single evolving system.
 
 ### API Endpoints
 
-The following table summarizes the available endpoints.
+The currently available API endpoints belong to the tracker domain and are summarized below.
 
 | Method | Endpoint                                         | Description                                                         | Authentication     |
 |--------|--------------------------------------------------|---------------------------------------------------------------------|--------------------|
@@ -72,15 +86,14 @@ The following table summarizes the available endpoints.
 | `GET`  | `/tracker/v1/routes/({id}`                       | Find route configuration by id                                      | API Key Required   |
 | `GET`  | `/tracker/v1/routes/({id}/metrics`               | Retrieves the GeoJSON definition for a specific route               | API Key Required   |
 
-For comprehensive documentation including request/response schemas, examples, and error handling,
-see the following documents:
+For detailed request and response schemas, examples, and error handling, see:
 
 - [Tracker Domain](docs/api-endpoints-tracker.md)
 
 ### Swagger UI & API Documentation
 
 The **EnduranceTrio** API provides interactive documentation through **Swagger UI**, with
-separate documentation groups for different environments. This graphic interface allows you to:
+separate documentation groups for different environments. This graphical interface allows you to:
 
 - Explore all available endpoints.
 - View request/response models (e.g., `DeviceTelemetryDTO`).
