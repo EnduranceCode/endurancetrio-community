@@ -34,6 +34,23 @@ Three Maven modules, one entry point:
 
 Module dependency: `app → business → data`. Only `app` produces an executable JAR.
 
+## Product direction
+
+EnduranceTrio is a web platform and REST API for endurance sports data and resources, centered on
+triathlon and related multisport disciplines with an initial focus on Portugal.
+
+The main product goal is to build a structured and reliable dataset of Portuguese triathlon events,
+results, athletes, and related content. Development starts with a strong historical foundation, but
+the platform is intended to expand toward more recent competitions and increasingly timely race
+data as the data model and ingestion workflows mature.
+
+When making product, content, or UX changes, prefer language that reflects both sides of the
+platform:
+
+- historical preservation and structured sports data
+- current and future competition coverage
+- practical live-event tooling through the tracker domain
+
 ## Configuration
 
 | File | Purpose |
