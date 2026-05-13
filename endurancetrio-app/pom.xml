@@ -32,6 +32,12 @@
 
   <artifactId>endurancetrio-app</artifactId>
 
+  <properties>
+    <frontend.workingDirectory>${project.basedir}/src/main/resources/webpack</frontend.workingDirectory>
+    <frontend.generatedResourcesDirectory>${project.build.directory}/generated-resources/frontend</frontend.generatedResourcesDirectory>
+    <frontend.outputDirectory>${project.build.directory}/generated-resources/frontend/static</frontend.outputDirectory>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.endurancetrio</groupId>
@@ -103,10 +109,77 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>application.yaml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>application.yaml</exclude>
+          <exclude>webpack/**</exclude>
+          <exclude>static/**</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>${frontend.generatedResourcesDirectory}</directory>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>${frontend-maven-plugin.version}</version>
+        <configuration>
+          <workingDirectory>${frontend.workingDirectory}</workingDirectory>
+          <installDirectory>${project.build.directory}</installDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>install-node-and-npm</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>${node.version}</nodeVersion>
+              <npmVersion>${npm.version}</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm-ci</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>ci</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm-build</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run build:prod</arguments>
+              <environmentVariables>
+                <WEBPACK_OUTPUT_DIR>${frontend.outputDirectory}</WEBPACK_OUTPUT_DIR>
+              </environmentVariables>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>

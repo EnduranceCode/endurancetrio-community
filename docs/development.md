@@ -24,6 +24,7 @@ an overview of the project, see the [main README.md](../README.md).
 - **Spring Security** - API key authentication and security configuration
 - **SpringDoc OpenAPI** - Automated Swagger/OpenAPI documentation generation
 - **Maven** - Dependency management and build automation
+- **Webpack** - Frontend asset bundling, triggered automatically by the Maven build
 
 ## API Key Management
 
@@ -343,8 +344,16 @@ From the repository root, run the following command to compile the application a
 its dependencies:
 
 ```shell
-mvn clean install
+./mvnw clean install
 ```
+
+The Maven build automatically installs the required Node.js/npm toolchain for the app module,
+executes `npm ci`, bundles the frontend with Webpack, and packages the generated assets under the
+Spring Boot static resource path in the final JAR.
+
+Frontend source files live in `endurancetrio-app/src/main/resources/webpack/`.
+Generated frontend assets are written to
+`endurancetrio-app/target/generated-resources/frontend/static/` during the build.
 
 ### 5. Run the application
 
@@ -367,20 +376,23 @@ Or, for standard JAR execution:
 ```
 
 A helper script, `launch-app.sh`, is provided to streamline local development. It performs
-a full Maven build and then starts the application using the packaged JAR with the **local**
-profile enabled:
+a full Maven build, including frontend asset generation, and then starts the application using the
+packaged JAR with the **local** profile enabled:
 
 ```shell
 ./launch-app.sh
 ```
 
 This project also includes an IntelliJ run configuration stored in the `.run/` folder. After opening
-the project in [IntelliJ](https://www.jetbrains.com/idea/), you will find a `TrackerApplication`
-entry in the *run/debug* configuration dropdown. Select it and run the application with
+the project in [IntelliJ](https://www.jetbrains.com/idea/), you will find an
+`EnduranceTrioApplication` entry in the *run/debug* configuration dropdown. Select it and run the
+application with
 `Shift + F10`, or use `Shift + F9` to run the application in debug mode.
 
-The run configuration uses the `local` Spring profile (`application-local.yaml`), so you can start
-developing immediately without additional setup.
+The run configuration uses the `local` Spring profile (`application-local.yaml`) and invokes the
+shared Maven run configuration `.run/GenerateFrontendAssets.run.xml` before startup. That Maven
+step runs `./mvnw -pl endurancetrio-app generate-resources`, so IntelliJ generates the frontend assets
+automatically without any manual Webpack step.
 
 ## Code & Naming Conventions
 
@@ -552,7 +564,7 @@ This project supports programmatic version updates across all Maven modules. It 
 replacing the label as appropriate in the below command and then executing it.
 
 ```shell
-mvn versions:set -DnewVersion={VERSION_NUMBER}
+./mvnw versions:set -DnewVersion={VERSION_NUMBER}
 ```
 
 > **Placeholder Definition**
@@ -562,11 +574,11 @@ mvn versions:set -DnewVersion={VERSION_NUMBER}
 The changes applied with the above command can be reverted executing the following command:
 
 ```shell
-mvn versions:revert
+./mvnw versions:revert
 ```
 
 Or commited with the following command:
 
 ```shell
-mvn versions:commit
+./mvnw versions:commit
 ```

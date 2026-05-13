@@ -99,7 +99,12 @@ env vars `FIRST_OWNER` + `FIRST_HASH`.
 
 - Thymeleaf templates in `endurancetrio-app/src/main/resources/templates/`
 - JS/SCSS source in `endurancetrio-app/src/main/resources/webpack/`
-- Build: `npm run build:dev` or `npm run build:prod` (from webpack dir)
+- Build: frontend assets are generated automatically during Maven builds into
+  `endurancetrio-app/target/generated-resources/frontend/static/` and packaged under
+  `BOOT-INF/classes/static/`; use `npm run build:dev` or `npm run build:prod` from the webpack dir
+  only for standalone frontend work
+- IntelliJ: `.run/EnduranceTrioApplication.run.xml` invokes
+  `.run/GenerateFrontendAssets.run.xml` before launch
 - CSS framework: Bulma
 
 ## Docker

@@ -145,8 +145,9 @@ to the [Development Guide](./docs/development.md).
 1. **Prerequisites**: Java 21, Maven, PostgreSQL
 2. **Clone**: `git clone git@github.com:EnduranceCode/endurancetrio-community.git`
 3. **Configure**: Set up `application-secrets.yaml` from template
-4. **Build**: `mvn clean install`
-5. **Run**: Use `./launch-app.sh` or the provided IntelliJ run configuration
+4. **Build**: `./mvnw clean install` (frontend assets are generated automatically)
+5. **Run**: Use `./launch-app.sh` or the provided IntelliJ run configuration, which triggers the
+   shared `GenerateFrontendAssets` Maven step before startup
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 
