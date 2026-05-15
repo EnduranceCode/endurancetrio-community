@@ -61,14 +61,14 @@
 
 @use 'sass:map';
 
+@use '../utilities/endurance-bulma-utilities' as bu;
 @use 'bulma/sass/utilities/css-variables' as cv;
-@use 'bulma/sass/utilities/initial-variables' as iv;
 @use 'bulma/sass/utilities/mixins' as mx;
 @use 'bulma/sass/elements/button';
 
-@use './klaro-variables-endurance' as kv;
-@use './klaro-modal-endurance' as kx;
-@use './klaro-switch-endurance';
+@use './endurance-klaro-variables' as kv;
+@use './endurance-klaro-modal' as kx;
+@use './endurance-klaro-switch';
 
 .klaro {
   &.cm-as-context-notice {
@@ -97,7 +97,7 @@
     }
 
     .cm-btn {
-      @extend .#{iv.$class-prefix}button;
+      @extend .#{bu.$class-prefix}button;
 
       &:disabled {
         opacity: 0.5;
@@ -105,12 +105,15 @@
 
       &.cn-decline,
       &.cm-btn-accept {
-        @extend .#{iv.$class-prefix}is-light;
+        @extend .#{bu.$class-prefix}is-light;
       }
 
-      &.cm-btn-accept-all,
+      &.cm-btn-accept-all {
+        @extend .#{bu.$class-prefix}is-primary;
+      }
+
       &.cm-btn-success:not(.cm-btn-accept) {
-        @extend .#{iv.$class-prefix}is-primary;
+        @extend .#{bu.$class-prefix}is-success;
       }
     }
 
@@ -123,7 +126,7 @@
 
   .context-notice {
     border: 1px solid cv.getVar('border-active');
-    border-radius: iv.$radius;
+    border-radius: bu.$radius;
 
     align-items: center;
     display: flex;
@@ -331,6 +334,13 @@
     border-style: none;
     color: kv.$cookie-notice-text-color;
 
+    a,
+    .cm-link,
+    .cn-learn-more {
+      color: kv.$cookie-notice-link-color;
+      text-decoration: underline;
+    }
+
     bottom: 0;
     position: fixed;
     width: 100%;
@@ -399,7 +409,7 @@
         }
       }
 
-      @include mx.until(iv.$desktop) {
+        @include mx.until(bu.$desktop) {
         padding: 1em;
       }
     }

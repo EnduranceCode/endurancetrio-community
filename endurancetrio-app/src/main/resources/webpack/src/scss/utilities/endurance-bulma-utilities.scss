@@ -20,11 +20,13 @@
 
 @charset "utf-8";
 
-@use 'bulma/sass/utilities/css-variables' as cv;
+@use './endurancetrio-variables' as et;
 
-$cookie-notice-body-color: hsl(cv.getVar('warning-h'), cv.getVar('warning-s'), cv.getVar('warning-l'));
-$cookie-notice-text-color: hsl(cv.getVar('warning-h'), cv.getVar('warning-s'), cv.getVar('warning-on-scheme-l'));
-
-$agreement-color: hsl(cv.getVar('primary-h'), cv.getVar('primary-s'), cv.getVar('primary-l'));
-
-$button-margin: 1em;
+@forward 'bulma/sass/utilities' with (
+  $link: et.$et-blue-700,
+  $primary: et.$et-blue-500,
+  $info: et.$et-blue-500,
+  $success: et.$et-green-500,
+  $warning: et.$et-yellow-500,
+  $danger: et.$et-red-500
+);

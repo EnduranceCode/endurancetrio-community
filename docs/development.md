@@ -363,6 +363,15 @@ Frontend source files live in `endurancetrio-app/src/main/resources/webpack/`.
 Generated frontend assets are written to
 `endurancetrio-app/target/generated-resources/frontend/static/` during the build.
 
+Frontend color semantics and usage guidance are documented in
+[`docs/color-system.md`](./color-system.md). Bulma utility customization is centralized in
+`endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`,
+and EnduranceTrio palette tokens live in
+`endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
+
+Project-maintained SCSS adaptations for Bulma and third-party code use the `endurance-` prefix for
+file names, including Klaro, switch-control, and theme entrypoints.
+
 For standalone frontend work inside `endurancetrio-app/src/main/resources/webpack/`, the available
 npm scripts are:
 
@@ -426,6 +435,20 @@ The shared `.run/` frontend-related configurations are:
   `EnduranceTrioApplication` and `FrontendAssetsWatch` together
 
 ## Code & Naming Conventions
+
+### Frontend Styling
+
+- Use `docs/color-system.md` as the canonical guide for frontend color selection and semantic usage.
+- Keep EnduranceTrio palette tokens in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
+- Keep Bulma utility customization in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`.
+- Import the local Bulma utilities wrapper when a stylesheet needs configured members from
+  `bulma/sass/utilities`.
+- Import Bulma modules directly when the needed Sass members are outside that wrapper, such as
+  `css-variables`, `mixins`, `extends`, or element/component styles.
+- Use the `endurance-` prefix for project-maintained SCSS customizations that adapt Bulma or
+  third-party code, including Klaro, switch-control, and theme entrypoints.
 
 ### Controllers, Services and Repositories
 

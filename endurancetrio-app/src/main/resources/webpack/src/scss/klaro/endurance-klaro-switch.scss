@@ -59,13 +59,12 @@
 
 @charset "utf-8";
 
+@use '../utilities/endurance-bulma-utilities' as bu;
 @use 'bulma/sass/utilities/css-variables' as cv;
-@use 'bulma/sass/utilities/initial-variables' as iv;
-@use 'bulma/sass/utilities/derived-variables' as dv;
 
-@use '../form/switch-control-variables.scss' as sv;
+@use '../form/endurance-switch-control-variables.scss' as sv;
 
-@use './klaro-variables-endurance' as kv;
+@use './endurance-klaro-variables' as kv;
 
 .cm-switch-container {
   border: 1px solid cv.getVar('border-active');
@@ -152,26 +151,26 @@
 
   .slider {
     align-items: center;
-    background: iv.$grey-light;
-    border-radius: iv.$radius-rounded;
+    background: bu.$grey-light;
+    border-radius: bu.$radius-rounded;
     display: flex;
     flex-shrink: 0;
     height: #{sv.$switch-width * 0.5 + sv.$switch-padding};
     padding: sv.$switch-padding;
     transition:
-      background sv.$speed-slow iv.$easing,
-      box-shadow sv.$speed-slow iv.$easing;
+      background sv.$speed-slow bu.$easing,
+      box-shadow sv.$speed-slow bu.$easing;
     width: sv.$switch-width;
   }
 
   .slider::before {
     content: '';
-    background: dv.$background;
-    border-radius: iv.$radius-rounded;
+    background: bu.$background;
+    border-radius: bu.$radius-rounded;
     display: block;
     height: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
     transform-origin: left;
-    transition: transform sv.$speed-slow iv.$easing;
+    transition: transform sv.$speed-slow bu.$easing;
     will-change: transform;
     width: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
   }

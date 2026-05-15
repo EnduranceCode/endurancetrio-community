@@ -55,14 +55,12 @@
 
 @use 'sass:list';
 
-@use 'bulma/sass/utilities/initial-variables' as iv;
-@use 'bulma/sass/utilities/derived-variables' as dv;
-@use 'bulma/sass/utilities/controls' as cx;
+@use '../utilities/endurance-bulma-utilities' as bu;
 @use 'bulma/sass/utilities/extends';
 
-@use './switch-control-variables' as sv;
+@use './endurance-switch-control-variables' as sv;
 
-.#{iv.$class-prefix}switch {
+.#{bu.$class-prefix}switch {
   @extend %unselectable;
   cursor: pointer;
   display: inline-flex;
@@ -70,7 +68,7 @@
   position: relative;
   margin-right: 0.5em;
 
-  & + .#{iv.$class-prefix}switch:last-child {
+  & + .#{bu.$class-prefix}switch:last-child {
     margin-right: 0;
   }
 
@@ -81,28 +79,28 @@
     outline: none;
     z-index: -1;
 
-    + .#{iv.$class-prefix}check {
+    + .#{bu.$class-prefix}check {
       display: flex;
       align-items: center;
       flex-shrink: 0;
       width: sv.$switch-width;
       height: #{sv.$switch-width * 0.5 + sv.$switch-padding};
       padding: sv.$switch-padding;
-      background: iv.$grey-light;
-      border-radius: iv.$radius;
+      background: bu.$grey-light;
+      border-radius: bu.$radius;
       transition:
-        background sv.$speed-slow iv.$easing,
-        box-shadow sv.$speed-slow iv.$easing;
+        background sv.$speed-slow bu.$easing,
+        box-shadow sv.$speed-slow bu.$easing;
 
-      @each $name, $pair in dv.$colors {
+      @each $name, $pair in bu.$colors {
         $color: list.nth($pair, 1);
 
-        &.#{iv.$class-prefix}is-#{$name}-passive,
+        &.#{bu.$class-prefix}is-#{$name}-passive,
         &:hover {
           background: $color;
         }
 
-        &.#{iv.$class-prefix}input[type='checkbox'] + &.#{iv.$class-prefix}check {
+        &.#{bu.$class-prefix}input[type='checkbox'] + &.#{bu.$class-prefix}check {
           background: 'pink';
         }
       }
@@ -110,11 +108,11 @@
       &:before {
         content: '';
         display: block;
-        border-radius: iv.$radius;
+        border-radius: bu.$radius;
         width: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
         height: #{(sv.$switch-width - sv.$switch-padding * 2) * 0.5};
-        background: dv.$background;
-        transition: transform sv.$speed-slow iv.$easing;
+        background: bu.$background;
+        transition: transform sv.$speed-slow bu.$easing;
         will-change: transform;
         transform-origin: left;
 
@@ -126,19 +124,19 @@
         }
       }
 
-      &.#{iv.$class-prefix}is-elastic:before {
+      &.#{bu.$class-prefix}is-elastic:before {
         transform: scaleX(1.5);
-        border-radius: iv.$radius;
+        border-radius: bu.$radius;
       }
     }
 
-    &:checked + .#{iv.$class-prefix}check {
+    &:checked + .#{bu.$class-prefix}check {
       background: sv.$switch-active-background-color;
 
-      @each $name, $pair in dv.$colors {
+      @each $name, $pair in bu.$colors {
         $color: list.nth($pair, 1);
 
-        &.#{iv.$class-prefix}is-#{$name} {
+        &.#{bu.$class-prefix}is-#{$name} {
           background: $color;
         }
       }
@@ -147,7 +145,7 @@
         transform: translate3d(100%, 0, 0);
       }
 
-      &.#{iv.$class-prefix}is-elastic:before {
+      &.#{bu.$class-prefix}is-elastic:before {
         // Might be a little offset if base font is not 16px
         transform: translate3d(50%, 0, 0) scaleX(1.5);
       }
@@ -157,32 +155,32 @@
     &:active {
       outline: none;
 
-      + .#{iv.$class-prefix}check {
+      + .#{bu.$class-prefix}check {
         @if sv.$switch-has-shadows ==1 {
-          box-shadow: 0 0 0.5em rgba($grey, 0.6);
+          box-shadow: 0 0 0.5em rgba(bu.$grey, 0.6);
         }
 
-        @each $name, $pair in dv.$colors {
+        @each $name, $pair in bu.$colors {
           $color: list.nth($pair, 1);
 
           @if sv.$switch-has-shadows ==1 {
-            &.#{iv.$class-prefix}is-#{$name}-passive {
+            &.#{bu.$class-prefix}is-#{$name}-passive {
               box-shadow: 0 0 0.5em rgba($color, 0.8);
             }
           }
         }
       }
 
-      &:checked + .#{iv.$class-prefix}check {
+      &:checked + .#{bu.$class-prefix}check {
         @if sv.$switch-has-shadows ==1 {
           box-shadow: 0 0 0.5em rgba(sv.$switch-active-background-color, 0.8);
         }
 
-        @each $name, $pair in dv.$colors {
+        @each $name, $pair in bu.$colors {
           $color: list.nth($pair, 1);
 
           @if sv.$switch-has-shadows ==1 {
-            &.#{iv.$class-prefix}is-#{$name} {
+            &.#{bu.$class-prefix}is-#{$name} {
               box-shadow: 0 0 0.5em rgba($color, 0.8);
             }
           }
@@ -191,64 +189,64 @@
     }
   }
 
-  .#{iv.$class-prefix}control-label {
+  .#{bu.$class-prefix}control-label {
     padding-left: 0.5em;
   }
 
   &:hover {
-    input[type='checkbox'] + .#{iv.$class-prefix}check {
-      background: rgba(iv.$grey-light, 0.9);
+    input[type='checkbox'] + .#{bu.$class-prefix}check {
+      background: rgba(bu.$grey-light, 0.9);
 
-      @each $name, $pair in dv.$colors {
+      @each $name, $pair in bu.$colors {
         $color: list.nth($pair, 1);
 
-        &.#{iv.$class-prefix}is-#{$name}-passive {
+        &.#{bu.$class-prefix}is-#{$name}-passive {
           background: rgba($color, 0.9);
         }
       }
     }
 
-    input[type='checkbox']:checked + .#{iv.$class-prefix}check {
+    input[type='checkbox']:checked + .#{bu.$class-prefix}check {
       background: rgba(sv.$switch-active-background-color, 0.9);
 
-      @each $name, $pair in dv.$colors {
+      @each $name, $pair in bu.$colors {
         $color: list.nth($pair, 1);
 
-        &.#{iv.$class-prefix}is-#{$name} {
+        &.#{bu.$class-prefix}is-#{$name} {
           background: rgba($color, 0.9);
         }
       }
     }
   }
 
-  &.#{iv.$class-prefix}is-rounded {
+  &.#{bu.$class-prefix}is-rounded {
     input[type='checkbox'] {
-      + .#{iv.$class-prefix}check {
-        border-radius: iv.$radius-rounded;
+      + .#{bu.$class-prefix}check {
+        border-radius: bu.$radius-rounded;
 
         &:before {
-          border-radius: iv.$radius-rounded;
+          border-radius: bu.$radius-rounded;
         }
       }
 
-      &.#{iv.$class-prefix}is-elastic:before {
+      &.#{bu.$class-prefix}is-elastic:before {
         transform: scaleX(1.5);
-        border-radius: iv.$radius-rounded;
+        border-radius: bu.$radius-rounded;
       }
     }
   }
 
-  &.#{iv.$class-prefix}is-outlined {
+  &.#{bu.$class-prefix}is-outlined {
     input[type='checkbox'] {
-      + .#{iv.$class-prefix}check {
+      + .#{bu.$class-prefix}check {
         background: transparent;
-        border: 0.1rem solid iv.$grey-light;
+        border: 0.1rem solid bu.$grey-light;
         padding: sv.$switch-outlined-padding;
 
-        @each $name, $pair in dv.$colors {
+        @each $name, $pair in bu.$colors {
           $color: list.nth($pair, 1);
 
-          &.#{iv.$class-prefix}is-#{$name}-passive {
+          &.#{bu.$class-prefix}is-#{$name}-passive {
             border: 0.1rem solid rgba($color, 0.9);
 
             &:before {
@@ -262,17 +260,17 @@
         }
 
         &:before {
-          background: iv.$grey-light;
+          background: bu.$grey-light;
         }
       }
 
-      &:checked + .#{iv.$class-prefix}check {
+      &:checked + .#{bu.$class-prefix}check {
         border-color: sv.$switch-active-background-color;
 
-        @each $name, $pair in dv.$colors {
+        @each $name, $pair in bu.$colors {
           $color: list.nth($pair, 1);
 
-          &.#{iv.$class-prefix}is-#{$name} {
+          &.#{bu.$class-prefix}is-#{$name} {
             background: transparent;
             border-color: $color;
 
@@ -291,14 +289,14 @@
     &:hover {
       input[type='checkbox'] + .check {
         background: transparent;
-        border-color: rgba(iv.$grey-light, 0.9);
+        border-color: rgba(bu.$grey-light, 0.9);
       }
 
-      input[type='checkbox']:checked + .#{iv.$class-prefix}check {
+      input[type='checkbox']:checked + .#{bu.$class-prefix}check {
         background: transparent;
         border-color: rgba(sv.$switch-active-background-color, 0.9);
 
-        @each $name, $pair in dv.$colors {
+        @each $name, $pair in bu.$colors {
           $color: list.nth($pair, 1);
 
           &.is-#{$name} {
@@ -309,21 +307,21 @@
     }
   }
 
-  &.#{iv.$class-prefix}is-small {
-    @include cx.control-small;
+  &.#{bu.$class-prefix}is-small {
+    @include bu.control-small;
   }
 
-  &.#{iv.$class-prefix}is-medium {
-    @include cx.control-medium;
+  &.#{bu.$class-prefix}is-medium {
+    @include bu.control-medium;
   }
 
-  &.#{iv.$class-prefix}is-large {
-    @include cx.control-large;
+  &.#{bu.$class-prefix}is-large {
+    @include bu.control-large;
   }
 
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
-    color: iv.$grey;
+    color: bu.$grey;
   }
 }

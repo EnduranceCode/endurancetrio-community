@@ -172,6 +172,13 @@ Frontend assets are generated into
   works out of the box.
 - `EnduranceTrioApplicationWithFrontendWatch` starts both `EnduranceTrioApplication` and
   `FrontendAssetsWatch` for live frontend rebuilds.
+- Frontend colors and semantic usage are documented in
+  [`docs/color-system.md`](./docs/color-system.md). Bulma utility customization is centralized in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`,
+  with EnduranceTrio palette tokens in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
+- Project-maintained SCSS adaptations for Bulma and third-party styles use the `endurance-`
+  prefix, including Klaro, switch-control, and theme entrypoints.
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 

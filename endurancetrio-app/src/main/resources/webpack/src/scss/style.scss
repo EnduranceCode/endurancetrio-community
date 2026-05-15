@@ -20,16 +20,7 @@
 
 @charset "utf-8";
 
-@use 'utilities/custom-variables.scss' as cv;
-
-@use 'bulma/sass/utilities' with (
-  $link: cv.$endurancetrio-run,
-  $primary: cv.$endurancetrio-swim,
-  $info: cv.$endurance-swim-900,
-  $success: cv.$endurance-js-600,
-  $warning: cv.$endurance-bike-300,
-  $danger: cv.$endurance-run-700
-);
+@use 'utilities/endurance-bulma-utilities';
 
 @forward 'bulma/sass/base';
 
@@ -55,8 +46,8 @@
 /* bulma/sass/form/select; */
 /* bulma/sass/form/file; */
 /* bulma/sass/form/tools; */
-@forward 'form/switch-control';
-@forward 'form/switch-control-inner-label';
+@forward 'form/endurance-switch-control';
+@forward 'form/endurance-switch-control-inner-label';
 
 /* Bulma Components */
 /* bulma/sass/components/breadcrumb */
@@ -72,7 +63,7 @@
 /* bulma/sass/components/tabs; */
 
 /* Klaro */
-@forward 'klaro/klaro-endurance';
+@forward 'klaro/endurance-klaro';
 
 /* Bulma Grid */
 /* "bulma/sass/grid/columns"; */
@@ -103,4 +94,4 @@
 /* bulma/sass/helpers/other */
 
 /* Bulma Themes */
-@forward 'themes/light-theme';
+@forward 'themes/endurance-light-theme';

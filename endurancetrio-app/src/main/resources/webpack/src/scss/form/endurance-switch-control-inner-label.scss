@@ -22,19 +22,18 @@
 
 @use 'sass:list';
 
-@use 'bulma/sass/utilities/initial-variables' as iv;
-@use 'bulma/sass/utilities/derived-variables' as dv;
-@use './switch-control';
+@use '../utilities/endurance-bulma-utilities' as bu;
+@use './endurance-switch-control';
 
 $switch-inner-label-width-number: 3.5 !default;
 $switch-inner-label-width: $switch-inner-label-width-number * 1em !default;
 $switch-inner-label-padding: 0.2em !default;
 
-.#{iv.$class-prefix}switch-inner-label {
-  @extend .#{iv.$class-prefix}switch;
+.#{bu.$class-prefix}switch-inner-label {
+  @extend .#{bu.$class-prefix}switch;
 
-  #{iv.$class-prefix}input[type='checkbox'] {
-    + .#{iv.$class-prefix}check {
+  #{bu.$class-prefix}input[type='checkbox'] {
+    + .#{bu.$class-prefix}check {
       width: $switch-inner-label-width;
 
       &:before {
@@ -43,16 +42,16 @@ $switch-inner-label-padding: 0.2em !default;
     }
   }
 
-  .#{iv.$class-prefix}check {
+  .#{bu.$class-prefix}check {
     position: relative;
     z-index: 0;
 
-    .#{iv.$class-prefix}control-inner-label {
+    .#{bu.$class-prefix}control-inner-label {
       font-size: 0.9em;
       font-weight: 500;
     }
 
-    .#{iv.$class-prefix}control-inner-label::before {
+    .#{bu.$class-prefix}control-inner-label::before {
       content: attr(data-off-label);
       left: 70%;
       pointer-events: none;
@@ -63,16 +62,16 @@ $switch-inner-label-padding: 0.2em !default;
     }
   }
 
-  input[type='checkbox']:checked ~ .#{iv.$class-prefix}check {
-    @each $name, $pair in dv.$colors {
+  input[type='checkbox']:checked ~ .#{bu.$class-prefix}check {
+    @each $name, $pair in bu.$colors {
       $color: list.nth($pair, 1);
 
-      &.#{iv.$class-prefix}is-#{$name} {
+      &.#{bu.$class-prefix}is-#{$name} {
         color: $color;
       }
     }
 
-    .#{iv.$class-prefix}control-inner-label::before {
+    .#{bu.$class-prefix}control-inner-label::before {
       content: attr(data-on-label);
       left: 30%;
     }
