@@ -53,21 +53,21 @@ platform:
 
 ## Configuration
 
-| File | Purpose |
-|------|---------|
-| `application.yaml` | defaults (datasource, JPA, Flyway, server port 8080) |
-| `application-{local,dev,prod}.yaml` | profile-specific overrides |
-| `template-secrets.yaml` → `application-secrets.yaml` | DB credentials (gitignored) |
-| `application-test.yaml` | H2 in-memory DB for tests |
+| File                                                 | Purpose                                              |
+|------------------------------------------------------|------------------------------------------------------|
+| `application.yaml`                                   | defaults (datasource, JPA, Flyway, server port 8080) |
+| `application-{local,dev,prod}.yaml`                  | profile-specific overrides                           |
+| `template-secrets.yaml` → `application-secrets.yaml` | DB credentials (gitignored)                          |
+| `application-test.yaml`                              | H2 in-memory DB for tests                            |
 
 ## Spring profiles
 
-| Profile | DB | Config file |
-|---------|----|-------------|
+| Profile | DB                   | Config file              |
+|---------|----------------------|--------------------------|
 | `local` | localhost PostgreSQL | `application-local.yaml` |
-| `dev` | env-var PostgreSQL | `application-dev.yaml` |
-| `prod` | env-var PostgreSQL | `application-prod.yaml` |
-| `test` | H2 in-memory | `application-test.yaml` |
+| `dev`   | env-var PostgreSQL   | `application-dev.yaml`   |
+| `prod`  | env-var PostgreSQL   | `application-prod.yaml`  |
+| `test`  | H2 in-memory         | `application-test.yaml`  |
 
 Activate with `-Dspring.profiles.active=local` or `-Dspring-boot.run.profiles=local`.
 
@@ -130,6 +130,13 @@ env vars `FIRST_OWNER` + `FIRST_HASH`.
   `GenerateFrontendAssetsDev` for debuggable assets, `FrontendAssetsWatch` for continuous frontend
   rebuilds, and `EnduranceTrioApplicationWithFrontendWatch` for the combined app plus watch workflow
 - CSS framework: Bulma
+- Frontend color semantics and usage guidance live in `docs/color-system.md`
+- Bulma utility customization is centralized in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`
+  and EnduranceTrio palette tokens live in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`
+- Project-maintained SCSS customizations for Bulma/third-party code use the `endurance-` prefix
+  for file names, including Klaro, switch-control, and theme entrypoints
 
 ## Docker
 

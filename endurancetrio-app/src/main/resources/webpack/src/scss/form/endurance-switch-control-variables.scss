@@ -53,7 +53,7 @@
 
 @charset "utf-8";
 
-@use 'bulma/sass/utilities/derived-variables' as dv;
+@use '../utilities/endurancetrio-variables.scss' as et;
 
 $speed-slow: 150ms !default;
 
@@ -61,7 +61,7 @@ $switch-width-number: 2.75 !default;
 $switch-width: $switch-width-number * 1em !default;
 $switch-padding: 0.2em !default;
 $switch-outlined-padding: 0.1em !default;
-$switch-active-background-color: dv.$primary !default;
+$switch-active-background-color: et.$et-blue-500 !default;
 
 /* Box-shadow */
 $switch-has-shadows: 0 !default;
