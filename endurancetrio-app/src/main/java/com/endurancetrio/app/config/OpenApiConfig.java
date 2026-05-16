@@ -30,7 +30,6 @@ import io.swagger.v3.oas.models.servers.Server;
 import java.util.List;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -51,11 +50,18 @@ import org.springframework.context.annotation.Configuration;
 )
 public class OpenApiConfig {
 
-  @Value("${app.version:unknown}")
-  private String appVersion;
+  private final AppProperties appProperties;
+
+  public OpenApiConfig(AppProperties appProperties) {
+    this.appProperties = appProperties;
+  }
 
   @Bean
   public OpenAPI enduranceTrioOpenAPI() {
+
+    String appVersion = appProperties.getVersion();
+    appVersion = appVersion == null || appVersion.isBlank() ? "" : appVersion;
+
     return new OpenAPI().info(new Info().title("EnduranceTrio REST API").description("""
             **EnduranceTrio** is the definitive central hub for endurance sports data and resources,
             focusing on triathlon and its core disciplines as well as all related multisports.

@@ -25,8 +25,10 @@ import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * The {@link PageMetadataUtils} class provides utility methods for building page metadata across
- * controller classes in the application.
+ * The {@link PageMetadataUtils} class provides utility methods for building
+ * {@link com.endurancetrio.app.common.model.PageMetadata PageMetadata} instances across controller
+ * classes in the application. The constructed metadata is shared between HTML {@code <head>}
+ * elements and other layout fragments (e.g. navigation bar, footer).
  */
 public final class PageMetadataUtils {
 
@@ -60,18 +62,21 @@ public final class PageMetadataUtils {
       String view, String title, String description, HttpServletRequest request,
       AppProperties properties
   ) {
+    String appVersion = properties.getVersion();
     String baseUrl = getBaseUrl(request);
 
     PageMetadata metadata = new PageMetadata();
-    metadata.setView(view);
-    metadata.setTitle(title);
+    metadata.setAppVersion(appVersion == null || appVersion.isBlank() ? "" : appVersion);
+    metadata.setCopyrightYear(properties.getCopyrightYear());
     metadata.setDescription(description);
     metadata.setCanonicalUrl(request.getRequestURL().toString());
     metadata.setOgImage(baseUrl + properties.getOpenGraph().getDefaultImg());
-    metadata.setOgImageWidth(properties.getOpenGraph().getDefaultImgWidth());
-    metadata.setOgImageHeight(properties.getOpenGraph().getDefaultImgHeight());
-    metadata.setTwitterSite(properties.getSocial().getTwitterSite());
     metadata.setFacebookPageId(properties.getSocial().getFacebookPageId());
+    metadata.setOgImageHeight(properties.getOpenGraph().getDefaultImgHeight());
+    metadata.setOgImageWidth(properties.getOpenGraph().getDefaultImgWidth());
+    metadata.setTitle(title);
+    metadata.setTwitterSite(properties.getSocial().getTwitterSite());
+    metadata.setView(view);
 
     return metadata;
   }

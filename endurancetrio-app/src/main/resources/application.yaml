@@ -19,13 +19,14 @@
 #
 
 app:
+  copyright-year: 2011-2026
   initialization:
     first-account-owner: ${FIRST_OWNER:}
     first-account-key-hash: ${FIRST_HASH:}
   open-graph:
     default-img: /img/endurancetrio-open-graph.png
-    default-img-width: 1200
     default-img-height: 628
+    default-img-width: 1200
   social:
     facebook-page-id: "1692877750958091"
     twitter-site: "@EnduranceTrio"

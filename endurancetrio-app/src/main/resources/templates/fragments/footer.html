@@ -26,16 +26,32 @@
 
 <body>
 <footer data-th-fragment="footer" class="footer">
-  <section class="section">
-    <div class="hero">
-      <div class="hero-body">
-        <figure class="image" style="width: 12rem; height: auto;">
-          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
-        </figure>
-        <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+  <div class="hero">
+    <div class="hero-body">
+      <figure class="image" style="width: 12rem; height: auto;">
+        <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
+      </figure>
+      <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+    </div>
+  </div>
+
+  <div class="section pb-0">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="is-size-7">© <span data-th-text="${metadata.copyrightYear}">2011-2026</span> <a
+              data-th-href="@{/{language}/(language=${language})}">EnduranceTrio</a> - <span
+              data-th-text="#{footer.copyright}">All rights reserved.</span></p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <p class="is-size-7">EnduranceTrio Community <span
+              data-th-text="${metadata.appVersion}"></span></p>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 </footer>
 </body>
 </html>
