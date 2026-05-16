@@ -21,40 +21,51 @@
 package com.endurancetrio.app.common.model;
 
 /**
- * The {@link PageMetadata} class holds metadata used to populate HTML {@code <head>} elements such
- * as title, description, canonical URL, and Open Graph image for each page rendered in the
- * application.
+ * The {@link PageMetadata} class holds page-level metadata used across shared template fragments in
+ * the application. This includes HTML {@code <head>} elements (title, description, canonical URL,
+ * Open Graph tags) as well as view-specific data consumed by other layout components such as the
+ * navigation bar and footer.
  */
 public class PageMetadata {
 
-  private String view;
-  private String title;
-  private String description;
+  private String appVersion;
   private String canonicalUrl;
-  private String ogImage;
-  private Integer ogImageWidth;
-  private Integer ogImageHeight;
+  private String copyrightYear;
+  private String description;
   private String facebookPageId;
+  private String ogImage;
+  private Integer ogImageHeight;
+  private Integer ogImageWidth;
+  private String title;
   private String twitterSite;
+  private String view;
 
   public PageMetadata() {
     super();
   }
 
-  public String getView() {
-    return view;
+  public String getAppVersion() {
+    return appVersion;
   }
 
-  public void setView(String view) {
-    this.view = view;
+  public void setAppVersion(String appVersion) {
+    this.appVersion = appVersion;
   }
 
-  public String getTitle() {
-    return title;
+  public String getCanonicalUrl() {
+    return canonicalUrl;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public String getCopyrightYear() {
+    return copyrightYear;
+  }
+
+  public void setCopyrightYear(String copyrightYear) {
+    this.copyrightYear = copyrightYear;
+  }
+
+  public void setCanonicalUrl(String canonicalUrl) {
+    this.canonicalUrl = canonicalUrl;
   }
 
   public String getDescription() {
@@ -65,12 +76,12 @@ public class PageMetadata {
     this.description = description;
   }
 
-  public String getCanonicalUrl() {
-    return canonicalUrl;
+  public String getFacebookPageId() {
+    return facebookPageId;
   }
 
-  public void setCanonicalUrl(String canonicalUrl) {
-    this.canonicalUrl = canonicalUrl;
+  public void setFacebookPageId(String facebookPageId) {
+    this.facebookPageId = facebookPageId;
   }
 
   public String getOgImage() {
@@ -81,6 +92,14 @@ public class PageMetadata {
     this.ogImage = ogImage;
   }
 
+  public Integer getOgImageHeight() {
+    return ogImageHeight;
+  }
+
+  public void setOgImageHeight(Integer ogImageHeight) {
+    this.ogImageHeight = ogImageHeight;
+  }
+
   public Integer getOgImageWidth() {
     return ogImageWidth;
   }
@@ -89,20 +108,12 @@ public class PageMetadata {
     this.ogImageWidth = ogImageWidth;
   }
 
-  public Integer getOgImageHeight() {
-    return ogImageHeight;
+  public String getTitle() {
+    return title;
   }
 
-  public String getFacebookPageId() {
-    return facebookPageId;
-  }
-
-  public void setFacebookPageId(String facebookPageId) {
-    this.facebookPageId = facebookPageId;
-  }
-
-  public void setOgImageHeight(Integer ogImageHeight) {
-    this.ogImageHeight = ogImageHeight;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getTwitterSite() {
@@ -111,5 +122,13 @@ public class PageMetadata {
 
   public void setTwitterSite(String twitterSite) {
     this.twitterSite = twitterSite;
+  }
+
+  public String getView() {
+    return view;
+  }
+
+  public void setView(String view) {
+    this.view = view;
   }
 }

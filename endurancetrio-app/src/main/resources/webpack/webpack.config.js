@@ -59,7 +59,20 @@ export default function webpackConfig(_, argv = {}) {
       rules: [
         {
           test: /\.(s[ac]|c)ss$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', 'postcss-loader'],
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'postcss-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sassOptions: {
+                  loadPaths: [path.resolve(__dirname, 'node_modules')],
+                  sourceMap: !isProduction,
+                },
+              },
+            },
+          ],
         },
       ],
     },

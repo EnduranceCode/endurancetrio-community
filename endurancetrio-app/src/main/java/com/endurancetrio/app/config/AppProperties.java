@@ -27,8 +27,18 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
 
+  private String copyrightYear;
   private OpenGraph openGraph = new OpenGraph();
   private Social social = new Social();
+  private String version;
+
+  public String getCopyrightYear() {
+    return copyrightYear;
+  }
+
+  public void setCopyrightYear(String copyrightYear) {
+    this.copyrightYear = copyrightYear;
+  }
 
   public OpenGraph getOpenGraph() {
     return openGraph;
@@ -44,6 +54,14 @@ public class AppProperties {
 
   public void setSocial(Social social) {
     this.social = social;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   public static class OpenGraph {

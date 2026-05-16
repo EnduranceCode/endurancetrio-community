@@ -22,76 +22,91 @@
 
 @use 'utilities/endurance-bulma-utilities';
 
+// Base
+// Add/remove individual base partials as the template evolves
+// -------------------------------------------------------------------------------------------------
 @forward 'bulma/sass/base';
+@forward 'bulma/sass/base/skeleton';
 
-/* Bulma Elements */
-/* bulma/sass/elements/block */
+
+// Elements
+// Add/remove individual elements partials as the template evolves
+// -------------------------------------------------------------------------------------------------
+// @forward 'bulma/sass/elements/block';
 @forward 'bulma/sass/elements/box';
 @forward 'bulma/sass/elements/content';
 @forward 'bulma/sass/elements/button';
-/* bulma/sass/elements/delete */
-/* bulma/sass/elements/icon; */
+// @forward 'bulma/sass/elements/delete';
+// @forward 'bulma/sass/elements/icon';
 @forward 'bulma/sass/elements/image';
-/* bulma/sass/elements/loader */
-/* bulma/sass/elements/notification */
-/* bulma/sass/elements/progress */
-/* bulma/sass/elements/table */
-/* bulma/sass/elements/tag */
+// @forward 'bulma/sass/elements/loader';
+// @forward 'bulma/sass/elements/notification';
+// @forward 'bulma/sass/elements/progress';
+// @forward 'bulma/sass/elements/table';
+// @forward 'bulma/sass/elements/tag';
 @forward 'bulma/sass/elements/title';
 
-/* Bulma Form */
-/* bulma/sass/form/shared; */
-/* bulma/sass/form/input-textarea; */
-/* bulma/sass/form/checkbox-radio; */
-/* bulma/sass/form/select; */
-/* bulma/sass/form/file; */
-/* bulma/sass/form/tools; */
+// Form
+// Add/remove individual form partials as the template evolves
+// -------------------------------------------------------------------------------------------------
+// @forward 'bulma/sass/form/shared';
+// @forward 'bulma/sass/form/input-textarea';
+// @forward 'bulma/sass/form/checkbox-radio';
+// @forward 'bulma/sass/form/select';
+// @forward 'bulma/sass/form/file';
+// @forward 'bulma/sass/form/tools';
 @forward 'form/endurance-switch-control';
 @forward 'form/endurance-switch-control-inner-label';
 
-/* Bulma Components */
-/* bulma/sass/components/breadcrumb */
-/* bulma/sass/components/card; */
-/* bulma/sass/components/dropdown */
-/* bulma/sass/components/menu */
-/* bulma/sass/components/message */
-/* bulma/sass/components/modal; */
+// Components
+// Add/remove individual components as the template evolves
+// -------------------------------------------------------------------------------------------------
+// @forward 'bulma/sass/components/breadcrumb';
+// @forward 'bulma/sass/components/card';
+// @forward 'bulma/sass/components/dropdown';
+// @forward 'bulma/sass/components/menu';
+// @forward 'bulma/sass/components/message';
+// @forward 'bulma/sass/components/modal';
 @forward 'bulma/sass/components/navbar';
 @forward 'components/endurance-navbar';
-/* bulma/sass/components/pagination; */
-/* bulma/sass/components/panel */
-/* bulma/sass/components/tabs; */
+// @forward 'bulma/sass/components/pagination; */
+// @forward 'bulma/sass/components/panel */
+// @forward 'bulma/sass/components/tabs; */
 
-/* Klaro */
+// Klaro - Cookie Consent
 @forward 'klaro/endurance-klaro';
 
-/* Bulma Grid */
-/* "bulma/sass/grid/columns"; */
+// Grid
+// -------------------------------------------------------------------------------------------------
+// @forward 'bulma/sass/grid/columns"';
 @forward 'bulma/sass/grid/grid';
 
-/* Bulma Layout */
+// Layout
+// Add/remove individual layout modules as the template evolves
+// -------------------------------------------------------------------------------------------------
 @forward 'bulma/sass/layout/container';
 @forward 'bulma/sass/layout/footer';
 @forward 'bulma/sass/layout/hero';
-/* bulma/sass/layout/level */
-/* bulma/sass/layout/media; */
+@forward 'bulma/sass/layout/level';
+// @forward 'bulma/sass/layout/media';
 @forward 'bulma/sass/layout/section';
 
-@forward 'bulma/sass/base/skeleton';
-
-/* Bulma Helpers */
-/* bulma/sass/helpers/aspect-ratio */
-/* bulma/sass/helpers/border */
+// Helpers
+// Add/remove individual helper groups as the template evolves
+// -------------------------------------------------------------------------------------------------
+// @forward 'bulma/sass/helpers/aspect-ratio';
+// @forward 'bulma/sass/helpers/border';
 @forward 'bulma/sass/helpers/color';
-/* bulma/sass/helpers/flexbox */
-/* bulma/sass/helpers/float */
-/* bulma/sass/helpers/gap */
-/* bulma/sass/helpers/overflow */
-/* bulma/sass/helpers/position */
+// @forward 'bulma/sass/helpers/flexbox';
+// @forward 'bulma/sass/helpers/float';
+// @forward 'bulma/sass/helpers/gap';
+// @forward 'bulma/sass/helpers/overflow';
+// @forward 'bulma/sass/helpers/position';
 @forward 'bulma/sass/helpers/spacing';
-/* bulma/sass/helpers/typography; */
-/* bulma/sass/helpers/visibility */
-/* bulma/sass/helpers/other */
+@forward 'bulma/sass/helpers/typography';
+// @forward 'bulma/sass/helpers/visibility';
+// @forward 'bulma/sass/helpers/other';
 
-/* Bulma Themes */
+// Themes
+// -------------------------------------------------------------------------------------------------
 @forward 'themes/endurance-light-theme';
