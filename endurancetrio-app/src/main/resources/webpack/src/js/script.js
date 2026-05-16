@@ -34,6 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
     privacyPolicy: `/${currentLanguage}/privacy-policy#cookies-policy`,
   });
 
+  document.getElementById('cookies-preferences-link')?.addEventListener('click',
+      (event) => {
+        event.preventDefault();
+        klaro.show(klaro.defaultConfig, true);
+      });
+
   bulmaNavbar.init();
   languageSelector.init();
 });

@@ -26,12 +26,37 @@
 
 <body>
 <footer data-th-fragment="footer" class="footer">
-  <div class="hero">
-    <div class="hero-body">
-      <figure class="image" style="width: 12rem; height: auto;">
-        <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
-      </figure>
-      <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+  <div class="container">
+    <div class="hero">
+      <div class="hero-body">
+        <figure class="image" style="width: 12rem; height: auto;">
+          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
+        </figure>
+        <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="level">
+        <div class="level-item has-text-centered is-uppercase">
+          <a data-th-href="@{/{language}/privacy-policy#privacy-policy(language=${language})}"
+             data-th-text="#{page.policy.section.privacy}">
+            Privacy Policy
+          </a>
+        </div>
+        <div class="level-item has-text-centered is-uppercase">
+          <a data-th-href="@{/{language}/privacy-policy#cookies-policy(language=${language})}"
+             data-th-text="#{page.policy.section.cookies}">
+            Cookie Policy
+          </a>
+        </div>
+        <div class="level-item has-text-centered is-uppercase">
+          <a id="cookies-preferences-link"
+             data-th-text="#{footer.cookies-preferences}">
+            Cookie Preferences
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
