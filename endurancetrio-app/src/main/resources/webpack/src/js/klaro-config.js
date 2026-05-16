@@ -113,12 +113,12 @@ export default {
         },
         essential: {
           description:
-            'These cookies are essential for the website to function and cannot be disabled. They are typically set only in response to your actions, such as adjusting privacy settings, logging in, or filling forms. While you can configure your browser to block or notify you about these cookies, doing so may prevent certain parts of the site from working properly. These cookies do not store any personally identifiable information.',
+            'These cookies are essential for the website to function and cannot be disabled. They are typically set only in response to your actions, such as adjusting privacy settings, logging in, or filling in forms. While you can configure your browser to block or notify you about these cookies, doing so may prevent certain parts of the site from working properly. These cookies do not store any personally identifiable information.',
           title: 'Essential',
         },
         functional: {
           description:
-            'These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third party providers whose services we have added to our pages. If you do not allow these cookies then some or all of these services may not function properly.',
+            'These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third party providers whose services we have added to our pages. If you do not allow these cookies, then some or all of these services may not function properly.',
           title: 'Functional',
         },
         marketing: {
@@ -137,20 +137,20 @@ export default {
           title: 'All services',
         },
         required: {
-          description: 'These services is always required',
+          description: 'These services are always required',
           title: '(always required)',
         },
       },
     },
     pt: {
       consentModal: {
-        description: 'Aqui pode escolher quais os serviços que autoriza neste website.',
+        description: 'Aqui pode escolher quais os serviços que autoriza neste sítio web.',
         title: 'Definições de Privacidade',
       },
       consentNotice: {
         title: 'Utilização de Cookies',
         description:
-          'Utilizamos cookies e tecnologias similares para serviços {purposes} que permitem melhorar a experiência de navegação. Através da opção "Personalizar" pode escolher quais os cookies opcionais cuja utilizaçãp aceita.',
+          'Utilizamos cookies e tecnologias similares para serviços {purposes} que permitem melhorar a experiência de navegação. Através da opção "Personalizar", pode escolher quais os cookies opcionais cuja utilização aceita.',
         learnMore: 'Personalizar',
       },
       decline: 'Recusar',
@@ -159,22 +159,22 @@ export default {
       purposes: {
         analytics: {
           description:
-            'Estes cookies permitem-nos contar visitas e fontes de tráfego, para que possamos medir e melhorar o desempenho do nosso website. Eles ajudam-nos a saber quais são as páginas mais e menos populares e a ver como os visitantes se movimentam pelo website. Todas as informações recolhidas por estes cookies são agregadas e, por conseguinte, anónimas.',
+            'Estes cookies permitem-nos contar visitas e fontes de tráfego, para que possamos medir e melhorar o desempenho do nosso sítio web. Eles ajudam-nos a saber quais são as páginas mais e menos populares e a ver como os visitantes se movimentam pelo sítio web. Todas as informações recolhidas por estes cookies são agregadas e, por conseguinte, anónimas.',
           title: 'Analytics',
         },
         essential: {
           description:
-            'Estes cookies são essenciais para o funcionamento do site e não podem ser desativados. Normalmente, são definidos apenas em resposta às suas ações, como ajustar as definições de privacidade, iniciar sessão ou preencher formulários. Embora possa configurar o seu navegador para bloquear ou notificá-lo sobre estes cookies, isso pode impedir que certas partes do site funcionem corretamente. Estes cookies não armazenam qualquer informação pessoalmente identificável.',
+            'Estes cookies são essenciais para o funcionamento do sítio web e não podem ser desativados. Normalmente, são definidos apenas em resposta às suas ações, como ajustar as definições de privacidade, iniciar sessão ou preencher formulários. Embora possa configurar o seu navegador para bloquear ou notificá-lo sobre estes cookies, isso pode impedir que certas partes do sítio web funcionem corretamente. Estes cookies não armazenam qualquer informação pessoalmente identificável.',
           title: 'Essenciais',
         },
         functional: {
           description:
-            'Estes cookies permitem que o website forneça funcionalidade e personalização melhoradas. Podem ser definidos por nós ou por terceiros cujos serviços tenhamos adicionado às nossas páginas. Se não permitir esses cookies, alguns ou todos esses serviços podem não funcionar corretamente.',
+            'Estes cookies permitem que o sítio web forneça funcionalidade e personalização melhoradas. Podem ser definidos por nós ou por terceiros cujos serviços tenhamos adicionado às nossas páginas. Se não permitir esses cookies, alguns ou todos esses serviços podem não funcionar corretamente.',
           title: 'Funcional',
         },
         marketing: {
           description:
-            'Estes cookies podem ser definidos através do nosso site pelos nossos parceiros de publicidade. Podem ser utilizados por essas empresas para construir um perfil dos seus interesses e mostrar-lhe anúncios relevantes noutros sites. Eles não armazenam diretamente informações pessoais, mas baseiam-se na identificação exclusiva do seu navegador e dispositivo de internet. Se não permitir estes cookies, irá experimentar menos publicidade direcionada.',
+            'Estes cookies podem ser definidos através do nosso sítio web pelos nossos parceiros de publicidade. Podem ser utilizados por essas empresas para construir um perfil dos seus interesses e mostrar-lhe anúncios relevantes noutros sítios web. Não armazenam diretamente informações pessoais, mas baseiam-se na identificação exclusiva do seu navegador e dispositivo ligado à internet. Se não permitir estes cookies, irá experimentar menos publicidade direcionada.',
           title: 'Marketing',
         },
       },
