@@ -22,14 +22,7 @@
 clear -x
 
 echo "------------------------------------------------------------------------------------------------------------------------"
-echo -e "[\e[34mINFO\e[0m] Building EnduranceTrio Application..."
-echo "------------------------------------------------------------------------------------------------------------------------"
-echo
-./mvnw clean package -DskipTests -Dfrontend.build.script=build:dev
-
-echo
-echo "------------------------------------------------------------------------------------------------------------------------"
 echo -e "[\e[34mINFO\e[0m] Starting EnduranceTrio Application..."
 echo "------------------------------------------------------------------------------------------------------------------------"
 echo
-java -jar -Dspring.profiles.active=local endurancetrio-app/target/*.jar
+./mvnw spring-boot:run -pl endurancetrio-app -Dspring-boot.run.profiles=local -Dfrontend.build.script=build:dev

@@ -159,26 +159,20 @@ to the [Development Guide](./docs/development.md).
 2. **Clone**: `git clone git@github.com:EnduranceCode/endurancetrio-community.git`
 3. **Configure**: Set up `application-secrets.yaml` from template
 4. **Build**: `./mvnw clean install` (frontend assets are generated automatically in production mode)
-5. **Run**: Use `./launch-app.sh` or the provided IntelliJ run configuration, which triggers the
-   shared `GenerateFrontendAssetsDev` run configuration before startup so browser source maps are
-   available
+5. **Run**: Use `./launch-app.sh` or the `EnduranceTrioApplication` IntelliJ run configuration,
+   which triggers `GenerateFrontendAssets` before startup so browser source maps are available.
+   For live frontend rebuilds, also run `FrontendAssetsWatch` in a separate IntelliJ tab.
 
 Frontend assets are generated into
-`endurancetrio-app/target/generated-resources/frontend/static/`.
+`endurancetrio-app/target/generated-resources/frontend/static/` during Maven builds and into
+`endurancetrio-app/target/classes/static/` when `FrontendAssetsWatch` is running.
 
 - Maven package builds use the production Webpack mode: minified assets, no source maps, raster
   image optimization, and runtime assets packaged under `BOOT-INF/classes/static/`.
-- `EnduranceTrioApplication` uses `GenerateFrontendAssetsDev` before startup so frontend debugging
+- `EnduranceTrioApplication` runs `GenerateFrontendAssets` before startup so frontend debugging
   works out of the box.
-- `EnduranceTrioApplicationWithFrontendWatch` starts both `EnduranceTrioApplication` and
-  `FrontendAssetsWatch` for live frontend rebuilds.
-- Frontend colors and semantic usage are documented in
-  [`docs/color-system.md`](./docs/color-system.md). Bulma utility customization is centralized in
-  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`,
-  with EnduranceTrio palette tokens in
-  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
-- Project-maintained SCSS adaptations for Bulma and third-party styles use the `endurance-`
-  prefix, including Klaro, switch-control, and theme entrypoints.
+- `FrontendAssetsWatch` is a separate npm run config for continuous frontend rebuilds — run it
+  in a second IntelliJ tab alongside `EnduranceTrioApplication` when editing SCSS or JS.
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 

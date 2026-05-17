@@ -31,3 +31,16 @@ logging:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/endurancetrio_community
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+      additional-paths: src/main/resources/templates, target/classes/static
+      exclude: "**/*.html,**/*.css,**/*.js"
+
+  thymeleaf:
+    cache: false
+    check-template-location: false
+    prefix: file:src/main/resources/templates/

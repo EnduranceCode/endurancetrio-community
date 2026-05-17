@@ -118,17 +118,15 @@ env vars `FIRST_OWNER` + `FIRST_HASH`.
 - JS/SCSS source in `endurancetrio-app/src/main/resources/webpack/`
 - Build: frontend assets are generated automatically during Maven builds into
   `endurancetrio-app/target/generated-resources/frontend/static/` and packaged under
-  `BOOT-INF/classes/static/`; use `npm run build:dev`, `npm run build:prod`, or
-  `npm run build:watch` from the webpack dir only for standalone frontend work
+  `BOOT-INF/classes/static/`; use `npm run build:dev` or `npm run build:prod` from the webpack
+  dir for standalone one-shot builds
 - Maven default: `frontend.build.script=build:prod`, so package builds produce minified assets
   without source maps and optimize copied raster images only
-- IntelliJ: `.run/EnduranceTrioApplication.run.xml` invokes
-  `.run/GenerateFrontendAssetsDev.run.xml` before launch, and
-  `.run/EnduranceTrioApplicationWithFrontendWatch.run.xml` starts
-  `EnduranceTrioApplication` plus `FrontendAssetsWatch`
-- Shared `.run/` configs: `GenerateFrontendAssets` for production assets,
-  `GenerateFrontendAssetsDev` for debuggable assets, `FrontendAssetsWatch` for continuous frontend
-  rebuilds, and `EnduranceTrioApplicationWithFrontendWatch` for the combined app plus watch workflow
+- IntelliJ: `.run/EnduranceTrioApplication.run.xml` invokes `.run/GenerateFrontendAssets.run.xml`
+  before launch; run `.run/FrontendAssetsWatch.run.xml` in a separate tab for continuous frontend
+  rebuilds — it sets `WEBPACK_OUTPUT_DIR` to write directly to `target/classes/static/`
+- Shared `.run/` configs: `GenerateFrontendAssets` for one-time dev assets (with source maps),
+  `FrontendAssetsWatch` for continuous frontend rebuilds
 - CSS framework: Bulma
 - Frontend color semantics and usage guidance live in `docs/color-system.md`
 - Bulma utility customization is centralized in

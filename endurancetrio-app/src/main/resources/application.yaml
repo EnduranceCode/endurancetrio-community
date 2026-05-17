@@ -120,7 +120,6 @@ spring:
       mode: never
 
   thymeleaf:
-    cache: false
     enabled: true
     prefix: classpath:/templates/
     suffix: .html

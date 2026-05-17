@@ -10,8 +10,9 @@ an overview of the project, see the [main README.md](../README.md).
 3. [Database](#database)
 4. [Tracker Domain Development](#tracker-domain-development)
 5. [Installation](#installation)
-6. [Code & Naming Conventions](#code--naming-conventions)
-7. [Programmatic Version Management](#programmatic-version-management)
+6. [Run the application](#run-the-application)
+7. [Code & Naming Conventions](#code--naming-conventions)
+8. [Programmatic Version Management](#programmatic-version-management)
 
 ## Technology Stack
 
@@ -363,15 +364,6 @@ Frontend source files live in `endurancetrio-app/src/main/resources/webpack/`.
 Generated frontend assets are written to
 `endurancetrio-app/target/generated-resources/frontend/static/` during the build.
 
-Frontend color semantics and usage guidance are documented in
-[`docs/color-system.md`](./color-system.md). Bulma utility customization is centralized in
-`endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`,
-and EnduranceTrio palette tokens live in
-`endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
-
-Project-maintained SCSS adaptations for Bulma and third-party code use the `endurance-` prefix for
-file names, including Klaro, switch-control, and theme entrypoints.
-
 For standalone frontend work inside `endurancetrio-app/src/main/resources/webpack/`, the available
 npm scripts are:
 
@@ -379,7 +371,7 @@ npm scripts are:
 - `npm run build:prod` - production bundle without source maps
 - `npm run build:watch` - continuous development rebuilds with source maps
 
-### 5. Run the application
+## Run the application
 
 The application uses Spring Boot profiles for environment-specific configuration:
 
@@ -399,46 +391,89 @@ Or, for standard JAR execution:
 -Dspring.profiles.active=dev
 ```
 
-A helper script, `launch-app.sh`, is provided to streamline local development. It performs
-a full Maven build, including frontend asset generation, and then starts the application using the
+A helper script, `launch-app.sh`, is provided to streamline local development. It performs a full
+Maven build, including frontend asset generation, and then starts the application using the
 packaged JAR with the **local** profile enabled:
 
 ```shell
 ./launch-app.sh
 ```
 
-This project also includes an IntelliJ run configuration stored in the `.run/` folder. After opening
-the project in [IntelliJ](https://www.jetbrains.com/idea/), you will find an
-`EnduranceTrioApplication` entry in the *run/debug* configuration dropdown. Select it and run the
-application with
-`Shift + F10`, or use `Shift + F9` to run the application in debug mode.
+This project also includes IntelliJ run configurations stored in the `.run/` folder. After opening
+the project in [IntelliJ](https://www.jetbrains.com/idea/), the available run configurations are:
 
-The run configuration uses the `local` Spring profile (`application-local.yaml`) and invokes the
-shared run configuration `.run/GenerateFrontendAssetsDev.run.xml` before startup. That run
-configuration executes `./mvnw compile -Dfrontend.build.script=build:dev
--f endurancetrio-app/pom.xml`, which builds the frontend with source maps, copies the assets to
-`target/classes/static/`, and compiles the Java sources — all in a single step without any manual
-Webpack step.
+| Configuration              | Type        | Purpose                                                                                                                                                                 |
+|----------------------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `EnduranceTrioApplication` | Application | Starts Spring Boot with the `local` profile. Pre-launch tasks: `Make` (Java compilation) + `GenerateFrontendAssets` (one-time frontend build).                          |
+| `GenerateFrontendAssets`   | Maven       | One-time development frontend build (`build:dev` with source maps). Invoked automatically as pre-launch task by `EnduranceTrioApplication`.                             |
+| `FrontendAssetsWatch`      | npm         | Runs `npm run build:watch` — continuously rebuilds SCSS and JS on change, writing output directly to `target/classes/static/`. Run in a separate tab alongside the app. |
 
-For faster frontend iteration, the shared `.run/FrontendAssetsWatch.run.xml` configuration runs
-`npm run build:watch` against the generated resources output directory, and the shared
-`.run/EnduranceTrioApplicationWithFrontendWatch.run.xml` compound configuration starts both the
-Spring Boot application and the frontend watch process together.
+### Hot Reload
 
-The shared `.run/` frontend-related configurations are:
+The project is configured for fast development feedback using Spring Boot DevTools and an inline
+LiveReload client:
 
-- `GenerateFrontendAssets` - Maven production asset generation
-- `GenerateFrontendAssetsDev` - Maven development asset generation with source maps + Java compilation
-- `FrontendAssetsWatch` - Webpack development watch process targeting the generated resources folder
-- `EnduranceTrioApplication` - Spring Boot app run config using `GenerateFrontendAssetsDev`
-- `EnduranceTrioApplicationWithFrontendWatch` - compound run config that starts
-  `EnduranceTrioApplication` and `FrontendAssetsWatch` together
+1. **Spring Boot DevTools** starts an embedded LiveReload WebSocket server on port `35729`
+   (visible in the logs as `LiveReload server is running on port 35729`)
+2. An inline script in the HTML `<head>` (only rendered on the `local` profile) connects to this
+   server and listens for reload commands
+3. When a file changes, DevTools sends a reload notification and the browser auto-refreshes
+
+#### Template changes (`.html`)
+
+Templates are read directly from the source tree using a `file:` prefix (configured in
+`application-local.yaml`). Saving a template triggers a LiveReload signal via DevTools and
+the browser auto-refreshes — no build step, compilation, or manual refresh is needed.
+
+#### Frontend changes (`.scss`, `.js`)
+
+For continuous frontend rebuilds, run `FrontendAssetsWatch` in a separate IntelliJ run tab.
+Webpack watches the source files and rebuilds to `target/classes/static/` on every change
+(the `WEBPACK_OUTPUT_DIR` env var is set in the run config). DevTools detects the new files
+there and triggers a browser auto-refresh.
+
+#### What triggers a browser refresh
+
+| Change                       | What happens                                                                 |
+|------------------------------|------------------------------------------------------------------------------|
+| Thymeleaf template (`.html`) | DevTools detects the change → browser auto-refreshes                         |
+| Frontend (`.scss`, `.js`)    | Webpack watch rebuilds → DevTools detects → browser auto-refreshes           |
+| Java class                   | IntelliJ offers a hotswap button (no restart needed for method body changes) |
+
+#### Profile safety
+
+All hot-reload features are scoped to the `local` profile only:
+
+- `spring.thymeleaf.cache: false` — only in `application-local.yaml`; production uses `cache: true`
+- LiveReload client script — gated on `@environment.acceptsProfiles('local')` in the Thymeleaf
+  template
+- DevTools — only active when running from an IDE or `spring-boot:run`; excluded from the
+  production JAR by the Spring Boot Maven plugin
+
+### Running the application (IntelliJ)
+
+1. Select `EnduranceTrioApplication` from the run configuration dropdown
+2. Click `Run` (`Shift + F10`) — the app starts with a one-time frontend build
+3. If editing SCSS or JS, also run `FrontendAssetsWatch` in a separate tab
+
+### Running the application (CLI)
+
+Use `launch-app.sh` which performs a full Maven build (including frontend asset generation)
+and then starts the application using the packaged JAR with the `local` profile. For continuous
+frontend rebuilds in a separate terminal, set `WEBPACK_OUTPUT_DIR` to point at
+`target/classes/static/` so webpack writes directly to the path Spring Boot serves:
+
+```shell
+WEBPACK_OUTPUT_DIR=$(pwd)/endurancetrio-app/target/classes/static \
+  npm --prefix endurancetrio-app/src/main/resources/webpack run build:watch
+```
 
 ## Code & Naming Conventions
 
 ### Frontend Styling
 
-- Use `docs/color-system.md` as the canonical guide for frontend color selection and semantic usage.
+- Use [`docs/color-system.md`](./color-system.md) as the canonical guide for frontend color selection
+  and semantic usage.
 - Keep EnduranceTrio palette tokens in
   `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
 - Keep Bulma utility customization in
