@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="EnduranceTrioApplicationWithFrontendWatch" type="CompoundRunConfigurationType" factoryName="Compound">
-    <toRun name="EnduranceTrioApplication" type="Application" />
-    <toRun name="FrontendAssetsWatch" type="npm" />
-    <method v="2" />
-  </configuration>
-</component>

@@ -61,6 +61,35 @@
 
   <link rel="stylesheet" data-th-href="@{/css/style.css}">
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
+
+  <script th:if="${@environment.acceptsProfiles('local')}">
+    (function() {
+      // Connects to Spring Boot DevTools' embedded LiveReload WebSocket server.
+      // The protocol identifier below is a URN used in the LiveReload handshake —
+      // it is NOT fetched from any domain (no network call to livereload.com).
+      var ws = new WebSocket('ws://localhost:35729/livereload');
+      ws.onopen = function() {
+        ws.send(JSON.stringify({
+          command: 'hello',
+          protocols: ['http://livereload.com/protocols/official-7'],
+          serverName: 'browser'
+        }));
+      };
+      ws.onmessage = function(event) {
+        try {
+          var msg = JSON.parse(event.data);
+          if (msg.command === 'reload') {
+            location.reload();
+          }
+        } catch(e) {}
+      };
+      ws.onclose = function() {
+        setTimeout(function() {
+          location.reload();
+        }, 1500);
+      };
+    })();
+  </script>
 </head>
 
 <body>

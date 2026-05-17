@@ -8,6 +8,7 @@
           <option name="goals">
             <list>
               <option value="process-resources" />
+              <option value="-Dfrontend.build.script=build:dev" />
             </list>
           </option>
           <option name="pomFileName" value="endurancetrio-app/pom.xml" />
