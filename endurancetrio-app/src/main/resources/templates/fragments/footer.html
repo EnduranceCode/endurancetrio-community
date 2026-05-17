@@ -36,7 +36,39 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section pb-0">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <form action="#">
+              <div class="field is-grouped is-grouped-multiline">
+                <p class="control is-expanded">
+                  <label class="label is-sr-only" for="newsletter-name"
+                         data-th-text="#{footer.newsletter.name}">Name</label>
+                  <input id="newsletter-name" class="input" type="text"
+                         data-th-placeholder="#{footer.newsletter.name}" placeholder="Name">
+                </p>
+                <p class="control is-expanded">
+                  <label class="label is-sr-only" for="newsletter-email"
+                         data-th-text="#{footer.newsletter.email}">Email</label>
+                  <input id="newsletter-email" class="input" type="email"
+                         data-th-placeholder="#{footer.newsletter.email}" placeholder="Email">
+                </p>
+                <p class="control is-expanded">
+                  <button class="button is-primary is-fullwidth"
+                          data-th-text="#{footer.newsletter.subscribe}">
+                    Subscribe Newsletter
+                  </button>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="level-right"></div>
+      </div>
+    </div>
+
+    <div class="section pb-0">
       <div class="level">
         <div class="level-item has-text-centered is-uppercase">
           <a data-th-href="@{/{language}/privacy-policy#privacy-policy(language=${language})}"

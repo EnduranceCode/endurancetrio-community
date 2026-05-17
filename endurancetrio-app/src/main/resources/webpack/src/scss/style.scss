@@ -49,12 +49,12 @@
 // Form
 // Add/remove individual form partials as the template evolves
 // -------------------------------------------------------------------------------------------------
-// @forward 'bulma/sass/form/shared';
-// @forward 'bulma/sass/form/input-textarea';
+@forward 'bulma/sass/form/shared';
+@forward 'bulma/sass/form/input-textarea';
 // @forward 'bulma/sass/form/checkbox-radio';
 // @forward 'bulma/sass/form/select';
 // @forward 'bulma/sass/form/file';
-// @forward 'bulma/sass/form/tools';
+@forward 'bulma/sass/form/tools';
 @forward 'form/endurance-switch-control';
 @forward 'form/endurance-switch-control-inner-label';
 
@@ -104,7 +104,7 @@
 // @forward 'bulma/sass/helpers/position';
 @forward 'bulma/sass/helpers/spacing';
 @forward 'bulma/sass/helpers/typography';
-// @forward 'bulma/sass/helpers/visibility';
+@forward 'bulma/sass/helpers/visibility';
 // @forward 'bulma/sass/helpers/other';
 
 // Themes
