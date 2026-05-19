@@ -133,6 +133,10 @@ env vars `FIRST_OWNER` + `FIRST_HASH`.
   `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-bulma-utilities.scss`
   and EnduranceTrio palette tokens live in
   `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`
+- Gray background helpers (`has-background-grey-{050…900}`) are generated in
+  `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurance-grey-helpers.scss`;
+  each class sets an auto-inverted text colour via CSS custom properties — see
+  `docs/color-system.md#grey-background-helpers` for the full reference
 - Project-maintained SCSS customizations for Bulma/third-party code use the `endurance-` prefix
   for file names, including Klaro, switch-control, and theme entrypoints
 - **Icon system (generated):** Configured via `webpack/icons.config.json`. Each icon

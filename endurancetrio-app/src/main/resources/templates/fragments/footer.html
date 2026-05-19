@@ -25,18 +25,18 @@
 </head>
 
 <body>
-<footer data-th-fragment="footer" class="footer">
+<footer data-th-fragment="footer" class="footer has-background-grey-700 pb-0">
   <div class="container">
     <div class="hero">
       <div class="hero-body">
         <figure class="image" style="width: 12rem; height: auto;">
-          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid}"></svg>
+          <svg data-th-replace="~{fragments/svg::endurancetrio-logo-fluid-white}"></svg>
         </figure>
         <p data-th-text="#{endurancetrio.tag-line}" class="subtitle mt-3"></p>
       </div>
     </div>
 
-    <div class="section pb-0">
+    <div class="section">
       <div class="columns is-8">
         <div class="column is-three-quarters">
           <form action="#">
@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <div class="section pb-0">
+    <div class="section">
       <div class="level">
         <div class="level-item has-text-centered is-uppercase">
           <a data-th-href="@{/{language}/privacy-policy#privacy-policy(language=${language})}"
@@ -121,7 +121,7 @@
     </div>
   </div>
 
-  <div class="section pb-0">
+  <div class="section">
     <div class="level">
       <div class="level-left">
         <div class="level-item">

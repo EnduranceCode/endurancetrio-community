@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+@use 'sass:color';
+@use './endurancetrio-variables' as et;
+
+$et-greys: (
+  "050": et.$et-grey-050,
+  "100": et.$et-grey-100,
+  "200": et.$et-grey-200,
+  "300": et.$et-grey-300,
+  "400": et.$et-grey-400,
+  "500": et.$et-grey-500,
+  "600": et.$et-grey-600,
+  "700": et.$et-grey-700,
+  "800": et.$et-grey-800,
+  "900": et.$et-grey-900,
+);
+
+@each $name, $color in $et-greys {
+  $is-light: color.channel($color, "lightness", $space: hsl) > 55;
+  $text-color: if($is-light, et.$et-grey-900, et.$et-grey-050);
+  $link-color: if($is-light, et.$et-blue-700, et.$et-blue-300);
+  $link-hover-color: if($is-light, et.$et-blue-800, et.$et-blue-200);
+
+  .has-background-grey-#{$name} {
+    --bulma-text: #{$text-color};
+    --bulma-text-strong: #{$text-color};
+    --bulma-link-text: #{$link-color};
+
+    background-color: $color !important;
+    color: $text-color !important;
+
+    a:not(.button):not(.navbar-item):hover {
+      color: $link-hover-color !important;
+    }
+  }
+}

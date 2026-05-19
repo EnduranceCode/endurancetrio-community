@@ -1,7 +1,5 @@
 # EnduranceTrio Color System
 
-## Overview
-
 The EnduranceTrio color system is built on four Material-Design-inspired palettes that extend
 the three brand colors from the logo plus a supporting semantic green.
 
@@ -16,6 +14,18 @@ consistently without custom CSS overrides.
 - Semantic clarity rooted in endurance-sport metaphors
 - Readability and WCAG AA contrast wherever possible
 - Clean Bulma integration using only its variable system
+
+## Table of Contents
+
+1. [Brand Foundations](#brand-foundations)
+2. [Supporting Semantic Color - Green](#supporting-semantic-color---green)
+3. [Material Design Palettes](#material-design-palettes)
+4. [Grey Neutral Palette](#grey-neutral-palette)
+5. [Grey Background Helpers](#grey-background-helpers)
+6. [Bulma Color System Customization](#bulma-color-system-customization)
+7. [Color Usage Recommendations](#color-usage-recommendations)
+8. [Accessibility Guidance](#accessibility-guidance)
+9. [Palette Swatch Reference](#palette-swatch-reference)
 
 ## Brand Foundations
 
@@ -75,18 +85,18 @@ to derive `600`, all lighter tints (`400`→`050`), and all darker shades (`800`
 
 ### HSL Palette Reference
 
-| Shade   | Blue                                           | HSL                   | Yellow                                         | HSL                  | Red                                            | HSL                  | Green                                          | HSL                   | Shade   |
-|---------|------------------------------------------------|-----------------------|------------------------------------------------|----------------------|------------------------------------------------|----------------------|------------------------------------------------|-----------------------|---------|
-| 050     | ![#A4DCF3](./assets/color-swatches/a4dcf3.svg) | `hsl(197, 77%, 80%)`  | ![#FEEF8C](./assets/color-swatches/feef8c.svg) | `hsl(52, 98%, 77%)`  | ![#FCAFAD](./assets/color-swatches/fcafad.svg) | `hsl(2, 93%, 83%)`   | ![#A7EFE3](./assets/color-swatches/a7efe3.svg) | `hsl(170, 69%, 80%)`  | 050     |
-| 100     | ![#95D6F1](./assets/color-swatches/95d6f1.svg) | `hsl(198, 77%, 76%)`  | ![#FEEC78](./assets/color-swatches/feec78.svg) | `hsl(52, 99%, 73%)`  | ![#FCA09D](./assets/color-swatches/fca09d.svg) | `hsl(2, 94%, 80%)`   | ![#98ECDE](./assets/color-swatches/98ecde.svg) | `hsl(170, 69%, 76%)`  | 100     |
-| 200     | ![#84D0EF](./assets/color-swatches/84d0ef.svg) | `hsl(197, 77%, 73%)`  | ![#FEE961](./assets/color-swatches/fee961.svg) | `hsl(52, 99%, 69%)`  | ![#FC8E8A](./assets/color-swatches/fc8e8a.svg) | `hsl(2, 95%, 76%)`   | ![#86E9D8](./assets/color-swatches/86e9d8.svg) | `hsl(170, 69%, 72%)`  | 200     |
-| 300     | ![#71C9EC](./assets/color-swatches/71c9ec.svg) | `hsl(197, 76%, 68%)`  | ![#FEE546](./assets/color-swatches/fee546.svg) | `hsl(52, 99%, 64%)`  | ![#FB7974](./assets/color-swatches/fb7974.svg) | `hsl(2, 94%, 72%)`   | ![#71E5D1](./assets/color-swatches/71e5d1.svg) | `hsl(170, 69%, 67%)`  | 300     |
-| 400     | ![#5BC0E9](./assets/color-swatches/5bc0e9.svg) | `hsl(197, 76%, 64%)`  | ![#FEE026](./assets/color-swatches/fee026.svg) | `hsl(52, 99%, 57%)`  | ![#FA605A](./assets/color-swatches/fa605a.svg) | `hsl(2, 94%, 67%)`   | ![#59E0C9](./assets/color-swatches/59e0c9.svg) | `hsl(170, 69%, 61%)`  | 400     |
-| **500** | ![#41B6E6](./assets/color-swatches/41b6e6.svg) | `hsl(197, 77%, 58%)`  | ![#FEDB00](./assets/color-swatches/fedb00.svg) | `hsl(52, 100%, 50%)` | ![#F9423A](./assets/color-swatches/f9423a.svg) | `hsl(3, 94%, 60%)`   | ![#3CDBC0](./assets/color-swatches/3cdbc0.svg) | `hsl(170, 69%, 55%)`  | **500** |
-| 600     | ![#389DC7](./assets/color-swatches/389dc7.svg) | `hsl(198, 56%, 50%)`  | ![#D8BA00](./assets/color-swatches/d8ba00.svg) | `hsl(52, 100%, 42%)` | ![#D13731](./assets/color-swatches/d13731.svg) | `hsl(2, 63%, 51%)`   | ![#33BBA4](./assets/color-swatches/33bba4.svg) | `hsl(170, 57%, 47%)`  | 600     |
-| **700** | ![#0077C8](./assets/color-swatches/0077c8.svg) | `hsl(204, 100%, 39%)` | ![#CC8A00](./assets/color-swatches/cc8a00.svg) | `hsl(41, 100%, 40%)` | ![#AF272F](./assets/color-swatches/af272f.svg) | `hsl(356, 64%, 42%)` | ![#00B388](./assets/color-swatches/00b388.svg) | `hsl(166, 100%, 35%)` | **700** |
-| 800     | ![#0067AD](./assets/color-swatches/0067ad.svg) | `hsl(204, 100%, 34%)` | ![#AE7600](./assets/color-swatches/ae7600.svg) | `hsl(41, 100%, 34%)` | ![#932127](./assets/color-swatches/932127.svg) | `hsl(357, 63%, 35%)` | ![#009974](./assets/color-swatches/009974.svg) | `hsl(165, 100%, 30%)` | 800     |
-| 900     | ![#005995](./assets/color-swatches/005995.svg) | `hsl(204, 100%, 29%)` | ![#946400](./assets/color-swatches/946400.svg) | `hsl(41, 100%, 29%)` | ![#7B1C21](./assets/color-swatches/7b1c21.svg) | `hsl(357, 63%, 30%)` | ![#008263](./assets/color-swatches/008263.svg) | `hsl(166, 100%, 25%)` | 900     |
+| Shade   | Blue                  | Yellow               | Red                  | Green                 | Shade   |
+|---------|-----------------------|----------------------|----------------------|-----------------------|---------|
+| 050     | `hsl(197, 77%, 80%)`  | `hsl(52, 98%, 77%)`  | `hsl(2, 93%, 83%)`   | `hsl(170, 69%, 80%)`  | 050     |
+| 100     | `hsl(198, 77%, 76%)`  | `hsl(52, 99%, 73%)`  | `hsl(2, 94%, 80%)`   | `hsl(170, 69%, 76%)`  | 100     |
+| 200     | `hsl(197, 77%, 73%)`  | `hsl(52, 99%, 69%)`  | `hsl(2, 95%, 76%)`   | `hsl(170, 69%, 72%)`  | 200     |
+| 300     | `hsl(197, 76%, 68%)`  | `hsl(52, 99%, 64%)`  | `hsl(2, 94%, 72%)`   | `hsl(170, 69%, 67%)`  | 300     |
+| 400     | `hsl(197, 76%, 64%)`  | `hsl(52, 99%, 57%)`  | `hsl(2, 94%, 67%)`   | `hsl(170, 69%, 61%)`  | 400     |
+| **500** | `hsl(197, 77%, 58%)`  | `hsl(52, 100%, 50%)` | `hsl(3, 94%, 60%)`   | `hsl(170, 69%, 55%)`  | **500** |
+| 600     | `hsl(198, 56%, 50%)`  | `hsl(52, 100%, 42%)` | `hsl(2, 63%, 51%)`   | `hsl(170, 57%, 47%)`  | 600     |
+| **700** | `hsl(204, 100%, 39%)` | `hsl(41, 100%, 40%)` | `hsl(356, 64%, 42%)` | `hsl(166, 100%, 35%)` | **700** |
+| 800     | `hsl(204, 100%, 34%)` | `hsl(41, 100%, 34%)` | `hsl(357, 63%, 35%)` | `hsl(165, 100%, 30%)` | 800     |
+| 900     | `hsl(204, 100%, 29%)` | `hsl(41, 100%, 29%)` | `hsl(357, 63%, 30%)` | `hsl(166, 100%, 25%)` | 900     |
 
 ### HEX Palette Reference
 
@@ -103,12 +113,62 @@ to derive `600`, all lighter tints (`400`→`050`), and all darker shades (`800`
 | 800     | ![#0067AD](./assets/color-swatches/0067ad.svg) | `#0067AD` | ![#AE7600](./assets/color-swatches/ae7600.svg) | `#AE7600` | ![#932127](./assets/color-swatches/932127.svg) | `#932127` | ![#009974](./assets/color-swatches/009974.svg) | `#009974` | 800     |
 | 900     | ![#005995](./assets/color-swatches/005995.svg) | `#005995` | ![#946400](./assets/color-swatches/946400.svg) | `#946400` | ![#7B1C21](./assets/color-swatches/7b1c21.svg) | `#7B1C21` | ![#008263](./assets/color-swatches/008263.svg) | `#008263` | 900     |
 
+## Grey Neutral Palette
+
+A 10-step neutral grey palette following the same 050–900 scale as the brand colors. Unlike the
+hue-based palettes above, all grey shades share a single hue and saturation — the same values
+Bulma uses for its built-in grey scale — varying only in lightness.
+
+| Shade | Grey                                           | HEX       | HSL                  | Lightness | Anchored To   |
+|-------|------------------------------------------------|-----------|----------------------|-----------|---------------|
+| 050   | ![#F6F7F8](./assets/color-swatches/f6f7f8.svg) | `#F6F7F8` | `hsl(221, 14%, 97%)` | 97%       | —             |
+| 100   | ![#F0F2F4](./assets/color-swatches/f0f2f4.svg) | `#F0F2F4` | `hsl(221, 14%, 95%)` | 95%       | ~white-ter    |
+| 200   | ![#D6D9E0](./assets/color-swatches/d6d9e0.svg) | `#D6D9E0` | `hsl(221, 14%, 86%)` | 86%       | =grey-lighter |
+| 300   | ![#B3B9C6](./assets/color-swatches/b3b9c6.svg) | `#B3B9C6` | `hsl(221, 14%, 74%)` | 74%       | interpolated  |
+| 400   | ![#9199AC](./assets/color-swatches/9199ac.svg) | `#9199AC` | `hsl(221, 14%, 62%)` | 62%       | interpolated  |
+| 500   | ![#69748C](./assets/color-swatches/69748c.svg) | `#69748C` | `hsl(221, 14%, 48%)` | 48%       | =grey         |
+| 600   | ![#4F5769](./assets/color-swatches/4f5769.svg) | `#4F5769` | `hsl(221, 14%, 36%)` | 36%       | interpolated  |
+| 700   | ![#373C49](./assets/color-swatches/373c49.svg) | `#373C49` | `hsl(221, 14%, 25%)` | 25%       | interpolated  |
+| 800   | ![#1F2229](./assets/color-swatches/1f2229.svg) | `#1F2229` | `hsl(221, 14%, 14%)` | 14%       | =black-ter    |
+| 900   | ![#14161A](./assets/color-swatches/14161a.svg) | `#14161A` | `hsl(221, 14%,  9%)` | 9%        | =black-bis    |
+
+The SCSS variables are declared as `$et-grey-{050…900}` in `endurancetrio-variables.scss`.
+
+## Grey Background Helpers
+
+Ten utility classes are generated from the grey palette, each setting both a background colour
+and an automatically inverted text color so the content remains readable without extra markup.
+
+| Class                          | Background                     | Text Colour                    | Links                          | Link Hover                     |
+|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|
+| `.has-background-grey-050`     | `hsl(221, 14%, 97%)`           | `$et-grey-900`                 | `$et-blue-700`                 | `$et-blue-800`                 |
+| `.has-background-grey-100`     | `hsl(221, 14%, 95%)`           | `$et-grey-900`                 | `$et-blue-700`                 | `$et-blue-800`                 |
+| `.has-background-grey-200`     | `hsl(221, 14%, 86%)`           | `$et-grey-900`                 | `$et-blue-700`                 | `$et-blue-800`                 |
+| `.has-background-grey-300`     | `hsl(221, 14%, 74%)`           | `$et-grey-900`                 | `$et-blue-700`                 | `$et-blue-800`                 |
+| `.has-background-grey-400`     | `hsl(221, 14%, 62%)`           | `$et-grey-900`                 | `$et-blue-700`                 | `$et-blue-800`                 |
+| `.has-background-grey-500`     | `hsl(221, 14%, 48%)`           | `$et-grey-050`                 | `$et-blue-300`                 | `$et-blue-200`                 |
+| `.has-background-grey-600`     | `hsl(221, 14%, 36%)`           | `$et-grey-050`                 | `$et-blue-300`                 | `$et-blue-200`                 |
+| `.has-background-grey-700`     | `hsl(221, 14%, 25%)`           | `$et-grey-050`                 | `$et-blue-300`                 | `$et-blue-200`                 |
+| `.has-background-grey-800`     | `hsl(221, 14%, 14%)`           | `$et-grey-050`                 | `$et-blue-300`                 | `$et-blue-200`                 |
+| `.has-background-grey-900`     | `hsl(221, 14%,  9%)`           | `$et-grey-050`                 | `$et-blue-300`                 | `$et-blue-200`                 |
+
+The invert threshold follows Bulma's luminance-based logic (≈55 % lightness). Backgrounds lighter
+than the threshold — 050 through 400 — get dark text and dark blue links (`$et-blue-700`).
+Backgrounds darker than or equal to the threshold — 500 through 900 — get light text and light
+blue links (`$et-blue-300`).
+
+Link hover moves one step darker on light backgrounds (`$et-blue-800`) and one step lighter on
+dark backgrounds (`$et-blue-200`). The `a:not(.button):not(.navbar-item)` selector prevents the
+helpers from overriding Bulma's own button and navbar link styles.
+
+The classes set CSS custom properties (`--bulma-text`, `--bulma-text-strong`, `--bulma-link-text`)
+so that Bulma components such as `.title` and `.subtitle` inside these backgrounds automatically
+inherit the correct color via Bulma's own variable cascade.
+
 ## Bulma Color System Customization
 
-Bulma's neutral and text colors are kept at their defaults. This preserves Bulma's
-proven readability defaults and reduces maintenance surface area.
-
-The EnduranceTrio palettes replace Bulma's built-in color variables as follows:
+Bulma's neutral shades are supplemented by the grey palette above. The four brand palettes replace
+Bulma's built-in color variables as follows:
 
 | Bulma Variable | Color Token   | HEX       | HSL                   |
 |----------------|---------------|-----------|-----------------------|
@@ -229,10 +289,12 @@ are formalized in SCSS.
 
 Known-safe foreground–background combinations for text:
 
-| Text Color          | Works On                                             |
-|---------------------|------------------------------------------------------|
-| White               | Blue 600–900, Red 600–900, Green 600–900             |
-| Dark text (`$text`) | Blue 50–400, Yellow 50–500, Red 50–200, Green 50–200 |
+| Text Color                | Works On                                                          |
+|---------------------------|-------------------------------------------------------------------|
+| White                     | Blue 600–900, Red 600–900, Green 600–900, Grey 500–900            |
+| `$et-grey-050` (near-white) | Grey 500–900                                                    |
+| `$et-grey-900` (near-black) | Grey 050–400                                                    |
+| Dark text (`$text`)       | Blue 50–400, Yellow 50–500, Red 50–200, Green 50–200             |
 
 Risky combinations to avoid:
 
