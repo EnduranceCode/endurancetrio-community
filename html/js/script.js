@@ -20,7 +20,29 @@
       {
         name: 'google-tag-manager',
         purposes: ['functional'],
-        default: true
+        default: true,
+        onAccept: `
+                for(let k of Object.keys(opts.consents)){
+                    if (opts.consents[k]){
+                        let eventName = 'klaro-'+k+'-accepted'
+                        dataLayer.push({'event': eventName})
+                    }
+                }
+            `,
+        onInit: `
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function(){dataLayer.push(arguments)}
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'analytics_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'functionality_storage': 'denied',
+                    'security_storage': 'denied'
+                })
+                gtag('set', 'ads_data_redaction', true)
+                gtag('set', 'url_passthrough', true)
+            `
       },
       {
         name: 'google-analytics',
