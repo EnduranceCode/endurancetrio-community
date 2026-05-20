@@ -72,6 +72,7 @@ public final class PageMetadataUtils {
     metadata.setCanonicalUrl(request.getRequestURL().toString());
     metadata.setOgImage(baseUrl + properties.getOpenGraph().getDefaultImg());
     metadata.setFacebookPageId(properties.getSocial().getFacebookPageId());
+    metadata.setGoogleAdsenseId(properties.getGoogle().getAdsenseId());
     metadata.setKofiUserId(properties.getKoFi().getUserId());
     metadata.setOgImageHeight(properties.getOpenGraph().getDefaultImgHeight());
     metadata.setOgImageWidth(properties.getOpenGraph().getDefaultImgWidth());

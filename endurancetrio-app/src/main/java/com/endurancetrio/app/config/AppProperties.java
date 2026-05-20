@@ -28,10 +28,19 @@ import org.springframework.stereotype.Component;
 public class AppProperties {
 
   private String copyrightYear;
+  private Google google = new Google();
   private KoFi kofi = new KoFi();
   private OpenGraph openGraph = new OpenGraph();
   private Social social = new Social();
   private String version;
+
+  public Google getGoogle() {
+    return google;
+  }
+
+  public void setGoogle(Google google) {
+    this.google = google;
+  }
 
   public KoFi getKoFi() {
     return kofi;
@@ -71,6 +80,19 @@ public class AppProperties {
 
   public void setVersion(String version) {
     this.version = version;
+  }
+
+  public static class Google {
+
+    private String adsenseId;
+
+    public String getAdsenseId() {
+      return adsenseId;
+    }
+
+    public void setAdsenseId(String adsenseId) {
+      this.adsenseId = adsenseId;
+    }
   }
 
   public static class KoFi {
