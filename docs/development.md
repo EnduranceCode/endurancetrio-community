@@ -332,6 +332,10 @@ cp endurancetrio-app/src/main/resources/template-secrets.yaml endurancetrio-app/
 Now, edit the `application-secrets.yaml` file:
 
 - **Set database credentials**: replace `{USER}` and `{PASSWORD}` with your desired values.
+- **Set Google AdSense publisher ID** (optional): replace `{GOOGLE_ADSENSE_ID}` with your
+  Google AdSense publisher ID (e.g., `ca-pub-xxxxxxxxxxxxxx`).
+- **Set Ko-fi and social IDs** (optional): replace `{KOFI_USER_ID}`, `{FACEBOOK_PAGE_ID}`,
+  and `{TWITTER_SITE}` with your platform identifiers.
 
 > **Security Notice**
 >
