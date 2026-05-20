@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('cookies-preferences-link')?.addEventListener('click',
       (event) => {
         event.preventDefault();
-        klaro.show(klaro.defaultConfig, true);
+        klaro.show(klaroConfig, true);
       });
 
   bulmaNavbar.init();
