@@ -23,12 +23,14 @@ app:
   initialization:
     first-account-owner: ${FIRST_OWNER:}
     first-account-key-hash: ${FIRST_HASH:}
+  google:
+    adsense-id: ${GOOGLE_ADSENSE_ID:}
+  kofi:
+    user-id: ${KOFI_USER_ID:}
   open-graph:
     default-img: /img/endurancetrio-open-graph.png
     default-img-height: 628
     default-img-width: 1200
-  kofi:
-    user-id: ${KOFI_USER_ID:}
   social:
     facebook-page-id: ${FACEBOOK_PAGE_ID:}
     twitter-site: ${TWITTER_SITE:}

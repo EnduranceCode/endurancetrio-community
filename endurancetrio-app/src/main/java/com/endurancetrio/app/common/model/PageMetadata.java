@@ -33,6 +33,7 @@ public class PageMetadata {
   private String copyrightYear;
   private String description;
   private String facebookPageId;
+  private String googleAdsenseId;
   private String kofiUserId;
   private String ogImage;
   private Integer ogImageHeight;
@@ -83,6 +84,14 @@ public class PageMetadata {
 
   public void setFacebookPageId(String facebookPageId) {
     this.facebookPageId = facebookPageId;
+  }
+
+  public String getGoogleAdsenseId() {
+    return googleAdsenseId;
+  }
+
+  public void setGoogleAdsenseId(String googleAdsenseId) {
+    this.googleAdsenseId = googleAdsenseId;
   }
 
   public String getKofiUserId() {
