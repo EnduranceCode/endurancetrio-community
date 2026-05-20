@@ -47,14 +47,14 @@
 
     <div id="main-navbar" class="navbar-menu">
       <div class="navbar-end">
-        <a
+        <button
             data-th-href="@{/{language}/events(language=${language})}"
             data-th-text="#{navbar.option.events}"
             data-th-classappend="${metadata.view == 'events'} ? 'is-active'"
             class="navbar-item"
         >
           Events
-        </a>
+        </button>
         <a
             data-th-href="@{/{language}/about(language=${language})}"
             data-th-text="#{navbar.option.about}"
