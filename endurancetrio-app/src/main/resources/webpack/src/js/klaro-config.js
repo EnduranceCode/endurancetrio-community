@@ -50,8 +50,16 @@ export default {
       onInit: `
                 window.dataLayer = window.dataLayer || [];
                 window.gtag = function(){dataLayer.push(arguments)}
-                gtag('consent', 'default', {'ad_storage': 'denied', 'analytics_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied'})
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'analytics_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'functionality_storage': 'denied',
+                    'security_storage': 'denied'
+                })
                 gtag('set', 'ads_data_redaction', true)
+                gtag('set', 'url_passthrough', true)
             `,
     },
     {
