@@ -20,7 +20,7 @@
       {
         name: 'google-tag-manager',
         purposes: ['functional'],
-        default: true,
+        required: true,
         onAccept: `
                 for(let k of Object.keys(opts.consents)){
                     if (opts.consents[k]){
@@ -37,8 +37,8 @@
                     'analytics_storage': 'denied',
                     'ad_user_data': 'denied',
                     'ad_personalization': 'denied',
-                    'functionality_storage': 'denied',
-                    'security_storage': 'denied'
+                    'functionality_storage': 'granted',
+                    'security_storage': 'granted'
                 })
                 gtag('set', 'ads_data_redaction', true)
                 gtag('set', 'url_passthrough', true)
@@ -48,12 +48,36 @@
         name: 'google-analytics',
         cookies: [/^_ga(_.*)?/, /^_gat/, /^_gid/],
         purposes: ['analytics'],
-        default: true
+        default: true,
+        onAccept: `
+                gtag('consent', 'update', {
+                    'analytics_storage': 'granted',
+                })
+            `,
+        onDecline: `
+                gtag('consent', 'update', {
+                    'analytics_storage': 'denied',
+                })
+            `
       },
       {
         name: 'google-ads',
         cookies: [/^_gac/, /^_gcl/],
-        purposes: ['marketing']
+        purposes: ['marketing'],
+        onAccept: `
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted'
+                })
+            `,
+        onDecline: `
+                gtag('consent', 'update', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied'
+                })
+            `
       }
     ],
     translations: {

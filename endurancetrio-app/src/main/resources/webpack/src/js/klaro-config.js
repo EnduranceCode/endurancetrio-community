@@ -38,7 +38,7 @@ export default {
     {
       name: 'google-tag-manager',
       purposes: ['functional'],
-      default: true,
+      required: true,
       onAccept: `
                 for(let k of Object.keys(opts.consents)){
                     if (opts.consents[k]){
@@ -55,8 +55,8 @@ export default {
                     'analytics_storage': 'denied',
                     'ad_user_data': 'denied',
                     'ad_personalization': 'denied',
-                    'functionality_storage': 'denied',
-                    'security_storage': 'denied'
+                    'functionality_storage': 'granted',
+                    'security_storage': 'granted'
                 })
                 gtag('set', 'ads_data_redaction', true)
                 gtag('set', 'url_passthrough', true)
