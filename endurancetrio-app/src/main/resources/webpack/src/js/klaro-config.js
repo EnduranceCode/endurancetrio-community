@@ -31,13 +31,13 @@ export default {
 
   services: [
     {
-      name: 'enduranceTrio-consent',
+      name: 'endurancetrio-consent',
       purposes: ['essential'],
       required: true,
     },
     {
       name: 'google-tag-manager',
-      purposes: ['functional'],
+      purposes: ['essential'],
       required: true,
       onAccept: `
                 for(let k of Object.keys(opts.consents)){
@@ -100,6 +100,26 @@ export default {
   ],
   translations: {
     en: {
+      'endurancetrio-consent': {
+        title: 'Website Consent Preferences',
+        description:
+          'Remembers the cookie and consent choices you make in this banner so you do not have to re-select them on your next visit.',
+      },
+      'google-tag-manager': {
+        title: 'Privacy Infrastructure',
+        description:
+          'Securely coordinates script configurations and enforces your global data protection and cookie choices instantly.',
+      },
+      'google-analytics': {
+        title: 'Google Analytics',
+        description:
+          'Anonymously measures site traffic and user navigation trends so we can optimize performance and data layouts.',
+      },
+      'google-ads': {
+        title: 'Google AdSense',
+        description:
+          'Displays safe ad placements on our platform while strictly respecting your advertising preference choices.',
+      },
       consentModal: {
         description: 'Here, you can choose which services you allow on this website.',
         title: 'Privacy Settings',
@@ -151,6 +171,26 @@ export default {
       },
     },
     pt: {
+      'endurancetrio-consent': {
+        title: 'Preferências de Consentimento',
+        description:
+          'Guarda as escolhas de cookies e consentimento que fizer neste painel para que não tenha de as redefinir na sua próxima visita.',
+      },
+      'google-tag-manager': {
+        title: 'Infraestrutura de Privacidade',
+        description:
+          'Coordena de forma segura as configurações de scripts e garante o cumprimento imediato das suas escolhas de proteção de dados.',
+      },
+      'google-analytics': {
+        title: 'Google Analytics',
+        description:
+          'Mede de forma anónima o tráfego e as tendências de navegação para que possamos otimizar a performance da plataforma.',
+      },
+      'google-ads': {
+        title: 'Google AdSense',
+        description:
+          'Exibe anúncios na plataforma garantindo que as suas preferências de publicidade sejam rigorosamente respeitadas.',
+      },
       consentModal: {
         description: 'Aqui pode escolher quais os serviços que autoriza neste sítio web.',
         title: 'Definições de Privacidade',
@@ -163,7 +203,7 @@ export default {
       },
       decline: 'Recusar',
       ok: 'Aceitar',
-      poweredBy: 'Desenvolvido por Klaro!',
+      poweredBy: 'Suportado por Klaro!',
       purposes: {
         analytics: {
           description:
@@ -177,7 +217,7 @@ export default {
         },
         functional: {
           description:
-            'Estes cookies permitem que o sítio web forneça funcionalidade e personalização melhoradas. Podem ser definidos por nós ou por terceiros cujos serviços tenhamos adicionado às nossas páginas. Se não permitir esses cookies, alguns ou todos esses serviços podem não funcionar corretamente.',
+            'Estes cookies permitem que o sítio web forneça funcionalidade e personalização melhoradas. Podem ser definidos por nós ou por terceiros cujos serviços tenham adicionado às nossas páginas. Se não permitir esses cookies, alguns ou todos esses serviços podem não funcionar corretamente.',
           title: 'Funcional',
         },
         marketing: {

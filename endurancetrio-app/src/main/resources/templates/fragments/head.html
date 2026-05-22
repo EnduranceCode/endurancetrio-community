@@ -21,15 +21,18 @@
 <!DOCTYPE html>
 <html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
 <head data-th-fragment="head(metadata)">
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title data-th-text="${metadata.title}"></title>
 
-  <meta name="description" data-th-content="${metadata.description}">
-  <meta name="robots" content="index,follow">
   <meta name="color-scheme" content="light">
+  <meta name="description" data-th-content="${metadata.description}">
   <meta name="format-detection" content="telephone=no">
+  <meta name="google-adsense-account" data-th-content="${metadata.googleAdsenseId}">
+  <meta name="robots" content="index,follow">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" data-th-content="${metadata.twitterSite}">
 
   <meta property="og:title" data-th-content="${metadata.title}">
   <meta property="og:description" data-th-content="${metadata.description}">
@@ -41,9 +44,6 @@
   <meta property="og:image:width" data-th-content="${metadata.ogImageWidth}">
   <meta property="og:image:height" data-th-content="${metadata.ogImageHeight}">
   <meta property="fb:pages" data-th-content="${metadata.facebookPageId}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" data-th-content="${metadata.twitterSite}">
-  <meta name="google-adsense-account" data-th-content="${metadata.googleAdsenseId}">
 
   <!-- Google Tag Manager -->
   <script data-type="application/javascript" type="text/plain" data-name="google-tag-manager">
@@ -64,28 +64,29 @@
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
 
   <script th:if="${@environment.acceptsProfiles('local')}">
-    (function() {
+    (function () {
       // Connects to Spring Boot DevTools' embedded LiveReload WebSocket server.
       // The protocol identifier below is a URN used in the LiveReload handshake —
       // it is NOT fetched from any domain (no network call to livereload.com).
       var ws = new WebSocket('ws://localhost:35729/livereload');
-      ws.onopen = function() {
+      ws.onopen = function () {
         ws.send(JSON.stringify({
           command: 'hello',
           protocols: ['http://livereload.com/protocols/official-7'],
           serverName: 'browser'
         }));
       };
-      ws.onmessage = function(event) {
+      ws.onmessage = function (event) {
         try {
           var msg = JSON.parse(event.data);
           if (msg.command === 'reload') {
             location.reload();
           }
-        } catch(e) {}
+        } catch (e) {
+        }
       };
-      ws.onclose = function() {
-        setTimeout(function() {
+      ws.onclose = function () {
+        setTimeout(function () {
           location.reload();
         }, 1500);
       };

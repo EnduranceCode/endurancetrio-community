@@ -13,36 +13,36 @@
     privacyPolicy: 'privacy-policy.html#cookies-policy',
     services: [
       {
-        name: 'enduranceTrio-consent',
+        name: 'endurancetrio-consent',
         purposes: ['essential'],
-        required: true
+        required: true,
       },
       {
         name: 'google-tag-manager',
-        purposes: ['functional'],
+        purposes: ['essential'],
         required: true,
         onAccept: `
-                for(let k of Object.keys(opts.consents)){
-                    if (opts.consents[k]){
-                        let eventName = 'klaro-'+k+'-accepted'
-                        dataLayer.push({'event': eventName})
-                    }
-                }
-            `,
+              for(let k of Object.keys(opts.consents)){
+                  if (opts.consents[k]){
+                      let eventName = 'klaro-'+k+'-accepted'
+                      dataLayer.push({'event': eventName})
+                  }
+              }
+          `,
         onInit: `
-                window.dataLayer = window.dataLayer || [];
-                window.gtag = function(){dataLayer.push(arguments)}
-                gtag('consent', 'default', {
-                    'ad_storage': 'denied',
-                    'analytics_storage': 'denied',
-                    'ad_user_data': 'denied',
-                    'ad_personalization': 'denied',
-                    'functionality_storage': 'granted',
-                    'security_storage': 'granted'
-                })
-                gtag('set', 'ads_data_redaction', true)
-                gtag('set', 'url_passthrough', true)
-            `
+              window.dataLayer = window.dataLayer || [];
+              window.gtag = function(){dataLayer.push(arguments)}
+              gtag('consent', 'default', {
+                  'ad_storage': 'denied',
+                  'analytics_storage': 'denied',
+                  'ad_user_data': 'denied',
+                  'ad_personalization': 'denied',
+                  'functionality_storage': 'granted',
+                  'security_storage': 'granted'
+              })
+              gtag('set', 'ads_data_redaction', true)
+              gtag('set', 'url_passthrough', true)
+          `,
       },
       {
         name: 'google-analytics',
@@ -50,38 +50,58 @@
         purposes: ['analytics'],
         default: true,
         onAccept: `
-                gtag('consent', 'update', {
-                    'analytics_storage': 'granted',
-                })
-            `,
+              gtag('consent', 'update', {
+                  'analytics_storage': 'granted',
+              })
+          `,
         onDecline: `
-                gtag('consent', 'update', {
-                    'analytics_storage': 'denied',
-                })
-            `
+              gtag('consent', 'update', {
+                  'analytics_storage': 'denied',
+              })
+          `,
       },
       {
         name: 'google-ads',
         cookies: [/^_gac/, /^_gcl/],
         purposes: ['marketing'],
         onAccept: `
-                gtag('consent', 'update', {
-                    'ad_storage': 'granted',
-                    'ad_user_data': 'granted',
-                    'ad_personalization': 'granted'
-                })
-            `,
+              gtag('consent', 'update', {
+                  'ad_storage': 'granted',
+                  'ad_user_data': 'granted',
+                  'ad_personalization': 'granted'
+              })
+          `,
         onDecline: `
-                gtag('consent', 'update', {
-                    'ad_storage': 'denied',
-                    'ad_user_data': 'denied',
-                    'ad_personalization': 'denied'
-                })
-            `
-      }
+              gtag('consent', 'update', {
+                  'ad_storage': 'denied',
+                  'ad_user_data': 'denied',
+                  'ad_personalization': 'denied'
+              })
+          `,
+      },
     ],
     translations: {
       en: {
+        'endurancetrio-consent': {
+          title: 'Website Consent Preferences',
+          description:
+            'Remembers the cookie and consent choices you make in this banner so you do not have to re-select them on your next visit.',
+        },
+        'google-tag-manager': {
+          title: 'Privacy Infrastructure',
+          description:
+            'Securely coordinates script configurations and enforces your global data protection and cookie choices instantly.',
+        },
+        'google-analytics': {
+          title: 'Google Analytics',
+          description:
+            'Anonymously measures site traffic and user navigation trends so we can optimize performance and data layouts.',
+        },
+        'google-ads': {
+          title: 'Google AdSense',
+          description:
+            'Displays safe ad placements on our platform while strictly respecting your advertising preference choices.',
+        },
         consentModal: {
           description: 'Here, you can choose which services you allow on this website.',
           title: 'Privacy Settings',
@@ -89,7 +109,7 @@
         consentNotice: {
           title: 'Use of cookies',
           description:
-              'We use cookies and similar technologies for {purposes} services that allow us to improve the browsing experience. Through the "Customize" option you can choose which optional cookies you accept.',
+            'We use cookies and similar technologies for {purposes} services that allow us to improve the browsing experience. Through the "Customize" option you can choose which optional cookies you accept.',
           learnMore: 'Customize',
         },
         decline: 'Decline',
@@ -98,22 +118,22 @@
         purposes: {
           analytics: {
             description:
-                'These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us know which pages are the most and least popular and see how visitors move around the site. All information collected by these cookies is aggregated and therefore anonymous.',
+              'These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us know which pages are the most and least popular and see how visitors move around the site. All information collected by these cookies is aggregated and therefore anonymous.',
             title: 'Analytics',
           },
           essential: {
             description:
-                'These cookies are essential for the website to function and cannot be disabled. They are typically set only in response to your actions, such as adjusting privacy settings, logging in, or filling in forms. While you can configure your browser to block or notify you about these cookies, doing so may prevent certain parts of the site from working properly. These cookies do not store any personally identifiable information.',
+              'These cookies are essential for the website to function and cannot be disabled. They are typically set only in response to your actions, such as adjusting privacy settings, logging in, or filling in forms. While you can configure your browser to block or notify you about these cookies, doing so may prevent certain parts of the site from working properly. These cookies do not store any personally identifiable information.',
             title: 'Essential',
           },
           functional: {
             description:
-                'These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third party providers whose services we have added to our pages. If you do not allow these cookies, then some or all of these services may not function properly.',
+              'These cookies enable the website to provide enhanced functionality and personalization. They may be set by us or by third party providers whose services we have added to our pages. If you do not allow these cookies, then some or all of these services may not function properly.',
             title: 'Functional',
           },
           marketing: {
             description:
-                'These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites. They do not store directly personal information, but are based on uniquely identifying your browser and internet device. If you do not allow these cookies, you will experience less targeted advertising.',
+              'These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites. They do not store directly personal information, but are based on uniquely identifying your browser and internet device. If you do not allow these cookies, you will experience less targeted advertising.',
             title: 'Marketing',
           },
         },
@@ -133,6 +153,26 @@
         },
       },
       pt: {
+        'endurancetrio-consent': {
+          title: 'Preferências de Consentimento',
+          description:
+            'Guarda as escolhas de cookies e consentimento que fizer neste painel para que não tenha de as redefinir na sua próxima visita.',
+        },
+        'google-tag-manager': {
+          title: 'Infraestrutura de Privacidade',
+          description:
+            'Coordena de forma segura as configurações de scripts e garante o cumprimento imediato das suas escolhas de proteção de dados.',
+        },
+        'google-analytics': {
+          title: 'Google Analytics',
+          description:
+            'Mede de forma anónima o tráfego e as tendências de navegação para que possamos otimizar a performance da plataforma.',
+        },
+        'google-ads': {
+          title: 'Google AdSense',
+          description:
+            'Exibe anúncios na plataforma garantindo que as suas preferências de publicidade sejam rigorosamente respeitadas.',
+        },
         consentModal: {
           description: 'Aqui pode escolher quais os serviços que autoriza neste sítio web.',
           title: 'Definições de Privacidade',
@@ -140,31 +180,31 @@
         consentNotice: {
           title: 'Utilização de Cookies',
           description:
-              'Utilizamos cookies e tecnologias similares para serviços {purposes} que permitem melhorar a experiência de navegação. Através da opção "Personalizar", pode escolher quais os cookies opcionais cuja utilização aceita.',
+            'Utilizamos cookies e tecnologias similares para serviços {purposes} que permitem melhorar a experiência de navegação. Através da opção "Personalizar", pode escolher quais os cookies opcionais cuja utilização aceita.',
           learnMore: 'Personalizar',
         },
         decline: 'Recusar',
         ok: 'Aceitar',
-        poweredBy: 'Desenvolvido por Klaro!',
+        poweredBy: 'Suportado por Klaro!',
         purposes: {
           analytics: {
             description:
-                'Estes cookies permitem-nos contar visitas e fontes de tráfego, para que possamos medir e melhorar o desempenho do nosso sítio web. Eles ajudam-nos a saber quais são as páginas mais e menos populares e a ver como os visitantes se movimentam pelo sítio web. Todas as informações recolhidas por estes cookies são agregadas e, por conseguinte, anónimas.',
+              'Estes cookies permitem-nos contar visitas e fontes de tráfego, para que possamos medir e melhorar o desempenho do nosso sítio web. Eles ajudam-nos a saber quais são as páginas mais e menos populares e a ver como os visitantes se movimentam pelo sítio web. Todas as informações recolhidas por estes cookies são agregadas e, por conseguinte, anónimas.',
             title: 'Analytics',
           },
           essential: {
             description:
-                'Estes cookies são essenciais para o funcionamento do sítio web e não podem ser desativados. Normalmente, são definidos apenas em resposta às suas ações, como ajustar as definições de privacidade, iniciar sessão ou preencher formulários. Embora possa configurar o seu navegador para bloquear ou notificá-lo sobre estes cookies, isso pode impedir que certas partes do sítio web funcionem corretamente. Estes cookies não armazenam qualquer informação pessoalmente identificável.',
+              'Estes cookies são essenciais para o funcionamento do sítio web e não podem ser desativados. Normalmente, são definidos apenas em resposta às suas ações, como ajustar as definições de privacidade, iniciar sessão ou preencher formulários. Embora possa configurar o seu navegador para bloquear ou notificá-lo sobre estes cookies, isso pode impedir que certas partes do sítio web funcionem corretamente. Estes cookies não armazenam qualquer informação pessoalmente identificável.',
             title: 'Essenciais',
           },
           functional: {
             description:
-                'Estes cookies permitem que o sítio web forneça funcionalidade e personalização melhoradas. Podem ser definidos por nós ou por terceiros cujos serviços tenhamos adicionado às nossas páginas. Se não permitir esses cookies, alguns ou todos esses serviços podem não funcionar corretamente.',
+              'Estes cookies permitem que o sítio web forneça funcionalidade e personalização melhoradas. Podem ser definidos por nós ou por terceiros cujos serviços tenham adicionado às nossas páginas. Se não permitir esses cookies, alguns ou todos esses serviços podem não funcionar corretamente.',
             title: 'Funcional',
           },
           marketing: {
             description:
-                'Estes cookies podem ser definidos através do nosso sítio web pelos nossos parceiros de publicidade. Podem ser utilizados por essas empresas para construir um perfil dos seus interesses e mostrar-lhe anúncios relevantes noutros sítios web. Não armazenam diretamente informações pessoais, mas baseiam-se na identificação exclusiva do seu navegador e dispositivo ligado à internet. Se não permitir estes cookies, irá experimentar menos publicidade direcionada.',
+              'Estes cookies podem ser definidos através do nosso sítio web pelos nossos parceiros de publicidade. Podem ser utilizados por essas empresas para construir um perfil dos seus interesses e mostrar-lhe anúncios relevantes noutros sítios web. Não armazenam diretamente informações pessoais, mas baseiam-se na identificação exclusiva do seu navegador e dispositivo ligado à internet. Se não permitir estes cookies, irá experimentar menos publicidade direcionada.',
             title: 'Marketing',
           },
         },
@@ -188,10 +228,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     // Navbar burger toggle
-    var navbarBurgers = Array.prototype.slice.call(
-        document.querySelectorAll('.navbar-burger'),
-        0
-    );
+    var navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
     if (navbarBurgers.length > 0) {
       navbarBurgers.forEach(function (el) {
         el.addEventListener('click', function () {
