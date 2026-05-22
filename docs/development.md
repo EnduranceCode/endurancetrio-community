@@ -534,11 +534,11 @@ public class UserRestController implements UserAPI {
 - **Interface**: Optional (usually not needed unless for documentation or testing).
     - Naming: `DomainWeb` (e.g., `UserWeb`).
 - **Implementation**:
-    - Annotate with `@Controller`.
+    - Annotate with `@EnduranceTrioWebController`.
     - Naming: `EntityWebController` (e.g., `UserWebController`).
 
 ```java
-@Controller
+@EnduranceTrioWebController
 public class UserWebController {
   /* Thymeleaf views */
 }

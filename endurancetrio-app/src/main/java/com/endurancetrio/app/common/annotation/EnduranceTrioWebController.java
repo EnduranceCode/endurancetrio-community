@@ -18,19 +18,19 @@
  * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.app.common.web;
+package com.endurancetrio.app.common.annotation;
 
-import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.stereotype.Controller;
 
-@EnduranceTrioWebController
-public class HomeWebController {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Controller
+public @interface EnduranceTrioWebController {
 
-  @GetMapping("/{language:en|pt}/")
-  public String homePage(@PathVariable String language, Model model) {
-
-    return "redirect:/" + language + "/events";
-  }
 }

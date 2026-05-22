@@ -22,17 +22,17 @@ package com.endurancetrio.app.common.web;
 
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
+import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Controller
+@EnduranceTrioWebController
 public class AboutWebController {
 
   private static final String VIEW = "about";
