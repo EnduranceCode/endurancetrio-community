@@ -200,10 +200,8 @@ public class AppSecurityConfig {
                     "/error"
                 ).permitAll()
                 .anyRequest()
-                .authenticated())
-        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-        .formLogin(Customizer.withDefaults())
-        .httpBasic(Customizer.withDefaults());
+                .denyAll())
+        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
     return http.build();
   }

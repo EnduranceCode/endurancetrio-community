@@ -105,6 +105,7 @@ env vars `FIRST_OWNER` + `FIRST_HASH`.
 ## Key conventions
 
 - Controller pattern: `interface XxxAPI` (OpenAPI annotations) → `class XxxRestController implements XxxAPI`
+- Web controller pattern: `@EnduranceTrioWebController` on Thymeleaf controllers (subjects them to `EnduranceTrioExceptionHandlerWeb` for i18n error pages)
 - Service pattern: `interface XxxService` → `class XxxServiceMain` (never `Impl`)
 - Method ordering in services: CRUD (CREATE → READ → UPDATE → DELETE → UTILITY), then alphabetical within group
 - Private methods: after all public methods, alphabetical

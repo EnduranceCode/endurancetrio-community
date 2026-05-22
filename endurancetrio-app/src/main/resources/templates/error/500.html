@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main class="section">
+  <section class="container">
+    <div class="box has-background-grey-700">
+      <section class="hero">
+        <div class="hero-body has-text-centered">
+          <p class="title has-text-white" data-th-text="${status}"></p>
+          <p class="subtitle has-text-white" data-th-text="${reason}"></p>
+        </div>
+      </section>
+    </div>
+
+    <section class="content has-text-centered">
+      <p class="is-size-5" data-th-text="${message}"></p>
+
+      <div data-th-if="${errors != null and !errors.isEmpty()}" class="mt-5">
+        <div class="box has-background-grey-100 has-text-left">
+          <ul>
+            <li data-th-each="error : ${errors}" data-th-text="${error.message}"></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
