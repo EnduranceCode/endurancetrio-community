@@ -13,6 +13,7 @@ an overview of the project, see the [main README.md](../README.md).
 6. [Run the application](#run-the-application)
 7. [Code & Naming Conventions](#code--naming-conventions)
 8. [Programmatic Version Management](#programmatic-version-management)
+9. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
 
 ## Technology Stack
 
@@ -721,3 +722,57 @@ Or commited with the following command:
 ```shell
 ./mvnw versions:commit
 ```
+
+## SonarQube Cloud Configuration
+
+The **EnduranceTrio** project uses [SonarQube Cloud](https://sonarcloud.io/) for continuous code quality
+inspection. The repository is linked to SonarQube Cloud via the GitHub App integration, which
+automatically decorates pull requests with analysis results and performs automatic analysis
+on every push.
+
+### Repository Configuration
+
+The following configuration is already in place for the project:
+
+1. **`pom.xml`** — the `<sonar.organization>` property is set in the root POM to identify the
+   SonarQube Cloud organization (`endurancecode`).
+2. **`sonar-project.properties`** — the root configuration file defines the project key, the
+   SonarQube Cloud host URL, and analysis exclusions (e.g., CPD duplication detection on SQL migration
+   scripts).
+
+### Prerequisites for Manual Analysis
+
+1. A SonarQube Cloud account with access to the `EnduranceCode` organization.
+2. A SonarQube Cloud token generated at **[Account → Security](https://sonarcloud.io/account/security)**
+   with the **Analyze Projects** permission.
+3. The `SONAR_TOKEN` environment variable set to the generated token:
+
+```shell
+export SONAR_TOKEN=your_sonarcloud_token
+```
+
+### Run a Manual Analysis
+
+Before running a manual analysis, disable **Automatic Analysis** in the SonarQube Cloud project
+settings (**Project Settings → Analysis Method → "Other CI"**). If Automatic Analysis is enabled,
+the scanner will fail with a conflict error.
+
+To trigger a full project analysis from your local machine, execute the following command from the
+repository root:
+
+```shell
+./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=endurancecode_endurancetrio-community
+```
+
+This will:
+- Build the project and run all tests
+- Execute the SonarScanner, which reads `sonar-project.properties` from the repository root
+- Send the analysis results to SonarQube Cloud, creating a new baseline for the project
+- Apply any configured exclusions (e.g., CPD for SQL migration scripts)
+
+After the manual analysis completes, Automatic Analysis can be re-enabled from the same settings
+page. SonarQube Cloud will immediately trigger a new analysis using the uploaded results as the
+baseline. The results are available in the
+[SonarQube Cloud dashboard](https://sonarcloud.io/project/overview?id=endurancecode_endurancetrio-community).
+Subsequent automatic analyses (triggered by future pushes) will continue to use this latest analysis
+as their baseline.
