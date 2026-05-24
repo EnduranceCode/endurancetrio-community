@@ -24,6 +24,7 @@ import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -49,6 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
     FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
     registrationBean.setFilter(new LocaleRedirectFilter());
     registrationBean.addUrlPatterns("/*");
+    registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 50);
     return registrationBean;
   }
 

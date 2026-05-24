@@ -63,7 +63,7 @@
   <link rel="stylesheet" data-th-href="@{/css/style.css}">
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
 
-  <script th:if="${@environment.acceptsProfiles('local')}">
+  <script th:if="${metadata.view != 'error' and @environment.acceptsProfiles('local')}">
     (function () {
       // Connects to Spring Boot DevTools' embedded LiveReload WebSocket server.
       // The protocol identifier below is a URN used in the LiveReload handshake —

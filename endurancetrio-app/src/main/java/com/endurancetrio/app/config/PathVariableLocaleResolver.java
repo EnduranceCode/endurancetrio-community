@@ -20,6 +20,7 @@
 
 package com.endurancetrio.app.config;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Locale;
@@ -32,8 +33,8 @@ public class PathVariableLocaleResolver implements LocaleResolver {
 
   @Override
   @NonNull
-  public Locale resolveLocale(HttpServletRequest request) {
-    String uri = request.getRequestURI();
+  public Locale resolveLocale(@NonNull HttpServletRequest request) {
+    String uri = resolveUri(request);
 
     if (uri.startsWith("/api/")) {
       return DEFAULT_LOCALE;
@@ -59,5 +60,17 @@ public class PathVariableLocaleResolver implements LocaleResolver {
   @Override
   public void setLocale(@NonNull HttpServletRequest request, HttpServletResponse response, Locale locale) {
     // Not needed for this implementation
+  }
+
+  private String resolveUri(HttpServletRequest request) {
+    String errorRequestUri = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+    if (errorRequestUri != null) {
+      String contextPath = request.getContextPath();
+      if (contextPath != null && !contextPath.isEmpty()) {
+        errorRequestUri = errorRequestUri.substring(contextPath.length());
+      }
+      return errorRequestUri;
+    }
+    return request.getRequestURI();
   }
 }

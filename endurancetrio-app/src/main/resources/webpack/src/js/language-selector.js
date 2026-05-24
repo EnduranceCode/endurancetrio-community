@@ -70,6 +70,20 @@ const languageSelector = {
       const storedLanguage = localStorage.getItem('endurancetrioLanguage');
       const currentLanguage = getCurrentLanguage();
 
+      if (document.documentElement.dataset.pageType === 'error') {
+        if (storedLanguage && storedLanguage !== currentLanguage) {
+          var form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '/' + storedLanguage + window.location.pathname.substring(3);
+          form.style.display = 'none';
+          document.body.appendChild(form);
+          form.submit();
+        } else {
+          languageOption.checked = currentLanguage === 'pt';
+        }
+        return;
+      }
+
       if (storedLanguage && storedLanguage !== currentLanguage) {
         window.location.href = `/${storedLanguage}` + window.location.pathname.substring(3);
       } else {
