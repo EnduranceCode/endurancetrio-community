@@ -27,6 +27,10 @@
 $endurance-navbar-height: 5.2rem !default;
 $endurance-navbar-item-img-max-height: 2.8rem !default;
 
+:root {
+  --bulma-navbar-height: #{$endurance-navbar-height};
+}
+
 .#{iv.$class-prefix}endurance-navbar {
   @extend .#{iv.$class-prefix}navbar;
 
@@ -71,4 +75,8 @@ body {
   &.#{iv.$class-prefix}has-endurance-navbar-fixed-bottom {
     padding-bottom: $endurance-navbar-height;
   }
+}
+
+.#{iv.$class-prefix}hero.#{iv.$class-prefix}is-fullheight-with-navbar {
+  min-height: calc(100vh - var(--bulma-navbar-height));
 }

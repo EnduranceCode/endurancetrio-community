@@ -23,6 +23,7 @@ import '../scss/style.scss';
 import * as klaro from 'klaro/dist/klaro-no-css.js';
 import klaroConfig from './klaro-config.js';
 
+import bulmaModal from './bulma-modal.js';
 import bulmaNavbar from './bulma-navbar.js';
 import languageSelector from './language-selector.js';
 
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         klaro.show(klaroConfig, true);
       });
 
+  bulmaModal.init();
   bulmaNavbar.init();
   languageSelector.init();
 });

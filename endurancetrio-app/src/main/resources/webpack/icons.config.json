@@ -1,5 +1,8 @@
 {
-  "mdi": ["email-newsletter"],
+  "mdi": [
+    "email-newsletter",
+    "head-cog-outline"
+  ],
   "custom": {
     "kofi": "src/icons/kofi.svg"
   }
