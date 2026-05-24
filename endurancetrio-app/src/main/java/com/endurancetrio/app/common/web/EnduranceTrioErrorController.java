@@ -68,6 +68,7 @@ public class EnduranceTrioErrorController implements ErrorController {
    * @param request the current HTTP request containing error attributes
    * @return a {@link ModelAndView} with the error page
    */
+  @SuppressWarnings("java:S3752")
   @RequestMapping(value = "/error", method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleError(@NonNull HttpServletRequest request) {
     Object statusAttr = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
