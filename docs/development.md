@@ -460,6 +460,46 @@ All hot-reload features are scoped to the `local` profile only:
 - DevTools — only active when running from an IDE or `spring-boot:run`; excluded from the
   production JAR by the Spring Boot Maven plugin
 
+### Testing Error Pages
+
+A test controller, gated to the `local` profile, provides endpoints for verifying the layout
+and behavior of error pages during development.
+
+| URL                                 | HTTP Code | Error Page  |
+|-------------------------------------|-----------|-------------|
+| `/{language:en\|pt}/test/error-403` | 403       | `error/403` |
+| `/{language:en\|pt}/test/error-404` | 404       | `error/404` |
+| `/{language:en\|pt}/test/error-500` | 500       | `error/500` |
+
+- **403** — throws an `EnduranceTrioException` with code 403, caught by the exception handler.
+- **404** — throws an `EnduranceTrioException` with code 404, caught by the exception handler.
+- **500** — throws an unhandled `RuntimeException`, caught by the catch-all handler.
+
+Alternatively, to trigger a 403 through Spring Security's actual CSRF rejection rather than the test
+controller, paste the following in the browser DevTools console:
+
+```javascript
+document.body.appendChild(
+  Object.assign(document.createElement('form'), {method:'POST', action:'/en/events'})
+).submit();
+```
+
+This submits a form without the `_csrf` token, causing an `AccessDeniedException` that the servlet
+container forwards to the `/error` path, where `EnduranceTrioErrorController` renders the 403 page.
+Replace `/en/events` with `/pt/events` for the Portuguese version.
+
+#### Profile safety
+
+The controller is annotated with `@Profile("local")`, so it is never instantiated outside
+the `local` profile and poses no risk in production deployments.
+
+#### Notes
+
+- LiveReload will **not** auto-refresh error pages because the browser URL does not change on
+  error. Manually refresh to see error-page updates.
+- The language selector works on error pages: switching between `en` and `pt` in the URL
+  changes the rendered locale.
+
 ### Running the application (IntelliJ)
 
 1. Select `EnduranceTrioApplication` from the run configuration dropdown
