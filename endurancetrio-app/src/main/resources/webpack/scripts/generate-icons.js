@@ -46,11 +46,11 @@ const config = JSON.parse(readFileSync(configPath, 'utf-8'));
 
 function svgToDataUri(svgContent) {
   const data = svgContent
-  .replace(/<!--.*?-->/gs, '')
-  .replace(/>\s+</g, '><')
+  .replaceAll(/<!--.*?-->/gs, '')
+  .replaceAll(/>\s+</g, '><')
   .trim();
   const encoded = encodeURIComponent(data)
-  .replace(/%20/g, ' ');
+  .replaceAll('%20', ' ');
   return `url("data:image/svg+xml,${encoded}")`;
 }
 
