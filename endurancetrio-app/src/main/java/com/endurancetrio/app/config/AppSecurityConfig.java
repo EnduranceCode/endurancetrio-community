@@ -141,6 +141,7 @@ public class AppSecurityConfig {
    * @param http the HttpSecurity to configure
    * @return the configured SecurityFilterChain
    */
+  @SuppressWarnings("java:S4502")
   @Bean
   @Order(1)
   public SecurityFilterChain securityFilterChainAPI(HttpSecurity http) {

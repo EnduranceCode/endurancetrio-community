@@ -47,7 +47,7 @@ const languageSelector = {
     function getCurrentLanguage() {
       const supportedLanguages = new Set(['pt', 'en']);
 
-      const pathSegments = window.location.pathname.split('/');
+      const pathSegments = globalThis.location.pathname.split('/');
 
       return supportedLanguages.has(pathSegments[1]) ? pathSegments[1] : 'en';
     }
@@ -69,7 +69,7 @@ const languageSelector = {
     function applyStoredLanguage() {
       const storedLanguage = localStorage.getItem('endurancetrioLanguage');
       const currentLanguage = getCurrentLanguage();
-      const pathWithoutPrefix = window.location.pathname.slice(('/' + currentLanguage).length);
+      const pathWithoutPrefix = globalThis.location.pathname.slice(('/' + currentLanguage).length);
 
       if (document.documentElement.dataset.pageType === 'error') {
         if (storedLanguage && storedLanguage !== currentLanguage) {
@@ -86,7 +86,7 @@ const languageSelector = {
       }
 
       if (storedLanguage && storedLanguage !== currentLanguage) {
-        window.location.href = `/${storedLanguage}${pathWithoutPrefix}`;
+        globalThis.location.href = `/${storedLanguage}${pathWithoutPrefix}`;
       } else {
         languageOption.checked = currentLanguage === 'pt';
       }
@@ -102,8 +102,8 @@ const languageSelector = {
 
       if (newLanguage !== currentLanguage) {
         setLanguagePreference(newLanguage);
-        const pathWithoutPrefix = window.location.pathname.slice(('/' + currentLanguage).length);
-        window.location.replace(`/${newLanguage}${pathWithoutPrefix}`);
+        const pathWithoutPrefix = globalThis.location.pathname.slice(('/' + currentLanguage).length);
+        globalThis.location.replace(`/${newLanguage}${pathWithoutPrefix}`);
       }
     });
 
