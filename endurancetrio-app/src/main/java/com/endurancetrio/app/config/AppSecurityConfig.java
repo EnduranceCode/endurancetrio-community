@@ -147,6 +147,9 @@ public class AppSecurityConfig {
 
     http.cors(Customizer.withDefaults())
         .securityMatcher(API_PATTERN)
+        // CSRF disabled: the API uses header-based auth (Bearer + ET-Owner) with
+        // stateless sessions. No cookies or HTTP sessions are used, so there is no
+        // session for a CSRF attack to hijack.
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

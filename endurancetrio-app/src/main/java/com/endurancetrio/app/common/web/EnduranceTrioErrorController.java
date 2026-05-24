@@ -22,13 +22,11 @@ package com.endurancetrio.app.common.web;
 
 import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_SERVER_ERROR;
 
-import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
-import com.endurancetrio.app.common.utils.PageMetadataUtils;
+import com.endurancetrio.app.common.utils.ErrorPageUtils;
 import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Locale;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +35,7 @@ import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -49,11 +48,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class EnduranceTrioErrorController implements ErrorController {
 
-  private static final String ERROR_VIEW_PREFIX = "error/";
   private static final String ERROR_LOG_TEMPLATE = "Error on {} ({}): {}";
 
   private static final Logger LOG = LoggerFactory.getLogger(EnduranceTrioErrorController.class);
-  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private final MessageService messageService;
   private final AppProperties appProperties;
@@ -71,7 +68,7 @@ public class EnduranceTrioErrorController implements ErrorController {
    * @param request the current HTTP request containing error attributes
    * @return a {@link ModelAndView} with the error page
    */
-  @RequestMapping("/error")
+  @RequestMapping(value = "/error", method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleError(@NonNull HttpServletRequest request) {
     Object statusAttr = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
     int statusCode =
@@ -97,73 +94,8 @@ public class EnduranceTrioErrorController implements ErrorController {
       LOG.warn(ERROR_LOG_TEMPLATE, requestUri, statusCode, message);
     }
 
-    Locale locale = resolveLocale(request);
-    String language = locale.getLanguage();
-
-    PageMetadata metadata = createMetadata(status.value(), request, locale);
-
-    ModelAndView mav = new ModelAndView(errorView(status.value()));
-    mav.addObject("language", language);
-    mav.addObject("metadata", metadata);
-    mav.addObject("status", status.value());
-    mav.addObject("reason", status.getReasonPhrase());
-    mav.addObject("message", message);
-
-    return mav;
-  }
-
-  private PageMetadata createMetadata(int statusCode, HttpServletRequest request, Locale locale) {
-    String title;
-    String description;
-    switch (statusCode) {
-      case 403 -> {
-        title = messageService.getMessage("page.error.403.metadata.title", null, locale);
-        description = messageService.getMessage("page.error.403.metadata.description", null,
-            locale
-        );
-      }
-      case 404 -> {
-        title = messageService.getMessage("page.error.404.metadata.title", null, locale);
-        description = messageService.getMessage("page.error.404.metadata.description", null,
-            locale
-        );
-      }
-      default -> {
-        title = messageService.getMessage("page.error.500.metadata.title", null, locale);
-        description = messageService.getMessage("page.error.500.metadata.description", null,
-            locale
-        );
-      }
-    }
-    return PageMetadataUtils.create("error", title, description, request, appProperties);
-  }
-
-  private static String errorView(int statusCode) {
-    return switch (statusCode) {
-      case 403 -> ERROR_VIEW_PREFIX + "403";
-      case 404 -> ERROR_VIEW_PREFIX + "404";
-      default -> ERROR_VIEW_PREFIX + "500";
-    };
-  }
-
-  private Locale resolveLocale(HttpServletRequest request) {
-    String requestUri = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
-    if (requestUri == null) {
-      requestUri = request.getRequestURI();
-    }
-    String contextPath = request.getContextPath();
-    if (contextPath != null && !contextPath.isEmpty()) {
-      requestUri = requestUri.substring(contextPath.length());
-    }
-    if (requestUri.startsWith("/")) {
-      requestUri = requestUri.substring(1);
-    }
-    int slashIndex = requestUri.indexOf('/');
-    String language = slashIndex > 0 ? requestUri.substring(0, slashIndex) : requestUri;
-
-    if ("pt".equalsIgnoreCase(language)) {
-      return PORTUGUESE_LOCALE;
-    }
-    return Locale.ENGLISH;
+    return ErrorPageUtils.buildErrorModelAndView(status, message, null, request,
+        messageService, appProperties
+    );
   }
 }

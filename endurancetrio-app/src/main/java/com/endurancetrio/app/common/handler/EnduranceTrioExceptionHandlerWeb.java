@@ -24,16 +24,12 @@ import static com.endurancetrio.app.common.constants.ControllerConstants.MSG_SER
 import static com.endurancetrio.app.common.constants.ControllerConstants.STATUS_500;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
-import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
-import com.endurancetrio.app.common.utils.PageMetadataUtils;
+import com.endurancetrio.app.common.utils.ErrorPageUtils;
 import com.endurancetrio.app.config.AppProperties;
-import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Locale;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +51,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice(annotations = EnduranceTrioWebController.class)
 public class EnduranceTrioExceptionHandlerWeb {
 
-  private static final String ERROR_VIEW_PREFIX = "error/";
-
   private static final Logger LOG = LoggerFactory.getLogger(EnduranceTrioExceptionHandlerWeb.class);
-  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private final MessageService messageService;
   private final AppProperties appProperties;
@@ -99,7 +92,9 @@ public class EnduranceTrioExceptionHandlerWeb {
         .orElse(EnduranceTrioError.INTERNAL_ERROR)
         .getMessage();
 
-    return buildErrorModelAndView(status, responseMessage, exception.getErrors(), request);
+    return ErrorPageUtils.buildErrorModelAndView(status, responseMessage, exception.getErrors(), request,
+        messageService, appProperties
+    );
   }
 
   /**
@@ -114,8 +109,8 @@ public class EnduranceTrioExceptionHandlerWeb {
   public ModelAndView handleDataIntegrity(
       @NonNull DataIntegrityViolationException ex, @NonNull HttpServletRequest request) {
     LOG.warn("Database integrity violation: {}", ex.getMostSpecificCause().getMessage());
-    return buildErrorModelAndView(HttpStatus.CONFLICT, EnduranceTrioError.CONFLICT.getMessage(),
-        null, request
+    return ErrorPageUtils.buildErrorModelAndView(HttpStatus.CONFLICT, EnduranceTrioError.CONFLICT.getMessage(),
+        null, request, messageService, appProperties
     );
   }
 
@@ -131,80 +126,8 @@ public class EnduranceTrioExceptionHandlerWeb {
   public ModelAndView handleUnhandledException(
       @NonNull Exception exception, @NonNull HttpServletRequest request) {
     LOG.error("Unhandled exception ({}): {}", STATUS_500, exception.getMessage(), exception);
-    return buildErrorModelAndView(HttpStatus.INTERNAL_SERVER_ERROR, MSG_SERVER_ERROR, null,
-        request
+    return ErrorPageUtils.buildErrorModelAndView(HttpStatus.INTERNAL_SERVER_ERROR, MSG_SERVER_ERROR, null,
+        request, messageService, appProperties
     );
-  }
-
-  private ModelAndView buildErrorModelAndView(
-      HttpStatus status, String message, List<ErrorDTO> errors, HttpServletRequest request) {
-    Locale locale = resolveLocale(request);
-    String language = locale.getLanguage();
-
-    PageMetadata metadata = createMetadata(status.value(), request, locale);
-
-    ModelAndView mav = new ModelAndView(errorView(status.value()));
-    mav.addObject("language", language);
-    mav.addObject("metadata", metadata);
-    mav.addObject("status", status.value());
-    mav.addObject("reason", status.getReasonPhrase());
-    mav.addObject("message", message);
-    if (errors != null && !errors.isEmpty()) {
-      mav.addObject("errors", errors);
-    }
-    return mav;
-  }
-
-  private PageMetadata createMetadata(int statusCode, HttpServletRequest request, Locale locale) {
-    String title;
-    String description;
-    switch (statusCode) {
-      case 403 -> {
-        title = messageService.getMessage("page.error.403.metadata.title", null, locale);
-        description = messageService.getMessage("page.error.403.metadata.description", null,
-            locale
-        );
-      }
-      case 404 -> {
-        title = messageService.getMessage("page.error.404.metadata.title", null, locale);
-        description = messageService.getMessage("page.error.404.metadata.description", null,
-            locale
-        );
-      }
-      default -> {
-        title = messageService.getMessage("page.error.500.metadata.title", null, locale);
-        description = messageService.getMessage("page.error.500.metadata.description", null,
-            locale
-        );
-      }
-    }
-
-    return PageMetadataUtils.create("error", title, description, request, appProperties);
-  }
-
-  private static String errorView(int statusCode) {
-    return switch (statusCode) {
-      case 403 -> ERROR_VIEW_PREFIX + "403";
-      case 404 -> ERROR_VIEW_PREFIX + "404";
-      default -> ERROR_VIEW_PREFIX + "500";
-    };
-  }
-
-  private Locale resolveLocale(HttpServletRequest request) {
-    String requestUri = request.getRequestURI();
-    String contextPath = request.getContextPath();
-    if (contextPath != null && !contextPath.isEmpty()) {
-      requestUri = requestUri.substring(contextPath.length());
-    }
-    if (requestUri.startsWith("/")) {
-      requestUri = requestUri.substring(1);
-    }
-    int slashIndex = requestUri.indexOf('/');
-    String language = slashIndex > 0 ? requestUri.substring(0, slashIndex) : requestUri;
-
-    if ("pt".equalsIgnoreCase(language)) {
-      return PORTUGUESE_LOCALE;
-    }
-    return Locale.ENGLISH;
   }
 }

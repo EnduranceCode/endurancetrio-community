@@ -69,12 +69,13 @@ const languageSelector = {
     function applyStoredLanguage() {
       const storedLanguage = localStorage.getItem('endurancetrioLanguage');
       const currentLanguage = getCurrentLanguage();
+      const pathWithoutPrefix = window.location.pathname.slice(('/' + currentLanguage).length);
 
       if (document.documentElement.dataset.pageType === 'error') {
         if (storedLanguage && storedLanguage !== currentLanguage) {
-          var form = document.createElement('form');
+          let form = document.createElement('form');
           form.method = 'POST';
-          form.action = '/' + storedLanguage + window.location.pathname.substring(3);
+          form.action = '/' + storedLanguage + pathWithoutPrefix;
           form.style.display = 'none';
           document.body.appendChild(form);
           form.submit();
@@ -85,7 +86,7 @@ const languageSelector = {
       }
 
       if (storedLanguage && storedLanguage !== currentLanguage) {
-        window.location.href = `/${storedLanguage}` + window.location.pathname.substring(3);
+        window.location.href = `/${storedLanguage}${pathWithoutPrefix}`;
       } else {
         languageOption.checked = currentLanguage === 'pt';
       }
@@ -97,10 +98,12 @@ const languageSelector = {
      */
     languageOption.addEventListener('input', function () {
       const newLanguage = this.checked ? 'pt' : 'en';
+      const currentLanguage = getCurrentLanguage();
 
-      if (newLanguage !== getCurrentLanguage()) {
+      if (newLanguage !== currentLanguage) {
         setLanguagePreference(newLanguage);
-        window.location.replace(`/${newLanguage}${window.location.pathname.substring(3)}`);
+        const pathWithoutPrefix = window.location.pathname.slice(('/' + currentLanguage).length);
+        window.location.replace(`/${newLanguage}${pathWithoutPrefix}`);
       }
     });
 
