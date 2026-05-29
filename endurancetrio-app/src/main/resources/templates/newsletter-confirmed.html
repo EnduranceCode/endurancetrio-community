@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main class="section">
+  <section class="container">
+    <div class="box has-text-centered">
+      <span class="icon is-large has-text-success">
+        <i class="fas fa-check-circle fa-2x"></i>
+      </span>
+      <h1 data-th-text="#{page.newsletter.newsletter-confirmed.title}"
+          class="title is-3 mt-4">You are subscribed!</h1>
+      <p data-th-text="#{page.newsletter.newsletter-confirmed.message}"
+         class="subtitle mt-3"></p>
+      <a data-th-href="@{/{language}/(language=${language})}"
+         data-th-text="#{page.newsletter.back-home}"
+         class="button is-primary mt-5">
+        Return to home
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

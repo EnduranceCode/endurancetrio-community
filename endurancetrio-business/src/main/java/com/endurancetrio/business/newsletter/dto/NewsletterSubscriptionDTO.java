@@ -18,20 +18,30 @@
  * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.app.common.web;
+package com.endurancetrio.business.newsletter.dto;
 
-import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import com.endurancetrio.app.common.utils.WebUtils;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import java.io.Serial;
+import java.io.Serializable;
 
-@EnduranceTrioWebController
-public class HomeWebController {
+/**
+ * Data Transfer Object for a newsletter subscription request.
+ * <p>
+ * Carries the subscriber's first name and email address as submitted via the footer subscription
+ * form. Both fields are required; the email address must be a valid format.
+ */
+public record NewsletterSubscriptionDTO(
 
-  @GetMapping("/{language:en|pt}/")
-  public String homePage(@PathVariable String language, Model model) {
+    @NotBlank(message = "First name is required")
+    String firstName,
 
-    return WebUtils.redirect(language, "/events");
-  }
+    @NotBlank(message = "Email address is required")
+    @Email(message = "Email address must be valid")
+    String email
+
+) implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = 1L;
 }

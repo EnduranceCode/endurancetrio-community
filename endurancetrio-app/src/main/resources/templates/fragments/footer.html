@@ -39,30 +39,76 @@
     <div class="section">
       <div class="columns is-8">
         <div class="column is-three-quarters">
-          <form action="#">
+          <form id="newsletter-form"
+                data-th-action="@{/{language}/newsletter/subscribe(language=${language})}"
+                method="post" novalidate>
             <div class="field is-grouped is-grouped-multiline">
               <p class="control is-expanded">
                 <label class="label is-sr-only" for="newsletter-name"
                        data-th-text="#{footer.newsletter.name}">Name</label>
-                <input id="newsletter-name" class="input" type="text"
+                <input id="newsletter-name" class="input" type="text" name="firstName" required
+                       minlength="2" maxlength="100"
+                       data-th-attr="data-msg-required=#{footer.newsletter.validation.name.required},
+                                     data-msg-minlength=#{footer.newsletter.validation.name.minlength}"
                        data-th-placeholder="#{footer.newsletter.name}" placeholder="Name">
               </p>
               <p class="control is-expanded">
                 <label class="label is-sr-only" for="newsletter-email"
                        data-th-text="#{footer.newsletter.email}">Email</label>
-                <input id="newsletter-email" class="input" type="email"
+                <input id="newsletter-email" class="input" type="email" name="email" required
+                       maxlength="254"
+                       data-th-attr="data-msg-required=#{footer.newsletter.validation.email.required},
+                                     data-msg-email=#{footer.newsletter.validation.email.invalid}"
                        data-th-placeholder="#{footer.newsletter.email}" placeholder="Email">
               </p>
               <p class="control is-expanded">
-                <button class="button is-primary is-fullwidth">
+                <input type="submit" id="newsletter-submit-btn" class="is-sr-only"
+                       data-th-value="#{footer.newsletter.subscribe}">
+                <label for="newsletter-submit-btn" class="button is-primary is-fullwidth">
                     <span class="icon">
                       <i class="et et-email-newsletter"></i>
                     </span>
                   <span data-th-text="#{footer.newsletter.subscribe}">Subscribe Newsletter</span>
-                </button>
+                </label>
               </p>
             </div>
           </form>
+
+          <script>
+            document.getElementById('newsletter-form').addEventListener('submit', function (event) {
+              let nameInput = document.getElementById('newsletter-name');
+              let emailInput = document.getElementById('newsletter-email');
+              let firstInvalid = null;
+
+              [nameInput, emailInput].forEach(function (input) {
+                input.setCustomValidity('');
+              });
+
+              if (!nameInput.value.trim()) {
+                nameInput.setCustomValidity(nameInput.getAttribute('data-msg-required'));
+                firstInvalid = firstInvalid || nameInput;
+              } else if (nameInput.value.trim().length < 2) {
+                nameInput.setCustomValidity(nameInput.getAttribute('data-msg-minlength'));
+                firstInvalid = firstInvalid || nameInput;
+              }
+
+              if (!emailInput.value.trim()) {
+                emailInput.setCustomValidity(emailInput.getAttribute('data-msg-required'));
+                firstInvalid = firstInvalid || emailInput;
+              } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+                emailInput.setCustomValidity(emailInput.getAttribute('data-msg-email'));
+                firstInvalid = firstInvalid || emailInput;
+              }
+
+              if (!this.checkValidity()) {
+                event.preventDefault();
+                if (firstInvalid) {
+                  firstInvalid.focus();
+                  firstInvalid.reportValidity();
+                }
+              }
+            });
+          </script>
         </div>
         <div class="column">
           <a class="button is-primary is-fullwidth"
