@@ -41,6 +41,16 @@ cors:
   # This value is easily overridden by the environment variable CORS_ALLOWED_ORIGINS
   allowed-origins: "http://localhost:3000,http://localhost:8080"
 
+kit:
+  api-base-url: https://api.kit.com
+  api-key: ${KIT_API_KEY:}
+  api-key-header: X-Kit-Api-Key
+  api-version: v4
+  form-id-en: ${KIT_FORM_ID_EN:}
+  form-id-pt: ${KIT_FORM_ID_PT:}
+  path-form-subscribers: /forms/{formId}/subscribers/{subscriberId}
+  path-subscribers: /subscribers
+
 logging:
   level:
     org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator: WARN

@@ -18,20 +18,27 @@
  * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.app.common.web;
+package com.endurancetrio.app.common.utils;
 
-import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import com.endurancetrio.app.common.utils.WebUtils;
+/**
+ * Web-related helpers shared by controllers and view helpers.
+ */
+public final class WebUtils {
 
-@EnduranceTrioWebController
-public class HomeWebController {
+  private WebUtils() {
+    throw new IllegalStateException("Utility Class");
+  }
 
-  @GetMapping("/{language:en|pt}/")
-  public String homePage(@PathVariable String language, Model model) {
+  /**
+   * Prefix used when returning a Spring redirect view name.
+   */
+  public static final String REDIRECT_PREFIX = "redirect:/";
 
-    return WebUtils.redirect(language, "/events");
+  /**
+   * Build a redirect view name for the given language and path. The provided path must start with a
+   * '/'.
+   */
+  public static String redirect(String language, String path) {
+    return REDIRECT_PREFIX + language + path;
   }
 }

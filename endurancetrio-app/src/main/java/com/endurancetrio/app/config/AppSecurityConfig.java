@@ -173,6 +173,7 @@ public class AppSecurityConfig {
    * @param http the HttpSecurity to configure
    * @return the configured SecurityFilterChain
    */
+  @SuppressWarnings("java:S4502")
   @Bean
   @Order(2)
   public SecurityFilterChain securityFilterChainWeb(HttpSecurity http) {
@@ -203,9 +204,18 @@ public class AppSecurityConfig {
                     "/static/**",
                     "/error"
                 ).permitAll()
+                .requestMatchers(HttpMethod.POST,
+                    "/en/newsletter/subscribe",
+                    "/pt/newsletter/subscribe"
+                )
+                .permitAll()
                 .anyRequest()
                 .denyAll())
-        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+        // CSRF disabled: the web chain has no authenticated sessions to protect.
+        // All GET endpoints are public content pages and the only POST endpoints
+        // (newsletter subscription) are already permitted to all without authentication.
+        .csrf(AbstractHttpConfigurer::disable);
 
     return http.build();
   }
