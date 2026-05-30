@@ -86,10 +86,10 @@
 
               if (!nameInput.value.trim()) {
                 nameInput.setCustomValidity(nameInput.getAttribute('data-msg-required'));
-                firstInvalid = firstInvalid || nameInput;
+                firstInvalid = nameInput;
               } else if (nameInput.value.trim().length < 2) {
                 nameInput.setCustomValidity(nameInput.getAttribute('data-msg-minlength'));
-                firstInvalid = firstInvalid || nameInput;
+                firstInvalid = nameInput;
               }
 
               if (!emailInput.value.trim()) {
@@ -106,6 +106,11 @@
                   firstInvalid.focus();
                   firstInvalid.reportValidity();
                 }
+              } else {
+                let submitBtn = document.getElementById('newsletter-submit-btn');
+                let submitLabel = document.querySelector('label[for="newsletter-submit-btn"]');
+                submitBtn.disabled = true;
+                submitLabel.classList.add('is-loading');
               }
             });
           </script>
