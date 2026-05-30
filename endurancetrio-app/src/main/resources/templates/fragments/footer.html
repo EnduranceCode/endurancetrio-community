@@ -37,8 +37,8 @@
     </div>
 
     <div class="section">
-      <div class="columns is-8">
-        <div class="column is-three-quarters">
+      <div class="columns is-8 is-vcentered">
+        <div class="column is-half-tablet is-three-quarters-desktop">
           <form id="newsletter-form"
                 data-th-action="@{/{language}/newsletter/subscribe(language=${language})}"
                 method="post" novalidate>
@@ -110,6 +110,7 @@
             });
           </script>
         </div>
+
         <div class="column">
           <a class="button is-primary is-fullwidth"
              data-th-href="@{'https://ko-fi.com/' + ${metadata.kofiUserId}}"
