@@ -36,6 +36,7 @@ $endurance-navbar-item-img-max-height: 2.8rem !default;
 
   --navbar-height: #{$endurance-navbar-height};
   --navbar-item-img-max-height: #{$endurance-navbar-item-img-max-height};
+  --bulma-navbar-box-shadow-size: 0 0.25em 0 0;
 
   min-height: var(--navbar-height);
 
