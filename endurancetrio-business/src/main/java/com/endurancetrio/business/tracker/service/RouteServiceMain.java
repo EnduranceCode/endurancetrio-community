@@ -74,25 +74,35 @@ public class RouteServiceMain implements RouteService {
 
   @Override
   @Transactional
-  public RouteDTO save(RouteDTO routeDTO) {
+  public RouteDTO create(RouteDTO routeDTO) {
+
+    if (routeDTO.id() != null) {
+      String errorMsg = "Route creation must not include an id";
+      LOG.warn(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.BAD_REQUEST, errorMsg));
+    }
 
     validateRouteDevices(routeDTO);
 
-    Route entity;
-    if (routeDTO.id() != null) {
+    Route entity = routeMapper.map(routeDTO);
 
-      entity = routeRepository.findById(routeDTO.id()).orElseThrow(() -> {
-        String errorMsg = String.format("Route update failed: No route found with ID %d", routeDTO.id());
+    return routeMapper.map(routeRepository.save(entity));
+  }
 
-        LOG.warn(errorMsg);
-        return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
-      });
+  @Override
+  @Transactional
+  public RouteDTO update(Long id, RouteDTO routeDTO) {
 
-      routeMapper.updateEntity(routeDTO, entity);
-    } else {
+    validateRouteDevices(routeDTO);
 
-      entity = routeMapper.map(routeDTO);
-    }
+    Route entity = routeRepository.findById(id).orElseThrow(() -> {
+      String errorMsg = String.format("Route update failed: No route found with ID %d", id);
+
+      LOG.warn(errorMsg);
+      return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
+    });
+
+    routeMapper.updateEntity(routeDTO, entity);
 
     return routeMapper.map(routeRepository.save(entity));
   }

@@ -10,9 +10,10 @@ requirements. For an overview of the project, see the [main README.md](../README
 2. [Submit a device telemetry data point](#submit-a-device-telemetry-data-point)
 3. [Get historical telemetry for a device](#get-historical-telemetry-for-a-device)
 4. [Get all route configurations](#get-all-route-configurations)
-5. [Submit a route configuration](#submit-a-route-configuration)
-6. [Find route configuration by id](#find-route-configuration-by-id)
-7. [Retrieves the GeoJSON definition for a specific route](#retrieves-the-geojson-definition-for-a-specific-route)
+5. [Create a route configuration](#create-a-route-configuration)
+6. [Update a route configuration](#update-a-route-configuration)
+7. [Find route configuration by id](#find-route-configuration-by-id)
+8. [Retrieves the GeoJSON definition for a specific route](#retrieves-the-geojson-definition-for-a-specific-route)
 
 ## Get last known telemetry for all existing devices
 
@@ -257,7 +258,10 @@ curl -X GET 'http://localhost:8081/api/tracker/v1/routes/{id}' \
   -H 'ET-Owner: <account-name-here>'
 ```
 
-# Submit a route configuration
+# Create a route configuration
+
+Creates a new route configuration. The `id` must not be present in the request body
+— it is assigned by the server.
 
 ```shell
 POST /tracker/v1/routes
@@ -325,6 +329,101 @@ ET-Owner: account-name-here
 
 ```shell
 curl -X POST 'http://localhost:8081/api/tracker/v1/routes' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <api-key-here>' \
+  -H 'ET-Owner: <account-name-here>' \
+  -d '{
+    "reference": "20260921ETU001-001S",
+    "segments": [
+      {
+        "order": 1,
+        "startDevice": "SDABC",
+        "endDevice": "SDDEF"
+      },
+      {
+        "order": 2,
+        "startDevice": "SDDEF",
+        "endDevice": "SDFGH"
+      },
+      {
+        "order": 3,
+        "startDevice": "SDFGH",
+        "endDevice": "SDJKL"
+      }
+    ]
+  }'
+```
+
+# Update a route configuration
+
+Updates an existing route configuration identified by its id.
+
+```shell
+PUT /tracker/v1/routes/{id}
+Content-Type: application/json
+Authorization: Bearer api-key-here
+ET-Owner: account-name-here
+
+{
+  "reference": "20260921ETU001-001S",
+  "segments": [
+    {
+      "order": 1,
+      "startDevice": "SDABC",
+      "endDevice": "SDDEF"
+    },
+    {
+      "order": 2,
+      "startDevice": "SDDEF",
+      "endDevice": "SDFGH"
+    },
+    {
+      "order": 3,
+      "startDevice": "SDFGH",
+      "endDevice": "SDJKL"
+    }
+  ]
+}
+```
+
+**Response**: `200 OK`
+
+```json
+{
+  "status": 200,
+  "reason": "OK",
+  "message": "Request handled successfully",
+  "data": {
+    "id": 1,
+    "reference": "20260921ETU001-001S",
+    "segments": [
+      {
+        "id": 1,
+        "order": 1,
+        "startDevice": "SDABC",
+        "endDevice": "SDDEF"
+      },
+      {
+        "id": 2,
+        "order": 2,
+        "startDevice": "SDDEF",
+        "endDevice": "SDFGH"
+      },
+      {
+        "id": 3,
+        "order": 3,
+        "startDevice": "SDFGH",
+        "endDevice": "SDJKL"
+      }
+    ]
+  }
+}
+```
+
+### `cURL` request (assuming the application is running on localhost:8081):
+
+```shell
+curl -X PUT 'http://localhost:8081/api/tracker/v1/routes/1' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <api-key-here>' \
   -H 'ET-Owner: <account-name-here>' \
