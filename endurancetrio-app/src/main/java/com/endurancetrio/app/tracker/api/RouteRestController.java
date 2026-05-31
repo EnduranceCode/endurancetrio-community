@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @EnduranceTrioRestController
 @RequestMapping(API_PATH + TRACKER_DOMAIN + TRACKER_V1)
-public class RouteRestController implements RouteApi {
+public class RouteRestController implements RouteAPI {
 
   private final RouteService routeService;
 

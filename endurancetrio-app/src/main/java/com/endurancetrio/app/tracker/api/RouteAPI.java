@@ -46,7 +46,7 @@ import org.springframework.http.ResponseEntity;
         as sequences of segments, each connecting a start device to an end device
         """
 )
-public interface RouteApi {
+public interface RouteAPI {
 
   /**
    * Retrieves all route configurations.
