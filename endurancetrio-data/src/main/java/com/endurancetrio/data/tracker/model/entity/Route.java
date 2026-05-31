@@ -73,7 +73,7 @@ public class Route extends BaseEntity<Long> {
   private static final long serialVersionUID = 1L;
 
   @Column(name = "reference", nullable = false)
-  String reference;
+  private String reference;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "route_id", nullable = false)
