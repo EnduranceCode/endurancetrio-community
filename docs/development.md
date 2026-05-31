@@ -501,6 +501,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 ## Programmatic Version Management
 
+### Version Tagging
+
+All releases must be tagged using the following pattern:
+
+    tracker-vX.Y.Z
+
+> ***X*** : Major version number
+>
+> ***Y*** : Minor version number
+>
+> ***Z*** : Patch version number
+
+For example, version `1.0.0` is tagged as `tracker-v1.0.0`.
+
+### Version Bump
+
 This project supports programmatic version updates across all Maven modules. It can be achieved
 replacing the label as appropriate in the below command and then executing it.
 

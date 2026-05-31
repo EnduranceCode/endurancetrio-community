@@ -60,6 +60,11 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 - Baseline version: `0`
 - New migrations must be added to both `h2` and `postgres` directories
 
+## Tag naming
+
+- Tags follow the pattern `tracker-vX.Y.Z` where X is major, Y is minor, Z is patch
+- Example: `tracker-v1.0.0`
+
 ## Code conventions
 
 - **No `Impl` suffix** — service implementations use `Main` (e.g., `RouteServiceMain`). Descriptive suffixes preferred.
