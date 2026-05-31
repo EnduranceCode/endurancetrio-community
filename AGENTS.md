@@ -63,6 +63,8 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 ## Tag naming
 
 - Tags follow the pattern `tracker-vX.Y.Z` where X is major, Y is minor, Z is patch
+- Tags must be **annotated** (use `git tag -a`)
+- Push with `git push origin tracker-vX.Y.Z`
 - Example: `tracker-v1.0.0`
 
 ## Code conventions

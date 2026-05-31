@@ -534,7 +534,8 @@ spring:
 
 ### Version Tagging
 
-All releases must be tagged using the following pattern:
+All releases must be tagged using **annotated** tags (created with the `-a` flag) following
+the pattern:
 
     tracker-vX.Y.Z
 
@@ -545,6 +546,18 @@ All releases must be tagged using the following pattern:
 > ***Z*** : Patch version number
 
 For example, version `1.0.0` is tagged as `tracker-v1.0.0`.
+
+Create an annotated tag with a release message:
+
+```shell
+git tag -a tracker-vX.Y.Z -m "vX.Y.Z"
+```
+
+Push the tag to the remote repository:
+
+```shell
+git push origin tracker-vX.Y.Z
+```
 
 ### Version Bump
 
