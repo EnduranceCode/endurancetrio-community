@@ -30,12 +30,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
@@ -54,7 +52,6 @@ public class EnduranceTrioExceptionHandlerAuth {
    * uses the AuthenticationEntryPoint.
    */
   @ExceptionHandler({AuthenticationException.class})
-  @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<@NonNull EnduranceTrioResponse<String>> authException(
       AuthenticationException exception
   ) {
@@ -75,7 +72,6 @@ public class EnduranceTrioExceptionHandlerAuth {
    * resource without the necessary permissions.
    */
   @ExceptionHandler({AccessDeniedException.class})
-  @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<@NonNull EnduranceTrioResponse<String>> handleAuthorizationException(
       AccessDeniedException exception
   ) {
