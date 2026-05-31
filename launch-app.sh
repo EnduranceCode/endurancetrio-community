@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2025-2025 Ricardo do Canto
+# Copyright (c) 2025-2026 Ricardo do Canto
 #
 # This file is part of the EnduranceTrio Tracker project.
 #
@@ -22,14 +22,7 @@
 clear -x
 
 echo "------------------------------------------------------------------------------------------------------------------------"
-echo -e "[\e[34mINFO\e[0m] Building EnduranceTrio Tracker Application..."
-echo "------------------------------------------------------------------------------------------------------------------------"
-echo
-./mvnw clean package -DskipTests
-
-echo
-echo "------------------------------------------------------------------------------------------------------------------------"
 echo -e "[\e[34mINFO\e[0m] Starting EnduranceTrio Tracker Application..."
 echo "------------------------------------------------------------------------------------------------------------------------"
 echo
-java -jar -Dspring.profiles.active=local endurancetrio-app/target/*.jar
+./mvnw spring-boot:run -pl endurancetrio-app -Dspring-boot.run.profiles=local

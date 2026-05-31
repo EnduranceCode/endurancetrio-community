@@ -22,7 +22,7 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 |------------------------|----------------------------------------------------------------------------------------------------------------------|
 | Build all              | `./mvnw clean install`                                                                                               |
 | Build skip tests       | `./mvnw clean package -DskipTests`                                                                                   |
-| Run (local)            | `./launch-app.sh` (builds + runs with `local` profile, port 8081)                                                    |
+| Run (local)            | `./launch-app.sh` (compiles + runs with `local` profile, port 8081)                                                   |
 | Run single module      | `./mvnw -pl endurancetrio-app -am spring-boot:run -Dspring-boot.run.profiles=local`                                  |
 | Run all tests          | `./mvnw verify`                                                                                                      |
 | Run single test class  | `./mvnw -pl endurancetrio-business test -Dtest=RouteServiceMainTest`                                                 |

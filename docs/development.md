@@ -319,9 +319,9 @@ Or, for standard JAR execution:
 -Dspring.profiles.active=dev
 ```
 
-A helper script, `launch-app.sh`, is provided to streamline local development. It performs
-a full Maven build and then starts the application using the packaged JAR with the **local**
-profile enabled:
+A helper script, `launch-app.sh`, is provided to streamline local development. It uses
+`spring-boot:run` to compile and start the application directly with the **local** profile
+enabled, skipping the separate packaging step for faster iteration:
 
 ```shell
 ./launch-app.sh
