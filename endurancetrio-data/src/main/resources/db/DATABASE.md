@@ -68,18 +68,24 @@ The [migration scripts](https://documentation.red-gate.com/flyway/quickstart-how
 must respect the following naming convention (which is compatible with the
 [Flyway naming patterns](https://www.red-gate.com/blog/database-devops/flyway-naming-patterns-matter)):
 
-    Vxxx.yyy.zzz.nnn__free-description.sql
+    Vyyyymmdd.nnn__free-description.sql
 
-> ***xxx*** : Major version number at the time of the script creation
+> ***yyyymmdd*** : Date of the script's creation (e.g., `20260531`)
 >
-> ***yyy*** : Minor version number at the time of the script creation
->
-> ***zzz*** : Patch version number at the time of the script creation
->
-> ***nnn*** : Order number for version number at the time of the script creation
+> ***nnn*** : Sequence number for scripts created on the same date (e.g., `001`, `002`)
 >
 > ***free-description*** : A short free description of the scripts actions with words separated
 > with dashes
+
+### Legacy Naming Convention (retired)
+
+Previously, the project used a version-based naming convention that tied migration versions to the
+project release version:
+
+    Vxxx.yyy.zzz.nnn__free-description.sql
+
+Existing scripts using this convention will not be renamed and remain fully functional. All new
+scripts must use the current timestamp-based convention.
 
 ### Spring Boot Configuration
 
@@ -111,6 +117,8 @@ spring:
 
 The migration scripts are duplicated, when necessary for tests) for each supported database
 (H2 and PostgreSQL) to ensure full compatibility with the targeted databases.
+
+The existing scripts below use the retired legacy naming convention.
 
 1. Creates the **EnduranceTrio Tracker** REST API database tables:
    - [V000.000.001.001__create-tables-h2.sql](migration/ddl/h2/V000.000.001.001__create-tables-h2.sql)

@@ -54,7 +54,7 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 
 ## Flyway
 
-- Version format: `Vxxx.yyy.zzz.nnn__description.sql`
+- Version format: `Vyyyymmdd.nnn__description.sql`
 - DDL and DML scripts are duplicated per database (`h2/` vs `postgres/`)
 - Schema: `endurancetrio_tracker`
 - Baseline version: `0`
@@ -65,7 +65,7 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 - **No `Impl` suffix** — service implementations use `Main` (e.g., `RouteServiceMain`). Descriptive suffixes preferred.
 - **Controller pattern**: `DomainAPI` interface (OpenAPI annotations) + `DomainRestController` impl (with `@EnduranceTrioRestController`)
 - **Method ordering**: Controllers follow Swagger display order. Services grouped by entity then CRUD (CREATE, READ, UPDATE, DELETE, UTILITY). Private methods after all public, alphabetically.
-- **Flyway naming**: `V<major>.<minor>.<patch>.<seq>__description.sql`
+- **Flyway naming**: `V<yyyymmdd>.<seq>__description.sql`
 - **DB naming**: snake_case, plural table names, constraints prefixed: `pk_`, `fk_`, `uk_`, `chk_`, `idx_`
 
 ## Profiles
