@@ -113,12 +113,23 @@ This runs the full test suite and ensures the build passes.
 
 ### Step 7 – Commit the merge
 
-Add all the changes from the merge and adaptations, and commit with a clear message referencing
-the merged Tracker version:
+Add all the changes from the merge, as well as any eventual adaptations, to the staging area:
 
 ```shell
 git add -A
-git commit -m "Merge tracker-vX.Y.Z into Community"
+```
+
+Before committing, review the staged changes to ensure only intended modifications are included:
+
+```shell
+git diff --staged
+```
+
+After reviewing the staged changes, and if there's no correction to be made, commit with a clear
+message referencing the merged Tracker version:
+
+```shell
+git commit -m "Merge tracker-vX.Y.Z"
 ```
 
 ### Step 8 – Create a pull request and merge to master
@@ -129,7 +140,12 @@ Push the integration branch:
 git push --set-upstream origin integration/tracker-vX.Y.Z
 ```
 
-Then go to GitHub and create a pull request for review. Once approved, merge it into master.
+Then go to GitHub and create a pull request for review. Once approved, merge it into master with the
+following commit message format:
+
+```shell
+Integrate Tracker vX.Y.Z
+```
 
 ### Step 9 – Delete the integration branch
 
