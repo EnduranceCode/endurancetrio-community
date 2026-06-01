@@ -37,7 +37,7 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 
 ## Tracker integration (dual-repo)
 
-Tracker domain code lives in [`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) and is incorporated via `git merge tracker/tracker`. The `tracker` remote is pre-configured. Issues found in tracker code go upstream; stage them as markdown in `issues/` using the tracker's issue template format.
+Tracker domain code lives in [`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) and is incorporated via `git merge` (see [`docs/tracker-integration.md`](docs/tracker-integration.md)). The `tracker` remote is pre-configured. Issues found in tracker code go upstream; stage them as markdown in `issues/` using the tracker's issue template format.
 
 ## Frontend
 

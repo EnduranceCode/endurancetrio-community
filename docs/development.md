@@ -266,39 +266,11 @@ The Tracker domain (IoT telemetry ingestion and GeoJSON route management) is dev
 incorporated into this project via `git merge`.
 
 This dual-repo approach allows the Tracker to evolve independently while its code is periodically
-merged back into this repository.
+merged back into this repository. The Tracker API surface is fully integrated and documented in
+[`docs/api-endpoints-tracker.md`](./api-endpoints-tracker.md).
 
-### Merge Workflow
-
-To pull in new Tracker code:
-
-1. Create a feature branch off `master`:
-   ```shell
-   git checkout master
-   git pull
-   git checkout -b feature/tracker-<version>
-   ```
-2. Fetch the tracker remote:
-   ```shell
-   git fetch tracker
-   ```
-3. Merge `tracker/tracker` into the feature branch:
-   ```shell
-   git merge tracker/tracker
-   ```
-4. **Resolve conflicts** case-by-case using these rules (community infrastructure wins):
-   - `pom.xml` — dependency additions from Tracker must be reconciled with the multi-module structure
-   - `endurancetrio-app/src/main/resources/application*.yaml` — Tracker may add entries; host app's
-     config structure takes precedence
-   - `endurancetrio-app/.../config/AppSecurityConfig.java` — security filter chains, CORS, and
-     permit rules are owned by the community app
-   - `Dockerfile`, `launch-app.sh`, `docs/` — Tracker had its own versions; use community versions
-5. Implement any necessary adaptations for the merged code
-6. Run the full test suite:
-   ```shell
-   ./mvnw clean install
-   ```
-7. Merge the feature branch into `master` (via PR or local merge) and push
+The complete integration workflow, merge steps, and conflict resolution are documented in
+[`docs/tracker-integration.md`](./tracker-integration.md).
 
 ### Issue Tracking
 
@@ -722,6 +694,47 @@ Or commited with the following command:
 ```shell
 ./mvnw versions:commit
 ```
+
+### Version Tagging
+
+Community releases are versioned independently of any integrated repositories (such as the
+[`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) repository).
+Merging integrated repositories into Community does not automatically warrant a Community version
+bump. The version is only incremented when the impact of changes (integrations, Community-specific
+features, fixes) justifies a new release.
+
+All releases must be tagged using **annotated** tags (created with the `-a` flag) following
+the pattern:
+
+    community-vX.Y.Z
+
+> ***X*** : Major version number
+>
+> ***Y*** : Minor version number
+>
+> ***Z*** : Patch version number
+
+For example, version `1.0.0` is tagged as `community-v1.0.0`.
+
+Create an annotated tag with a release message:
+
+```shell
+git tag -a community-vX.Y.Z -m "vX.Y.Z"
+```
+
+Push the tag to the remote repository:
+
+```shell
+git push --follow-tags
+```
+
+### Tag Rules
+
+- Tags are immutable
+- Tags represent released state only
+- Tags are the ONLY safe merge anchors for integration merges
+- Namespacing avoids tag collisions between integrated repositories (e.g., `tracker-vX.Y.Z`
+  tags in the Tracker repo)
 
 ## SonarQube Cloud Configuration
 

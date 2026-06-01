@@ -13,12 +13,14 @@
    2. [API Endpoints](#api-endpoints)
    3. [Swagger UI & API Documentation](#swagger-ui--api-documentation)
 3. [Development](#development)
-   1. [Technology Stack](./docs/development.md#technology-stack)
-   2. [API Key Management](./docs/development.md#api-key-management)
-   3. [Database](./docs/development.md#database)
-   4. [Installation](./docs/development.md#installation)
-   5. [Code & Naming Conventions](./docs/development.md#code--naming-conventions)
-   6. [Programmatic Version Management](./docs/development.md#programmatic-version-management)
+   1. [Quick Start](#quick-start)
+   2. [Technology Stack](./docs/development.md#technology-stack)
+   3. [API Key Management](./docs/development.md#api-key-management)
+   4. [Database](./docs/development.md#database)
+   5. [Installation](./docs/development.md#installation)
+   6. [Code & Naming Conventions](./docs/development.md#code--naming-conventions)
+   7. [Programmatic Version Management](./docs/development.md#programmatic-version-management)
+   8. [Integrations](#integrations)
 4. [Deployment](#deployment)
    1. [Container Architecture](./docs/deployment.md#container-architecture)
    2. [Server Setup](./docs/deployment.md#server-setup)
@@ -83,8 +85,8 @@ The currently available API endpoints belong to the tracker domain and are summa
 |        |                                                  |                                                                     |                    |
 | `GET`  | `/tracker/v1/routes`                             | Get all route configurations                                        | API Key Required   |
 | `POST` | `/tracker/v1/routes`                             | Submit a route configuration                                        | API Key Required   |
-| `GET`  | `/tracker/v1/routes/({id}`                       | Find route configuration by id                                      | API Key Required   |
-| `GET`  | `/tracker/v1/routes/({id}/metrics`               | Retrieves the GeoJSON definition for a specific route               | API Key Required   |
+| `GET`  | `/tracker/v1/routes/{id}`                        | Find route configuration by id                                      | API Key Required   |
+| `GET`  | `/tracker/v1/routes/{id}/metrics`                | Retrieves the GeoJSON definition for a specific route               | API Key Required   |
 
 For detailed request and response schemas, examples, and error handling, see:
 
@@ -179,18 +181,19 @@ Frontend assets are generated into
 
 > See the [full Development Guide](./docs/development.md) for comprehensive instructions.
 
-### Tracker Domain Development Model
+### Integrations
 
-The Tracker functionality (IoT telemetry ingestion and GeoJSON route management) is developed
-in its own [`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker)
-repository and incorporated into this project via `git merge`.
+**EnduranceTrio** can integrate independently developed domain codebases via `git merge`,
+allowing external modules to evolve in their own repositories while their code is periodically
+incorporated into this project.
 
-This dual-repo approach allows the Tracker to evolve independently while its code is periodically
-merged back into this repository. Issues discovered in Tracker-domain code during integration
-are filed in the tracker repository.
+The current integration is the **Tracker domain** (IoT telemetry ingestion and GeoJSON route
+management), developed in its own
+[`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) repository.
+Its API surface is documented in [`docs/api-endpoints-tracker.md`](./docs/api-endpoints-tracker.md).
 
-See [`docs/development.md`](./docs/development.md#tracker-domain-development) for the full merge
-workflow and operational instructions.
+See [`docs/tracker-integration.md`](./docs/tracker-integration.md) for the full integration
+workflow and conflict resolution rules.
 
 ## Deployment
 

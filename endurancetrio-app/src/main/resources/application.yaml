@@ -100,7 +100,7 @@ spring:
     locations:
       - classpath:db/migration/ddl/postgres
       - classpath:db/migration/dml/postgres
-    out-of-order: false
+    out-of-order: true
     placeholders:
       timezone: UTC
     schemas: endurancetrio_community
