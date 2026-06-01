@@ -61,6 +61,7 @@ import java.util.stream.Collectors;
 public enum EnduranceTrioError {
 
   BAD_REQUEST(400, "The request was made with invalid or incomplete data"),
+  UNAUTHORIZED(401, "Authentication is required to access this resource"),
   FORBIDDEN(403, "Access to the requested resource is denied"),
   NOT_FOUND(404, "The requested resource was not found"),
   CONFLICT(409, "A conflict occurred with the current state of the resource"),

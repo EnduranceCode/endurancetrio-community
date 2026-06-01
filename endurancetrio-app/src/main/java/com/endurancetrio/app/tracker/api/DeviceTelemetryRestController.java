@@ -97,14 +97,14 @@ public class DeviceTelemetryRestController implements DeviceTelemetryAPI {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {
-      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND));
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.UNAUTHORIZED));
     }
     String owner = authentication.getName();
 
     if (owner == null || owner.isBlank()) {
       String errorMsg = "The authenticated owner is null or blank";
       LOG.error(errorMsg);
-      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.UNAUTHORIZED, errorMsg));
     }
 
     HttpStatus status = HttpStatus.CREATED;
