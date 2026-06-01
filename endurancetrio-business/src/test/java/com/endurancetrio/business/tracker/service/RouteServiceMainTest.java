@@ -129,7 +129,73 @@ class RouteServiceMainTest {
   }
 
   @Test
-  void save() {
+  void create() {
+
+    RouteDTO createDTO = new RouteDTO(null, REFERENCE, List.of(new RouteSegmentDTO(null, ORDER, START_DEVICE, END_DEVICE)));
+    Route expectedEntity = new Route();
+    expectedEntity.setReference(REFERENCE);
+    expectedEntity.setSegments(List.of());
+
+    RouteDTO expectedDTO = new RouteDTO(ROUTE_ID, REFERENCE,
+        List.of(new RouteSegmentDTO(SEGMENT_ID, ORDER, START_DEVICE, END_DEVICE))
+    );
+
+    when(deviceTelemetryRepository.findExistingDevicesFrom(anySet())).thenReturn(
+        Set.of(START_DEVICE, END_DEVICE));
+    when(routeMapper.map(any(RouteDTO.class))).thenReturn(expectedEntity);
+    when(routeRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+    when(routeMapper.map(any(Route.class))).thenReturn(expectedDTO);
+
+    RouteDTO result = underTest.create(createDTO);
+
+    verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());
+    verify(routeMapper, times(1)).map(any(RouteDTO.class));
+    verify(routeRepository, times(1)).save(expectedEntity);
+    verify(routeMapper, times(1)).map(any(Route.class));
+
+    assertNotNull(result);
+    assertEquals(ROUTE_ID, result.id());
+    assertEquals(REFERENCE, result.reference());
+    assertEquals(1, result.segments().size());
+  }
+
+  @Test
+  void createWithIdShouldThrow() {
+
+    RouteDTO invalidDTO = new RouteDTO(ROUTE_ID, REFERENCE, List.of());
+
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.create(invalidDTO)
+    );
+
+    verify(deviceTelemetryRepository, times(0)).findExistingDevicesFrom(anySet());
+    verify(routeRepository, times(0)).save(any());
+    verify(routeMapper, times(0)).map(any(Route.class));
+
+    assertEquals(EnduranceTrioError.BAD_REQUEST.getCode(), result.getCode());
+  }
+
+  @Test
+  void createWithInvalidSegments() {
+
+    RouteSegmentDTO invalidSegment = new RouteSegmentDTO(null, ORDER, "SDXXX", "SDYYY");
+    RouteDTO invalidDTO = new RouteDTO(null, REFERENCE, List.of(invalidSegment));
+
+    when(deviceTelemetryRepository.findExistingDevicesFrom(anySet())).thenReturn(Set.of());
+
+    EnduranceTrioException result = assertThrows(
+        EnduranceTrioException.class, () -> underTest.create(invalidDTO)
+    );
+
+    verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());
+    verify(routeRepository, times(0)).save(any());
+    verify(routeMapper, times(0)).map(any(Route.class));
+
+    assertEquals(EnduranceTrioError.BAD_REQUEST.getCode(), result.getCode());
+  }
+
+  @Test
+  void update() {
 
     Route dbEntity = new Route();
     dbEntity.setId(ROUTE_ID);
@@ -152,10 +218,10 @@ class RouteServiceMainTest {
     when(routeRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
     when(routeMapper.map(any(Route.class))).thenReturn(expectedDTO);
 
-    RouteDTO result = underTest.save(testDTO);
+    RouteDTO result = underTest.update(ROUTE_ID, testDTO);
 
     verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());
-    verify(routeRepository, times(1)).save(any());
+    verify(routeRepository, times(1)).findById(ROUTE_ID);
     verify(routeMapper, times(1)).updateEntity(testDTO, dbEntity);
     verify(routeRepository, times(1)).save(dbEntity);
     verify(routeMapper, times(1)).map(any(Route.class));
@@ -167,33 +233,14 @@ class RouteServiceMainTest {
   }
 
   @Test
-  void saveWithInvalidSegments() {
-
-    RouteSegmentDTO invalidSegment = new RouteSegmentDTO(null, ORDER, "SDXXX", "SDYYY");
-    RouteDTO invalidDTO = new RouteDTO(ROUTE_ID, REFERENCE, List.of(invalidSegment));
-
-    when(deviceTelemetryRepository.findExistingDevicesFrom(anySet())).thenReturn(Set.of());
-
-    EnduranceTrioException result = assertThrows(
-        EnduranceTrioException.class, () -> underTest.save(invalidDTO)
-    );
-
-    verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());
-    verify(routeRepository, times(0)).save(any());
-    verify(routeMapper, times(0)).map(any(Route.class));
-
-    assertEquals(EnduranceTrioError.BAD_REQUEST.getCode(), result.getCode());
-  }
-
-  @Test
-  void saveWithNonExistingRoute() {
+  void updateWithNonExistingRoute() {
 
     when(deviceTelemetryRepository.findExistingDevicesFrom(anySet())).thenReturn(
         Set.of(START_DEVICE, END_DEVICE));
     when(routeRepository.findById(ROUTE_ID)).thenReturn(Optional.empty());
 
     EnduranceTrioException result = assertThrows(
-        EnduranceTrioException.class, () -> underTest.save(testDTO)
+        EnduranceTrioException.class, () -> underTest.update(ROUTE_ID, testDTO)
     );
 
     verify(deviceTelemetryRepository, times(1)).findExistingDevicesFrom(anySet());

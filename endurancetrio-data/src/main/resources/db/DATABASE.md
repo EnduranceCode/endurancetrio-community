@@ -68,18 +68,24 @@ The [migration scripts](https://documentation.red-gate.com/flyway/quickstart-how
 must respect the following naming convention (which is compatible with the
 [Flyway naming patterns](https://www.red-gate.com/blog/database-devops/flyway-naming-patterns-matter)):
 
-    Vxxx.yyy.zzz.nnn__free-description.sql
+    Vyyyymmdd.nnn__free-description.sql
 
-> ***xxx*** : Major version number at the time of the script creation
+> ***yyyymmdd*** : Date of the script's creation (e.g., `20260531`)
 >
-> ***yyy*** : Minor version number at the time of the script creation
->
-> ***zzz*** : Patch version number at the time of the script creation
->
-> ***nnn*** : Order number for version number at the time of the script creation
+> ***nnn*** : Sequence number for scripts created on the same date (e.g., `001`, `002`)
 >
 > ***free-description*** : A short free description of the scripts actions with words separated
 > with dashes
+
+### Legacy Naming Convention (retired)
+
+Previously, the project used a version-based naming convention that tied migration versions to the
+project release version:
+
+    Vxxx.yyy.zzz.nnn__free-description.sql
+
+Existing scripts using this convention will not be renamed and remain fully functional. All new
+scripts must use the current timestamp-based convention.
 
 ### Spring Boot Configuration
 
@@ -112,33 +118,35 @@ spring:
 The migration scripts are duplicated, when necessary for tests, for each supported database
 (H2 and PostgreSQL) to ensure full compatibility with the targeted databases.
 
+The existing scripts below use the retired legacy naming convention.
+
 1. Creates the tables for the **EnduranceTrio** application:
    - [V000.000.001.001__create-tables-h2.sql](migration/ddl/h2/V000.000.001.001__create-tables-h2.sql)
    - [V000.000.001.001__create-tables-postgres.sql](migration/ddl/postgres/V000.000.001.001__create-tables-postgres.sql)
 2. Inserts the data of the 1984 triathlon related events in Portugal:
-    - [V000.000.001.002__insert-1984-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.002__insert-1984-portuguese-triathlon-data-h2.sql)
-    - [V000.000.001.002__insert-1984-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.002__insert-1984-portuguese-triathlon-data-postgres.sql)
+   - [V000.000.001.002__insert-1984-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.002__insert-1984-portuguese-triathlon-data-h2.sql)
+   - [V000.000.001.002__insert-1984-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.002__insert-1984-portuguese-triathlon-data-postgres.sql)
 3. Inserts the data of the 1985 triathlon related events in Portugal:
-    - [V000.000.001.002__insert-1985-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.003__insert-1985-portuguese-triathlon-data-h2.sql)
-    - [V000.000.001.002__insert-1985-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.003__insert-1985-portuguese-triathlon-data-postgres.sql)
+   - [V000.000.001.002__insert-1985-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.003__insert-1985-portuguese-triathlon-data-h2.sql)
+   - [V000.000.001.002__insert-1985-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.003__insert-1985-portuguese-triathlon-data-postgres.sql)
 4. Inserts the data of the 1986 triathlon related events in Portugal:
-    - [V000.000.001.002__insert-1986-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.004__insert-1986-portuguese-triathlon-data-h2.sql)
-    - [V000.000.001.002__insert-1986-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.004__insert-1986-portuguese-triathlon-data-postgres.sql)
+   - [V000.000.001.002__insert-1986-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.004__insert-1986-portuguese-triathlon-data-h2.sql)
+   - [V000.000.001.002__insert-1986-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.004__insert-1986-portuguese-triathlon-data-postgres.sql)
 5. Inserts the data of the 1987 triathlon related events in Portugal:
-    - [V000.000.001.002__insert-1987-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.005__insert-1987-portuguese-triathlon-data-h2.sql)
-    - [V000.000.001.002__insert-1987-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.005__insert-1987-portuguese-triathlon-data-postgres.sql)
+   - [V000.000.001.002__insert-1987-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.005__insert-1987-portuguese-triathlon-data-h2.sql)
+   - [V000.000.001.002__insert-1987-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.005__insert-1987-portuguese-triathlon-data-postgres.sql)
 6. Inserts the data of the 1988 triathlon related events in Portugal:
-    - [V000.000.001.002__insert-1988-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.006__insert-1988-portuguese-triathlon-data-h2.sql)
-    - [V000.000.001.002__insert-1988-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.006__insert-1988-portuguese-triathlon-data-postgres.sql)
+   - [V000.000.001.002__insert-1988-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.006__insert-1988-portuguese-triathlon-data-h2.sql)
+   - [V000.000.001.002__insert-1988-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.006__insert-1988-portuguese-triathlon-data-postgres.sql)
 7. Inserts the data of the 1989 triathlon related events in Portugal:
-    - [V000.000.001.002__insert-1989-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.007__insert-1989-portuguese-triathlon-data-h2.sql)
-    - [V000.000.001.002__insert-1989-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.007__insert-1989-portuguese-triathlon-data-postgres.sql)
+   - [V000.000.001.002__insert-1989-portuguese-triathlon-data-h2.sql](migration/dml/h2/V000.000.001.007__insert-1989-portuguese-triathlon-data-h2.sql)
+   - [V000.000.001.002__insert-1989-portuguese-triathlon-data-postgres.sql](migration/dml/postgres/V000.000.001.007__insert-1989-portuguese-triathlon-data-postgres.sql)
 8. Inserts *Tracker* test data into **EnduranceTrio** application database tables:
-    - [V000.000.001.008__insert-test-data-h2.sql](migration/dml/h2/V000.000.001.008__insert-test-data-h2.sql)
-    - [V000.000.001.008__insert-test-data-postgres.sql](migration/dml/postgres/V000.000.001.008__insert-test-data-postgres.sql)
+   - [V000.000.001.008__insert-test-data-h2.sql](migration/dml/h2/V000.000.001.008__insert-test-data-h2.sql)
+   - [V000.000.001.008__insert-test-data-postgres.sql](migration/dml/postgres/V000.000.001.008__insert-test-data-postgres.sql)
 9. Creates the **EnduranceTrio** application telemetry management database table:
-    - [V000.002.000.001__create-telemetry-management-table-h2.sql](migration/ddl/h2/V000.002.000.001__create-telemetry-management-table-h2.sql)
-    - [V000.002.000.001__create-telemetry-management-table-postgres.sql](migration/ddl/postgres/V000.002.000.001__create-telemetry-management-table-postgres.sql)
+   - [V000.002.000.001__create-telemetry-management-table-h2.sql](migration/ddl/h2/V000.002.000.001__create-telemetry-management-table-h2.sql)
+   - [V000.002.000.001__create-telemetry-management-table-postgres.sql](migration/ddl/postgres/V000.002.000.001__create-telemetry-management-table-postgres.sql)
 10. Inserts test data into **EnduranceTrio** application telemetry management database table:
     - [V000.002.000.002__insert-telemetry-management-test-data-h2.sql](migration/dml/h2/V000.002.000.002__insert-telemetry-management-test-data-h2.sql)
     - [V000.002.000.002__insert-telemetry-management-test-data-postgres.sql](migration/dml/postgres/V000.002.000.002__insert-telemetry-management-test-data-postgres.sql)

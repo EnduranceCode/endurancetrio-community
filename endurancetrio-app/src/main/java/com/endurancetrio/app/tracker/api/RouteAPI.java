@@ -46,7 +46,7 @@ import org.springframework.http.ResponseEntity;
         as sequences of segments, each connecting a start device to an end device
         """
 )
-public interface RouteApi {
+public interface RouteAPI {
 
   /**
    * Retrieves all route configurations.
@@ -126,29 +126,31 @@ public interface RouteApi {
   ResponseEntity<@NonNull EnduranceTrioResponse<List<RouteDTO>>> findAll();
 
   /**
-   * Saves the provided route configuration.
+   * Creates a new route configuration. The request body must not include an id —
+   * it is assigned by the server.
    *
-   * @param routeDTO the route configuration to be saved
-   * @return a {@link ResponseEntity} containing an {@link EnduranceTrioResponse} with the saved
+   * @param routeDTO the route configuration to be created (id must be null)
+   * @return a {@link ResponseEntity} containing an {@link EnduranceTrioResponse} with the created
    * {@link RouteDTO}
    */
   @Operation(
-      summary = "Save route configuration",
-      description = "Saves the provided route configuration.",
+      summary = "Create route configuration",
+      description = "Creates a new route configuration. The id is assigned by the server "
+          + "and must not be present in the request body.",
       security = {
           @SecurityRequirement(name = "Account Name"), @SecurityRequirement(name = "API Key")
       }
   )
   @ApiResponse(
       responseCode = "201",
-      description = "Route configuration successfully saved",
+      description = "Route configuration successfully created",
       content = @Content(
           mediaType = MediaType.APPLICATION_JSON_VALUE,
           schema = @Schema(implementation = EnduranceTrioResponse.class),
           examples = {
               @ExampleObject(
                   name = "Success Response",
-                  summary = "Route configuration saved successfully",
+                  summary = "Route configuration created successfully",
                   value = """
                       {
                         "status": 201,
@@ -196,7 +198,113 @@ public interface RouteApi {
   @OpenApiStandardErrors
   @RequestBody(
       description = """
-          Route configuration to be saved. The first route segments must start at order 1,
+          Route configuration to be created. The id must not be present (assigned by the server).
+          The first route segments must start at order 1, the segments order must be sequential
+          and the segment N end device must match the segment N+1 start device.
+          """,
+      required = true,
+      content = @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = RouteDTO.class),
+          examples = {
+              @ExampleObject(
+                  name = "Route Configuration Example",
+                  summary = "A typical route configuration payload",
+                  value = """
+                      {
+                        "reference": "20260921ETU001-001S",
+                        "segments": [
+                          {
+                            "order": 1,
+                            "startDevice": "SDABC",
+                            "endDevice": "SDDEF"
+                          },
+                          {
+                            "order": 2,
+                            "startDevice": "SDDEF",
+                            "endDevice": "SDFGH"
+                          },
+                          {
+                            "order": 3,
+                            "startDevice": "SDFGH",
+                            "endDevice": "SDJKL"
+                          }
+                        ]
+                      }
+                      """
+              )
+          }
+      )
+  )
+  ResponseEntity<@NonNull EnduranceTrioResponse<RouteDTO>> create(
+      @Parameter(description = "Route configuration to be created (id must be null)",
+          required = true) RouteDTO routeDTO
+  );
+
+  /**
+   * Updates an existing route configuration.
+   *
+   * @param id       the unique identifier of the route configuration to update
+   * @param routeDTO the route configuration with updated data
+   * @return a {@link ResponseEntity} containing an {@link EnduranceTrioResponse} with the updated
+   * {@link RouteDTO}
+   */
+  @Operation(
+      summary = "Update route configuration",
+      description = "Updates an existing route configuration identified by its id.",
+      security = {
+          @SecurityRequirement(name = "Account Name"), @SecurityRequirement(name = "API Key")
+      }
+  )
+  @ApiResponse(
+      responseCode = "200",
+      description = "Route configuration successfully updated",
+      content = @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = EnduranceTrioResponse.class),
+          examples = {
+              @ExampleObject(
+                  name = "Success Response",
+                  summary = "Route configuration updated successfully",
+                  value = """
+                      {
+                        "status": 200,
+                        "reason": "OK",
+                        "message": "Request handled successfully",
+                        "data": {
+                          "id": 1,
+                          "reference": "20260921ETU001-001S",
+                          "segments": [
+                            {
+                              "id": 1,
+                              "order": 1,
+                              "startDevice": "SDABC",
+                              "endDevice": "SDDEF"
+                            },
+                            {
+                              "id": 2,
+                              "order": 2,
+                              "startDevice": "SDDEF",
+                              "endDevice": "SDFGH"
+                            },
+                            {
+                              "id": 3,
+                              "order": 3,
+                              "startDevice": "SDFGH",
+                              "endDevice": "SDJKL"
+                            }
+                          ]
+                        }
+                      }
+                      """
+              )
+          }
+      )
+  )
+  @OpenApiStandardErrors
+  @RequestBody(
+      description = """
+          Route configuration with updated data. The first route segments must start at order 1,
           the segments order must be sequential and the segment N end device must match
           the segment N+1 start device.
           """,
@@ -234,8 +342,11 @@ public interface RouteApi {
           }
       )
   )
-  ResponseEntity<@NonNull EnduranceTrioResponse<RouteDTO>> save(
-      @Parameter(description = "Route configuration to be saved", required = true) RouteDTO routeDTO
+  ResponseEntity<@NonNull EnduranceTrioResponse<RouteDTO>> update(
+      @Parameter(description = "The unique identifier of the route to update", example = "1")
+      @NonNull Long id,
+      @Parameter(description = "Route configuration with updated data", required = true)
+      RouteDTO routeDTO
   );
 
   /**

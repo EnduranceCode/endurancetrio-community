@@ -84,7 +84,8 @@ The currently available API endpoints belong to the tracker domain and are summa
 | `GET`  | `/tracker/v1/devices/{device}/telemetry`         | Get historical telemetry for a device (supports pagination)         | API Key Required   |
 |        |                                                  |                                                                     |                    |
 | `GET`  | `/tracker/v1/routes`                             | Get all route configurations                                        | API Key Required   |
-| `POST` | `/tracker/v1/routes`                             | Submit a route configuration                                        | API Key Required   |
+| `POST` | `/tracker/v1/routes`                             | Create a route configuration                                        | API Key Required   |
+| `PUT`  | `/tracker/v1/routes/{id}`                        | Update a route configuration                                        | API Key Required   |
 | `GET`  | `/tracker/v1/routes/{id}`                        | Find route configuration by id                                      | API Key Required   |
 | `GET`  | `/tracker/v1/routes/{id}/metrics`                | Retrieves the GeoJSON definition for a specific route               | API Key Required   |
 

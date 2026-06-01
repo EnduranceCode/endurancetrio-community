@@ -27,12 +27,21 @@ import java.util.List;
 public interface RouteService {
 
   /**
-   * Saves the provided route configuration.
+   * Creates a new route configuration.
    *
-   * @param routeDTO the route configuration to be saved
-   * @return the saved {@link RouteDTO}
+   * @param routeDTO the route configuration to be created (id must be null)
+   * @return the created {@link RouteDTO}
    */
-  RouteDTO save(RouteDTO routeDTO);
+  RouteDTO create(RouteDTO routeDTO);
+
+  /**
+   * Updates an existing route configuration.
+   *
+   * @param id       the unique identifier of the route to update
+   * @param routeDTO the route configuration with updated data
+   * @return the updated {@link RouteDTO}
+   */
+  RouteDTO update(Long id, RouteDTO routeDTO);
 
   /**
    * Retrieves all route configurations.

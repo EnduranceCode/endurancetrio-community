@@ -670,7 +670,46 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
+### Configuration File Key Ordering
+
+All `application-*.yaml` and `*.properties` files must follow a consistent key ordering convention
+to reduce merge conflicts and make key locations predictable.
+
+#### Rules
+
+1. **Root-level keys**: ordered alphabetically.
+2. **Nested keys**: ordered alphabetically within each section.
+3. **Exception — `username`/`password` pairs**: kept as a logical credentials pair, with `username`
+   before `password`, regardless of alphabetical order.
+4. **`.properties` files**: follow the same alphabetical ordering rule.
+
+#### Example (`application-test.yaml`)
+
+```yaml
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+spring:
+  datasource:
+    password: test
+    url: jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+```
+
+> `username` appears before the alphabetically-earlier `password` because they form a credentials
+> pair.
+
 ## Programmatic Version Management
+
+Community releases are versioned independently of any integrated repositories (such as the
+[`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) repository).
+Merging integrated repositories into Community does not automatically warrant a Community version
+bump. The version is only incremented when the impact of changes (integrations, Community-specific
+features, fixes) justifies a new release.
+
+### Version Update
 
 This project supports programmatic version updates across all Maven modules. It can be achieved
 replacing the label as appropriate in the below command and then executing it.
@@ -696,12 +735,6 @@ Or commited with the following command:
 ```
 
 ### Version Tagging
-
-Community releases are versioned independently of any integrated repositories (such as the
-[`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) repository).
-Merging integrated repositories into Community does not automatically warrant a Community version
-bump. The version is only incremented when the impact of changes (integrations, Community-specific
-features, fixes) justifies a new release.
 
 All releases must be tagged using **annotated** tags (created with the `-a` flag) following
 the pattern:

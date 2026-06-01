@@ -28,6 +28,9 @@ import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_V1
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioRestController;
 import com.endurancetrio.app.common.response.EnduranceTrioResponse;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.RouteDTO;
 import com.endurancetrio.business.tracker.dto.RouteMetricsDTO;
 import com.endurancetrio.business.tracker.service.RouteService;
@@ -40,13 +43,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @EnduranceTrioRestController
 @RequestMapping(API_PATH + TRACKER_DOMAIN + TRACKER_V1)
-public class RouteRestController implements RouteApi {
+public class RouteRestController implements RouteAPI {
 
   private final RouteService routeService;
 
@@ -77,24 +81,37 @@ public class RouteRestController implements RouteApi {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE
   )
-  public ResponseEntity<@NonNull EnduranceTrioResponse<RouteDTO>> save(
+  public ResponseEntity<@NonNull EnduranceTrioResponse<RouteDTO>> create(
       @Valid @RequestBody RouteDTO routeDTO
   ) {
 
-    RouteDTO data = routeService.save(routeDTO);
+    RouteDTO data = routeService.create(routeDTO);
 
-    HttpStatus status;
-    if (routeDTO.id() != null) {
-      status = HttpStatus.OK;
-    } else {
-      status = HttpStatus.CREATED;
-    }
-
-    EnduranceTrioResponse<RouteDTO> response = new EnduranceTrioResponse<>(status.value(),
-        status.getReasonPhrase(), MSG_SUCCESS, data
+    EnduranceTrioResponse<RouteDTO> response = new EnduranceTrioResponse<>(HttpStatus.CREATED.value(),
+        HttpStatus.CREATED.getReasonPhrase(), MSG_SUCCESS, data
     );
 
-    return ResponseEntity.status(status).body(response);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  }
+
+  @Override
+  @ResponseStatus(HttpStatus.OK)
+  @PutMapping(
+      value = TRACKER_RESOURCE_ROUTES + "/{id}",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  public ResponseEntity<@NonNull EnduranceTrioResponse<RouteDTO>> update(
+      @NonNull @PathVariable Long id, @Valid @RequestBody RouteDTO routeDTO
+  ) {
+
+    RouteDTO data = routeService.update(id, routeDTO);
+
+    EnduranceTrioResponse<RouteDTO> response = new EnduranceTrioResponse<>(HttpStatus.OK.value(),
+        HttpStatus.OK.getReasonPhrase(), MSG_SUCCESS, data
+    );
+
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @Override

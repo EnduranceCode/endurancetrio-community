@@ -75,9 +75,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # 1. Release Tag (Semantic Versioning - 0.0.0)
+            # 1. Release Tag (git tag: community-vX.Y.Z → Docker tag: X.Y.Z)
             # Conditions: ONLY run if the event is 'release'.
-            type=semver,pattern={{version}},enable=${{ github.event_name == 'release' }}
+            type=match,pattern=community-v(\d+\.\d+\.\d+),group=1,enable=${{ github.event_name == 'release' }}
 
             # 2. Short SHA Tag (Manual builds)
             # Conditions: ONLY run if the event is 'workflow_dispatch'
