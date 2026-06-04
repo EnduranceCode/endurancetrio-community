@@ -53,13 +53,21 @@
            data-th-attr="disabled=${eventYears.currentPage == 0} ? 'disabled' : null"
            data-th-href="${eventYears.currentPage > 0}
            ? @{/{lang}/events(lang=${language}, page=${eventYears.currentPage - 1})}
-           : null">Previous</a>
+           : null">
+          <span class="icon">
+            <i class="et et-chevron-double-left"></i>
+          </span>
+        </a>
         <a class="pagination-next"
            data-th-classappend="${eventYears.currentPage >= eventYears.totalBatches - 1} ? 'is-disabled'"
            data-th-attr="disabled=${eventYears.currentPage >= eventYears.totalBatches - 1} ? 'disabled' : null"
            data-th-href="${eventYears.currentPage < eventYears.totalBatches - 1}
            ? @{/{lang}/events(lang=${language}, page=${eventYears.currentPage + 1})}
-           : null">Next</a>
+           : null">
+          <span class="icon">
+            <i class="et et-chevron-double-right"></i>
+          </span>
+        </a>
       </nav>
     </div>
 
@@ -69,14 +77,14 @@
           <div class="cell" data-th-each="year : ${eventYears.years}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box-branded is-branded-faded is-clickable has-background-grey-200 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1989</span>
+              <span class="title is-1" data-th-text="${year}">1984</span>
             </a>
           </div>
           <div class="cell" data-th-each="year : ${eventYears.nextYears}"
                data-th-classappend="${yearStat.last ? (eventYears.nextYears.size() == 2 ? 'is-col-span-2' : (eventYears.nextYears.size() == 1 ? 'is-col-span-3' : '')) : ''}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box-branded is-branded-faded is-clickable has-background-grey-200 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1989</span>
+              <span class="title is-1" data-th-text="${year}">1984</span>
             </a>
           </div>
         </div>
@@ -85,14 +93,14 @@
           <div class="cell" data-th-each="year : ${eventYears.previousYears}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box-branded is-branded-faded is-clickable has-background-grey-200 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1989</span>
+              <span class="title is-1" data-th-text="${year}">1984</span>
             </a>
           </div>
           <div class="cell" data-th-each="year : ${eventYears.years}"
                data-th-classappend="${yearStat.last ? (eventYears.years.size() == 2 ? 'is-col-span-2' : (eventYears.years.size() == 1 ? 'is-col-span-3' : '')) : ''}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box-branded is-branded-faded is-clickable has-background-grey-200 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1989</span>
+              <span class="title is-1" data-th-text="${year}">1984</span>
             </a>
           </div>
         </div>
@@ -105,13 +113,21 @@
            data-th-attr="disabled=${eventYears.batchGroupPreviousPage < 0} ? 'disabled' : null"
            data-th-href="${eventYears.batchGroupPreviousPage >= 0}
            ? @{/{lang}/events(lang=${language}, page=${eventYears.batchGroupPreviousPage})}
-           : null">Previous</a>
+           : null">
+          <span class="icon">
+            <i class="et et-chevron-double-left"></i>
+          </span>
+        </a>
         <a class="pagination-next"
            data-th-classappend="${eventYears.batchGroupNextPage < 0} ? 'is-disabled'"
            data-th-attr="disabled=${eventYears.batchGroupNextPage < 0} ? 'disabled' : null"
            data-th-href="${eventYears.batchGroupNextPage >= 0}
            ? @{/{lang}/events(lang=${language}, page=${eventYears.batchGroupNextPage})}
-           : null">Next</a>
+           : null">
+          <span class="icon">
+            <i class="et et-chevron-double-right"></i>
+          </span>
+        </a>
       </nav>
     </div>
   </section>
