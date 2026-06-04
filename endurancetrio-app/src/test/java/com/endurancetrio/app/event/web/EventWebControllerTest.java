@@ -152,4 +152,53 @@ class EventWebControllerTest {
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attribute("eventYears", PAGE_1));
   }
+
+  @Test
+  void eventsYearPageWithEnglishLocale() throws Exception {
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(),
+        any()
+    )).thenReturn("Events by year - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
+        any()
+    )).thenReturn("Browse the endurance sports events by year");
+
+    mockMvc.perform(get("/en/events/1984"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events-year"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attributeExists("metadata"));
+  }
+
+  @Test
+  void eventsYearPageWithPortugueseLocale() throws Exception {
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(),
+        any()
+    )).thenReturn("Em Breve - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
+        any()
+    )).thenReturn("Explore eventos de desportos de endurance por ano");
+
+    mockMvc.perform(get("/pt/events/1984"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events-year"))
+        .andExpect(model().attribute("language", "pt"))
+        .andExpect(model().attributeExists("metadata"));
+  }
+
+  @Test
+  void eventsYearPageMetadataHasCorrectTitle() throws Exception {
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(),
+        any()
+    )).thenReturn("Events by year - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
+        any()
+    )).thenReturn("Browse the endurance sports events by year");
+
+    mockMvc.perform(get("/en/events/1984"))
+        .andExpect(model().attribute("metadata",
+            org.hamcrest.Matchers.hasProperty("title",
+                org.hamcrest.Matchers.is("Events by year - EnduranceTrio")
+            )
+        ));
+  }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html data-th-lang="${#locale.language}"
+      lang="en"
+      class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main class="hero is-fullheight-with-navbar">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div data-th-replace="~{fragments/svg :: athletes-training}" style="width: auto"></div>
+        </div>
+      </div>
+
+      <div class="container has-text-centered">
+        <p data-th-text="#{page.events.year.title}" class="title mt-6"></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

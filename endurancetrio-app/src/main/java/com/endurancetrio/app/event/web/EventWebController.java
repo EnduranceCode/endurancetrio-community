@@ -80,6 +80,25 @@ public class EventWebController {
     return VIEW;
   }
 
+  @GetMapping("/{language:en|pt}/events/{year}")
+  public String eventsYear(
+      @PathVariable String language, @PathVariable int year, HttpServletRequest request,
+      Model model
+  ) {
+    Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW,
+        messageService.getMessage("page.events.year.metadata.title", null, locale),
+        messageService.getMessage("page.events.year.metadata.description", null, locale), request,
+        appProperties
+    );
+
+    model.addAttribute("language", locale.getLanguage());
+    model.addAttribute("metadata", metadata);
+
+    return "events-year";
+  }
+
   /**
    * Builds an {@link EventYearsDTO} for the given page.
    * <p>
