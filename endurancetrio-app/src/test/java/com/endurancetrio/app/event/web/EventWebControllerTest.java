@@ -28,9 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.event.dto.EventYearsDTO;
+import com.endurancetrio.business.event.service.EventService;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,8 +45,21 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ExtendWith(MockitoExtension.class)
 class EventWebControllerTest {
 
+  private static final List<Integer> ALL_YEARS = List.of(1989, 1988, 1987, 1986, 1985, 1984, 1983,
+      1982
+  );
+  private static final EventYearsDTO PAGE_0 = new EventYearsDTO(List.of(1989, 1988, 1987),
+      List.of(1986, 1985, 1984), List.of(), 0, 3, 8, 3, -1, 2
+  );
+  private static final EventYearsDTO PAGE_1 = new EventYearsDTO(List.of(1986, 1985, 1984),
+      List.of(1983, 1982), List.of(1989, 1988, 1987), 1, 3, 8, 3, 0, 2
+  );
+
   @Mock
   MessageService messageService;
+
+  @Mock
+  EventService eventService;
 
   AppProperties appProperties;
 
@@ -61,7 +76,7 @@ class EventWebControllerTest {
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
-    eventWebController = new EventWebController(messageService, appProperties);
+    eventWebController = new EventWebController(messageService, appProperties, eventService);
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
     viewResolver.setPrefix("/WEB-INF/views/");
@@ -74,42 +89,67 @@ class EventWebControllerTest {
 
   @Test
   void eventYearsPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any()))
-        .thenReturn("Events - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.metadata.description"), any(), any()))
-        .thenReturn("Browse endurance sports events by year");
+    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
+        "Events - EnduranceTrio");
+    when(
+        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports events by year");
+    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
 
     mockMvc.perform(get("/en/events"))
         .andExpect(status().isOk())
         .andExpect(view().name("events"))
         .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attributeExists("metadata"));
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attribute("eventYears", PAGE_0));
   }
 
   @Test
   void eventYearsPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any()))
-        .thenReturn("Eventos - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.metadata.description"), any(), any()))
-        .thenReturn("Explore eventos de desportos de endurance por ano");
+    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
+        "Eventos - EnduranceTrio");
+    when(
+        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
+        "Explore eventos de desportos de endurance por ano");
+    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
 
     mockMvc.perform(get("/pt/events"))
         .andExpect(status().isOk())
         .andExpect(view().name("events"))
         .andExpect(model().attribute("language", "pt"))
-        .andExpect(model().attributeExists("metadata"));
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attribute("eventYears", PAGE_0));
   }
 
   @Test
   void eventYearsPageMetadataHasCorrectTitle() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any()))
-        .thenReturn("Events - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.metadata.description"), any(), any()))
-        .thenReturn("Browse endurance sports events by year");
+    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
+        "Events - EnduranceTrio");
+    when(
+        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports events by year");
+    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
 
     mockMvc.perform(get("/en/events"))
-        .andExpect(model().attribute("metadata",
-            org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is("Events - EnduranceTrio"))));
+        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
+                org.hamcrest.Matchers.is("Events - EnduranceTrio")
+            )
+        ));
+  }
+
+  @Test
+  void eventYearsPageSecondPage() throws Exception {
+    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
+        "Events - EnduranceTrio");
+    when(
+        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports events by year");
+    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+
+    mockMvc.perform(get("/en/events").param("page", "1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attribute("eventYears", PAGE_1));
   }
 }

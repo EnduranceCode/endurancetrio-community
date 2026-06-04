@@ -26,7 +26,7 @@
 // Add/remove individual base partials as the template evolves
 // -------------------------------------------------------------------------------------------------
 @forward 'bulma/sass/base';
-@forward 'bulma/sass/base/skeleton';
+// @forward 'bulma/sass/base/skeleton';
 
 
 // Elements
@@ -69,9 +69,9 @@
 @forward 'bulma/sass/components/modal';
 @forward 'bulma/sass/components/navbar';
 @forward 'components/endurance-navbar';
-// @forward 'bulma/sass/components/pagination'; */
-// @forward 'bulma/sass/components/panel'; */
-// @forward 'bulma/sass/components/tabs; */
+@forward 'bulma/sass/components/pagination';
+// @forward 'bulma/sass/components/panel';
+// @forward 'bulma/sass/components/tabs;
 
 // Klaro - Cookie Consent
 @forward 'klaro/endurance-klaro';
@@ -80,7 +80,7 @@
 // -------------------------------------------------------------------------------------------------
 @forward 'bulma/sass/grid/columns';
 @forward 'bulma/sass/grid/grid';
-@forward 'grid/endurance-grid';
+// @forward 'grid/endurance-grid';
 
 // Layout
 // Add/remove individual layout modules as the template evolves
