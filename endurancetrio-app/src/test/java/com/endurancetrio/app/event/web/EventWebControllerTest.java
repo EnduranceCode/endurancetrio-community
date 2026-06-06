@@ -30,12 +30,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.common.dto.PaginationDTO;
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventYearsDTO;
+import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.service.EventService;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,6 +58,22 @@ class EventWebControllerTest {
   );
   private static final EventYearsDTO PAGE_1 = new EventYearsDTO(List.of(1986, 1985, 1984),
       List.of(1983, 1982), List.of(1989, 1988, 1987), 1, 3, 8, 3, 0, 2
+  );
+  private static final LocalDate EVENT_DATE = LocalDate.of(1984, 8, 15);
+  private static final EventDTO EVENT_DTO = new EventDTO(1L, "Triatlo de Peniche", EVENT_DATE,
+      EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of("TRIATHLON")
+  );
+  private static final EventsPageDTO PAGE_WITH_EVENTS = new EventsPageDTO(List.of(EVENT_DTO),
+      new PaginationDTO(0, 10, 1, true, false)
+  );
+  private static final EventsPageDTO PAGE_WITH_EVENTS_PT = new EventsPageDTO(List.of(EVENT_DTO),
+      new PaginationDTO(0, 10, 1, true, false)
+  );
+  private static final EventsPageDTO PAGE_WITH_EVENTS_TITLE_TEST = new EventsPageDTO(
+      List.of(EVENT_DTO), new PaginationDTO(0, 10, 55, true, false)
+  );
+  private static final EventsPageDTO PAGE_EMPTY = new EventsPageDTO(List.of(),
+      new PaginationDTO(0, 0, 0, false, false)
   );
 
   @Mock
@@ -155,50 +176,125 @@ class EventWebControllerTest {
 
   @Test
   void eventsYearPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(),
-        any()
-    )).thenReturn("Events by year - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
+        "Events by year - EnduranceTrio");
     when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
         any()
     )).thenReturn("Browse the endurance sports events by year");
+    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
+        PAGE_WITH_EVENTS);
 
     mockMvc.perform(get("/en/events/1984"))
         .andExpect(status().isOk())
         .andExpect(view().name("events-year"))
         .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attributeExists("metadata"));
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attribute("year", 1984))
+        .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
+        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));
   }
 
   @Test
   void eventsYearPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(),
-        any()
-    )).thenReturn("Em Breve - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
+        "Eventos por ano - EnduranceTrio");
     when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
         any()
     )).thenReturn("Explore eventos de desportos de endurance por ano");
+    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
+        PAGE_WITH_EVENTS_PT);
 
     mockMvc.perform(get("/pt/events/1984"))
         .andExpect(status().isOk())
         .andExpect(view().name("events-year"))
         .andExpect(model().attribute("language", "pt"))
-        .andExpect(model().attributeExists("metadata"));
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attribute("year", 1984))
+        .andExpect(model().attribute("events", PAGE_WITH_EVENTS_PT.events()))
+        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS_PT.pagination()));
   }
 
   @Test
   void eventsYearPageMetadataHasCorrectTitle() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(),
-        any()
-    )).thenReturn("Events by year - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
+        "Events by year - EnduranceTrio");
     when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
         any()
     )).thenReturn("Browse the endurance sports events by year");
+    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
+        PAGE_WITH_EVENTS_TITLE_TEST);
 
     mockMvc.perform(get("/en/events/1984"))
-        .andExpect(model().attribute("metadata",
-            org.hamcrest.Matchers.hasProperty("title",
+        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
                 org.hamcrest.Matchers.is("Events by year - EnduranceTrio")
             )
         ));
+  }
+
+  @Test
+  void eventsYearPageEmptyYear() throws Exception {
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
+        "Events by year - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
+        any()
+    )).thenReturn("Browse the endurance sports events by year");
+    when(eventService.getEventsByYear(eq(1985), ArgumentMatchers.any())).thenReturn(PAGE_EMPTY);
+
+    mockMvc.perform(get("/en/events/1985"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events-year"))
+        .andExpect(model().attribute("year", 1985))
+        .andExpect(model().attribute("events", PAGE_EMPTY.events()))
+        .andExpect(model().attribute("pagination", PAGE_EMPTY.pagination()));
+  }
+
+  @Test
+  void eventsYearPageNegativePageShouldBeClamped() throws Exception {
+    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
+        "Events by year - EnduranceTrio");
+    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
+        any()
+    )).thenReturn("Browse the endurance sports events by year");
+    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
+        PAGE_WITH_EVENTS);
+
+    mockMvc.perform(get("/en/events/1984").param("page", "-1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events-year"))
+        .andExpect(model().attribute("year", 1984))
+        .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
+        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));
+  }
+
+  @Test
+  void eventDetailPageWithEnglishLocale() throws Exception {
+    when(
+        messageService.getMessage(eq("page.event.detail.metadata.title"), any(), any())).thenReturn(
+        "Event Details - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.detail.metadata.description"), any(),
+        any()
+    )).thenReturn("View endurance sports event details");
+
+    mockMvc.perform(get("/en/events/1984/1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-detail"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attributeExists("metadata"));
+  }
+
+  @Test
+  void eventDetailPageWithPortugueseLocale() throws Exception {
+    when(
+        messageService.getMessage(eq("page.event.detail.metadata.title"), any(), any())).thenReturn(
+        "Detalhes do Evento - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.detail.metadata.description"), any(),
+        any()
+    )).thenReturn("Detalhes do evento de desportos de endurance");
+
+    mockMvc.perform(get("/pt/events/1984/1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-detail"))
+        .andExpect(model().attribute("language", "pt"))
+        .andExpect(model().attributeExists("metadata"));
   }
 }

@@ -20,6 +20,10 @@
 
 package com.endurancetrio.app.newsletter.web;
 
+import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
@@ -52,7 +56,6 @@ public class NewsletterWebController {
 
   private static final Logger LOG = LoggerFactory.getLogger(NewsletterWebController.class);
 
-  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
   private static final String VIEW_SUCCESS = "newsletter-success";
   private static final String VIEW_CONFIRMED = "newsletter-confirmed";
   private static final String VIEW_ERROR = "newsletter-error";
@@ -128,7 +131,7 @@ public class NewsletterWebController {
   }
 
   private String renderView(String view, String language, HttpServletRequest request, Model model) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
     PageMetadata metadata = PageMetadataUtils.create(view,
         messageService.getMessage("page.newsletter." + view + ".metadata.title", null, locale),
@@ -137,8 +140,8 @@ public class NewsletterWebController {
         ), request, appProperties
     );
 
-    model.addAttribute("language", locale.getLanguage());
-    model.addAttribute("metadata", metadata);
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
 
     return view;
   }

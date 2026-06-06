@@ -20,11 +20,17 @@
 
 package com.endurancetrio.app.event.web;
 
+import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
+import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.EventYearsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +48,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @EnduranceTrioWebController
 public class EventWebController {
 
-  private static final String VIEW = "events";
-  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
+  private static final String VIEW_EVENTS = "events";
+  private static final String VIEW_EVENTS_YEARS = "events-year";
+  private static final String VIEW_EVENT_DETAIL = "event-detail";
+
+  private static final String ATTRIBUTE_EVENTS = "events";
+  private static final String ATTRIBUTE_EVENT_YEARS = "eventYears";
+  private static final String ATTRIBUTE_YEAR = "year";
+
   private static final int BATCH_SIZE = 3;
+  private static final int PAGE_SIZE = 10;
 
   private final MessageService messageService;
   private final AppProperties appProperties;
@@ -63,9 +78,9 @@ public class EventWebController {
       @PathVariable String language, @RequestParam(defaultValue = "0") int page,
       HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS,
         messageService.getMessage("page.events.metadata.title", null, locale),
         messageService.getMessage("page.events.metadata.description", null, locale), request,
         appProperties
@@ -73,30 +88,56 @@ public class EventWebController {
 
     EventYearsDTO eventYears = getEventYearsDTO(page);
 
-    model.addAttribute("language", locale.getLanguage());
-    model.addAttribute("metadata", metadata);
-    model.addAttribute("eventYears", eventYears);
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
+    model.addAttribute(ATTRIBUTE_EVENT_YEARS, eventYears);
 
-    return VIEW;
+    return VIEW_EVENTS;
   }
 
   @GetMapping("/{language:en|pt}/events/{year}")
   public String eventsYear(
-      @PathVariable String language, @PathVariable int year, HttpServletRequest request,
-      Model model
+      @PathVariable String language, @PathVariable int year,
+      @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS,
         messageService.getMessage("page.events.year.metadata.title", null, locale),
         messageService.getMessage("page.events.year.metadata.description", null, locale), request,
         appProperties
     );
 
-    model.addAttribute("language", locale.getLanguage());
-    model.addAttribute("metadata", metadata);
+    int clampedPage = Math.max(0, page);
+    Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
+    EventsPageDTO eventPage = eventService.getEventsByYear(year, pageable);
 
-    return "events-year";
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
+    model.addAttribute(PAGINATION, eventPage.pagination());
+    model.addAttribute(ATTRIBUTE_YEAR, year);
+    model.addAttribute(ATTRIBUTE_EVENTS, eventPage.events());
+
+    return VIEW_EVENTS_YEARS;
+  }
+
+  @GetMapping("/{language:en|pt}/events/{year}/{id}")
+  public String eventDetail(
+      @PathVariable String language, @PathVariable int year, @PathVariable Long id,
+      HttpServletRequest request, Model model
+  ) {
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_DETAIL,
+        messageService.getMessage("page.event.detail.metadata.title", null, locale),
+        messageService.getMessage("page.event.detail.metadata.description", null, locale), request,
+        appProperties
+    );
+
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
+
+    return VIEW_EVENT_DETAIL;
   }
 
   /**

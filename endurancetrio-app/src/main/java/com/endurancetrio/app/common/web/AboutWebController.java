@@ -20,6 +20,10 @@
 
 package com.endurancetrio.app.common.web;
 
+import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
@@ -36,7 +40,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class AboutWebController {
 
   private static final String VIEW = "about";
-  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private final MessageService messageService;
   private final AppProperties appProperties;
@@ -49,7 +52,7 @@ public class AboutWebController {
 
   @GetMapping("/{language:en|pt}/about")
   public String about(@PathVariable String language, HttpServletRequest request, Model model) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? PORTUGUESE_LOCALE : Locale.ENGLISH;
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW,
         messageService.getMessage("page.about.metadata.title", null, locale),
@@ -57,8 +60,8 @@ public class AboutWebController {
         appProperties
     );
 
-    model.addAttribute("language", locale.getLanguage());
-    model.addAttribute("metadata", metadata);
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
 
     return VIEW;
   }

@@ -20,6 +20,10 @@
 
 package com.endurancetrio.app.common.utils;
 
+import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
@@ -41,7 +45,6 @@ import org.springframework.web.servlet.ModelAndView;
 public final class ErrorPageUtils {
 
   private static final String ERROR_VIEW_PREFIX = "error/";
-  private static final Locale PORTUGUESE_LOCALE = Locale.of("pt", "PT");
 
   private ErrorPageUtils() {
     throw new IllegalStateException("Utility Class");
@@ -126,8 +129,8 @@ public final class ErrorPageUtils {
     );
 
     ModelAndView mav = new ModelAndView(errorView(status.value()));
-    mav.addObject("language", language);
-    mav.addObject("metadata", metadata);
+    mav.addObject(LANGUAGE, language);
+    mav.addObject(METADATA, metadata);
     mav.addObject("status", status.value());
     mav.addObject("reason", status.getReasonPhrase());
     mav.addObject("message", message);
@@ -163,7 +166,7 @@ public final class ErrorPageUtils {
     String language = slashIndex > 0 ? requestUri.substring(0, slashIndex) : requestUri;
 
     if ("pt".equalsIgnoreCase(language)) {
-      return PORTUGUESE_LOCALE;
+      return LOCALE_PORTUGUESE;
     }
     return Locale.ENGLISH;
   }

@@ -44,7 +44,7 @@
 // @forward 'bulma/sass/elements/notification';
 // @forward 'bulma/sass/elements/progress';
 // @forward 'bulma/sass/elements/table';
-// @forward 'bulma/sass/elements/tag';
+@forward 'bulma/sass/elements/tag';
 @forward 'bulma/sass/elements/title';
 
 // Form
@@ -90,7 +90,7 @@
 @forward 'bulma/sass/layout/footer';
 @forward 'bulma/sass/layout/hero';
 @forward 'bulma/sass/layout/level';
-// @forward 'bulma/sass/layout/media';
+@forward 'bulma/sass/layout/media';
 @forward 'bulma/sass/layout/section';
 
 // Helpers

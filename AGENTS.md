@@ -34,6 +34,7 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 - Entity base classes: `BaseEntity<T>` (id, equals, hashCode), `AuditableEntity` (version, createdAt, updatedAt)
 - Flyway: `V{major}.{minor}.{patch}.{order}__description.sql` in `endurancetrio-data/src/main/resources/db/migration/{ddl,dml}/{h2,postgres}/`
 - DB naming: snake_case, plural tables, constraint prefixes (`pk_`, `fk_`, `uk_`, `chk_`, `idx_`, `seq_`)
+- Config files (`*.yaml`, `*.properties`): keys ordered alphabetically (root-level and nested). See [`docs/development.md`](docs/development.md#configuration-file-key-ordering)
 
 ## Tracker integration (dual-repo)
 
