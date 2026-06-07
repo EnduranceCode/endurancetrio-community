@@ -36,6 +36,7 @@ import com.endurancetrio.business.event.dto.EventYearsDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.service.EventService;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ class EventWebControllerTest {
   private static final EventYearsDTO PAGE_1 = new EventYearsDTO(List.of(1986, 1985, 1984),
       List.of(1983, 1982), List.of(1989, 1988, 1987), 1, 3, 8, 3, 0, 2
   );
-  private static final LocalDate EVENT_DATE = LocalDate.of(1984, 8, 15);
+  private static final LocalDate EVENT_DATE = LocalDate.of(1984, Month.AUGUST, 15);
   private static final EventDTO EVENT_DTO = new EventDTO(1L, "Triatlo de Peniche", EVENT_DATE,
       EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of("TRIATHLON")
   );
