@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.endurancetrio.business.common.dto.PaginationDTO;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ import org.junit.jupiter.api.Test;
 class EventsPageDTOTest {
 
   private static final List<EventDTO> EVENTS = List.of(
-      new EventDTO(1L, "Event One", LocalDate.of(2026, 6, 1), LocalDate.of(2026, 6, 1),
+      new EventDTO(1L, "Event One", LocalDate.of(2026, Month.JUNE, 1), LocalDate.of(2026, Month.JUNE, 1),
           "City", "County", "District", List.of("TRIATHLON"))
   );
   private static final PaginationDTO PAGINATION = new PaginationDTO(0, 10, 55, true, false);

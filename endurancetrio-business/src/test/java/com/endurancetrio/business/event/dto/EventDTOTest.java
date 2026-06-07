@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,8 +40,8 @@ class EventDTOTest {
 
   private static final Long ID = 1L;
   private static final String TITLE = "Test Event";
-  private static final LocalDate START_DATE = LocalDate.of(2026, 6, 1);
-  private static final LocalDate END_DATE = LocalDate.of(2026, 6, 1);
+  private static final LocalDate START_DATE = LocalDate.of(2026, Month.JUNE, 1);
+  private static final LocalDate END_DATE = LocalDate.of(2026, Month.JUNE, 1);
   private static final String CITY = "Test City";
   private static final String COUNTY = "Test County";
   private static final String DISTRICT = "Test District";

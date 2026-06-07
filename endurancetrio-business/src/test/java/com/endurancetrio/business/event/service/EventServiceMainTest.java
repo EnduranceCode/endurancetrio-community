@@ -30,6 +30,7 @@ import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.model.enumerator.Sport;
 import com.endurancetrio.data.event.repository.EventRepository;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,11 +82,11 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnEventsWithSportCodes() {
-    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, 8, 15), LocalDate.of(1984, 8, 15),
+    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15), LocalDate.of(1984, Month.AUGUST, 15),
         "City1", "County1", "District1",
         Set.of(createCourse(Sport.TRIATHLON), createCourse(Sport.ROAD_RUNNING))
     );
-    Event event2 = createEvent(2L, "Event 2", LocalDate.of(1984, 8, 1), LocalDate.of(1984, 8, 1),
+    Event event2 = createEvent(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 1), LocalDate.of(1984, Month.AUGUST, 1),
         "City2", "County2", "District2", Set.of(createCourse(Sport.DUATHLON))
     );
 
@@ -107,7 +108,7 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnDistinctSortedSportCodes() {
-    Event event = createEvent(1L, "Event", LocalDate.of(1984, 6, 1), LocalDate.of(1984, 8, 15),
+    Event event = createEvent(1L, "Event", LocalDate.of(1984, Month.JUNE, 1), LocalDate.of(1984, Month.AUGUST, 15),
         "City", "County", "District",
         Set.of(createCourse(Sport.TRIATHLON), createCourse(Sport.TRIATHLON),
             createCourse(Sport.ROAD_RUNNING)
@@ -138,7 +139,7 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnEmptySportCodes() {
-    Event event = createEvent(1L, "Event", LocalDate.of(1984, 6, 1), LocalDate.of(1984, 8, 15),
+    Event event = createEvent(1L, "Event", LocalDate.of(1984, Month.JUNE, 1), LocalDate.of(1984, Month.AUGUST, 15),
         "City", "County", "District", Set.of()
     );
 
