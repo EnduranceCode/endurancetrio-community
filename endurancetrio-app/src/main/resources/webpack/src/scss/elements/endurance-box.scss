@@ -1,0 +1,79 @@
+@charset "utf-8";
+
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/elements/box';
+@use '../utilities/endurancetrio-variables' as et;
+
+$endurance-box-stripe-height: 3px !default;
+$endurance-box-stripe-height-thin: 1px !default;
+$endurance-box-stripe-height-thick: 6px !default;
+$endurance-box-stripe-height-extra-thick: 9px !default;
+
+.#{iv.$class-prefix}endurance-box {
+  @extend .#{iv.$class-prefix}box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: auto;
+
+  background-image: linear-gradient(
+    to right,
+    et.$et-blue-500 33.333%,
+    et.$et-yellow-500 33.333%,
+    et.$et-yellow-500 66.667%,
+    et.$et-red-500 66.667%
+  );
+  background-size: 100% $endurance-box-stripe-height;
+  background-repeat: no-repeat;
+  background-position: bottom;
+
+  &.#{iv.$class-prefix}is-branded-faded {
+    background-image: linear-gradient(
+      to right,
+      et.$et-blue-500 0%,
+      et.$et-yellow-500 50%,
+      et.$et-red-500 100%
+    );
+  }
+
+  &.#{iv.$class-prefix}is-branded-thin {
+    background-size: 100% $endurance-box-stripe-height-thin;
+  }
+
+  &.#{iv.$class-prefix}is-branded-thick {
+    background-size: 100% $endurance-box-stripe-height-thick;
+  }
+
+  &.#{iv.$class-prefix}is-branded-extra-thick {
+    background-size: 100% $endurance-box-stripe-height-extra-thick;
+  }
+
+  &.#{iv.$class-prefix}is-small {
+    min-height: 6rem;
+  }
+
+  &.#{iv.$class-prefix}is-medium {
+    min-height: 12rem;
+  }
+
+  &.#{iv.$class-prefix}is-large {
+    min-height: 18rem;
+  }
+
+  &.#{iv.$class-prefix}is-halfheight {
+    min-height: 50vh;
+  }
+
+  &.#{iv.$class-prefix}is-halfheight-with-navbar {
+    min-height: calc(50vh - var(--bulma-navbar-height));
+  }
+
+  &.#{iv.$class-prefix}is-fullheight {
+    min-height: 100vh;
+  }
+
+  &.#{iv.$class-prefix}is-fullheight-with-navbar {
+    min-height: calc(100vh - var(--bulma-navbar-height));
+  }
+}
