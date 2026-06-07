@@ -118,7 +118,8 @@ spring:
 The migration scripts are duplicated, when necessary for tests, for each supported database
 (H2 and PostgreSQL) to ensure full compatibility with the targeted databases.
 
-The existing scripts below use the retired legacy naming convention.
+Scripts **1 to 14** use the retired legacy naming convention. Scripts **15 onwards** use the current
+timestamp-based naming convention.
 
 1. Creates the tables for the **EnduranceTrio** application:
    - [V000.000.001.001__create-tables-h2.sql](migration/ddl/h2/V000.000.001.001__create-tables-h2.sql)
@@ -162,3 +163,7 @@ The existing scripts below use the retired legacy naming convention.
 14. Removes the `DEFAULT CURRENT_TIMESTAMP` from the `created_at` column on event domain tables:
     - [V000.004.000.002__remove-created-at-default-from-event-tables-h2.sql](migration/ddl/h2/V000.004.000.002__remove-created-at-default-from-event-tables-h2.sql)
     - [V000.004.000.002__remove-created-at-default-from-event-tables-postgres.sql](migration/ddl/postgres/V000.004.000.002__remove-created-at-default-from-event-tables-postgres.sql)
+15. Fixes the course sport and title for biatlo events inserted in 1988 and 1989:
+    - [V20260607.001__fix-1988-1989-biatlo-course-types-h2.sql](migration/dml/h2/V20260607.001__fix-1988-1989-biatlo-course-types-h2.sql)
+    - [V20260607.001__fix-1988-1989-biatlo-course-types-postgres.sql](migration/dml/postgres/V20260607.001__fix-1988-1989-biatlo-course-types-postgres.sql)
+
