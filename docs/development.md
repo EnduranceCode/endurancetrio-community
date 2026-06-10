@@ -532,6 +532,31 @@ spring:
 
 ## Programmatic Version Management
 
+### Version Update
+
+This project supports programmatic version updates across all Maven modules. It can be achieved
+replacing the label as appropriate in the below command and then executing it.
+
+```shell
+mvn versions:set -DnewVersion={VERSION_NUMBER}
+```
+
+> **Placeholder Definition**
+>
+> + **{VERSION_NUMBER}** : The new Sematic Version number to be applied across all Maven modules
+
+The changes applied with the above command can be reverted executing the following command:
+
+```shell
+mvn versions:revert
+```
+
+Or commited with the following command:
+
+```shell
+mvn versions:commit
+```
+
 ### Version Tagging
 
 All releases must be tagged using **annotated** tags (created with the `-a` flag) following
@@ -557,29 +582,4 @@ Push the tag to the remote repository:
 
 ```shell
 git push origin tracker-vX.Y.Z
-```
-
-### Version Bump
-
-This project supports programmatic version updates across all Maven modules. It can be achieved
-replacing the label as appropriate in the below command and then executing it.
-
-```shell
-mvn versions:set -DnewVersion={VERSION_NUMBER}
-```
-
-> **Placeholder Definition**
->
-> + **{VERSION_NUMBER}** : The new Sematic Version number to be applied across all Maven modules
-
-The changes applied with the above command can be reverted executing the following command:
-
-```shell
-mvn versions:revert
-```
-
-Or commited with the following command:
-
-```shell
-mvn versions:commit
 ```

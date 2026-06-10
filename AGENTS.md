@@ -91,6 +91,6 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 
 ## Commit messages
 
-Subject: Uses a "[TRACKER]" prefix, ≤50 chars, capitalized, imperative mood, no period. Body
+Subject: Use a "[TRACKER]" prefix, ≤50 chars, capitalized, imperative mood, no period. Body
 optional (72-char wrap, explains what/why vs. how).
 Follows [cbea.ms/git-commit](https://cbea.ms/git-commit/).
