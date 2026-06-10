@@ -20,8 +20,10 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.event.model.converter.WetSuitRuleConverter;
 import com.endurancetrio.data.event.model.enumerator.WetsuitRule;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.io.Serial;
@@ -56,6 +58,7 @@ public class TriathlonBasedRace extends Race implements Serializable {
   @Column(name = "water_temperature", nullable = true)
   private Double waterTemperature;
 
+  @Convert(converter = WetSuitRuleConverter.class)
   @Column(name = "wetsuit_rule", nullable = false)
   private WetsuitRule wetsuitRule;
 
