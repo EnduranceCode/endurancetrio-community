@@ -30,13 +30,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit test for the {@link EventDTO} DTO.
+ * Unit test for the {@link EventOverviewDTO} DTO.
  * <p>
  * This test may seem redundant since it only verify getters and setters, but its purpose is to
  * establish a testing culture from the very beginning of the project. It serves as a reminder that
  * every part of the application should be testable and that tests should always be present.
  */
-class EventDTOTest {
+class EventOverviewDTOTest {
 
   private static final Long ID = 1L;
   private static final String TITLE = "Test Event";
@@ -45,13 +45,25 @@ class EventDTOTest {
   private static final String CITY = "Test City";
   private static final String COUNTY = "Test County";
   private static final String DISTRICT = "Test District";
-  private static final List<String> SPORT_CODES = List.of("TRIATHLON", "ROAD_RUNNING");
+  private static final List<OrganizerDTO> ORGANIZERS = List.of(
+      new OrganizerDTO(1L, "Organizer A", "CLUB", "City", "County", "District")
+  );
+  private static final List<RaceDTO> RACES = List.of(
+      new RaceDTO(1L, "Race 1", "Elite", LocalDate.of(2026, Month.JUNE, 1), null,
+          List.of("TRIATHLON"), List.of("SPRINT"), "TRIATHLON", null
+      )
+  );
+  private static final List<EventFileDTO> FILES = List.of(
+      new EventFileDTO(1L, "Regulamento", "RULES", "19840815NAC001-REG001-01.pdf")
+  );
 
-  private EventDTO underTest;
+  private EventOverviewDTO underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT, SPORT_CODES);
+    underTest = new EventOverviewDTO(
+        ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT, ORGANIZERS, RACES, FILES
+    );
   }
 
   @Test
@@ -63,89 +75,125 @@ class EventDTOTest {
     assertEquals(CITY, underTest.city());
     assertEquals(COUNTY, underTest.county());
     assertEquals(DISTRICT, underTest.district());
-    assertEquals(SPORT_CODES, underTest.sportCodes());
+    assertEquals(ORGANIZERS, underTest.organizers());
+    assertEquals(RACES, underTest.races());
+    assertEquals(FILES, underTest.files());
   }
 
   @Test
   void shouldRejectNullTitle() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, null, START_DATE, END_DATE, CITY, COUNTY, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, null, START_DATE, END_DATE, CITY, COUNTY, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectBlankTitle() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, " ", START_DATE, END_DATE, CITY, COUNTY, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, " ", START_DATE, END_DATE, CITY, COUNTY, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectNullStartDate() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, null, END_DATE, CITY, COUNTY, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, null, END_DATE, CITY, COUNTY, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectNullEndDate() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, null, CITY, COUNTY, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, null, CITY, COUNTY, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectNullCity() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, null, COUNTY, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, null, COUNTY, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectBlankCity() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, "", COUNTY, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, "", COUNTY, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectNullCounty() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, null, DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, null, DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectBlankCounty() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, " ", DISTRICT, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, " ", DISTRICT,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectNullDistrict() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, null, SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, null,
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
   void shouldRejectBlankDistrict() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, "\t", SPORT_CODES)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, "\t",
+            ORGANIZERS, RACES, FILES
+        )
     );
   }
 
   @Test
-  void shouldRejectNullSportCodes() {
+  void shouldRejectNullOrganizers() {
     assertThrows(IllegalArgumentException.class,
-        () -> new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT, null)
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT,
+            null, RACES, FILES
+        )
     );
   }
 
   @Test
-  void sportCodesCanBeEmpty() {
-    EventDTO dto = new EventDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT, List.of());
-    assertEquals(List.of(), dto.sportCodes());
+  void shouldRejectNullRaces() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT,
+            ORGANIZERS, null, FILES
+        )
+    );
+  }
+
+  @Test
+  void shouldRejectNullFiles() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new EventOverviewDTO(ID, TITLE, START_DATE, END_DATE, CITY, COUNTY, DISTRICT,
+            ORGANIZERS, RACES, null
+        )
+    );
   }
 }

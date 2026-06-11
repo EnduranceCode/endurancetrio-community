@@ -21,21 +21,27 @@
 package com.endurancetrio.app.event.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
-import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.event.dto.EventFileDTO;
+import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventYearsDTO;
+import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.service.EventService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -50,11 +56,22 @@ public class EventWebController {
 
   private static final String VIEW_EVENTS = "events";
   private static final String VIEW_EVENTS_YEARS = "events-year";
-  private static final String VIEW_EVENT_DETAIL = "event-detail";
+  private static final String VIEW_EVENT_OVERVIEW = "event-overview";
 
+  private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
   private static final String ATTRIBUTE_EVENT_YEARS = "eventYears";
   private static final String ATTRIBUTE_YEAR = "year";
+  private static final String ATTRIBUTE_FILE_TYPE_TABS = "fileTypeTabs";
+
+  private static final Map<String, List<String>> FILE_TYPE_GROUPS = Map.of(
+      "REGULATIONS", List.of("GUIDE", "RULES"),
+      "START_LIST", List.of("START_LIST"),
+      "COURSE_MAPS", List.of("COURSE_MAPS"),
+      "IMAGES", List.of("COVER_IMAGE", "POSTER")
+  );
+
+  private record FileTypeTab(String code, String fileTypes) {}
 
   private static final int BATCH_SIZE = 3;
   private static final int PAGE_SIZE = 10;
@@ -122,13 +139,13 @@ public class EventWebController {
   }
 
   @GetMapping("/{language:en|pt}/events/{year}/{id}")
-  public String eventDetail(
+  public String getEventOverview(
       @PathVariable String language, @PathVariable int year, @PathVariable Long id,
       HttpServletRequest request, Model model
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_DETAIL,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_OVERVIEW,
         messageService.getMessage("page.event.detail.metadata.title", null, locale),
         messageService.getMessage("page.event.detail.metadata.description", null, locale), request,
         appProperties
@@ -137,7 +154,39 @@ public class EventWebController {
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
 
-    return VIEW_EVENT_DETAIL;
+    try {
+      EventOverviewDTO event = eventService.getEventOverview(id);
+      model.addAttribute(ATTRIBUTE_EVENT, event);
+      model.addAttribute(ATTRIBUTE_FILE_TYPE_TABS, getActiveFileTypeTabs(event));
+    } catch (EnduranceTrioException e) {
+      return "redirect:/" + language + "/events";
+    }
+
+    return VIEW_EVENT_OVERVIEW;
+  }
+
+  /**
+   * Returns the list of active {@link FileTypeTab file type tabs} for the given event, based on the
+   * file types actually present in the event's files. The tabs are computed from the
+   * {@link #FILE_TYPE_GROUPS} mapping, with only those groups included that have at least one file
+   * of a matching type in the event.
+   *
+   * @param event the event overview DTO containing the event's files
+   * @return a list of active file type tabs
+   */
+  private @NonNull List<FileTypeTab> getActiveFileTypeTabs(EventOverviewDTO event) {
+    if (event == null || event.files() == null) {
+      return List.of();
+    }
+
+    Set<String> presentTypes = event.files().stream()
+        .map(EventFileDTO::fileType)
+        .collect(Collectors.toSet());
+
+    return FILE_TYPE_GROUPS.entrySet().stream()
+        .filter(entry -> entry.getValue().stream().anyMatch(presentTypes::contains))
+        .map(entry -> new FileTypeTab(entry.getKey(), String.join(",", entry.getValue())))
+        .toList();
   }
 
   /**

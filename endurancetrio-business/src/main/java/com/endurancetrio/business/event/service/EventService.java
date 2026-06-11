@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.service;
 
+import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.EventYearsDTO;
 import java.util.List;
@@ -50,4 +51,15 @@ public interface EventService {
    * @return an {@link EventsPageDTO} with the events for the given year and pagination metadata
    */
   EventsPageDTO getEventsByYear(int year, Pageable pageable);
+
+  /**
+   * Returns an {@link EventOverviewDTO} containing the summary details of the event identified by
+   * the given {@code id}, including its organizers and races.
+   *
+   * @param id the unique identifier of the event
+   * @return an {@link EventOverviewDTO} with the event overview
+   * @throws com.endurancetrio.business.common.exception.EnduranceTrioException if no event with the
+   *         given {@code id} is found
+   */
+  EventOverviewDTO getEventOverview(Long id);
 }

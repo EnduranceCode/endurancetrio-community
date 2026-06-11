@@ -268,7 +268,7 @@ class EventWebControllerTest {
   }
 
   @Test
-  void eventDetailPageWithEnglishLocale() throws Exception {
+  void getEventOverviewPageWithEnglishLocale() throws Exception {
     when(
         messageService.getMessage(eq("page.event.detail.metadata.title"), any(), any())).thenReturn(
         "Event Details - EnduranceTrio");
@@ -278,13 +278,13 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/en/events/1984/1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("event-detail"))
+        .andExpect(view().name("event-overview"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"));
   }
 
   @Test
-  void eventDetailPageWithPortugueseLocale() throws Exception {
+  void getEventOverviewPageWithPortugueseLocale() throws Exception {
     when(
         messageService.getMessage(eq("page.event.detail.metadata.title"), any(), any())).thenReturn(
         "Detalhes do Evento - EnduranceTrio");
@@ -294,7 +294,7 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/pt/events/1984/1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("event-detail"))
+        .andExpect(view().name("event-overview"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"));
   }

@@ -83,7 +83,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       pool-name: EnduranceTrio-HikariPool
-      auto-commit: false
       connection-test-query: SELECT 1
       connection-timeout: 30000
       idle-timeout: 600000

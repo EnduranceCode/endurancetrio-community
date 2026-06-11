@@ -24,8 +24,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * The {@link EventDTO} represents an event with its basic information, location data, and the
- * distinct sport codes extracted from its courses.
+ * The {@link EventOverviewDTO} provides a summary of an event, including its basic details,
+ * location, organizers, and races.
  *
  * @param id         the unique identifier of the event
  * @param title      the title of the event
@@ -34,13 +34,16 @@ import java.util.List;
  * @param city       the city where the event takes place
  * @param county     the county where the event takes place
  * @param district   the district where the event takes place
- * @param sportCodes the distinct sport codes associated with the event's courses, sorted
- *                   alphabetically
+ * @param organizers the organizers of the event
+ * @param races      the races associated with the event
+ * @param files      the files associated with the event
  */
-public record EventDTO(Long id, String title, LocalDate startDate, LocalDate endDate, String city,
-                       String county, String district, List<String> sportCodes) {
+public record EventOverviewDTO(Long id, String title, LocalDate startDate, LocalDate endDate,
+                               String city, String county, String district,
+                               List<OrganizerDTO> organizers, List<RaceDTO> races,
+                               List<EventFileDTO> files) {
 
-  public EventDTO {
+  public EventOverviewDTO {
     if (title == null || title.isBlank()) {
       throw new IllegalArgumentException("title must not be null or blank");
     }
@@ -59,8 +62,14 @@ public record EventDTO(Long id, String title, LocalDate startDate, LocalDate end
     if (district == null || district.isBlank()) {
       throw new IllegalArgumentException("district must not be null or blank");
     }
-    if (sportCodes == null) {
-      throw new IllegalArgumentException("sportCodes must not be null");
+    if (organizers == null) {
+      throw new IllegalArgumentException("organizers must not be null");
+    }
+    if (races == null) {
+      throw new IllegalArgumentException("races must not be null");
+    }
+    if (files == null) {
+      throw new IllegalArgumentException("files must not be null");
     }
   }
 }
