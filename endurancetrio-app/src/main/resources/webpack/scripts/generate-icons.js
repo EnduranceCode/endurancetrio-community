@@ -31,26 +31,24 @@
  *       (prebuild:* hooks also run this before every webpack build)
  */
 
-import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
-import {dirname, resolve} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
 const configPath = resolve(ROOT, 'icons.config.json');
-const outputPath = resolve(ROOT, 'src', 'scss', 'utilities',
-    'endurance-icons.scss');
+const outputPath = resolve(ROOT, 'src', 'scss', 'utilities', 'endurance-icons.scss');
 
 const config = JSON.parse(readFileSync(configPath, 'utf-8'));
 
 function svgToDataUri(svgContent) {
   const data = svgContent
-  .replaceAll(/<!--.*?-->/gs, '')
-  .replaceAll(/>\s+</g, '><')
-  .trim();
-  const encoded = encodeURIComponent(data)
-  .replaceAll('%20', ' ');
+    .replaceAll(/<!--.*?-->/gs, '')
+    .replaceAll(/>\s+</g, '><')
+    .trim();
+  const encoded = encodeURIComponent(data).replaceAll('%20', ' ');
   return `url("data:image/svg+xml,${encoded}")`;
 }
 
@@ -61,16 +59,15 @@ function readSvg(filePath) {
 const entries = [];
 
 for (const name of config.mdi) {
-  const svgPath = resolve(ROOT, 'node_modules', '@mdi', 'svg', 'svg',
-      `${name}.svg`);
+  const svgPath = resolve(ROOT, 'node_modules', '@mdi', 'svg', 'svg', `${name}.svg`);
   const svg = readSvg(svgPath);
-  entries.push({name: `et-${name}`, svg});
+  entries.push({ name: `et-${name}`, svg });
 }
 
 for (const [name, relativePath] of Object.entries(config.custom)) {
   const svgPath = resolve(ROOT, relativePath);
   const svg = readSvg(svgPath);
-  entries.push({name: `et-${name}`, svg});
+  entries.push({ name: `et-${name}`, svg });
 }
 
 const lines = [
@@ -92,7 +89,7 @@ const lines = [
   '',
 ];
 
-for (const {name, svg} of entries) {
+for (const { name, svg } of entries) {
   const dataUri = svgToDataUri(svg);
   lines.push(`.${name} {`);
   lines.push(`  @include et-icon-base;`);
@@ -104,7 +101,7 @@ for (const {name, svg} of entries) {
 
 const outputDir = dirname(outputPath);
 if (!existsSync(outputDir)) {
-  mkdirSync(outputDir, {recursive: true});
+  mkdirSync(outputDir, { recursive: true });
 }
 
 writeFileSync(outputPath, lines.join('\n'), 'utf-8');

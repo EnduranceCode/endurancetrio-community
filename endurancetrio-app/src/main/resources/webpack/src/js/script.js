@@ -25,6 +25,8 @@ import klaroConfig from './klaro-config.js';
 
 import bulmaModal from './bulma-modal.js';
 import bulmaNavbar from './bulma-navbar.js';
+import bulmaPanel from './bulma-panel.js';
+import bulmaTab from './bulma-tab.js';
 import languageSelector from './language-selector.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,13 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
     privacyPolicy: `/${currentLanguage}/privacy-policy#cookies-policy`,
   });
 
-  document.getElementById('cookies-preferences-link')?.addEventListener('click',
-      (event) => {
-        event.preventDefault();
-        klaro.show(klaroConfig, true);
-      });
+  document.getElementById('cookies-preferences-link')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    klaro.show(klaroConfig, true);
+  });
 
   bulmaModal.init();
   bulmaNavbar.init();
+  bulmaPanel.init();
+  bulmaTab.init();
   languageSelector.init();
 });
