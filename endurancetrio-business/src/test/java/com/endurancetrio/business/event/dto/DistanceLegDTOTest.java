@@ -21,56 +21,46 @@
 package com.endurancetrio.business.event.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.endurancetrio.business.common.dto.PaginationDTO;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit test for the {@link EventsPageDTO} DTO.
+ * Unit test for the {@link DistanceLegDTO} DTO.
  * <p>
  * This test may seem redundant since it only verify getters and setters, but its purpose is to
  * establish a testing culture from the very beginning of the project. It serves as a reminder that
  * every part of the application should be testable and that tests should always be present.
  */
-class EventsPageDTOTest {
+class DistanceLegDTOTest {
 
-  private static final List<EventDTO> EVENTS = List.of(
-      new EventDTO(1L, "Event One", LocalDate.of(2026, Month.JUNE, 1),
-          LocalDate.of(2026, Month.JUNE, 1), "City", "County", "District", List.of("TRIATHLON")
-      ));
-  private static final PaginationDTO PAGINATION = new PaginationDTO(0, 10, 55, true, false);
+  private static final String CORE_SPORT = "SWIM";
+  private static final Integer LENGTH = 1500;
 
-  private EventsPageDTO underTest;
+  private DistanceLegDTO underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new EventsPageDTO(EVENTS, PAGINATION);
+    underTest = new DistanceLegDTO(CORE_SPORT, LENGTH);
   }
 
   @Test
   void dtoShouldRetainValues() {
-    assertEquals(EVENTS, underTest.events());
-    assertEquals(PAGINATION, underTest.pagination());
+    assertEquals(CORE_SPORT, underTest.coreSport());
+    assertEquals(LENGTH, underTest.length());
   }
 
   @Test
-  void shouldRejectNullEvents() {
-    assertThrows(IllegalArgumentException.class, () -> new EventsPageDTO(null, PAGINATION));
+  void coreSportCanBeNull() {
+    DistanceLegDTO dto = new DistanceLegDTO(null, LENGTH);
+    assertNull(dto.coreSport());
+    assertEquals(LENGTH, dto.length());
   }
 
   @Test
-  void shouldRejectNullPagination() {
-    assertThrows(IllegalArgumentException.class, () -> new EventsPageDTO(EVENTS, null));
-  }
-
-  @Test
-  void eventsListCanBeEmpty() {
-    EventsPageDTO dto = new EventsPageDTO(List.of(), PAGINATION);
-    assertEquals(List.of(), dto.events());
+  void shouldRejectNullLength() {
+    assertThrows(IllegalArgumentException.class, () -> new DistanceLegDTO(CORE_SPORT, null));
   }
 }

@@ -23,54 +23,37 @@ package com.endurancetrio.business.event.dto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.endurancetrio.business.common.dto.PaginationDTO;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit test for the {@link EventsPageDTO} DTO.
+ * Unit test for the {@link DistanceMetadataDTO} DTO.
  * <p>
  * This test may seem redundant since it only verify getters and setters, but its purpose is to
  * establish a testing culture from the very beginning of the project. It serves as a reminder that
  * every part of the application should be testable and that tests should always be present.
  */
-class EventsPageDTOTest {
+class DistanceMetadataDTOTest {
 
-  private static final List<EventDTO> EVENTS = List.of(
-      new EventDTO(1L, "Event One", LocalDate.of(2026, Month.JUNE, 1),
-          LocalDate.of(2026, Month.JUNE, 1), "City", "County", "District", List.of("TRIATHLON")
-      ));
-  private static final PaginationDTO PAGINATION = new PaginationDTO(0, 10, 55, true, false);
+  private static final List<DistanceLegDTO> LEGS = List.of(new DistanceLegDTO("SWIM", 1500),
+      new DistanceLegDTO("BIKE", 40000), new DistanceLegDTO("RUN", 10000)
+  );
 
-  private EventsPageDTO underTest;
+  private DistanceMetadataDTO underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new EventsPageDTO(EVENTS, PAGINATION);
+    underTest = new DistanceMetadataDTO(LEGS);
   }
 
   @Test
   void dtoShouldRetainValues() {
-    assertEquals(EVENTS, underTest.events());
-    assertEquals(PAGINATION, underTest.pagination());
+    assertEquals(LEGS, underTest.legs());
   }
 
   @Test
-  void shouldRejectNullEvents() {
-    assertThrows(IllegalArgumentException.class, () -> new EventsPageDTO(null, PAGINATION));
-  }
-
-  @Test
-  void shouldRejectNullPagination() {
-    assertThrows(IllegalArgumentException.class, () -> new EventsPageDTO(EVENTS, null));
-  }
-
-  @Test
-  void eventsListCanBeEmpty() {
-    EventsPageDTO dto = new EventsPageDTO(List.of(), PAGINATION);
-    assertEquals(List.of(), dto.events());
+  void shouldRejectNullLegs() {
+    assertThrows(IllegalArgumentException.class, () -> new DistanceMetadataDTO(null));
   }
 }

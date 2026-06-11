@@ -20,11 +20,19 @@
 
 package com.endurancetrio.business.event.service;
 
+import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.dto.PaginationDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventDTO;
+import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.mapper.EventMapper;
+import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.repository.EventRepository;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,22 +40,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 public class EventServiceMain implements EventService {
 
+  private static final Logger LOG = LoggerFactory.getLogger(EventServiceMain.class);
+
   private final EventRepository eventRepository;
+  private final EventMapper eventMapper;
 
   @Autowired
-  public EventServiceMain(EventRepository eventRepository) {
+  public EventServiceMain(EventRepository eventRepository, EventMapper eventMapper) {
     this.eventRepository = eventRepository;
+    this.eventMapper = eventMapper;
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<Integer> getEventYears() {
     return eventRepository.findDistinctYears();
   }
 
   @Override
+  @Transactional(readOnly = true)
   public EventsPageDTO getEventsByYear(int year, Pageable pageable) {
     Page<EventDTO> eventPage = eventRepository.findByEventYear(year, pageable)
         .map(event -> {
@@ -63,5 +76,17 @@ public class EventServiceMain implements EventService {
         });
 
     return new EventsPageDTO(eventPage.getContent(), PaginationDTO.from(eventPage));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public EventOverviewDTO getEventOverview(Long id) {
+    Event event = eventRepository.findByIdWithGraph(id).orElseThrow(() -> {
+      String errorMsg = String.format("No event found with ID %d", id);
+      LOG.warn(errorMsg);
+      return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
+    });
+
+    return eventMapper.mapToEventOverviewDTO(event);
   }
 }

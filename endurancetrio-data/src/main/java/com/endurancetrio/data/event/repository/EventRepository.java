@@ -22,6 +22,7 @@ package com.endurancetrio.data.event.repository;
 
 import com.endurancetrio.data.event.model.entity.Event;
 import java.util.List;
+import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,15 +36,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull Long> {
-
-  /**
-   * Returns all distinct years extracted from the {@link Event#getStartDate() startDate} of
-   * existing {@link Event events}, ordered descending.
-   *
-   * @return a list of distinct years in descending order
-   */
-  @Query("SELECT DISTINCT YEAR(e.startDate) FROM Event e ORDER BY YEAR(e.startDate) DESC")
-  List<Integer> findDistinctYears();
 
   /**
    * Returns a {@link Page} of {@link Event events} whose {@link Event#getStartDate() startDate}
@@ -60,4 +52,30 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
       countQuery = "SELECT COUNT(DISTINCT e) FROM Event e WHERE YEAR(e.startDate) = :year"
   )
   Page<Event> findByEventYear(@Param("year") int year, Pageable pageable);
+
+  /**
+   * Finds an {@link Event} by its ID with the full object graph eagerly fetched (courses,
+   * distances, and races). This avoids N+1 queries and ensures Hibernate constructs the correct
+   * concrete subclass instances for the joined-table inheritance hierarchy of
+   * {@link com.endurancetrio.data.event.model.entity.Distance}.
+   *
+   * @param id the event ID
+   * @return the event with its associated courses, distances, and races, or {@code null} if not
+   * found
+   */
+  @Query(
+      "SELECT DISTINCT e FROM Event e " + "LEFT JOIN FETCH e.courses c "
+          + "LEFT JOIN FETCH c.distance " + "LEFT JOIN FETCH c.races "
+          + "LEFT JOIN FETCH e.eventFiles " + "WHERE e.id = :id"
+  )
+  Optional<Event> findByIdWithGraph(@Param("id") Long id);
+
+  /**
+   * Returns all distinct years extracted from the {@link Event#getStartDate() startDate} of
+   * existing {@link Event events}, ordered descending.
+   *
+   * @return a list of distinct years in descending order
+   */
+  @Query("SELECT DISTINCT YEAR(e.startDate) FROM Event e ORDER BY YEAR(e.startDate) DESC")
+  List<Integer> findDistinctYears();
 }

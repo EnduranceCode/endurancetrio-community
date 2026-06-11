@@ -22,9 +22,15 @@ package com.endurancetrio.business.event.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.mapper.EventMapper;
 import com.endurancetrio.data.event.model.entity.Course;
 import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.model.enumerator.Sport;
@@ -32,10 +38,11 @@ import com.endurancetrio.data.event.repository.EventRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -46,6 +53,7 @@ import org.springframework.data.domain.Pageable;
 @ExtendWith(MockitoExtension.class)
 class EventServiceMainTest {
 
+  private static final Long EVENT_ID = 1L;
   private static final List<Integer> ALL_YEARS = List.of(1989, 1988, 1987, 1986, 1985, 1984);
   private static final int YEAR = 1984;
   private static final Pageable PAGEABLE = PageRequest.of(0, 10);
@@ -53,18 +61,17 @@ class EventServiceMainTest {
   @Mock
   EventRepository eventRepository;
 
-  EventServiceMain eventService;
+  @Mock
+  EventMapper eventMapper;
 
-  @BeforeEach
-  void setUp() {
-    eventService = new EventServiceMain(eventRepository);
-  }
+  @InjectMocks
+  EventServiceMain underTest;
 
   @Test
   void getEventYearsShouldReturnAllYears() {
     when(eventRepository.findDistinctYears()).thenReturn(ALL_YEARS);
 
-    List<Integer> result = eventService.getEventYears();
+    List<Integer> result = underTest.getEventYears();
 
     assertNotNull(result);
     assertEquals(ALL_YEARS, result);
@@ -74,7 +81,7 @@ class EventServiceMainTest {
   void getEventYearsShouldReturnEmptyWhenNoYears() {
     when(eventRepository.findDistinctYears()).thenReturn(List.of());
 
-    List<Integer> result = eventService.getEventYears();
+    List<Integer> result = underTest.getEventYears();
 
     assertNotNull(result);
     assertEquals(List.of(), result);
@@ -82,18 +89,20 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnEventsWithSportCodes() {
-    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15), LocalDate.of(1984, Month.AUGUST, 15),
+    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15),
         "City1", "County1", "District1",
         Set.of(createCourse(Sport.TRIATHLON), createCourse(Sport.ROAD_RUNNING))
     );
-    Event event2 = createEvent(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 1), LocalDate.of(1984, Month.AUGUST, 1),
+    Event event2 = createEvent(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 1),
+        LocalDate.of(1984, Month.AUGUST, 1),
         "City2", "County2", "District2", Set.of(createCourse(Sport.DUATHLON))
     );
 
     Page<Event> eventPage = new PageImpl<>(List.of(event1, event2), PAGEABLE, 2L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
 
-    EventsPageDTO result = eventService.getEventsByYear(YEAR, PAGEABLE);
+    EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(2, result.events().size());
@@ -108,7 +117,8 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnDistinctSortedSportCodes() {
-    Event event = createEvent(1L, "Event", LocalDate.of(1984, Month.JUNE, 1), LocalDate.of(1984, Month.AUGUST, 15),
+    Event event = createEvent(1L, "Event", LocalDate.of(1984, Month.JUNE, 1),
+        LocalDate.of(1984, Month.AUGUST, 15),
         "City", "County", "District",
         Set.of(createCourse(Sport.TRIATHLON), createCourse(Sport.TRIATHLON),
             createCourse(Sport.ROAD_RUNNING)
@@ -118,7 +128,7 @@ class EventServiceMainTest {
     Page<Event> eventPage = new PageImpl<>(List.of(event), PAGEABLE, 1L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
 
-    EventsPageDTO result = eventService.getEventsByYear(YEAR, PAGEABLE);
+    EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(1, result.events().size());
@@ -130,7 +140,7 @@ class EventServiceMainTest {
     Page<Event> eventPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
 
-    EventsPageDTO result = eventService.getEventsByYear(YEAR, PAGEABLE);
+    EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(0, result.events().size());
@@ -139,18 +149,46 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnEmptySportCodes() {
-    Event event = createEvent(1L, "Event", LocalDate.of(1984, Month.JUNE, 1), LocalDate.of(1984, Month.AUGUST, 15),
+    Event event = createEvent(1L, "Event", LocalDate.of(1984, Month.JUNE, 1),
+        LocalDate.of(1984, Month.AUGUST, 15),
         "City", "County", "District", Set.of()
     );
 
     Page<Event> eventPage = new PageImpl<>(List.of(event), PAGEABLE, 1L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
 
-    EventsPageDTO result = eventService.getEventsByYear(YEAR, PAGEABLE);
+    EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(1, result.events().size());
     assertEquals(List.of(), result.events().getFirst().sportCodes());
+  }
+
+  @Test
+  void getEventOverviewShouldReturnEventOverview() {
+    Event event = createEvent(EVENT_ID, "Test Event", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15), "City", "County", "District", Set.of()
+    );
+    EventOverviewDTO expected = mock(EventOverviewDTO.class);
+
+    when(eventRepository.findByIdWithGraph(EVENT_ID)).thenReturn(Optional.of(event));
+    when(eventMapper.mapToEventOverviewDTO(event)).thenReturn(expected);
+
+    EventOverviewDTO result = underTest.getEventOverview(EVENT_ID);
+
+    assertNotNull(result);
+    assertEquals(expected, result);
+  }
+
+  @Test
+  void getEventOverviewShouldThrowWhenEventNotFound() {
+    when(eventRepository.findByIdWithGraph(EVENT_ID)).thenReturn(Optional.empty());
+
+    EnduranceTrioException exception = assertThrows(EnduranceTrioException.class,
+        () -> underTest.getEventOverview(EVENT_ID)
+    );
+
+    assertEquals(EnduranceTrioError.NOT_FOUND.getCode(), exception.getCode());
   }
 
   private Event createEvent(
