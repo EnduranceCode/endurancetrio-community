@@ -76,4 +76,12 @@ $endurance-box-stripe-height-extra-thick: 9px !default;
   &.#{iv.$class-prefix}is-fullheight-with-navbar {
     min-height: calc(100vh - var(--bulma-navbar-height));
   }
+
+  &.#{iv.$class-prefix}is-content-top {
+    justify-content: flex-start;
+  }
+}
+
+.#{iv.$class-prefix}column > .#{iv.$class-prefix}endurance-box {
+  height: 100%;
 }

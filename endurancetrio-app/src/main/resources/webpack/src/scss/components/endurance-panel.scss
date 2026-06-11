@@ -1,0 +1,59 @@
+@charset "utf-8";
+
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/components/panel';
+@use '../utilities/endurancetrio-variables' as et;
+
+$endurance-panel-stripe-height: 3px !default;
+$endurance-panel-stripe-height-thin: 1px !default;
+$endurance-panel-stripe-height-thick: 6px !default;
+$endurance-panel-stripe-height-extra-thick: 9px !default;
+
+.#{iv.$class-prefix}endurance-panel {
+  @extend .#{iv.$class-prefix}panel;
+
+  background-image: linear-gradient(
+    to right,
+    et.$et-blue-500 33.333%,
+    et.$et-yellow-500 33.333%,
+    et.$et-yellow-500 66.667%,
+    et.$et-red-500 66.667%
+  );
+  background-size: 100% $endurance-panel-stripe-height;
+  background-repeat: no-repeat;
+  background-position: bottom;
+
+  &.#{iv.$class-prefix}is-branded-faded {
+    background-image: linear-gradient(
+      to right,
+      et.$et-blue-500 0%,
+      et.$et-yellow-500 50%,
+      et.$et-red-500 100%
+    );
+  }
+
+  &.#{iv.$class-prefix}is-branded-thin {
+    background-size: 100% $endurance-panel-stripe-height-thin;
+  }
+
+  &.#{iv.$class-prefix}is-branded-thick {
+    background-size: 100% $endurance-panel-stripe-height-thick;
+  }
+
+  &.#{iv.$class-prefix}is-branded-extra-thick {
+    background-size: 100% $endurance-panel-stripe-height-extra-thick;
+  }
+
+  &.#{iv.$class-prefix}has-plain-heading {
+    > .#{iv.$class-prefix}panel-heading {
+      background: none;
+      border-bottom: none;
+      color: var(--bulma-title-color);
+      padding: 1.25rem;
+    }
+  }
+}
+
+.#{iv.$class-prefix}column > .#{iv.$class-prefix}endurance-panel {
+  height: 100%;
+}
