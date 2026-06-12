@@ -31,17 +31,13 @@ import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
-import com.endurancetrio.business.event.dto.EventFileDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
-import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -63,16 +59,6 @@ public class EventWebController {
   private static final String ATTRIBUTE_EVENTS = "events";
   private static final String ATTRIBUTE_YEARS_WITH_EVENTS = "yearsWithEvents";
   private static final String ATTRIBUTE_YEAR = "year";
-  private static final String ATTRIBUTE_FILE_TYPE_TABS = "fileTypeTabs";
-
-  private static final Map<String, List<String>> FILE_TYPE_GROUPS = Map.of(
-      "REGULATIONS", List.of("GUIDE", "RULES"),
-      "START_LIST", List.of("START_LIST"),
-      "COURSE_MAPS", List.of("COURSE_MAPS"),
-      "IMAGES", List.of("COVER_IMAGE", "POSTER")
-  );
-
-  private record FileTypeTab(String code, String fileTypes) {}
 
   private static final int BATCH_SIZE = 3;
   private static final int PAGE_SIZE = 10;
@@ -158,7 +144,6 @@ public class EventWebController {
     try {
       EventOverviewDTO event = eventService.getEventOverview(id);
       model.addAttribute(ATTRIBUTE_EVENT, event);
-      model.addAttribute(ATTRIBUTE_FILE_TYPE_TABS, getActiveFileTypeTabs(event));
     } catch (EnduranceTrioException e) {
       return "redirect:/" + language + "/events";
     }
@@ -190,30 +175,6 @@ public class EventWebController {
     }
 
     return VIEW_EVENT_RESULTS;
-  }
-
-  /**
-   * Returns the list of active {@link FileTypeTab file type tabs} for the given event, based on the
-   * file types actually present in the event's files. The tabs are computed from the
-   * {@link #FILE_TYPE_GROUPS} mapping, with only those groups included that have at least one file
-   * of a matching type in the event.
-   *
-   * @param event the event overview DTO containing the event's files
-   * @return a list of active file type tabs
-   */
-  private @NonNull List<FileTypeTab> getActiveFileTypeTabs(EventOverviewDTO event) {
-    if (event == null || event.files() == null) {
-      return List.of();
-    }
-
-    Set<String> presentTypes = event.files().stream()
-        .map(EventFileDTO::fileType)
-        .collect(Collectors.toSet());
-
-    return FILE_TYPE_GROUPS.entrySet().stream()
-        .filter(entry -> entry.getValue().stream().anyMatch(presentTypes::contains))
-        .map(entry -> new FileTypeTab(entry.getKey(), String.join(",", entry.getValue())))
-        .toList();
   }
 
   /**

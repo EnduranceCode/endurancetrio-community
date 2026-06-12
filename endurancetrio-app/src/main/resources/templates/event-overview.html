@@ -113,29 +113,6 @@
           </div>
         </div>
 
-        <div class="column is-half-tablet is-one-third-desktop"
-             data-th-if="${!#lists.isEmpty(event.files)}">
-          <nav class="endurance-panel is-branded-thin has-plain-heading">
-            <p class="panel-heading title is-4"
-               data-th-text="#{page.event.overview.section.files}">Files</p>
-            <div class="panel-tabs" data-panel-tabs>
-              <a class="is-active" data-panel-target="ALL"
-                 data-th-text="#{file.type.ALL}">All</a>
-              <a data-th-each="tab : ${fileTypeTabs}"
-                 th:data-panel-target="${tab.fileTypes}"
-                 data-th-text="#{file.type.__${tab.code}__}">Regulations</a>
-            </div>
-            <div class="panel-block" data-th-each="file : ${event.files}"
-                 th:data-panel-value="${file.fileType()}">
-              <span class="panel-icon">
-                <i th:class="${file.fileType() == 'COVER_IMAGE' || file.fileType() == 'POSTER'} ? 'et-file-image' : 'et-file-document'"
-                   class="et-file-document" aria-hidden="true"></i>
-              </span>
-              <span data-th-text="${file.title}">Regulamento</span>
-            </div>
-          </nav>
-        </div>
-
         <div class="column">
           <div class="endurance-box is-branded-thin is-content-top">
             <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}">Help us

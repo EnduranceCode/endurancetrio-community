@@ -25,7 +25,6 @@ import klaroConfig from './klaro-config.js';
 
 import bulmaModal from './bulma-modal.js';
 import bulmaNavbar from './bulma-navbar.js';
-import bulmaPanel from './bulma-panel.js';
 import languageSelector from './language-selector.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,6 +42,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   bulmaModal.init();
   bulmaNavbar.init();
-  bulmaPanel.init();
   languageSelector.init();
 });
