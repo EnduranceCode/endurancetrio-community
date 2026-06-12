@@ -32,8 +32,9 @@ import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.event.dto.EventDTO;
-import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
+import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import java.time.LocalDate;
 import java.time.Month;
@@ -75,6 +76,10 @@ class EventWebControllerTest {
   );
   private static final EventsPageDTO PAGE_EMPTY = new EventsPageDTO(List.of(),
       new PaginationDTO(0, 0, 0, false, false)
+  );
+  private static final EventOverviewDTO EVENT_OVERVIEW = new EventOverviewDTO(
+      1L, "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria",
+      List.of(), List.of(), List.of()
   );
 
   @Mock
@@ -276,6 +281,8 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event details");
 
+    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
+
     mockMvc.perform(get("/en/events/1984/1/overview"))
         .andExpect(status().isOk())
         .andExpect(view().name("event-overview"))
@@ -291,6 +298,7 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.overview.metadata.description"), any(),
         any()
     )).thenReturn("Detalhes do evento de desportos de endurance");
+    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
 
     mockMvc.perform(get("/pt/events/1984/1/overview"))
         .andExpect(status().isOk())
@@ -308,6 +316,8 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
 
+    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
+
     mockMvc.perform(get("/en/events/1984/1/results"))
         .andExpect(status().isOk())
         .andExpect(view().name("event-results"))
@@ -323,6 +333,7 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
         any()
     )).thenReturn("Resultados de eventos de desportos de endurance");
+    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
 
     mockMvc.perform(get("/pt/events/1984/1/results"))
         .andExpect(status().isOk())
