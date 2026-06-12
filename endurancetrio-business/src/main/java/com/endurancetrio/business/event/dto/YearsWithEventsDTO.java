@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The {@link EventYearsDTO} represents a paginated batch of years for navigating through events by
+ * The {@link YearsWithEventsDTO} represents a paginated batch of years for navigating through events by
  * year. It carries both the current batch of years and adjacent batches for pagination, along with
  * metadata about the overall pagination state.
  *
@@ -40,12 +40,12 @@ import java.util.List;
  * @param batchGroupPreviousPage the page index of the previous batch group (may be -1 if none)
  * @param batchGroupNextPage     the page index of the next batch group (may be -1 if none)
  */
-public record EventYearsDTO(List<Integer> years, List<Integer> nextYears,
+public record YearsWithEventsDTO(List<Integer> years, List<Integer> nextYears,
                             List<Integer> previousYears, int currentPage, int totalBatches,
                             long totalYears, int batchSize, int batchGroupPreviousPage,
                             int batchGroupNextPage) implements Serializable {
 
-  public EventYearsDTO {
+  public YearsWithEventsDTO {
     years = List.copyOf(years);
     nextYears = List.copyOf(nextYears);
     previousYears = List.copyOf(previousYears);

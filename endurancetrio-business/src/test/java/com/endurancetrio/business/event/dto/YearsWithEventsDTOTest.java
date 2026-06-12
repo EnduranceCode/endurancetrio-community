@@ -28,13 +28,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit test for the {@link EventYearsDTO} DTO.
+ * Unit test for the {@link YearsWithEventsDTO} DTO.
  * <p>
  * This test may seem redundant since it only verify getters and setters, but its purpose is to
  * establish a testing culture from the very beginning of the project. It serves as a reminder that
  * every part of the application should be testable and that tests should always be present.
  */
-class EventYearsDTOTest {
+class YearsWithEventsDTOTest {
 
   private static final List<Integer> YEARS = List.of(2026, 2025, 2024);
   private static final List<Integer> NEXT_YEARS = List.of(2023, 2022, 2021);
@@ -46,11 +46,11 @@ class EventYearsDTOTest {
   private static final int BATCH_GROUP_PREVIOUS_PAGE = -1;
   private static final int BATCH_GROUP_NEXT_PAGE = 2;
 
-  private EventYearsDTO underTest;
+  private YearsWithEventsDTO underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new EventYearsDTO(YEARS, NEXT_YEARS, PREVIOUS_YEARS, CURRENT_PAGE, TOTAL_BATCHES,
+    underTest = new YearsWithEventsDTO(YEARS, NEXT_YEARS, PREVIOUS_YEARS, CURRENT_PAGE, TOTAL_BATCHES,
         TOTAL_YEARS, BATCH_SIZE, BATCH_GROUP_PREVIOUS_PAGE, BATCH_GROUP_NEXT_PAGE
     );
   }
