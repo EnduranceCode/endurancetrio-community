@@ -22,7 +22,7 @@ package com.endurancetrio.business.event.service;
 
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
-import com.endurancetrio.business.event.dto.EventYearsDTO;
+import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -33,7 +33,7 @@ public interface EventService {
 
   /**
    * Returns a list of all distinct years extracted from the events' start dates, ordered
-   * descending. This is used by {@link EventYearsDTO} to drive the year-browser pagination on the
+   * descending. This is used by {@link YearsWithEventsDTO} to drive the year-browser pagination on the
    * events landing page.
    *
    * @return a list of distinct event years in descending order

@@ -32,7 +32,7 @@ import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.event.dto.EventDTO;
-import com.endurancetrio.business.event.dto.EventYearsDTO;
+import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.service.EventService;
 import java.time.LocalDate;
@@ -54,10 +54,10 @@ class EventWebControllerTest {
   private static final List<Integer> ALL_YEARS = List.of(1989, 1988, 1987, 1986, 1985, 1984, 1983,
       1982
   );
-  private static final EventYearsDTO PAGE_0 = new EventYearsDTO(List.of(1989, 1988, 1987),
+  private static final YearsWithEventsDTO PAGE_0 = new YearsWithEventsDTO(List.of(1989, 1988, 1987),
       List.of(1986, 1985, 1984), List.of(), 0, 3, 8, 3, -1, 2
   );
-  private static final EventYearsDTO PAGE_1 = new EventYearsDTO(List.of(1986, 1985, 1984),
+  private static final YearsWithEventsDTO PAGE_1 = new YearsWithEventsDTO(List.of(1986, 1985, 1984),
       List.of(1983, 1982), List.of(1989, 1988, 1987), 1, 3, 8, 3, 0, 2
   );
   private static final LocalDate EVENT_DATE = LocalDate.of(1984, Month.AUGUST, 15);
@@ -120,10 +120,10 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/en/events"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events"))
+        .andExpect(view().name("years-with-events"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("eventYears", PAGE_0));
+        .andExpect(model().attribute("yearsWithEvents", PAGE_0));
   }
 
   @Test
@@ -137,10 +137,10 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/pt/events"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events"))
+        .andExpect(view().name("years-with-events"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("eventYears", PAGE_0));
+        .andExpect(model().attribute("yearsWithEvents", PAGE_0));
   }
 
   @Test
@@ -170,9 +170,9 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/en/events").param("page", "1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events"))
+        .andExpect(view().name("years-with-events"))
         .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attribute("eventYears", PAGE_1));
+        .andExpect(model().attribute("yearsWithEvents", PAGE_1));
   }
 
   @Test
@@ -187,7 +187,7 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/en/events/1984"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events-year"))
+        .andExpect(view().name("events-by-year"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attribute("year", 1984))
@@ -207,7 +207,7 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/pt/events/1984"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events-year"))
+        .andExpect(view().name("events-by-year"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attribute("year", 1984))
@@ -243,7 +243,7 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/en/events/1985"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events-year"))
+        .andExpect(view().name("events-by-year"))
         .andExpect(model().attribute("year", 1985))
         .andExpect(model().attribute("events", PAGE_EMPTY.events()))
         .andExpect(model().attribute("pagination", PAGE_EMPTY.pagination()));
@@ -261,7 +261,7 @@ class EventWebControllerTest {
 
     mockMvc.perform(get("/en/events/1984").param("page", "-1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("events-year"))
+        .andExpect(view().name("events-by-year"))
         .andExpect(model().attribute("year", 1984))
         .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
         .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));

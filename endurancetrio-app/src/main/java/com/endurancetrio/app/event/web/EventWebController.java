@@ -33,7 +33,7 @@ import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventFileDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
-import com.endurancetrio.business.event.dto.EventYearsDTO;
+import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.service.EventService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,14 +54,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @EnduranceTrioWebController
 public class EventWebController {
 
-  private static final String VIEW_EVENTS = "events";
-  private static final String VIEW_EVENTS_YEARS = "events-year";
   private static final String VIEW_EVENT_OVERVIEW = "event-overview";
   private static final String VIEW_EVENT_RESULTS = "event-results";
+  private static final String VIEW_EVENTS_BY_YEAR = "events-by-year";
+  private static final String VIEW_YEARS_WITH_EVENTS = "years-with-events";
 
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
-  private static final String ATTRIBUTE_EVENT_YEARS = "eventYears";
+  private static final String ATTRIBUTE_YEARS_WITH_EVENTS = "yearsWithEvents";
   private static final String ATTRIBUTE_YEAR = "year";
   private static final String ATTRIBUTE_FILE_TYPE_TABS = "fileTypeTabs";
 
@@ -92,35 +92,35 @@ public class EventWebController {
   }
 
   @GetMapping("/{language:en|pt}/events")
-  public String eventsYears(
+  public String getYearsWithEvents(
       @PathVariable String language, @RequestParam(defaultValue = "0") int page,
       HttpServletRequest request, Model model
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_YEARS_WITH_EVENTS,
         messageService.getMessage("page.events.metadata.title", null, locale),
         messageService.getMessage("page.events.metadata.description", null, locale), request,
         appProperties
     );
 
-    EventYearsDTO eventYears = getEventYearsDTO(page);
+    YearsWithEventsDTO eventYears = buildYearsWithEvents(page);
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
-    model.addAttribute(ATTRIBUTE_EVENT_YEARS, eventYears);
+    model.addAttribute(ATTRIBUTE_YEARS_WITH_EVENTS, eventYears);
 
-    return VIEW_EVENTS;
+    return VIEW_YEARS_WITH_EVENTS;
   }
 
   @GetMapping("/{language:en|pt}/events/{year}")
-  public String eventsYear(
+  public String getEventsByYear(
       @PathVariable String language, @PathVariable int year,
       @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS_BY_YEAR,
         messageService.getMessage("page.events.year.metadata.title", null, locale),
         messageService.getMessage("page.events.year.metadata.description", null, locale), request,
         appProperties
@@ -136,7 +136,7 @@ public class EventWebController {
     model.addAttribute(ATTRIBUTE_YEAR, year);
     model.addAttribute(ATTRIBUTE_EVENTS, eventPage.events());
 
-    return VIEW_EVENTS_YEARS;
+    return VIEW_EVENTS_BY_YEAR;
   }
 
   @GetMapping("/{language:en|pt}/events/{year}/{id}/overview")
@@ -217,21 +217,21 @@ public class EventWebController {
   }
 
   /**
-   * Builds an {@link EventYearsDTO} for the given page.
+   * Builds a {@link YearsWithEventsDTO} for the given page.
    * <p>
    * The raw {@code page} parameter (from the URL query string) is clamped to the valid range
    * {@code [0, totalBatches - 1]} to produce the batch index. This index is used to slice the full
-   * year list into the current batch ({@link EventYearsDTO#years()}), the next batch
-   * ({@link EventYearsDTO#nextYears()}), and the previous batch
-   * ({@link EventYearsDTO#previousYears()}). Two-batch (desktop) navigation pages are also computed
-   * via {@link EventYearsDTO#batchGroupPreviousPage()} and
-   * {@link EventYearsDTO#batchGroupNextPage()}.
+   * year list into the current batch ({@link YearsWithEventsDTO#years()}), the next batch
+   * ({@link YearsWithEventsDTO#nextYears()}), and the previous batch
+   * ({@link YearsWithEventsDTO#previousYears()}). Two-batch (desktop) navigation pages are also
+   * computed via {@link YearsWithEventsDTO#batchGroupPreviousPage()} and
+   * {@link YearsWithEventsDTO#batchGroupNextPage()}.
    *
    * @param page the requested page from the URL query {@code page} parameter (may be out of
    *             bounds)
-   * @return a fully populated {@link EventYearsDTO}
+   * @return a fully populated {@link YearsWithEventsDTO}
    */
-  private @NonNull EventYearsDTO getEventYearsDTO(int page) {
+  private @NonNull YearsWithEventsDTO buildYearsWithEvents(int page) {
     List<Integer> allYears = eventService.getEventYears();
     int totalYears = allYears.size();
 
@@ -253,7 +253,7 @@ public class EventWebController {
     int batchGroupPreviousPage = getBatchGroupPreviousPage(batchIndex);
     int batchGroupNextPage = getBatchGroupNextPage(batchIndex, totalBatches);
 
-    return new EventYearsDTO(years, nextYears, previousYears, batchIndex, totalBatches, totalYears,
+    return new YearsWithEventsDTO(years, nextYears, previousYears, batchIndex, totalBatches, totalYears,
         BATCH_SIZE, batchGroupPreviousPage, batchGroupNextPage
     );
   }

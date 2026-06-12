@@ -37,7 +37,7 @@
     <div class="is-hidden-desktop">
       <div class="fixed-grid has-1-cols">
         <div class="grid">
-          <div class="cell" data-th-each="year : ${eventYears.years}">
+          <div class="cell" data-th-each="year : ${yearsWithEvents.years}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box is-medium is-branded-thin is-clickable has-background-grey-200 has-text-centered">
               <span class="title is-1" data-th-text="${year}">1984</span>
@@ -47,22 +47,22 @@
       </div>
 
       <nav class="pagination is-centered is-rounded" role="navigation"
-           aria-label="pagination" data-th-if="${eventYears.totalBatches > 1}">
+           aria-label="pagination" data-th-if="${yearsWithEvents.totalBatches > 1}">
         <a class="pagination-previous"
-           data-th-classappend="${eventYears.currentPage == 0} ? 'is-disabled'"
-           data-th-attr="disabled=${eventYears.currentPage == 0} ? 'disabled' : null"
-           data-th-href="${eventYears.currentPage > 0}
-           ? @{/{lang}/events(lang=${language}, page=${eventYears.currentPage - 1})}
+           data-th-classappend="${yearsWithEvents.currentPage == 0} ? 'is-disabled'"
+           data-th-attr="disabled=${yearsWithEvents.currentPage == 0} ? 'disabled' : null"
+           data-th-href="${yearsWithEvents.currentPage > 0}
+           ? @{/{lang}/events(lang=${language}, page=${yearsWithEvents.currentPage - 1})}
            : null">
           <span class="icon">
             <i class="et et-chevron-double-left"></i>
           </span>
         </a>
         <a class="pagination-next"
-           data-th-classappend="${eventYears.currentPage >= eventYears.totalBatches - 1} ? 'is-disabled'"
-           data-th-attr="disabled=${eventYears.currentPage >= eventYears.totalBatches - 1} ? 'disabled' : null"
-           data-th-href="${eventYears.currentPage < eventYears.totalBatches - 1}
-           ? @{/{lang}/events(lang=${language}, page=${eventYears.currentPage + 1})}
+           data-th-classappend="${yearsWithEvents.currentPage >= yearsWithEvents.totalBatches - 1} ? 'is-disabled'"
+           data-th-attr="disabled=${yearsWithEvents.currentPage >= yearsWithEvents.totalBatches - 1} ? 'disabled' : null"
+           data-th-href="${yearsWithEvents.currentPage < yearsWithEvents.totalBatches - 1}
+           ? @{/{lang}/events(lang=${language}, page=${yearsWithEvents.currentPage + 1})}
            : null">
           <span class="icon">
             <i class="et et-chevron-double-right"></i>
@@ -73,15 +73,15 @@
 
     <div class="is-hidden-touch">
       <div class="fixed-grid has-3-cols">
-        <div data-th-if="${!eventYears.nextYears.isEmpty()}" class="grid">
-          <div class="cell" data-th-each="year : ${eventYears.years}">
+        <div data-th-if="${!yearsWithEvents.nextYears.isEmpty()}" class="grid">
+          <div class="cell" data-th-each="year : ${yearsWithEvents.years}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box is-medium is-branded-thin is-clickable has-background-grey-200 has-text-centered">
               <span class="title is-1" data-th-text="${year}">1984</span>
             </a>
           </div>
-          <div class="cell" data-th-each="year : ${eventYears.nextYears}"
-               data-th-classappend="${yearStat.last ? (eventYears.nextYears.size() == 2 ? 'is-col-span-2' : (eventYears.nextYears.size() == 1 ? 'is-col-span-3' : '')) : ''}">
+          <div class="cell" data-th-each="year : ${yearsWithEvents.nextYears}"
+               data-th-classappend="${yearStat.last ? (yearsWithEvents.nextYears.size() == 2 ? 'is-col-span-2' : (yearsWithEvents.nextYears.size() == 1 ? 'is-col-span-3' : '')) : ''}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box is-medium is-branded-thin is-clickable has-background-grey-200 has-text-centered">
               <span class="title is-1" data-th-text="${year}">1984</span>
@@ -89,15 +89,15 @@
           </div>
         </div>
 
-        <div data-th-if="${eventYears.nextYears.isEmpty()}" class="grid">
-          <div class="cell" data-th-each="year : ${eventYears.previousYears}">
+        <div data-th-if="${yearsWithEvents.nextYears.isEmpty()}" class="grid">
+          <div class="cell" data-th-each="year : ${yearsWithEvents.previousYears}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box is-medium is-branded-thin is-clickable has-background-grey-200 has-text-centered">
               <span class="title is-1" data-th-text="${year}">1984</span>
             </a>
           </div>
-          <div class="cell" data-th-each="year : ${eventYears.years}"
-               data-th-classappend="${yearStat.last ? (eventYears.years.size() == 2 ? 'is-col-span-2' : (eventYears.years.size() == 1 ? 'is-col-span-3' : '')) : ''}">
+          <div class="cell" data-th-each="year : ${yearsWithEvents.years}"
+               data-th-classappend="${yearStat.last ? (yearsWithEvents.years.size() == 2 ? 'is-col-span-2' : (yearsWithEvents.years.size() == 1 ? 'is-col-span-3' : '')) : ''}">
             <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
                class="endurance-box is-medium is-branded-thin is-clickable has-background-grey-200 has-text-centered">
               <span class="title is-1" data-th-text="${year}">1984</span>
@@ -107,22 +107,22 @@
       </div>
 
       <nav class="pagination is-centered is-rounded" role="navigation"
-           aria-label="pagination" data-th-if="${eventYears.totalBatches > 2}">
+           aria-label="pagination" data-th-if="${yearsWithEvents.totalBatches > 2}">
         <a class="pagination-previous"
-           data-th-classappend="${eventYears.batchGroupPreviousPage < 0} ? 'is-disabled'"
-           data-th-attr="disabled=${eventYears.batchGroupPreviousPage < 0} ? 'disabled' : null"
-           data-th-href="${eventYears.batchGroupPreviousPage >= 0}
-           ? @{/{lang}/events(lang=${language}, page=${eventYears.batchGroupPreviousPage})}
+           data-th-classappend="${yearsWithEvents.batchGroupPreviousPage < 0} ? 'is-disabled'"
+           data-th-attr="disabled=${yearsWithEvents.batchGroupPreviousPage < 0} ? 'disabled' : null"
+           data-th-href="${yearsWithEvents.batchGroupPreviousPage >= 0}
+           ? @{/{lang}/events(lang=${language}, page=${yearsWithEvents.batchGroupPreviousPage})}
            : null">
           <span class="icon">
             <i class="et et-chevron-double-left"></i>
           </span>
         </a>
         <a class="pagination-next"
-           data-th-classappend="${eventYears.batchGroupNextPage < 0} ? 'is-disabled'"
-           data-th-attr="disabled=${eventYears.batchGroupNextPage < 0} ? 'disabled' : null"
-           data-th-href="${eventYears.batchGroupNextPage >= 0}
-           ? @{/{lang}/events(lang=${language}, page=${eventYears.batchGroupNextPage})}
+           data-th-classappend="${yearsWithEvents.batchGroupNextPage < 0} ? 'is-disabled'"
+           data-th-attr="disabled=${yearsWithEvents.batchGroupNextPage < 0} ? 'disabled' : null"
+           data-th-href="${yearsWithEvents.batchGroupNextPage >= 0}
+           ? @{/{lang}/events(lang=${language}, page=${yearsWithEvents.batchGroupNextPage})}
            : null">
           <span class="icon">
             <i class="et et-chevron-double-right"></i>
