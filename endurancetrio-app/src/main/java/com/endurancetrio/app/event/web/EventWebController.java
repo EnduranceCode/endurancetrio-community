@@ -57,6 +57,7 @@ public class EventWebController {
   private static final String VIEW_EVENTS = "events";
   private static final String VIEW_EVENTS_YEARS = "events-year";
   private static final String VIEW_EVENT_OVERVIEW = "event-overview";
+  private static final String VIEW_EVENT_RESULTS = "event-results";
 
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
@@ -138,7 +139,7 @@ public class EventWebController {
     return VIEW_EVENTS_YEARS;
   }
 
-  @GetMapping("/{language:en|pt}/events/{year}/{id}")
+  @GetMapping("/{language:en|pt}/events/{year}/{id}/overview")
   public String getEventOverview(
       @PathVariable String language, @PathVariable int year, @PathVariable Long id,
       HttpServletRequest request, Model model
@@ -146,8 +147,8 @@ public class EventWebController {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_OVERVIEW,
-        messageService.getMessage("page.event.detail.metadata.title", null, locale),
-        messageService.getMessage("page.event.detail.metadata.description", null, locale), request,
+        messageService.getMessage("page.event.overview.metadata.title", null, locale),
+        messageService.getMessage("page.event.overview.metadata.description", null, locale), request,
         appProperties
     );
 
@@ -163,6 +164,32 @@ public class EventWebController {
     }
 
     return VIEW_EVENT_OVERVIEW;
+  }
+
+  @GetMapping("/{language:en|pt}/events/{year}/{id}/results")
+  public String getEventResults(
+      @PathVariable String language, @PathVariable int year, @PathVariable Long id,
+      HttpServletRequest request, Model model
+  ) {
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_RESULTS,
+        messageService.getMessage("page.event.results.metadata.title", null, locale),
+        messageService.getMessage("page.event.results.metadata.description", null, locale),
+        request, appProperties
+    );
+
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
+
+    try {
+      EventOverviewDTO event = eventService.getEventOverview(id);
+      model.addAttribute(ATTRIBUTE_EVENT, event);
+    } catch (EnduranceTrioException e) {
+      return "redirect:/" + language + "/events";
+    }
+
+    return VIEW_EVENT_RESULTS;
   }
 
   /**

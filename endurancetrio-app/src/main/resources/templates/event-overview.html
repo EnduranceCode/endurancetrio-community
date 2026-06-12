@@ -30,51 +30,16 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-200">
-    <div class="hero-body">
-      <div class="container is-fullhd">
-        <h1 class="title is-1" data-th-text="${event.title()}">Event Title</h1>
-
-        <p class="subtitle is-3">
-          <span
-              data-th-text="${#temporals.format(event.startDate(), 'dd MMMM yyyy')}">15 August 1984</span>
-          <span data-th-if="${!event.startDate().equals(event.endDate())}">
-            - <span
-              data-th-text="${#temporals.format(event.endDate(), 'dd MMM yyyy')}">16 August 1984</span>
-          </span>
-          <span> - </span>
-          <span
-              data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'">
-          Peniche, Peniche (Leiria)
-        </span>
-        </p>
-      </div>
-    </div>
-
-    <div class="hero-foot">
-      <div class="container is-fullhd">
-        <div class="tabs is-right">
-          <ul data-tabs>
-            <li data-target="overview" class="is-active">
-              <a data-th-text="#{page.event.detail.tab.overview}">Overview</a>
-            </li>
-            <li data-target="results">
-              <a data-th-text="#{page.event.detail.tab.results}">Results</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'overview')}"></section>
 
   <div>
-    <section id="overview" class="section" data-tab-content>
+    <section id="overview" class="section">
       <div class="columns is-multiline">
         <div class="column is-half-tablet is-one-third-desktop"
              data-th-if="${!#lists.isEmpty(event.organizers)}">
           <div class="endurance-box is-branded-thin is-content-top">
             <h2 class="title is-4"
-                data-th-text="#{page.event.detail.label.organizers}">Organizers</h2>
+                data-th-text="#{page.event.overview.label.organizers}">Organizers</h2>
             <div data-th-each="organizer : ${event.organizers}" class="mb-2">
               <p class="has-text-weight-bold" data-th-text="${organizer.name}">Club Name</p>
               <p class="has-text-grey"
@@ -152,7 +117,7 @@
              data-th-if="${!#lists.isEmpty(event.files)}">
           <nav class="endurance-panel is-branded-thin has-plain-heading">
             <p class="panel-heading title is-4"
-               data-th-text="#{page.event.detail.section.files}">Files</p>
+               data-th-text="#{page.event.overview.section.files}">Files</p>
             <div class="panel-tabs" data-panel-tabs>
               <a class="is-active" data-panel-target="ALL"
                  data-th-text="#{file.type.ALL}">All</a>
@@ -173,7 +138,7 @@
 
         <div class="column">
           <div class="endurance-box is-branded-thin is-content-top">
-            <h2 class="title is-4" data-th-text="#{page.event.detail.section.support}">Help us
+            <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}">Help us
               complete the archive</h2>
             <div data-th-if="${language == 'pt'}">
               <p>
@@ -195,17 +160,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section id="results" class="section" data-tab-content>
-      <div class="has-text-centered">
-        <div class="columns">
-          <div class="column is-6 is-offset-3">
-            <div data-th-replace="~{fragments/svg :: athletes-training}"></div>
-          </div>
-        </div>
-        <p data-th-text="#{page.event.detail.title}" class="title mt-6"></p>
       </div>
     </section>
   </div>
