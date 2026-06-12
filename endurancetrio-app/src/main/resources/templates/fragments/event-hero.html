@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head>
+  <title>Event Hero</title>
+</head>
+
+<body>
+<section data-th-fragment="event-hero(event, language, year, currentTab)"
+         class="hero has-background-grey-200">
+  <div class="hero-body">
+    <div class="container is-fullhd">
+      <h1 class="title is-1" data-th-text="${event.title()}">Event Title</h1>
+
+      <p class="subtitle is-3">
+        <span
+            data-th-text="${#temporals.format(event.startDate(), 'dd MMMM yyyy')}">15 August 1984</span>
+        <span data-th-if="${!event.startDate().equals(event.endDate())}">
+          - <span
+            data-th-text="${#temporals.format(event.endDate(), 'dd MMM yyyy')}">16 August 1984</span>
+        </span>
+        <span> - </span>
+        <span
+            data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'">
+          Peniche, Peniche (Leiria)
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <div class="hero-foot">
+    <div class="container is-fullhd">
+      <div class="tabs is-right">
+        <ul>
+          <li data-th-classappend="${currentTab == 'overview'} ? 'is-active' : ''">
+            <a th:href="@{/{language}/events/{year}/{id}/overview(language=${language}, year=${year}, id=${event.id()})}"
+               data-th-text="#{page.event.tab.overview}">Overview</a>
+          </li>
+          <li data-th-classappend="${currentTab == 'results'} ? 'is-active' : ''">
+            <a data-th-href="@{/{language}/events/{year}/{id}/results(language=${language}, year=${year}, id=${event.id()})}"
+               data-th-text="#{page.event.tab.results}">Results</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

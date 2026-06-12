@@ -270,13 +270,13 @@ class EventWebControllerTest {
   @Test
   void getEventOverviewPageWithEnglishLocale() throws Exception {
     when(
-        messageService.getMessage(eq("page.event.detail.metadata.title"), any(), any())).thenReturn(
+        messageService.getMessage(eq("page.event.overview.metadata.title"), any(), any())).thenReturn(
         "Event Details - EnduranceTrio");
-    when(messageService.getMessage(eq("page.event.detail.metadata.description"), any(),
+    when(messageService.getMessage(eq("page.event.overview.metadata.description"), any(),
         any()
     )).thenReturn("View endurance sports event details");
 
-    mockMvc.perform(get("/en/events/1984/1"))
+    mockMvc.perform(get("/en/events/1984/1/overview"))
         .andExpect(status().isOk())
         .andExpect(view().name("event-overview"))
         .andExpect(model().attribute("language", "en"))
@@ -286,15 +286,47 @@ class EventWebControllerTest {
   @Test
   void getEventOverviewPageWithPortugueseLocale() throws Exception {
     when(
-        messageService.getMessage(eq("page.event.detail.metadata.title"), any(), any())).thenReturn(
+        messageService.getMessage(eq("page.event.overview.metadata.title"), any(), any())).thenReturn(
         "Detalhes do Evento - EnduranceTrio");
-    when(messageService.getMessage(eq("page.event.detail.metadata.description"), any(),
+    when(messageService.getMessage(eq("page.event.overview.metadata.description"), any(),
         any()
     )).thenReturn("Detalhes do evento de desportos de endurance");
 
-    mockMvc.perform(get("/pt/events/1984/1"))
+    mockMvc.perform(get("/pt/events/1984/1/overview"))
         .andExpect(status().isOk())
         .andExpect(view().name("event-overview"))
+        .andExpect(model().attribute("language", "pt"))
+        .andExpect(model().attributeExists("metadata"));
+  }
+
+  @Test
+  void getEventResultsPageWithEnglishLocale() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
+        any()
+    )).thenReturn("Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
+        any()
+    )).thenReturn("View endurance sports event results");
+
+    mockMvc.perform(get("/en/events/1984/1/results"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-results"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attributeExists("metadata"));
+  }
+
+  @Test
+  void getEventResultsPageWithPortugueseLocale() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
+        any()
+    )).thenReturn("Resultados - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
+        any()
+    )).thenReturn("Resultados de eventos de desportos de endurance");
+
+    mockMvc.perform(get("/pt/events/1984/1/results"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-results"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"));
   }
