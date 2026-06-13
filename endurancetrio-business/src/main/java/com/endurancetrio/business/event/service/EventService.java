@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.service;
 
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
@@ -42,7 +43,7 @@ public interface EventService {
 
   /**
    * Returns an {@link EventsPageDTO} containing the
-   * {@link com.endurancetrio.business.event.dto.EventDTO events} whose start date falls within the
+   * {@link EventDTO events} whose start date falls within the
    * given {@code year}, ordered by start date descending and paginated according to the given
    * {@link Pageable}.
    *
