@@ -35,6 +35,7 @@ import com.endurancetrio.data.event.model.enumerator.RaceType;
 import com.endurancetrio.data.event.model.enumerator.Sport;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,8 @@ class RaceMapperTest {
   private static final Long ID = 1L;
   private static final String TITLE = "Individual National Championship";
   private static final String SUBTITLE = "Elite Men";
-  private static final LocalDate DATE = LocalDate.of(2026, 6, 10);
-  private static final LocalTime TIME = LocalTime.of(10, 0);
+  private static final LocalDate DATE = LocalDate.of(1984, Month.AUGUST, 15);
+  private static final LocalTime TIME = LocalTime.of(16, 0);
 
   private Race entityTest;
   private Course course;

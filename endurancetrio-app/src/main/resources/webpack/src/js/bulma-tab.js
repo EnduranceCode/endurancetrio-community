@@ -64,7 +64,7 @@ const bulmaTab = {
       const tabItems = Array.from(tabContainer.children);
       const tabIds = tabItems.map((item) => item.dataset.target);
       let activeTab = tabItems.find((item) => item.classList.contains('is-active'))?.dataset.target;
-      const tabFromUrl = window.location.hash.substring(1);
+      const tabFromUrl = globalThis.location.hash.substring(1);
       if (tabIds.includes(tabFromUrl)) {
         activeTab = tabFromUrl;
       }
@@ -82,8 +82,8 @@ const bulmaTab = {
         this.toggle(button.dataset.target);
       });
     });
-    window.addEventListener('hashchange', () => {
-      const tabId = window.location.hash.substring(1);
+    globalThis.addEventListener('hashchange', () => {
+      const tabId = globalThis.location.hash.substring(1);
       if (document.querySelector(`[data-tabs] [data-target="${tabId}"]`)) {
         this.toggle(tabId);
       }
@@ -107,8 +107,8 @@ const bulmaTab = {
     document.querySelectorAll('[data-tabs] [data-target]').forEach((item) => {
       item.classList.toggle('is-active', item.dataset.target === targetId);
     });
-    window.history.replaceState(null, '', `#${targetId}`);
-    window.scroll(0, 0);
+    globalThis.history.replaceState(null, '', `#${targetId}`);
+    globalThis.scroll(0, 0);
   },
 };
 

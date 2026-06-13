@@ -63,31 +63,41 @@ const bulmaPanel = {
     }
 
     containers.forEach((container) => {
-      container.addEventListener('click', (event) => {
-        const tab = event.target.closest('a');
-        if (!tab) {
-          return;
-        }
-        event.preventDefault();
-
-        container.querySelectorAll('a').forEach((t) => t.classList.remove('is-active'));
-        tab.classList.add('is-active');
-
-        const rawTarget = tab.dataset.panelTarget;
-        const panel = container.closest('.endurance-panel, .panel');
-        if (panel) {
-          if (!panel.style.minHeight) {
-            panel.style.minHeight = panel.offsetHeight + 'px';
-          }
-
-          panel.querySelectorAll('[data-panel-value]').forEach((block) => {
-            const blockValue = block.dataset.panelValue;
-            const matches = rawTarget === 'ALL' || rawTarget.split(',').some((t) => t.trim() === blockValue);
-            block.style.display = matches ? '' : 'none';
-          });
-        }
-      });
+      container.addEventListener('click', (event) => this.onTabClick(event, container));
     });
+  },
+
+  /**
+   * Handles a click on a panel tab, filtering visible content blocks.
+   *
+   * @function onTabClick
+   * @memberof bulmaPanel
+   * @param {Event}  event     - The click event
+   * @param {Element} container - The panel-tabs container element
+   */
+  onTabClick(event, container) {
+    const tab = event.target.closest('a');
+    if (!tab) {
+      return;
+    }
+    event.preventDefault();
+
+    container.querySelectorAll('a').forEach((t) => t.classList.remove('is-active'));
+    tab.classList.add('is-active');
+
+    const rawTarget = tab.dataset.panelTarget;
+    const panel = container.closest('.endurance-panel, .panel');
+    if (panel) {
+      if (!panel.style.minHeight) {
+        panel.style.minHeight = panel.offsetHeight + 'px';
+      }
+
+      panel.querySelectorAll('[data-panel-value]').forEach((block) => {
+        const blockValue = block.dataset.panelValue;
+        const matches = rawTarget === 'ALL' || rawTarget.split(',').some((t) => t.trim() === blockValue);
+        block.style.display = matches ? '' : 'none';
+      });
+    }
   },
 };
 
