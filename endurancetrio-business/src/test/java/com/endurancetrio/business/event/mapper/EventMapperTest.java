@@ -27,6 +27,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventFileDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.OrganizerDTO;
@@ -37,6 +38,7 @@ import com.endurancetrio.data.event.model.entity.EventFile;
 import com.endurancetrio.data.event.model.entity.Organizer;
 import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.model.enumerator.FileType;
+import com.endurancetrio.data.event.model.enumerator.Sport;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -111,6 +113,60 @@ class EventMapperTest {
     entityTest.setEventFiles(Set.of(eventFile));
 
     eventFileDTO = new EventFileDTO(1L, "Regulamento", "RULES", "19840815NAC001-REG001-01.pdf");
+  }
+
+  @Test
+  void mapToEventDTOShouldMapNullToNull() {
+    assertNull(underTest.mapToEventDTO(null));
+  }
+
+  @Test
+  void mapToEventDTOShouldMapEntityWithCourses() {
+    Course triathlon = new Course();
+    triathlon.setSport(Sport.TRIATHLON);
+    Course roadRunning = new Course();
+    roadRunning.setSport(Sport.ROAD_RUNNING);
+
+    entityTest.setCourses(Set.of(triathlon, roadRunning));
+
+    EventDTO result = underTest.mapToEventDTO(entityTest);
+
+    assertNotNull(result);
+    assertEquals(EVENT_ID, result.id());
+    assertEquals(TITLE, result.title());
+    assertEquals(START_DATE, result.startDate());
+    assertEquals(END_DATE, result.endDate());
+    assertEquals(CITY, result.city());
+    assertEquals(COUNTY, result.county());
+    assertEquals(DISTRICT, result.district());
+    assertEquals(List.of("ROAD_RUNNING", "TRIATHLON"), result.sportCodes());
+  }
+
+  @Test
+  void mapToEventDTOShouldReturnDistinctSortedSportCodes() {
+    Course triathlon1 = new Course();
+    triathlon1.setSport(Sport.TRIATHLON);
+    Course triathlon2 = new Course();
+    triathlon2.setSport(Sport.TRIATHLON);
+    Course roadRunning = new Course();
+    roadRunning.setSport(Sport.ROAD_RUNNING);
+
+    entityTest.setCourses(Set.of(triathlon1, triathlon2, roadRunning));
+
+    EventDTO result = underTest.mapToEventDTO(entityTest);
+
+    assertNotNull(result);
+    assertEquals(List.of("ROAD_RUNNING", "TRIATHLON"), result.sportCodes());
+  }
+
+  @Test
+  void mapToEventDTOShouldReturnEmptySportCodes() {
+    entityTest.setCourses(Set.of());
+
+    EventDTO result = underTest.mapToEventDTO(entityTest);
+
+    assertNotNull(result);
+    assertEquals(List.of(), result.sportCodes());
   }
 
   @Test

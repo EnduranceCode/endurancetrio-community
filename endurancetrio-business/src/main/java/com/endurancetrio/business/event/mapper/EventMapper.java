@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.mapper;
 
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventFileDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.OrganizerDTO;
@@ -27,6 +28,7 @@ import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.data.event.model.entity.Course;
 import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.model.entity.Race;
+import com.endurancetrio.data.event.model.enumerator.Sport;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -49,6 +51,31 @@ public class EventMapper {
     this.organizerMapper = organizerMapper;
     this.raceMapper = raceMapper;
     this.eventFileMapper = eventFileMapper;
+  }
+
+  /**
+   * Maps an {@link Event} entity to an {@link EventDTO}.
+   *
+   * @param entity the Event entity to be mapped
+   * @return the corresponding EventDTO, or {@code null} if the entity is {@code null}
+   */
+  public EventDTO mapToEventDTO(Event entity) {
+    if (entity == null) {
+      return null;
+    }
+
+    List<String> sportCodes = entity.getCourses()
+        .stream()
+        .map(Course::getSport)
+        .filter(Objects::nonNull)
+        .map(Sport::getCode)
+        .distinct()
+        .sorted()
+        .toList();
+
+    return new EventDTO(entity.getId(), entity.getTitle(), entity.getStartDate(),
+        entity.getEndDate(), entity.getCity(), entity.getCounty(), entity.getDistrict(), sportCodes
+    );
   }
 
   /**

@@ -28,6 +28,7 @@ import static org.mockito.Mockito.when;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.mapper.EventMapper;
@@ -99,17 +100,26 @@ class EventServiceMainTest {
         "City2", "County2", "District2", Set.of(createCourse(Sport.DUATHLON))
     );
 
+    EventDTO expectedDTO1 = new EventDTO(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15), "City1", "County1", "District1",
+        List.of("ROAD_RUNNING", "TRIATHLON")
+    );
+    EventDTO expectedDTO2 = new EventDTO(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 1),
+        LocalDate.of(1984, Month.AUGUST, 1), "City2", "County2", "District2",
+        List.of("DUATHLON")
+    );
+
     Page<Event> eventPage = new PageImpl<>(List.of(event1, event2), PAGEABLE, 2L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    when(eventMapper.mapToEventDTO(event1)).thenReturn(expectedDTO1);
+    when(eventMapper.mapToEventDTO(event2)).thenReturn(expectedDTO2);
 
     EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(2, result.events().size());
-    assertEquals(1L, result.events().get(0).id());
-    assertEquals(List.of("ROAD_RUNNING", "TRIATHLON"), result.events().get(0).sportCodes());
-    assertEquals(2L, result.events().get(1).id());
-    assertEquals(List.of("DUATHLON"), result.events().get(1).sportCodes());
+    assertEquals(expectedDTO1, result.events().get(0));
+    assertEquals(expectedDTO2, result.events().get(1));
     assertEquals(0, result.pagination().pageNumber());
     assertEquals(1, result.pagination().totalPages());
     assertEquals(2L, result.pagination().totalItems());
@@ -125,14 +135,20 @@ class EventServiceMainTest {
         )
     );
 
+    EventDTO expectedDTO = new EventDTO(1L, "Event", LocalDate.of(1984, Month.JUNE, 1),
+        LocalDate.of(1984, Month.AUGUST, 15), "City", "County", "District",
+        List.of("ROAD_RUNNING", "TRIATHLON")
+    );
+
     Page<Event> eventPage = new PageImpl<>(List.of(event), PAGEABLE, 1L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    when(eventMapper.mapToEventDTO(event)).thenReturn(expectedDTO);
 
     EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(1, result.events().size());
-    assertEquals(List.of("ROAD_RUNNING", "TRIATHLON"), result.events().getFirst().sportCodes());
+    assertEquals(expectedDTO, result.events().getFirst());
   }
 
   @Test
@@ -154,14 +170,20 @@ class EventServiceMainTest {
         "City", "County", "District", Set.of()
     );
 
+    EventDTO expectedDTO = new EventDTO(1L, "Event", LocalDate.of(1984, Month.JUNE, 1),
+        LocalDate.of(1984, Month.AUGUST, 15), "City", "County", "District",
+        List.of()
+    );
+
     Page<Event> eventPage = new PageImpl<>(List.of(event), PAGEABLE, 1L);
     when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    when(eventMapper.mapToEventDTO(event)).thenReturn(expectedDTO);
 
     EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
     assertNotNull(result);
     assertEquals(1, result.events().size());
-    assertEquals(List.of(), result.events().getFirst().sportCodes());
+    assertEquals(expectedDTO, result.events().getFirst());
   }
 
   @Test
