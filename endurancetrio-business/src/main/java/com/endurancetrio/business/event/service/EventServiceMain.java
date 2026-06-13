@@ -28,9 +28,12 @@ import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.mapper.EventMapper;
+import com.endurancetrio.data.event.model.entity.Course;
 import com.endurancetrio.data.event.model.entity.Event;
+import com.endurancetrio.data.event.model.enumerator.Sport;
 import com.endurancetrio.data.event.repository.EventRepository;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +68,9 @@ public class EventServiceMain implements EventService {
     Page<EventDTO> eventPage = eventRepository.findByEventYear(year, pageable)
         .map(event -> {
           List<String> sportCodes = event.getCourses().stream()
-              .map(course -> course.getSport().getCode())
+              .map(Course::getSport)
+              .filter(Objects::nonNull)
+              .map(Sport::getCode)
               .distinct()
               .sorted()
               .toList();
