@@ -80,9 +80,9 @@ public class EventServiceMain implements EventService {
 
   @Override
   @Transactional(readOnly = true)
-  public EventOverviewDTO getEventOverview(Long id) {
-    Event event = eventRepository.findByIdWithGraph(id).orElseThrow(() -> {
-      String errorMsg = String.format("No event found with ID %d", id);
+  public EventOverviewDTO getEventOverview(Long id, int year) {
+    Event event = eventRepository.findByIdAndYearWithGraph(id, year).orElseThrow(() -> {
+      String errorMsg = String.format("No event found with ID %d for year %d", id, year);
       LOG.warn(errorMsg);
       return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     });

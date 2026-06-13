@@ -54,12 +54,14 @@ public interface EventService {
 
   /**
    * Returns an {@link EventOverviewDTO} containing the summary details of the event identified by
-   * the given {@code id}, including its organizers and races.
+   * the given {@code id} and belonging to the given {@code year}, including its organizers and
+   * races.
    *
-   * @param id the unique identifier of the event
+   * @param id   the unique identifier of the event
+   * @param year the year the event belongs to
    * @return an {@link EventOverviewDTO} with the event overview
    * @throws com.endurancetrio.business.common.exception.EnduranceTrioException if no event with the
-   *         given {@code id} is found
+   *         given {@code id} and {@code year} is found
    */
-  EventOverviewDTO getEventOverview(Long id);
+  EventOverviewDTO getEventOverview(Long id, int year);
 }
