@@ -27,6 +27,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventFileMapper {
 
+  /**
+   * Maps an {@link EventFile} entity to an {@link EventFileDTO}.
+   *
+   * @param entity the EventFile entity to be mapped
+   * @return the corresponding EventFileDTO, or {@code null} if the entity is {@code null}
+   */
   public EventFileDTO map(EventFile entity) {
     if (entity == null) {
       return null;
