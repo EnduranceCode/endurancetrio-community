@@ -30,9 +30,6 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
-import com.endurancetrio.business.common.dto.ErrorDTO;
-import com.endurancetrio.business.common.exception.EnduranceTrioError;
-import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
@@ -140,16 +137,10 @@ public class EventWebController {
         appProperties
     );
 
+    EventOverviewDTO event = eventService.getEventOverview(id, year);
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
-
-    EventOverviewDTO event = eventService.getEventOverview(id);
-
-    if (event.startDate().getYear() != year) {
-      String errorMsg = String.format("The event with ID %d is not from the year %d", id, year);
-      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
-    }
-
     model.addAttribute(ATTRIBUTE_EVENT, event);
 
     return VIEW_EVENT_OVERVIEW;
@@ -168,16 +159,10 @@ public class EventWebController {
         request, appProperties
     );
 
+    EventOverviewDTO event = eventService.getEventOverview(id, year);
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
-
-    EventOverviewDTO event = eventService.getEventOverview(id);
-
-    if (event.startDate().getYear() != year) {
-      String errorMsg = String.format("The event with ID %d is not from the year %d", id, year);
-      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
-    }
-
     model.addAttribute(ATTRIBUTE_EVENT, event);
 
     return VIEW_EVENT_RESULTS;

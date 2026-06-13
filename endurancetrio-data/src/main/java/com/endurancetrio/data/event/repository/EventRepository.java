@@ -20,6 +20,7 @@
 
 package com.endurancetrio.data.event.repository;
 
+import com.endurancetrio.data.event.model.entity.Distance;
 import com.endurancetrio.data.event.model.entity.Event;
 import java.util.List;
 import java.util.Optional;
@@ -54,21 +55,20 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
   Page<Event> findByEventYear(@Param("year") int year, Pageable pageable);
 
   /**
-   * Finds an {@link Event} by its ID with the full object graph eagerly fetched (courses,
+   * Finds an {@link Event} by its ID and year with the full object graph eagerly fetched (courses,
    * distances, and races). This avoids N+1 queries and ensures Hibernate constructs the correct
-   * concrete subclass instances for the joined-table inheritance hierarchy of
-   * {@link com.endurancetrio.data.event.model.entity.Distance}.
+   * concrete subclass instances for the joined-table inheritance hierarchy of {@link Distance}.
    *
-   * @param id the event ID
-   * @return the event with its associated courses, distances, and races, or {@code null} if not
-   * found
+   * @param id   the event ID
+   * @param year the year to filter events by
+   * @return the event with its associated courses, distances, and races, or empty if not found
    */
   @Query(
       "SELECT DISTINCT e FROM Event e " + "LEFT JOIN FETCH e.courses c "
           + "LEFT JOIN FETCH c.distance " + "LEFT JOIN FETCH c.races "
-          + "LEFT JOIN FETCH e.eventFiles " + "WHERE e.id = :id"
+          + "LEFT JOIN FETCH e.eventFiles " + "WHERE e.id = :id AND YEAR(e.startDate) = :year"
   )
-  Optional<Event> findByIdWithGraph(@Param("id") Long id);
+  Optional<Event> findByIdAndYearWithGraph(@Param("id") Long id, @Param("year") int year);
 
   /**
    * Returns all distinct years extracted from the {@link Event#getStartDate() startDate} of

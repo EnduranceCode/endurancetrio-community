@@ -280,8 +280,7 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.overview.metadata.description"), any(),
         any()
     )).thenReturn("View endurance sports event details");
-
-    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
 
     mockMvc.perform(get("/en/events/1984/1/overview"))
         .andExpect(status().isOk())
@@ -298,7 +297,7 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.overview.metadata.description"), any(),
         any()
     )).thenReturn("Detalhes do evento de desportos de endurance");
-    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
 
     mockMvc.perform(get("/pt/events/1984/1/overview"))
         .andExpect(status().isOk())
@@ -315,8 +314,7 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
         any()
     )).thenReturn("View endurance sports event results");
-
-    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
 
     mockMvc.perform(get("/en/events/1984/1/results"))
         .andExpect(status().isOk())
@@ -333,7 +331,7 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
         any()
     )).thenReturn("Resultados de eventos de desportos de endurance");
-    when(eventService.getEventOverview(1L)).thenReturn(EVENT_OVERVIEW);
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
 
     mockMvc.perform(get("/pt/events/1984/1/results"))
         .andExpect(status().isOk())

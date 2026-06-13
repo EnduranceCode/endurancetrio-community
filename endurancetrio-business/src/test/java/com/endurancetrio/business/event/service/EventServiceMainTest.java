@@ -171,10 +171,10 @@ class EventServiceMainTest {
     );
     EventOverviewDTO expected = mock(EventOverviewDTO.class);
 
-    when(eventRepository.findByIdWithGraph(EVENT_ID)).thenReturn(Optional.of(event));
+    when(eventRepository.findByIdAndYearWithGraph(EVENT_ID, YEAR)).thenReturn(Optional.of(event));
     when(eventMapper.mapToEventOverviewDTO(event)).thenReturn(expected);
 
-    EventOverviewDTO result = underTest.getEventOverview(EVENT_ID);
+    EventOverviewDTO result = underTest.getEventOverview(EVENT_ID, YEAR);
 
     assertNotNull(result);
     assertEquals(expected, result);
@@ -182,10 +182,10 @@ class EventServiceMainTest {
 
   @Test
   void getEventOverviewShouldThrowWhenEventNotFound() {
-    when(eventRepository.findByIdWithGraph(EVENT_ID)).thenReturn(Optional.empty());
+    when(eventRepository.findByIdAndYearWithGraph(EVENT_ID, YEAR)).thenReturn(Optional.empty());
 
     EnduranceTrioException exception = assertThrows(EnduranceTrioException.class,
-        () -> underTest.getEventOverview(EVENT_ID)
+        () -> underTest.getEventOverview(EVENT_ID, YEAR)
     );
 
     assertEquals(EnduranceTrioError.NOT_FOUND.getCode(), exception.getCode());
