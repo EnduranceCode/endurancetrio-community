@@ -42,8 +42,8 @@ done
 psql -v ON_ERROR_STOP=1 \
      -v stg_user="$STG_DB_USERNAME" \
      -v stg_pass="$STG_DB_SECRET" \
-     -v prg_user="$PRD_DB_USERNAME" \
-     -v prg_pass="$PRD_DB_SECRET" \
+     -v prd_user="$PRD_DB_USERNAME" \
+     -v prd_pass="$PRD_DB_SECRET" \
      --username "$POSTGRES_USER" <<-'EOSQL'
     -- Staging database
     CREATE DATABASE stg_endurancetrio_community;
@@ -52,8 +52,8 @@ psql -v ON_ERROR_STOP=1 \
 
     -- Production database
     CREATE DATABASE prd_endurancetrio_community;
-    CREATE USER :"prg_user" WITH PASSWORD :'prg_pass';
-    GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prg_user";
+    CREATE USER :"prd_user" WITH PASSWORD :'prd_pass';
+    GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";
 EOSQL
 
 # Grant schema-level permissions (required for Flyway and JPA to create/alter objects)
@@ -72,7 +72,7 @@ for db in stg_endurancetrio_community prd_endurancetrio_community; do
         GRANT ALL ON SCHEMA public TO :"db_user";
         GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO :"db_user";
         GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO :"db_user";
-        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO :"db_user";
-        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO :"db_user";
+        ALTER DEFAULT PRIVILEGES FOR ROLE :"db_user" IN SCHEMA public GRANT ALL ON TABLES TO :"db_user";
+        ALTER DEFAULT PRIVILEGES FOR ROLE :"db_user" IN SCHEMA public GRANT ALL ON SEQUENCES TO :"db_user";
 EOSQL
 done
