@@ -731,28 +731,50 @@ features, fixes) justifies a new release.
 
 ### Version Update
 
-This project supports programmatic version updates across all Maven modules. It can be achieved
-replacing the label as appropriate in the below command and then executing it.
+The project provides the `set-version.sh` script to update the version across **both** the Maven
+POM files and the frontend npm files (`package.json` and `package-lock.json`). Replace the
+placeholder in the command below and execute it:
+
+```shell
+./set-version.sh {VERSION_NUMBER}
+```
+
+> **Placeholder Definition**
+>
+> + **{VERSION_NUMBER}** : The new Semantic Version number to be applied across all Maven modules
+>   and the frontend `package.json` and `package-lock.json`. The `-SNAPSHOT` suffix (if present) is
+>   automatically stripped for the npm files, since npm does not use Maven snapshot conventions.
+
+The script also accepts an optional `--commit` flag to automatically create a git commit:
+
+```shell
+./set-version.sh {VERSION_NUMBER} --commit
+```
+
+#### Manual fallback
+
+If you prefer to update the version manually (or need to revert changes), the Maven commands are
+still available:
 
 ```shell
 ./mvnw versions:set -DnewVersion={VERSION_NUMBER}
 ```
 
-> **Placeholder Definition**
->
-> + **{VERSION_NUMBER}** : The new Sematic Version number to be applied across all Maven modules
-
-The changes applied with the above command can be reverted executing the following command:
+To revert uncommitted changes made by `versions:set`:
 
 ```shell
 ./mvnw versions:revert
 ```
 
-Or commited with the following command:
+To commit the changes made by `versions:set` (removes the backup files):
 
 ```shell
 ./mvnw versions:commit
 ```
+
+> **Note:** When using the manual Maven commands, remember to also update the `"version"` field
+> in both `endurancetrio-app/src/main/resources/webpack/package.json` and
+> `endurancetrio-app/src/main/resources/webpack/package-lock.json` to match.
 
 ### Version Tagging
 
