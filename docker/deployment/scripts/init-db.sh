@@ -48,13 +48,15 @@ psql -v ON_ERROR_STOP=1 \
     -- Staging database
     SELECT 'CREATE DATABASE stg_endurancetrio_community'
     WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'stg_endurancetrio_community')\gexec
-    CREATE USER IF NOT EXISTS :"stg_user" WITH PASSWORD :'stg_pass';
+    SELECT format('CREATE USER %I WITH PASSWORD %L', :'stg_user', :'stg_pass')
+    WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'stg_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO :"stg_user";
 
     -- Production database
     SELECT 'CREATE DATABASE prd_endurancetrio_community'
     WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'prd_endurancetrio_community')\gexec
-    CREATE USER IF NOT EXISTS :"prd_user" WITH PASSWORD :'prd_pass';
+    SELECT format('CREATE USER %I WITH PASSWORD %L', :'prd_user', :'prd_pass')
+    WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'prd_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";
 EOSQL
 
