@@ -65,8 +65,8 @@ jobs:
         with:
           # For workflow_dispatch: checkout the user-specified ref.
           # For release events: github.event.inputs is undefined, so
-          # the checkout action defaults to the release commit.
-          ref: ${{ github.event.inputs.ref }}
+          # fall back to github.sha (the release commit).
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.ref || github.sha }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
