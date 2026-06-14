@@ -130,7 +130,7 @@ sudo useradd -r -s /usr/sbin/nologin endurancetrio
 sudo chown -R endurancetrio:endurancetrio /opt/endurancetrio-community/
 ```
 
-To confirm that the folder `/opt/endurancetrio-community/logs/` has the correct ownership,
+To confirm that the folder `/opt/endurancetrio-community/` has the correct ownership,
 check the output of the following command:
 
 ```shell
@@ -176,7 +176,7 @@ The `.env` file manages environment-specific configurations and secrets.
 | Variable                     | Description                                                                          | Required    |
 |------------------------------|--------------------------------------------------------------------------------------|-------------|
 | `STG_VERSION`                | The Docker image tag to deploy for staging (e.g., `sha-abc1234-staging-fix-login`)   | Yes         |
-| `PRD_VERSION`                | The Docker image tag to deploy for production (e.g., `v1.0.0`)                       | Yes         |
+| `PRD_VERSION`                | The Docker image tag to deploy for production (e.g., `1.0.0`)                        | Yes         |
 | `PUID`                       | User ID under which the container process runs                                       | Yes         |
 | `PGID`                       | Group ID under which the container process runs                                      | Yes         |
 | `STG_ENDURANCETRIO_EXT_PORT` | Host port for staging app (e.g., `8081`)                                             | Yes         |
@@ -586,7 +586,7 @@ In the output, locate the certificate name that matches `{EXISTING_DOMAIN}` and 
 Then, execute the expand command including only the missing domains/subdomains:
 
 ```shell
-sudo certbot --apache --cert-name <EXISTING_DOMAIN> \
+sudo certbot --apache --cert-name {EXISTING_DOMAIN} \
   --expand \
   -d {EXISTING_DOMAIN} \
   -d {SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD} \
