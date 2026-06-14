@@ -15,12 +15,14 @@
 3. [Development](#development)
    1. [Quick Start](#quick-start)
    2. [Technology Stack](./docs/development.md#technology-stack)
-   3. [API Key Management](./docs/development.md#api-key-management)
-   4. [Database](./docs/development.md#database)
-   5. [Installation](./docs/development.md#installation)
-   6. [Code & Naming Conventions](./docs/development.md#code--naming-conventions)
-   7. [Programmatic Version Management](./docs/development.md#programmatic-version-management)
-   8. [Integrations](#integrations)
+   3. [Repository and Release Topology](./docs/development.md#repository-and-release-topology)
+   4. [API Key Management](./docs/development.md#api-key-management)
+   5. [Database](./docs/development.md#database)
+   6. [Installation](./docs/development.md#installation)
+   7. [Code & Naming Conventions](./docs/development.md#code--naming-conventions)
+   8. [Programmatic Version Management](./docs/development.md#programmatic-version-management)
+   9. [Building Custom Images with Workflow Dispatch](./docs/development.md#building-custom-images-with-workflow-dispatch)
+   10. [Integrations](#integrations)
 4. [Deployment](#deployment)
    1. [Container Architecture](./docs/deployment.md#container-architecture)
    2. [Server Setup](./docs/deployment.md#server-setup)
@@ -200,6 +202,10 @@ workflow and conflict resolution rules.
 
 For deployment instructions (container architecture, server and reverse proxy setup,
 SSL certificate configuration, etc.), please refer to the [Deployment Guide](./docs/deployment.md).
+
+Docker release artifacts (GitHub releases and GHCR images) are published from the
+**EnduranceTrio** [organization repository](https://github.com/endurancetrio/endurancetrio-community),
+while source development happens in [this repository](https://github.com/EnduranceCode/endurancetrio-community).
 
 ## License
 

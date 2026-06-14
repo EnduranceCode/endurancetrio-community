@@ -40,6 +40,13 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 
 Tracker domain code lives in [`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) and is incorporated via `git merge` (see [`docs/tracker-integration.md`](docs/tracker-integration.md)). The `tracker` remote is pre-configured. Issues found in tracker code go upstream; stage them as markdown in `issues/` using the tracker's issue template format.
 
+## Community release topology (dual-repo)
+
+- Source development repository: [`EnduranceCode/endurancetrio-community`](https://github.com/EnduranceCode/endurancetrio-community)
+- Release and image publishing repository: [`endurancetrio/endurancetrio-community`](https://github.com/endurancetrio/endurancetrio-community)
+- Deployment image: `ghcr.io/endurancetrio/endurancetrio-community`
+- GHCR token/secret setup and rotation guide: [`docs/development.md`](docs/development.md#ghcr-credentials-setup-and-renewal)
+
 ## Frontend
 
 - Source: `endurancetrio-app/src/main/resources/webpack/` (JS, SCSS, ES modules with Webpack)
@@ -74,6 +81,7 @@ Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activa
 - Image: `ghcr.io/endurancetrio/endurancetrio-community`, multi-stage `eclipse-temurin:21-jre-alpine`
 - Entrypoint drops privileges via PUID/PGID env vars. G1GC JVM tuning.
 - CI: `.github/workflows/publish-image.yml` — triggers on release publish or `workflow_dispatch`
+- Deployment Postgres port mapping is loopback-only (`127.0.0.1:${POSTGRES_EXT_PORT:-5432}:5432`), intended for local access on server or SSH tunnel clients
 
 ## Commit messages
 
