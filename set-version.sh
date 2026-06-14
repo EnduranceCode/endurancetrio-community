@@ -87,11 +87,11 @@ echo "Changed files:"
 git diff --name-only
 
 if [ "$DO_COMMIT" = true ]; then
-    git add -A
+    git add -u
     git commit -m "Set version to ${VERSION}"
     echo -e "[\e[32mOK\e[0m] Created commit for version ${VERSION}"
 else
     echo
     echo "To commit these changes, run:"
-    echo "  git add -A && git commit -m \"Set version to ${VERSION}\""
+    echo "  git add -u && git commit -m \"Set version to ${VERSION}\""
 fi
