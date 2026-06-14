@@ -122,7 +122,7 @@ sudo mkdir -p /opt/endurancetrio-community/scripts
 ```
 
 We will create a user to manage the **EnduranceTrio** application and set it as the owner
-of the folder `/opt/endurancetrio-community/logs/`. This will be achieved with the execution of the
+of the folder `/opt/endurancetrio-community/`. This will be achieved with the execution of the
 following commands:
 
 ```shell

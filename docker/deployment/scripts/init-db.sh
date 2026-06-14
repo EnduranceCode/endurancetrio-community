@@ -46,13 +46,15 @@ psql -v ON_ERROR_STOP=1 \
      -v prd_pass="$PRD_DB_SECRET" \
      --username "$POSTGRES_USER" <<-'EOSQL'
     -- Staging database
-    CREATE DATABASE stg_endurancetrio_community;
-    CREATE USER :"stg_user" WITH PASSWORD :'stg_pass';
+    SELECT 'CREATE DATABASE stg_endurancetrio_community'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'stg_endurancetrio_community')\gexec
+    CREATE USER IF NOT EXISTS :"stg_user" WITH PASSWORD :'stg_pass';
     GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO :"stg_user";
 
     -- Production database
-    CREATE DATABASE prd_endurancetrio_community;
-    CREATE USER :"prd_user" WITH PASSWORD :'prd_pass';
+    SELECT 'CREATE DATABASE prd_endurancetrio_community'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'prd_endurancetrio_community')\gexec
+    CREATE USER IF NOT EXISTS :"prd_user" WITH PASSWORD :'prd_pass';
     GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";
 EOSQL
 
