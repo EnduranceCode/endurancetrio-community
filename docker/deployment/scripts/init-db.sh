@@ -29,7 +29,15 @@
 #   - PRD_DB_USERNAME / PRD_DB_SECRET
 #   - STG_DB_USERNAME / STG_DB_SECRET
 
-set -e
+set -euo pipefail
+
+required_vars="STG_DB_USERNAME STG_DB_SECRET PRD_DB_USERNAME PRD_DB_SECRET POSTGRES_USER"
+for var in $required_vars; do
+    if [ -z "${!var:-}" ]; then
+        echo "Error: $var is not set or is empty" >&2
+        exit 1
+    fi
+done
 
 psql -v ON_ERROR_STOP=1 \
      -v stg_user="$STG_DB_USERNAME" \
