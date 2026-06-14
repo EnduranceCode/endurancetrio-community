@@ -470,7 +470,7 @@ used only when the file does not exist yet. The command will prompt you to enter
 password.
 
 ```shell
-sudo htpasswd -c /etc/apache2/.htpasswd-staging <username>
+sudo htpasswd -c /etc/apache2/.htpasswd-staging {USERNAME}
 ```
 
 > **Placeholder Definition**
@@ -480,19 +480,19 @@ sudo htpasswd -c /etc/apache2/.htpasswd-staging <username>
 To add additional users without overwriting the file, execute the following command (without `-c`):
 
 ```shell
-sudo htpasswd /etc/apache2/.htpasswd-staging <username>
+sudo htpasswd /etc/apache2/.htpasswd-staging {USERNAME}
 ```
 
 To update the password of an existing user, execute the same command with the existing username:
 
 ```shell
-sudo htpasswd /etc/apache2/.htpasswd-staging <existing-username>
+sudo htpasswd /etc/apache2/.htpasswd-staging {USERNAME}
 ```
 
 To remove a user and revoke access:
 
 ```shell
-sudo htpasswd -D /etc/apache2/.htpasswd-staging <username>
+sudo htpasswd -D /etc/apache2/.htpasswd-staging {USERNAME}
 ```
 
 Secure the file:
