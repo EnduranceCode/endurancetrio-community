@@ -256,9 +256,37 @@ script mounted at `/docker-entrypoint-initdb.d/`. This script:
 The `init-db.sh` script reads the `STG_DB_USERNAME`, `STG_DB_SECRET`, `PRD_DB_USERNAME` 
 and `PRD_DB_SECRET` variables from the container environment (passed via docker-compose).
 
-> **Note:** Re-initialisation only happens if the `/var/lib/postgresql/data` directory inside the
-> container is empty. Once the bind mount at `/opt/endurancetrio-community/db/` has data, the
-> init script is not executed again.
+> **Note:** Re-initialisation only happens if the PostgreSQL data directory inside the container is
+> empty. The bind mount at `/opt/endurancetrio-community/db/` is mounted at `/var/lib/postgresql`
+> inside the container. PostgreSQL 18+ stores data in a major-version-specific subdirectory
+> (e.g., `/var/lib/postgresql/data/18/`). The init script is not executed again once data exists.
+
+### Upgrading from a previous PostgreSQL deployment
+
+If the PostgreSQL container fails to start with an error about incompatible data directory format
+(PostgreSQL 18+ image with data from an older deployment), migrate the existing data to the new
+directory layout:
+
+```shell
+docker compose -p endurancetrio-community down postgres
+
+# Move existing data into a version-specific subdirectory
+cd /opt/endurancetrio-community/db
+sudo mkdir -p data/18
+sudo mv $(ls -A | grep -v data) data/18/
+```
+
+Then restart the container with the updated configuration:
+
+```shell
+docker compose -p endurancetrio-community up -d postgres
+```
+
+> **Note:** For a fresh deployment (no data to preserve), clear the `db/` directory before starting:
+>
+> ```shell
+> sudo rm -rf /opt/endurancetrio-community/db/*
+> ```
 
 The PostgreSQL service is mapped to the host loopback interface only (`127.0.0.1`) using
 `POSTGRES_EXT_PORT` (default `5432`). This allows local tools on the server, and remote tools via
