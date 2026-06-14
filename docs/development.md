@@ -870,6 +870,36 @@ Then redeploy the staging container:
 docker compose -p endurancetrio-community up -d stg-endurancetrio-community
 ```
 
+### Package Visibility
+
+Container images published to GHCR from forked repositories default to **private** visibility,
+even when the source repository is public. This is a known GHCR behavior for forks.
+
+To make a newly published image accessible, the package's visibility must be changed to **public**
+via the GitHub web UI. This is a **one-time** operation per package - once set, all future versions
+pushed under the same package name inherit the public visibility.
+
+**Procedure:**
+
+1. Navigate to the organization's packages page:
+   `https://github.com/orgs/endurancetrio/packages?repo_name=endurancetrio-community`
+
+2. Click on the **`endurancetrio-community`** container package.
+
+3. Click **Package settings** in the right sidebar.
+
+4. In the **Danger Zone** section, click **Change visibility**, select **Public**, confirm
+   by typing the package name, then click **"I understand the consequences, change package
+   visibility"**.
+
+> **Warning:** Once a package is made public, it cannot be reverted to private.
+
+> **Note:** There is currently no API endpoint to change GHCR package visibility programmatically
+> ([GitHub Community Discussion #22009][ghcr-visibility-discussion]). > The web UI is the only
+> method available.
+
+[ghcr-visibility-discussion]: https://github.com/orgs/community/discussions/22009
+
 ### GHCR credentials setup and renewal
 
 #### First-time setup
