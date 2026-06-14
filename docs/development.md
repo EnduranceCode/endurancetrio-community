@@ -6,14 +6,16 @@ an overview of the project, see the [main README.md](../README.md).
 ## Table of Contents
 
 1. [Technology Stack](#technology-stack)
-2. [API Key Management](#api-key-management)
-3. [Database](#database)
-4. [Tracker Domain Development](#tracker-domain-development)
-5. [Installation](#installation)
-6. [Run the application](#run-the-application)
-7. [Code & Naming Conventions](#code--naming-conventions)
-8. [Programmatic Version Management](#programmatic-version-management)
-9. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
+2. [Repository and Release Topology](#repository-and-release-topology)
+3. [API Key Management](#api-key-management)
+4. [Database](#database)
+5. [Tracker Domain Development](#tracker-domain-development)
+6. [Installation](#installation)
+7. [Run the application](#run-the-application)
+8. [Code & Naming Conventions](#code--naming-conventions)
+9. [Programmatic Version Management](#programmatic-version-management)
+10. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
+11. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
 
 ## Technology Stack
 
@@ -27,6 +29,24 @@ an overview of the project, see the [main README.md](../README.md).
 - **SpringDoc OpenAPI** - Automated Swagger/OpenAPI documentation generation
 - **Maven** - Dependency management and build automation
 - **Webpack** - Frontend asset bundling, triggered automatically by the Maven build
+
+## Repository and Release Topology
+
+EnduranceTrio uses a dual-repository model:
+
+- **Source repository (personal account):**
+  [`EnduranceCode/endurancetrio-community`](https://github.com/EnduranceCode/endurancetrio-community)
+- **Release and image publishing repository (organization account):**
+  [`endurancetrio/endurancetrio-community`](https://github.com/endurancetrio/endurancetrio-community)
+
+This means day-to-day development and documentation updates happen in the personal repository,
+while release publishing and Docker image publication are executed in the organization repository.
+
+Docker images are published to:
+
+`ghcr.io/endurancetrio/endurancetrio-community`
+
+> **Note:** Deployment should use image tags published from the organization repository.
 
 ## API Key Management
 
@@ -768,6 +788,109 @@ git push --follow-tags
 - Tags are the ONLY safe merge anchors for integration merges
 - Namespacing avoids tag collisions between integrated repositories (e.g., `tracker-vX.Y.Z`
   tags in the Tracker repo)
+
+## Building Custom Images with Workflow Dispatch
+
+The GitHub Actions workflow in `.github/workflows/publish-image.yml` builds and publishes Docker
+images to `ghcr.io/endurancetrio/endurancetrio-community` from the **EnduranceTrio**
+[organization repository](https://github.com/endurancetrio/endurancetrio-community).
+
+This workflow authenticates to GHCR with two repository secrets:
+
+- `GHCR_USERNAME`
+- `GHCR_SECRET`
+
+It supports two triggers:
+
+| Trigger           | Image tag format        | Use case                         |
+|-------------------|-------------------------|----------------------------------|
+| Workflow dispatch | `sha-<commit>-<suffix>` | Staging builds, feature branches |
+| Release           | `X.Y.Z` (e.g., `0.4.0`) | Production releases              |
+
+### How to trigger a manual build for staging
+
+1. Go to the **Actions** tab of the `endurancetrio/endurancetrio-community` repository on GitHub:
+   `https://github.com/endurancetrio/endurancetrio-community/actions`
+
+2. Select the **"Build and Publish Docker Image"** workflow from the left sidebar.
+
+3. Click the **"Run workflow"** dropdown button.
+
+4. Fill in the form:
+
+   | Field          | Example value            | Description                                  |
+   |----------------|--------------------------|----------------------------------------------|
+   | **Branch**     | `feature/my-new-feature` | The branch, tag, or commit SHA to build from |
+   | **Tag suffix** | `stg-my-new-feature`     | A short identifier appended to the image tag |
+
+5. Click **"Run workflow"**.
+
+The workflow checks out the specified branch, builds the application with Maven, builds the
+Docker image, and pushes it to GHCR.
+
+The resulting image tag will be:
+
+```text
+ghcr.io/endurancetrio/endurancetrio-community:sha-<7-char-commit-hash>-stg-my-new-feature
+```
+
+### Deploying the built image
+
+Update the `.env` file on the server:
+
+```shell
+STG_VERSION=sha-abc1234-stg-my-new-feature
+```
+
+Then redeploy the staging container:
+
+```shell
+docker compose -p endurancetrio-community up -d stg-endurancetrio-community
+```
+
+### GHCR credentials setup and renewal
+
+#### First-time setup
+
+1. Sign in to GitHub with an account that has permission to publish packages to the
+   **EnduranceTrio** organization namespace.
+2. Open **Settings -> Developer settings -> Personal access tokens -> Fine-grained tokens**.
+3. Create a token with these settings:
+   - **Resource owner:** the account creating the token
+   - **Repository access:** `Only select repositories`
+   - **Selected repository:** `endurancetrio/endurancetrio-community`
+   - **Repository permissions:** `Packages: Read and write`
+4. Set an expiration date according to your security policy.
+5. Generate the token and copy it immediately (GitHub does not show it again).
+
+Then configure repository secrets in `endurancetrio/endurancetrio-community`:
+
+1. Open **Settings -> Secrets and variables -> Actions -> Repository secrets**.
+2. Create/update `GHCR_USERNAME` with the GitHub username of the account that owns the token.
+3. Create/update `GHCR_SECRET` with the generated token value.
+
+#### Renewal procedure (token expiration/rotation)
+
+When the token expires (or must be rotated):
+
+1. Sign in to the account that owns the currently configured token.
+2. Open **Settings -> Developer settings -> Personal access tokens -> Fine-grained tokens**.
+3. Regenerate the existing token or create a replacement with the same permissions.
+4. In `endurancetrio/endurancetrio-community`, update the `GHCR_SECRET` repository secret.
+5. Keep `GHCR_USERNAME` aligned with the token owner username.
+6. Trigger the workflow manually to validate credentials.
+
+#### Quick validation
+
+After setting or rotating secrets, run a manual workflow dispatch and confirm these steps pass:
+
+- `Log in to GHCR`
+- `Build and push Docker image`
+
+If login fails with `unauthorized`/`denied`, verify token scope and organization membership.
+
+For broader deployment validation (health checks, logs, rollback flow), follow
+[`docs/deployment.md`](./deployment.md).
 
 ## SonarQube Cloud Configuration
 

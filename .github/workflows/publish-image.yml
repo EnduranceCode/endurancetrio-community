@@ -18,10 +18,16 @@
 # EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
 #
 
-# Build and publish Docker image to the repository owner (organization) GHCR namespace.
+# Build and publish Docker images.
+#
+# Repository topology:
+#  - Source development happens in: EnduranceCode/endurancetrio-community
+#  - Releases/images are published from: endurancetrio/endurancetrio-community
+#
 # Requirements:
-#  - Add GHCR_USERNAME and GHCR_SECRET as repository secrets in the fork.
-#  - GHCR_SECRET must have permission to write packages in the target org namespace.
+#  - Add GHCR_USERNAME and GHCR_SECRET as repository secrets where this workflow runs.
+#  - GHCR_SECRET must have permission to write packages in the target GHCR namespace.
+#  - Setup and renewal guide: docs/development.md#ghcr-credentials-setup-and-renewal
 #
 
 name: Build and Publish Docker Image
@@ -32,8 +38,13 @@ on:
   workflow_dispatch:
     inputs:
       build-tag-suffix:
-        description: 'Suffix to append to the image tag (e.g., bugfix-123)'
+        description: 'Suffix to append to the image tag (e.g., staging-fix-login)'
         required: true
+        type: string
+      ref:
+        description: 'Branch, tag, or SHA to build from (defaults to master)'
+        required: false
+        default: 'master'
         type: string
 
 permissions:
@@ -51,6 +62,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # For workflow_dispatch: checkout the user-specified ref.
+          # For release events: github.event.inputs is undefined, so
+          # the checkout action defaults to the release commit.
+          ref: ${{ github.event.inputs.ref }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -85,7 +101,7 @@ jobs:
           labels: |
             org.opencontainers.image.vendor=EnduranceTrio
             org.opencontainers.image.authors=Ricardo do Canto <https://github.com/EnduranceCode>
-            org.opencontainers.image.source=https://github.com/endurancetrio/endurancetrio-community
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6

@@ -42,11 +42,20 @@ fi
 # IMPORTANT: This step changes the ownership on the HOST file system.
 chown -R "$HOST_UID":"$HOST_GID" "$APP_HOME"
 
-# 4. Drop privileges and execute the main Java application
+# 4. Configure JVM heap via environment variables (overridable per container)
+JAVA_XMS=${JAVA_XMS:-768m}
+JAVA_XMX=${JAVA_XMX:-1024m}
+
+# 5. Set up GC logging to a file in the logs directory with rotation
+GC_LOG_FILE="${APP_HOME}/logs/gc.log"
+GC_LOG_OPTS="-Xlog:gc*:file=${GC_LOG_FILE}::filecount=5,filesize=10M"
+
+# 6. Drop privileges and execute the main Java application
 exec su-exec "$APP_USER" java \
-    -Xms1024m \
-    -Xmx2048m \
+    -Xms"${JAVA_XMS}" \
+    -Xmx"${JAVA_XMX}" \
     -XX:+UseG1GC \
     -XX:MaxGCPauseMillis=200 \
-    -Djava.security.egd=file:/dev/./urandom \
+    -XX:+ExitOnOutOfMemoryError \
+    "${GC_LOG_OPTS}" \
     "org.springframework.boot.loader.launch.JarLauncher"
