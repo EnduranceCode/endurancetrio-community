@@ -31,33 +31,40 @@
 
 set -e
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+psql -v ON_ERROR_STOP=1 \
+     -v stg_user="$STG_DB_USERNAME" \
+     -v stg_pass="$STG_DB_SECRET" \
+     -v prg_user="$PRD_DB_USERNAME" \
+     -v prg_pass="$PRD_DB_SECRET" \
+     --username "$POSTGRES_USER" <<-'EOSQL'
     -- Staging database
     CREATE DATABASE stg_endurancetrio_community;
-    CREATE USER ${STG_DB_USERNAME} WITH PASSWORD \$pass\$${STG_DB_SECRET}\$pass\$;
-    GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO ${STG_DB_USERNAME};
+    CREATE USER :"stg_user" WITH PASSWORD :'stg_pass';
+    GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO :"stg_user";
 
     -- Production database
     CREATE DATABASE prd_endurancetrio_community;
-    CREATE USER ${PRD_DB_USERNAME} WITH PASSWORD \$pass\$${PRD_DB_SECRET}\$pass\$;
-    GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO ${PRD_DB_USERNAME};
+    CREATE USER :"prg_user" WITH PASSWORD :'prg_pass';
+    GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prg_user";
 EOSQL
 
 # Grant schema-level permissions (required for Flyway and JPA to create/alter objects)
 for db in stg_endurancetrio_community prd_endurancetrio_community; do
     case "$db" in
         stg_endurancetrio_community)
-            user="${STG_DB_USERNAME}"
+            db_user="${STG_DB_USERNAME}"
             ;;
         prd_endurancetrio_community)
-            user="${PRD_DB_USERNAME}"
+            db_user="${PRD_DB_USERNAME}"
             ;;
     esac
-    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$db" <<-EOSQL
-        GRANT ALL ON SCHEMA public TO ${user};
-        GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${user};
-        GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ${user};
-        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${user};
-        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO ${user};
+    psql -v ON_ERROR_STOP=1 \
+         -v db_user="$db_user" \
+         --username "$POSTGRES_USER" --dbname "$db" <<-'EOSQL'
+        GRANT ALL ON SCHEMA public TO :"db_user";
+        GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO :"db_user";
+        GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO :"db_user";
+        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO :"db_user";
+        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO :"db_user";
 EOSQL
 done
