@@ -611,7 +611,7 @@ sudo certbot certificates
 In the output, locate the certificate name that matches `{EXISTING_DOMAIN}` and review the
 `Domains:` list.
 
-Then, execute the expand command including only the missing domains/subdomains:
+Then, execute the expand command:
 
 ```shell
 sudo certbot --apache --cert-name {EXISTING_DOMAIN} \
@@ -625,15 +625,25 @@ sudo certbot --apache --cert-name {EXISTING_DOMAIN} \
   -d stg.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}
 ```
 
-> **Note:** If already-covered domains are included in the command, Certbot usually handles them
-> safely. However, limiting the `-d` list to only missing domains/subdomains reduces unnecessary
-> issuance attempts.
+**Important:** The `--expand` flag **replaces** the entire domain list on the certificate. You
+MUST include ALL domains and subdomains (both existing and new) in the command. It is not
+possible to expand the certificate by providing only the new subdomains.
 
 > **Placeholder Definition**
 >
 > + **{EXISTING_DOMAIN}** : The existing domain (or subdomain) that already has a SSL certificate
 > + **{SECOND_LEVEL_DOMAIN_SLD}** : The [Second-level domain](https://en.wikipedia.org/wiki/Second-level_domain) (e.g., 'example' in example.com)
 > + **{TOP_LEVEL_DOMAIN_TLD}**    : The [TLD](https://en.wikipedia.org/wiki/Top-level_domain) (e.g., 'com', 'org', 'net')
+
+> **Warning — Certbot ServerAlias behavior**
+>
+> Certbot's `--apache` plugin may add new subdomains as `ServerAlias` to an existing SSL
+> VirtualHost instead of creating a dedicated `<VirtualHost *:443>` block. This happens because
+> Certbot reuses existing SSL VirtualHosts when it finds a new subdomain that wasn't there
+> before. If the subdomain needs its own configuration (e.g., staging with Basic Auth and
+> reverse proxy), it MUST have a dedicated VirtualHost block. The
+> [Post-Certbot verification](#post-certbot-verification) section covers how to detect and
+> fix this.
 
 Otherwise, to create a separate certificate for the new domain (or subdomain), execute the following
 command:
@@ -648,42 +658,260 @@ sudo certbot --apache -d {DOMAIN} -d www.{DOMAIN} -d api.{DOMAIN} -d openapi.{DO
 
 ### Post-Certbot verification
 
-[Certbot](https://certbot.eff.org/instructions?ws=apache&os=ubuntufocal) will create a file,
-at `/etc/apache2/sites-available/` named `{SECOND_LEVEL_DOMAIN_SLD}-le-ssl.conf` and it's necessary
-to check if the `RequestHeader` directives are set correctly. Execute the below command to be able
-to edit the referred file with the [nano text editor](https://www.nano-editor.org/).
+[Certbot](https://certbot.eff.org/instructions?ws=apache&os=ubuntufocal) will modify the HTTP
+configuration file (`{SECOND_LEVEL_DOMAIN_SLD}.conf`) and create/update the SSL configuration file
+(`{SECOND_LEVEL_DOMAIN_SLD}-le-ssl.conf`). A thorough verification is required to ensure the SSL
+VirtualHosts are correctly set up.
+
+#### 1. Check the VirtualHost structure
+
+Run the following command to list all VirtualHosts and their ServerName/ServerAlias assignments:
+
+```shell
+sudo apachectl -S
+```
+
+In the output, verify that each subdomain has its **own** entry on port 443 with the correct
+`ServerName`. If a subdomain appears only as a `ServerAlias` of another VirtualHost (e.g.,
+`stg.example.com` listed under `example.com:443` instead of having its own line),
+it needs a dedicated VirtualHost block (see step 2).
+
+> **Why this matters:** When a subdomain is only a `ServerAlias`, it inherits the entire
+> configuration of the parent VirtualHost. For example, `stg.example.com` would serve the same
+> content as `example.com` instead of being proxied to the staging application.
+
+#### 2. Verify and fix the SSL configuration
+
+Open the SSL configuration file:
 
 ```shell
 sudo nano {SECOND_LEVEL_DOMAIN_SLD}-le-ssl.conf
 ```
 
-Ensure that the `RequestHeader` directives matches the content of the following snippet:
+Ensure that the VirtualHost blocks are properly separated and in the same order as in the
+`{SECOND_LEVEL_DOMAIN_SLD}.conf` file.
+
+**For each VirtualHost block, verify the following:**
+
+##### VirtualHost port
+
+Check that each `<VirtualHost>` directive uses port **443**, not port 80:
+
+```apache
+<VirtualHost *:443>        # correct
+# <VirtualHost *:80>       # wrong — port 80 requests are handled by {SECOND_LEVEL_DOMAIN_SLD}.conf
+```
+
+Certbot may copy the HTTP VirtualHost template and leave the port unchanged, or you may be working
+from a block that was pasted from the HTTP config without updating the port.
+
+##### WWW redirect
+
+Ensure the WWW to non-WWW redirect uses HTTPS instead of HTTP:
+
+```text
+Redirect permanent / https://{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}/
+```
+
+##### All proxied subdomains (main domain, API, OpenAPI, staging)
+
+Check that `ProxyPass` and `ProxyPassReverse` are present and point to the correct port
+(refer to the [DNS records table](#create-dns-records) for target port and path):
+
+```text
+ProxyPass / http://localhost:<PORT>/
+ProxyPassReverse / http://localhost:<PORT>/
+```
+
+Check that the `RequestHeader` directives use HTTPS values:
 
 ```text
 RequestHeader set X-Forwarded-Proto "https"
 RequestHeader set X-Forwarded-Port "443"
 ```
 
-Ensure that the WWW to non-WWW redirection is set using https instead of http, as shown
-in the following snippet:
+##### Staging subdomain specifically
 
-```text
-Redirect permanent / https://{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}/
+In addition to the items above, verify that the following configuration is present:
+
+- Basic Authentication (`AuthType Basic`, `AuthName`, `AuthUserFile`, `Require valid-user`)
+- `X-Robots-Tag "noindex, nofollow"`
+- Offline fallback (`ProxyErrorOverride On`, `ErrorDocument`, `Alias /index.html`)
+- The `ProxyPass /index.html !` exclusion rule
+
+##### VirtualHost structure
+
+A correctly configured SSL VirtualHost block for the `stg` subdomain looks like this:
+
+```apache
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+    ServerName stg.<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD>
+
+    ServerAdmin <SERVER_ADMIN_EMAIL>
+
+    ProxyRequests Off
+    ProxyPreserveHost On
+
+    # Connection Settings
+    KeepAlive On
+    KeepAliveTimeout 5
+    MaxKeepAliveRequests 100
+    Timeout 300
+
+    # Apache HTTP Basic Authentication
+    <Location />
+        AuthType Basic
+        AuthName "Staging Environment — Authorised Access Only"
+        AuthUserFile /etc/apache2/.htpasswd-staging
+        Require valid-user
+    </Location>
+
+    <Location /index.html>
+        Require all granted
+    </Location>
+
+    Header always set X-Robots-Tag "noindex, nofollow"
+
+    # Offline fallback page
+    ProxyErrorOverride On
+    ErrorDocument 502 /index.html
+    ErrorDocument 503 /index.html
+    Alias /index.html /srv/www/endurancetrio/index.html
+    <Directory /srv/www/endurancetrio>
+        Require all granted
+    </Directory>
+
+    ProxyPass /index.html !
+    ProxyPass / http://localhost:<STG_ENDURANCETRIO_EXT_PORT>/
+    ProxyPassReverse / http://localhost:<STG_ENDURANCETRIO_EXT_PORT>/
+
+    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-Port "443"
+
+    ErrorLog ${APACHE_LOG_DIR}/stg_<SECOND_LEVEL_DOMAIN_SLD>_error.log
+    CustomLog ${APACHE_LOG_DIR}/stg_<SECOND_LEVEL_DOMAIN_SLD>_access.log combined
+
+    SSLCertificateFile /etc/letsencrypt/live/{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}/privkey.pem
+    Include /etc/letsencrypt/options-ssl-apache.conf
+</VirtualHost>
+</IfModule>
 ```
 
-Check if it's necessary any further modifications, implement it if required and when finished, save
-the file with the command `CTRL + O` and then exit the text editor  with the command `CTRL + X`.
+##### If a subdomain was added as ServerAlias
 
-Validate the Apache Server configuration and, if everything is correct, restart the
-[Apache Server](https://httpd.apache.org/) to apply the updated configuration, executing the below
-commands:
+If step 1 revealed that a subdomain is listed as `ServerAlias` instead of having its own
+`<VirtualHost *:443>` block:
+
+1. Copy the entire main VirtualHost block and paste it as a new VirtualHost
+2. Change the `ServerName` to the subdomain (e.g., `stg.example.com`)
+3. Remove the `ServerAlias` line from the original VirtualHost
+4. Adjust the configuration inside the new VirtualHost for the subdomain's purpose (e.g., add proxy
+   configuration for staging)
+5. Ensure `RequestHeader` values are set to `https`/`443`
+6. Ensure the `SSLCertificateFile` and `SSLCertificateKeyFile` paths are correct
+
+#### 3. Check the HTTP configuration
+
+After Certbot modifies the HTTP config file (`{SECOND_LEVEL_DOMAIN_SLD}.conf`), open it:
+
+```shell
+sudo nano {SECOND_LEVEL_DOMAIN_SLD}.conf
+```
+
+Within the file, to improve the readability, start by setting a proper indentation on the lines
+added by **Certbot**.
+
+For each static VirtualHost that now has an HTTPS redirect, delete the following sections/lines:
+
+```apache
+DocumentRoot /srv/www/{SECOND_LEVEL_DOMAIN_SLD}
+
+# Directory configuration
+<Directory /srv/www/{SECOND_LEVEL_DOMAIN_SLD}>
+    Options -Indexes +FollowSymLinks -MultiViews
+    # Change to AllowOverride All if runtime configuration via .htaccess is necessary
+    AllowOverride None
+    Require all granted
+
+    # Security headers
+    <IfModule mod_headers.c>
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set X-Frame-Options "SAMEORIGIN"
+    </IfModule>
+</Directory>
+
+CustomLog ${APACHE_LOG_DIR}/{SECOND_LEVEL_DOMAIN_SLD}_access.log combined
+```
+
+Also, within the same file, and on the Reverse Proxy section of the Virtual Host, delete the
+following sections/lines:
+
+```apache
+ProxyRequests Off
+
+# Connection Settings
+KeepAlive On
+KeepAliveTimeout 5
+MaxKeepAliveRequests 100
+Timeout 300
+
+# Forwarding configuration
+ProxyPreserveHost On
+ProxyPass / http://localhost:{APP_PORT}/
+ProxyPassReverse / http://localhost:{APP_PORT}/
+
+# Headers configuration
+RequestHeader set X-Forwarded-Proto "http"
+RequestHeader set X-Forwarded-Port "80"
+
+CustomLog ${APACHE_LOG_DIR}/<PREFIX>_access.log combined
+```
+
+Example of a **clean** redirect:
+
+```apache
+RewriteEngine on
+RewriteCond %{SERVER_NAME} =stg.<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD>
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+```
+
+Example of a **broken** redirect (remove the `[OR]` line):
+
+```apache
+RewriteEngine on
+RewriteCond %{SERVER_NAME} =stg.<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD> [OR]
+RewriteCond %{SERVER_NAME} =<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD>
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+```
+
+After cleanup, all HTTP VirtualHosts with SSL redirects should look like this:
+
+```apache
+<VirtualHost *:80>
+    ServerName stg.<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD>
+
+    ServerAdmin <SERVER_ADMIN_EMAIL>
+
+    RewriteEngine on
+    RewriteCond %{SERVER_NAME} =stg.<SECOND_LEVEL_DOMAIN_SLD>.<TOP_LEVEL_DOMAIN_TLD>
+    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+
+    ErrorLog ${APACHE_LOG_DIR}/stg_<SECOND_LEVEL_DOMAIN_SLD>_error.log
+</VirtualHost>
+```
+
+All proxy, auth, and security configuration has moved to the SSL VirtualHost.
+
+#### 4. Validate and reload
 
 ```shell
 sudo apachectl configtest
 sudo systemctl restart apache2
 ```
 
-[SSL Labs Server Test](https://www.ssllabs.com/ssltest/) can be used to verify the certificate’s
+[SSL Labs Server Test](https://www.ssllabs.com/ssltest/) can be used to verify the certificate's
 grade and obtain detailed information about it, from the perspective of an external service.
 
 To test if the [Certbot](https://certbot.eff.org/instructions?ws=apache&os=ubuntufocal) renewal
@@ -692,6 +920,70 @@ script includes the new domain (or subdomain), execute the following command:
 ```shell
 sudo certbot renew --dry-run
 ```
+
+### Adding a new subdomain to an existing deployment
+
+When adding a new subdomain (e.g., `stg.example.com`) to a server that already has working
+Apache VirtualHosts and an SSL certificate:
+
+1. Add the new `<VirtualHost *:80>` block to `{SECOND_LEVEL_DOMAIN_SLD}.conf` (the HTTP config)
+   by copying the relevant block from the [provided template](../apache/vhost-template.conf)
+   and replacing the placeholders
+
+2. Run Certbot to expand the existing certificate to include the new subdomain.
+   **Important:** The `--expand` flag replaces the entire domain list — you MUST include ALL
+   domains (existing and new):
+
+   ```shell
+   sudo certbot --apache --cert-name {EXISTING_DOMAIN} \
+     --expand \
+     -d {EXISTING_DOMAIN} \
+     -d www.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD} \
+     -d api.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD} \
+     -d openapi.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD} \
+     -d docs.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD} \
+     -d stg.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}
+   ```
+
+3. Follow the [Post-Certbot verification](#post-certbot-verification) checklist to:
+   - Verify the subdomain has its own `<VirtualHost *:443>` block (not just a `ServerAlias`)
+   - Verify `ProxyPass`/`ProxyPassReverse` are present in the SSL VirtualHost
+   - Verify custom configuration (Basic Auth, offline fallback, etc.) is present
+   - Remove any stale `[OR]` conditions from redirect rules in the HTTP config
+
+### Troubleshooting
+
+#### Subdomain shows content from a different domain on HTTPS
+
+**Symptom:** Visiting `https://stg.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}`
+shows the content from `https://{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}` instead of
+the expected staging page. The browser URL still shows the staging subdomain.
+
+**Diagnosis:** Run `sudo apachectl -S` and check the output. If the subdomain appears on port 443
+only as a `ServerAlias` of another VirtualHost (e.g., `stg.example.com` listed under
+`example.com:443`), there is no dedicated VirtualHost handling requests for it. Apache falls back
+to the first matching VirtualHost, which serves the wrong content.
+
+**Cause:** During `certbot --expand`, Certbot's `--apache` plugin added the new subdomain as a
+`ServerAlias` to an existing SSL VirtualHost instead of creating a dedicated one.
+
+**Fix:**
+1. Open the SSL config file: `sudo nano {SECOND_LEVEL_DOMAIN_SLD}-le-ssl.conf`
+2. Create a new `<VirtualHost *:443>` block for the subdomain (see the reference template in
+   the [Post-Certbot verification](#2-verify-and-fix-the-ssl-configuration) section)
+3. Remove the `ServerAlias` line from the original VirtualHost
+4. Run `sudo apachectl configtest && sudo systemctl restart apache2`
+
+#### Staging shows the Apache offline page when the container is running
+
+**Symptom:** The staging offline fallback page is displayed even though the staging container is up.
+
+**Diagnosis:** Verify the container is running (`docker ps`), then check if
+`ProxyPass / http://localhost:<STG_ENDURANCETRIO_EXT_PORT>/` exists in the staging SSL VirtualHost.
+If missing, Certbot may have stripped it during the expand process.
+
+**Fix:** Add the missing `ProxyPass` and `ProxyPassReverse` directives to the staging
+`<VirtualHost *:443>` block in the SSL config file.
 
 ## JavaDoc Deployment
 
