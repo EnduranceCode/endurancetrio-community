@@ -74,8 +74,8 @@
 @forward 'bulma/sass/components/pagination';
 // @forward 'bulma/sass/components/panel';
 // @forward 'components/endurance-panel';
-// @forward 'bulma/sass/components/tabs';
-// @forward 'components/endurance-tabs';
+@forward 'bulma/sass/components/tabs';
+@forward 'components/endurance-tabs';
 
 // Klaro - Cookie Consent
 @forward 'klaro/endurance-klaro';
