@@ -499,6 +499,334 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
+### Entity Layer
+
+This section documents how JPA entities should be created and managed in the `endurancetrio-data`
+module.
+
+#### Package Structure
+
+Each domain group follows a consistent package layout under
+`com.endurancetrio.data.{domain}.model`:
+
+```
+{domain}/
+  model/
+    converter/          → JPA AttributeConverter implementations
+    entity/             → JPA entity classes
+    enumerator/         → Code-backed enums stored as VARCHAR columns
+```
+
+#### Base Classes
+
+Two base class options are available, chosen based on the primary key strategy:
+
+**1. `BaseEntity<Long>`** — for entities with a surrogate, sequence-generated `id`:
+
+- **`id`** — auto-generated primary key via `GenerationType.SEQUENCE`
+- **`version`** — optimistic locking field (`@Version`)
+- **`createdAt` / `updatedAt`** — auditing timestamps via `@CreatedDate` / `@LastModifiedDate`
+- **`equals()` / `hashCode()`** — ID-based equality (same class + same non-null ID)
+
+```java
+public class MyEntity extends BaseEntity<Long> { ... }
+```
+
+Only entities that need a non-`Long` ID type should extend `BaseEntity` with a different type
+parameter; currently all entities use `Long`.
+
+**2. `AuditableEntity`** — for entities with a natural (business) primary key that is assigned
+rather than generated:
+
+- **`version`** — optimistic locking field (`@Version`)
+- **`createdAt` / `updatedAt`** — auditing timestamps via `@CreatedDate` / `@LastModifiedDate`
+- **No auto-generated ID** — the entity defines its own `@Id` on a natural key field
+
+```java
+public class MyEntity extends AuditableEntity { ... }
+```
+
+#### Entity Declaration
+
+```java
+
+@Entity(name = "MyEntity")
+@Table(name = "my_entity")
+@SequenceGenerator(
+    name = "seq_endurancetrio_generator",
+    sequenceName = "seq_my_entity_id",
+    allocationSize = 1
+)
+public class MyEntity extends BaseEntity<Long> {
+
+  @Serial
+  private static final long serialVersionUID = 1L;
+```
+
+- `@Entity(name = "...")` must use the simple PascalCase class name.
+- `@Table(name = "...")` must use snake_case, plural table names matching the database schema.
+- `@SequenceGenerator` must use the shared generator name `seq_endurancetrio_generator` and a
+  sequence name following the pattern `seq_{table}_id`.
+- Every entity must declare `@Serial private static final long serialVersionUID = 1L`.
+
+#### Natural Key Entities
+
+Entities with a natural (business) primary key extend `AuditableEntity` directly rather than
+`BaseEntity<Long>`. This pattern is used when the primary key is assigned in application code and
+has business meaning (e.g., `TrackerAccount` keyed by `owner`).
+
+```java
+@Entity
+@Table(name = "my_natural_entity")
+public class MyNaturalEntity extends AuditableEntity {
+
+  @Id
+  @Column(name = "natural_key", nullable = false, unique = true, length = 50)
+  private String naturalKey;
+```
+
+- `@Entity` does **not** require a `name` attribute; the class name is used by default.
+- No `@SequenceGenerator` is declared — the identifier is assigned, not generated.
+- The `@Id` field is the natural key and must be annotated with `@Column(unique = true)`.
+- `equals()` and `hashCode()` are based on the natural key field(s), not delegated to `super`.
+- Use `@Column(length = ...)` to constrain the natural key column size.
+
+#### Javadoc Convention
+
+Every entity must have a class-level Javadoc block describing what the entity represents, followed
+by a `<ul>` documenting each field with a link to its getter:
+
+```java
+/**
+ * The {@link MyEntity} entity represents ...
+ * <p>
+ * The {@link MyEntity}'s fields are defined as follows:
+ * <ul>
+ *   <li>
+ *     {@link #getId() id} : the unique identifier ...
+ *   </li>
+ *   <li>
+ *     {@link #getFieldName() fieldName} : the description ...
+ *   </li>
+ * </ul>
+ */
+```
+
+#### Constructor
+
+Always provide a public no-argument constructor that calls `super()`. Initialize collection fields
+to `new HashSet<>()` in the constructor:
+
+```java
+public MyEntity() {
+  super();
+  this.children = new HashSet<>();
+}
+```
+
+#### Field & Column Naming
+
+- Fields follow camelCase in Java.
+- `@Column(name = "...")` uses snake_case matching the database column.
+- Nullable columns omit `nullable`; required columns use `nullable = false`.
+- Boolean fields use the `is` prefix for the field name (e.g., `isActive`) and `get`/`set` prefix
+  for accessors (e.g., `getActive()`, `setActive()`).
+- Enum fields are annotated with `@Convert(converter = XxxConverter.class)` and stored as VARCHAR
+  codes, never as ORDINAL.
+- Validation annotations (`@Pattern`, `@AssertTrue`) are placed on the field directly.
+
+```java
+
+@Column(name = "full_name", nullable = false)
+private String fullName;
+
+@Column(name = "is_active", nullable = false)
+private Boolean isActive;
+
+@Column(name = "race_type", nullable = false)
+@Convert(converter = RaceTypeConverter.class)
+private RaceType raceType;
+```
+
+#### Associations
+
+All associations use `FetchType.LAZY`. Use `Set<>` (not `List`) for collection fields:
+
+| Annotation    | Cascade                  | Example                                                         |
+|---------------|--------------------------|-----------------------------------------------------------------|
+| `@ManyToOne`  | None                     | `@ManyToOne(fetch = FetchType.LAZY)`                            |
+| `@OneToOne`   | `ALL` + `orphanRemoval`  | `@OneToOne(fetch = LAZY, cascade = ALL, orphanRemoval = true)`  |
+| `@OneToMany`  | `ALL` + `orphanRemoval`  | `@OneToMany(fetch = LAZY, cascade = ALL, orphanRemoval = true)` |
+| `@ManyToMany` | `PERSIST, MERGE` or none | `@ManyToMany(fetch = FetchType.LAZY)`                           |
+
+- `@OneToMany` with `@JoinColumn` (foreign key on child table) is preferred over `mappedBy` when the
+  child has no inverse reference.
+- `@ManyToMany` always uses a `@JoinTable` with explicit join column names.
+
+#### Bidirectional Helper Methods
+
+When both sides of a relationship exist, provide `addXxx` / `removeXxx` helper methods that maintain
+consistency on both sides:
+
+```java
+public void addChild(Child child) {
+  if (child != null && this.children.add(child)) {
+    child.setParent(this);
+  }
+}
+
+public void removeChild(Child child) {
+  if (child != null && this.children.remove(child)) {
+    child.setParent(null);
+  }
+}
+```
+
+#### Method Ordering
+
+Methods in an entity class follow this order:
+
+1. Javadoc + class declaration
+2. `@Serial` / `serialVersionUID`
+3. Fields (simple columns first, associations last)
+4. Constructor(s)
+5. `@AssertTrue` validation methods
+6. Bidirectional helper methods (`addXxx` / `removeXxx`)
+7. Getters and setters (alphabetically by field name)
+8. `equals(Object)` → delegates to `super.equals(o)` (or natural key check for `AuditableEntity` entities)
+9. `hashCode()` → delegates to `super.hashCode()` (or natural key hash for `AuditableEntity` entities)
+10. `toString()` → uses `StringJoiner`
+
+#### equals(), hashCode() and toString()
+
+- **Surrogate key entities** (extending `BaseEntity`): `equals()` and `hashCode()` must delegate to
+  `super` (the `BaseEntity` ID-based contract):
+
+```java
+@Override
+public boolean equals(Object o) {
+  return super.equals(o);
+}
+
+@Override
+public int hashCode() {
+  return super.hashCode();
+}
+```
+
+- **Natural key entities** (extending `AuditableEntity` directly): `equals()` and `hashCode()` must
+  be implemented based on the natural key field(s):
+
+```java
+@Override
+public boolean equals(Object o) {
+  if (this == o) {
+    return true;
+  }
+
+  if (!(o instanceof NaturalKeyEntity that)) {
+    return false;
+  }
+
+  Class<?> thisClass = org.hibernate.Hibernate.getClass(this);
+  Class<?> thatClass = org.hibernate.Hibernate.getClass(that);
+
+  if (thisClass != thatClass) {
+    return false;
+  }
+
+  return naturalKey != null && naturalKey.equals(that.getNaturalKey());
+}
+
+@Override
+public int hashCode() {
+  return Objects.hash(naturalKey);
+}
+```
+
+- `toString()` must use `StringJoiner` with the pattern
+  `EntityName.class.getSimpleName() + "[", "]"`. Include all scalar fields and, for associations,
+  only the referenced entity's ID (using
+  `Optional.ofNullable(...).map(X::getId).orElse(null)`):
+
+```java
+
+@Override
+public String toString() {
+  return new StringJoiner(", ", MyEntity.class.getSimpleName() + "[", "]")
+      .add("id=" + this.getId())
+      .add("name='" + name + "'")
+      .add("parentId=" + Optional.ofNullable(parent).map(Parent::getId).orElse(null))
+      .toString();
+}
+```
+
+#### Enums
+
+All persisted enums must use a code-based pattern with a dedicated JPA `AttributeConverter`:
+
+```java
+public enum MyEnum {
+  VALUE_A("VALUE_A"),
+  VALUE_B("VALUE_B");
+
+  private final String code;
+
+  MyEnum(String code) {
+    this.code = code;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  @Override
+  public String toString() {
+    return code;
+  }
+}
+```
+
+**Converter:**
+
+```java
+
+@Converter
+public class MyEnumConverter implements AttributeConverter<MyEnum, String> {
+
+  @Override
+  public String convertToDatabaseColumn(MyEnum value) {
+    return Optional.ofNullable(value).map(MyEnum::getCode).orElse(null);
+  }
+
+  @Override
+  public MyEnum convertToEntityAttribute(String code) {
+    return Stream.of(MyEnum.values())
+        .filter(e -> e.getCode().equals(code))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+            "The value '" + code + "' returned from the database is not a valid MyEnum code"));
+  }
+}
+```
+
+- Enums live in `{domain}.model.enumerator`.
+- Converters live in `{domain}.model.converter`.
+- Never use `EnumType.ORDINAL` or `EnumType.STRING` — always go through a converter.
+
+#### Inheritance
+
+Use `@Inheritance(strategy = InheritanceType.JOINED)` when entities share a common base table:
+
+```java
+
+@Entity(name = "Race")
+@Table(name = "race")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Race extends BaseEntity<Long> { ...
+}
+```
+
 ### Configuration File Key Ordering
 
 All `application-*.yaml` and `*.properties` files must follow a consistent key ordering convention
