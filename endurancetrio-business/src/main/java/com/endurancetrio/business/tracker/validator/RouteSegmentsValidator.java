@@ -36,7 +36,6 @@ import java.util.List;
  * <li><b>Continuity:</b> The {@code endDevice} of segment N must match the {@code startDevice} of segment N+1.</li>
  * <li><b>Sequence:</b> Segment orders must be strictly sequential (1, 2, 3...) without gaps.</li>
  * </ol>
- * </p>
  */
 public class RouteSegmentsValidator implements ConstraintValidator<RouteSegmentsValid, RouteDTO> {
 

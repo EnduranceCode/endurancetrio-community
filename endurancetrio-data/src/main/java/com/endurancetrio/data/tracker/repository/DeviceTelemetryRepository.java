@@ -64,7 +64,7 @@ public interface DeviceTelemetryRepository extends
    * B      | 2024-01-05 10:00 | true   | 200  ← Same timestamp as A
    * B      | 2024-01-03 08:00 | true   | 250
    * </pre>
-   * Returns: [A(2024-01-05 10:00), B(2024-01-05 10:00)]</p>
+   * Returns: [A(2024-01-05 10:00), B(2024-01-05 10:00)]
    *
    * @param devices the list of device identifiers to query (must not be null)
    * @return a non-null list containing the most recent active telemetry record for each device in

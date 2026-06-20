@@ -22,7 +22,7 @@ package com.endurancetrio.business.tracker.dto.geojson;
 
 /**
  * Represents a GeoJSON geometry
- * @see <a href="https://geojson.org/" />
+ * @see <a href="https://geojson.org/">geojson.org</a>
  */
 public sealed interface Geometry permits PointGeometry, LineStringGeometry {
 

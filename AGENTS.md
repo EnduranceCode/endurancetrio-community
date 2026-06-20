@@ -44,6 +44,7 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 - Business tests use `@ExtendWith(MockitoExtension.class)` (pure Mockito, no Spring context)
 - Flyway migrations for H2 are in `db/migration/ddl/h2` and `db/migration/dml/h2`
 - Tests do NOT require PostgreSQL — H2 is fully self-contained
+- Full testing conventions documented in [docs/development.md#testing](docs/development.md#testing)
 
 ## API
 
@@ -74,6 +75,7 @@ Entrypoint: `com.endurancetrio.app.TrackerApplication` (scans `com.endurancetrio
 - **Method ordering**: Controllers follow Swagger display order. Services grouped by entity then CRUD (CREATE, READ, UPDATE, DELETE, UTILITY). Private methods after all public, alphabetically.
 - **Flyway naming**: `V<yyyymmdd>.<seq>__description.sql`
 - **DB naming**: snake_case, plural table names, constraints prefixed: `pk_`, `fk_`, `uk_`, `chk_`, `idx_`
+- **Javadoc HTML**: must use valid HTML — no self-closing tags (e.g., `<a href="..." />`), no stray closing tags. Verify with `mvn javadoc:aggregate`
 
 ## Profiles
 
