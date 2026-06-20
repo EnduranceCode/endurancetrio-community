@@ -21,7 +21,7 @@
 -- Description: Adds auditable columns to the EnduranceTrio application event domain tables
 --
 
-SET search_path TO endurancetrio_community;
+SET search_path TO endurancetrio_hub;
 
 ALTER TABLE event ADD COLUMN version    INTEGER   NOT NULL DEFAULT 0;
 ALTER TABLE event ADD COLUMN created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

@@ -21,7 +21,7 @@
 -- Description: Removes the DEFAULT CURRENT_TIMESTAMP from created_at on event domain tables
 --
 
-SET SCHEMA endurancetrio_community;
+SET SCHEMA endurancetrio_hub;
 
 ALTER TABLE event                    ALTER COLUMN created_at DROP DEFAULT;
 ALTER TABLE organizer                ALTER COLUMN created_at DROP DEFAULT;

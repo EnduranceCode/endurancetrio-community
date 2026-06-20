@@ -23,17 +23,17 @@
 
 -- Insert test data into route table
 INSERT INTO
-  endurancetrio_community.route (id, reference, created_at)
+  endurancetrio_hub.route (id, reference, created_at)
 VALUES
   (1, '20260921ETU001-001S', CURRENT_TIMESTAMP);
 
 -- Align the sequence to take in consideration manually inserted records
 -- The next sequence value will be 100, which will help to distinguish the test values
-ALTER SEQUENCE endurancetrio_community.seq_route_id RESTART WITH 100;
+ALTER SEQUENCE endurancetrio_hub.seq_route_id RESTART WITH 100;
 
 -- Insert test data into route_segment table
 INSERT INTO
-  endurancetrio_community.route_segment (id, route_id, segment_order, start_device, end_device, created_at)
+  endurancetrio_hub.route_segment (id, route_id, segment_order, start_device, end_device, created_at)
 VALUES
   (1, 1, 1, 'SDABC', 'SDDEF', CURRENT_TIMESTAMP),
   (2, 1, 2, 'SDDEF', 'SDFGH', CURRENT_TIMESTAMP),
@@ -41,4 +41,4 @@ VALUES
 
 -- Align the sequence to take in consideration manually inserted records
 -- The next sequence value will be 100, which will help to distinguish the test values
-ALTER SEQUENCE endurancetrio_community.seq_route_segment_id RESTART WITH 100;
+ALTER SEQUENCE endurancetrio_hub.seq_route_segment_id RESTART WITH 100;

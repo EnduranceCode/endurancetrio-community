@@ -22,7 +22,7 @@
 -- in 1988 and 1989, and corrects course titles from "Duatlo" to "Biatlo"
 
 UPDATE
-  endurancetrio_community.course
+  endurancetrio_hub.course
 SET
   sport = 'BIATHLON',
   title = CASE id

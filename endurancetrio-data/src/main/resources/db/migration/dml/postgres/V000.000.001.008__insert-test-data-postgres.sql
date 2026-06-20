@@ -21,8 +21,8 @@
 -- Description: Inserts test data into EnduranceTrio application database tables
 --
 
--- Set the search path to the schema `endurancetrio_community`
-SET search_path TO endurancetrio_community;
+-- Set the search path to the schema `endurancetrio_hub`
+SET search_path TO endurancetrio_hub;
 
 -- Insert test data into tracker_account table
 INSERT INTO

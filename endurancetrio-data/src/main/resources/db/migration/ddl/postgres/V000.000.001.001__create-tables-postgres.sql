@@ -21,8 +21,8 @@
 -- Description: Creates the tables for the EnduranceTrio application
 --
 
--- The schema `endurancetrio_community` must exist before running this script
-SET search_path TO endurancetrio_community;
+-- The schema `endurancetrio_hub` must exist before running this script
+SET search_path TO endurancetrio_hub;
 
 -- Create sequence for the event table primary key
 CREATE SEQUENCE IF NOT EXISTS seq_event_id START WITH 1 INCREMENT BY 1 CACHE 1;

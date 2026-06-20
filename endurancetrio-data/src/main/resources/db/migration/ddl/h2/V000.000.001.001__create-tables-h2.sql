@@ -22,14 +22,14 @@
 --
 
 -- Create the schema for the EnduranceTrio application
-CREATE SCHEMA IF NOT EXISTS endurancetrio_community;
+CREATE SCHEMA IF NOT EXISTS endurancetrio_hub;
 
 -- Create sequence for the event table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_event_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_event_id START WITH 1 INCREMENT BY 1;
 
 -- Create the event table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.event (
-  id                BIGINT      DEFAULT nextval('endurancetrio_community.seq_event_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.event (
+  id                BIGINT      DEFAULT nextval('endurancetrio_hub.seq_event_id') NOT NULL,
   event_reference   VARCHAR(14)  NOT NULL,
   title             VARCHAR(512) NOT NULL,
   start_date        DATE         NOT NULL,
@@ -42,11 +42,11 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.event (
 );
 
 -- Create sequence for the organizer table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_organizer_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_organizer_id START WITH 1 INCREMENT BY 1;
 
 -- Create the organizer table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.organizer (
-  id              BIGINT       DEFAULT nextval('endurancetrio_community.seq_organizer_id')  NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.organizer (
+  id              BIGINT       DEFAULT nextval('endurancetrio_hub.seq_organizer_id')  NOT NULL,
   name            VARCHAR(255) NOT NULL,
   district        VARCHAR(255) NOT NULL,
   county          VARCHAR(255) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.organizer (
 );
 
 -- Create the event_organizer table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.event_organizer (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.event_organizer (
   event_id      BIGINT NOT NULL,
   organizer_id  BIGINT NOT NULL,
   CONSTRAINT pk_event_organizer PRIMARY KEY (event_id, organizer_id),
@@ -67,11 +67,11 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.event_organizer (
 );
 
 -- Create sequence for the event_file table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_event_file_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_event_file_id START WITH 1 INCREMENT BY 1;
 
 -- Create the event_file table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.event_file (
-  id        BIGINT       DEFAULT nextval('endurancetrio_community.seq_event_file_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.event_file (
+  id        BIGINT       DEFAULT nextval('endurancetrio_hub.seq_event_file_id') NOT NULL,
   event_id  BIGINT       NOT NULL,
   title     VARCHAR(255) NOT NULL,
   file_type VARCHAR(32)  NOT NULL,
@@ -84,21 +84,21 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.event_file (
 );
 
 -- Create index on the event_file table
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_event_file_event_id
-  ON endurancetrio_community.event_file (event_id);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_event_file_event_id
+  ON endurancetrio_hub.event_file (event_id);
 
 -- Create sequence for the distance table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_distance_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_distance_id START WITH 1 INCREMENT BY 1;
 
 -- Create the distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.distance (
-  id            BIGINT      DEFAULT nextval('endurancetrio_community.seq_distance_id')  NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.distance (
+  id            BIGINT      DEFAULT nextval('endurancetrio_hub.seq_distance_id')  NOT NULL,
   distance_type VARCHAR(32) NOT NULL,
   CONSTRAINT pk_distance PRIMARY KEY (id)
 );
 
 -- Create the aquabike_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.aquabike_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.aquabike_distance (
   id            BIGINT NOT NULL,
   swim_distance INTEGER,
   swim_laps     INTEGER,
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.aquabike_distance (
 );
 
 -- Create the aquathlon_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.aquathlon_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.aquathlon_distance (
   id            BIGINT NOT NULL,
   swim_distance INTEGER,
   swim_laps     INTEGER,
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.aquathlon_distance (
 );
 
 -- Create the biathlon_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.biathlon_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.biathlon_distance (
   id            BIGINT NOT NULL,
   bike_distance INTEGER,
   bike_laps     INTEGER,
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.biathlon_distance (
 );
 
 -- Create the double_biathlon_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.double_biathlon_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.double_biathlon_distance (
   id                    BIGINT NOT NULL,
   first_bike_distance   INTEGER,
   first_bike_laps       INTEGER,
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.double_biathlon_distance (
 );
 
 -- Create the duathlon_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.duathlon_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.duathlon_distance (
   id                  BIGINT NOT NULL,
   first_run_distance  INTEGER,
   first_run_laps      INTEGER,
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.duathlon_distance (
 );
 
 -- Create the single_sport_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.single_sport_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.single_sport_distance (
   id       BIGINT NOT NULL,
   distance INTEGER,
   laps     INTEGER,
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.single_sport_distance (
 );
 
 -- Create the triathlon_distance table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.triathlon_distance (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.triathlon_distance (
   id            BIGINT NOT NULL,
   swim_distance INTEGER,
   swim_laps     INTEGER,
@@ -182,11 +182,11 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.triathlon_distance (
 );
 
 -- Create sequence for the course table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_course_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_course_id START WITH 1 INCREMENT BY 1;
 
 -- Create the course table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.course (
-  id          BIGINT       DEFAULT nextval('endurancetrio_community.seq_course_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.course (
+  id          BIGINT       DEFAULT nextval('endurancetrio_hub.seq_course_id') NOT NULL,
   event_id    BIGINT       NOT NULL,
   title       VARCHAR(255) NOT NULL,
   sport       VARCHAR(32)  NOT NULL,
@@ -199,26 +199,26 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.course (
 );
 
 -- Create index on the course table
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_course_event_id
-  ON endurancetrio_community.course(event_id);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_course_event_id
+  ON endurancetrio_hub.course(event_id);
 
 -- Create sequence for the age_group table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_age_group_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_age_group_id START WITH 1 INCREMENT BY 1;
 
 -- Create the age_group table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.age_group (
-  id          BIGINT       DEFAULT nextval('endurancetrio_community.seq_age_group_id')  NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.age_group (
+  id          BIGINT       DEFAULT nextval('endurancetrio_hub.seq_age_group_id')  NOT NULL,
   title       VARCHAR(255) NOT NULL,
   short_title VARCHAR(16)  NOT NULL,
   CONSTRAINT pk_age_group PRIMARY KEY (id)
 );
 
 -- Create sequence for the race table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_race_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_race_id START WITH 1 INCREMENT BY 1;
 
 -- Create the race table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.race (
-  id              BIGINT       DEFAULT nextval('endurancetrio_community.seq_race_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.race (
+  id              BIGINT       DEFAULT nextval('endurancetrio_hub.seq_race_id') NOT NULL,
   race_reference  VARCHAR(18)  NOT NULL,
   race_type       VARCHAR(32)  NOT NULL,
   title           VARCHAR(255) NOT NULL,
@@ -237,11 +237,11 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.race (
 );
 
 -- Create index on the race table
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_race_age_group_id
-  ON endurancetrio_community.race(age_group_id);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_race_age_group_id
+  ON endurancetrio_hub.race(age_group_id);
 
 -- Create the course_race table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.course_race (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.course_race (
   course_id BIGINT NOT NULL,
   race_id   BIGINT NOT NULL,
   CONSTRAINT pk_course_race PRIMARY KEY (course_id, race_id),
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.course_race (
 );
 
 -- Create the race_hierarchy table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.race_hierarchy (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.race_hierarchy (
   race_id        BIGINT NOT NULL,
   parent_race_id BIGINT NOT NULL,
   CONSTRAINT pk_race_hierarchy PRIMARY KEY (race_id, parent_race_id),
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.race_hierarchy (
 );
 
 -- Create the triathlon_based_race table
-CREATE TABLE endurancetrio_community.triathlon_based_race (
+CREATE TABLE endurancetrio_hub.triathlon_based_race (
   id                BIGINT           NOT NULL,
   water_temperature DOUBLE PRECISION,
   wetsuit_rule      VARCHAR(32)      NOT NULL,
@@ -272,11 +272,11 @@ CREATE TABLE endurancetrio_community.triathlon_based_race (
 );
 
 -- Create sequence for the results_file table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_results_file_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_results_file_id START WITH 1 INCREMENT BY 1;
 
 -- Create the results_file table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.results_file (
-  id        BIGINT       DEFAULT nextval('endurancetrio_community.seq_results_file_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.results_file (
+  id        BIGINT       DEFAULT nextval('endurancetrio_hub.seq_results_file_id') NOT NULL,
   race_id   BIGINT       NOT NULL,
   title     VARCHAR(255) NOT NULL,
   subtitle  VARCHAR(255) NOT NULL,
@@ -289,11 +289,11 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.results_file (
 );
 
 -- Create index on the results_file table
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_results_file_race_id
-  ON endurancetrio_community.results_file(race_id);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_results_file_race_id
+  ON endurancetrio_hub.results_file(race_id);
 
 -- Create the tracker_account table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.tracker_account (
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.tracker_account (
   owner       VARCHAR(50)  NOT NULL,
   account_key VARCHAR(100) NOT NULL,
   enabled     BOOLEAN      NOT NULL,
@@ -305,12 +305,12 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.tracker_account (
 );
 
 -- Create sequence for tracking_data table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_tracking_data_id
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_tracking_data_id
   START WITH 1 INCREMENT BY 5;
 
 -- Create the tracking_data table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.tracking_data (
-  id          BIGINT           DEFAULT nextval('endurancetrio_community.seq_tracking_data_id')  NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.tracking_data (
+  id          BIGINT           DEFAULT nextval('endurancetrio_hub.seq_tracking_data_id')  NOT NULL,
   account     VARCHAR(50)      NOT NULL,
   device      VARCHAR(50)      NOT NULL,
   record_time TIMESTAMP        NOT NULL,
@@ -327,11 +327,11 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.tracking_data (
 );
 
 -- Create indexes on the tracking_data table
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_tracking_data_device
-  ON endurancetrio_community.tracking_data(device);
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_tracking_data_device_time
-  ON endurancetrio_community.tracking_data(device, record_time);
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_tracking_data_account
-  ON endurancetrio_community.tracking_data(account);
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_tracking_data_account_device
-  ON endurancetrio_community.tracking_data(account, device);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_tracking_data_device
+  ON endurancetrio_hub.tracking_data(device);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_tracking_data_device_time
+  ON endurancetrio_hub.tracking_data(device, record_time);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_tracking_data_account
+  ON endurancetrio_hub.tracking_data(account);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_tracking_data_account_device
+  ON endurancetrio_hub.tracking_data(account, device);

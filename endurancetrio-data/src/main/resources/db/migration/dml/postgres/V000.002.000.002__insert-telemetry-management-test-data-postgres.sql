@@ -21,8 +21,8 @@
 -- Description: Inserts test data into EnduranceTrio telemetry management database table
 --
 
--- Set the search path to the schema `endurancetrio_community`
-SET search_path TO endurancetrio_community;
+-- Set the search path to the schema `endurancetrio_hub`
+SET search_path TO endurancetrio_hub;
 
 -- Insert test data into device_telemetry table
 INSERT INTO

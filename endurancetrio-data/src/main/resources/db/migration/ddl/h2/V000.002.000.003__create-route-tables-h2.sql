@@ -22,11 +22,11 @@
 --
 
 -- Create sequence for the route table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_route_id START WITH 1 INCREMENT BY 5;
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_route_id START WITH 1 INCREMENT BY 5;
 
 -- Create the route table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.route (
-  id          BIGINT      DEFAULT nextval('endurancetrio_community.seq_route_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.route (
+  id          BIGINT      DEFAULT nextval('endurancetrio_hub.seq_route_id') NOT NULL,
   reference   VARCHAR(50) NOT NULL,
   version     INTEGER     NOT NULL DEFAULT 0,
   created_at  TIMESTAMP   NOT NULL,
@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.route (
 );
 
 -- Create sequence for the route_segment table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_route_segment_id
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_route_segment_id
   START WITH 1 INCREMENT BY 5;
 
 -- Create the route_segment table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.route_segment (
-  id            BIGINT      DEFAULT nextval('endurancetrio_community.seq_route_segment_id') NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.route_segment (
+  id            BIGINT      DEFAULT nextval('endurancetrio_hub.seq_route_segment_id') NOT NULL,
   route_id      BIGINT      NOT NULL,
   segment_order INTEGER     NOT NULL,
   start_device  VARCHAR(50) NOT NULL,
@@ -55,6 +55,6 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.route_segment (
 
 -- Create indexes on the route_segment table
 CREATE INDEX IF NOT EXISTS idx_route_segment_route_id
-  ON endurancetrio_community.route_segment(route_id);
+  ON endurancetrio_hub.route_segment(route_id);
 CREATE INDEX IF NOT EXISTS idx_route_segment_route_id_segment_order
-  ON endurancetrio_community.route_segment(route_id, segment_order);
+  ON endurancetrio_hub.route_segment(route_id, segment_order);

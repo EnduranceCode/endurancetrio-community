@@ -22,16 +22,16 @@
 --
 
 -- Drops tracking_data table and its sequence
-DROP TABLE IF EXISTS endurancetrio_community.tracking_data;
-DROP SEQUENCE IF EXISTS endurancetrio_community.seq_tracking_data_id;
+DROP TABLE IF EXISTS endurancetrio_hub.tracking_data;
+DROP SEQUENCE IF EXISTS endurancetrio_hub.seq_tracking_data_id;
 
 -- Create sequence for the device_telemetry table primary key
-CREATE SEQUENCE IF NOT EXISTS endurancetrio_community.seq_device_telemetry_id
+CREATE SEQUENCE IF NOT EXISTS endurancetrio_hub.seq_device_telemetry_id
   START WITH 1 INCREMENT BY 5 CACHE 5;
 
 -- Create the device_telemetry table
-CREATE TABLE IF NOT EXISTS endurancetrio_community.device_telemetry (
-  id          BIGINT            DEFAULT nextval('endurancetrio_community.seq_device_telemetry_id')  NOT NULL,
+CREATE TABLE IF NOT EXISTS endurancetrio_hub.device_telemetry (
+  id          BIGINT            DEFAULT nextval('endurancetrio_hub.seq_device_telemetry_id')  NOT NULL,
   account     VARCHAR(50)       NOT NULL,
   device      VARCHAR(50)       NOT NULL,
   record_time TIMESTAMP         NOT NULL,
@@ -43,15 +43,15 @@ CREATE TABLE IF NOT EXISTS endurancetrio_community.device_telemetry (
   updated_at  TIMESTAMP,
   CONSTRAINT pk_device_telemetry PRIMARY KEY (id),
   CONSTRAINT fk_device_telemetry_tracker_account_owner
-    FOREIGN KEY (account) REFERENCES endurancetrio_community.tracker_account(owner)
+    FOREIGN KEY (account) REFERENCES endurancetrio_hub.tracker_account(owner)
 );
 
 -- Create indexes on the device_telemetry table
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_device_telemetry_device
-  ON endurancetrio_community.device_telemetry(device);
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_device_telemetry_device_time
-  ON endurancetrio_community.device_telemetry(device, record_time);
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_device_telemetry_account
-  ON endurancetrio_community.device_telemetry(account);
-CREATE INDEX IF NOT EXISTS endurancetrio_community.idx_device_telemetry_account_device
-  ON endurancetrio_community.device_telemetry(account, device);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_device_telemetry_device
+  ON endurancetrio_hub.device_telemetry(device);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_device_telemetry_device_time
+  ON endurancetrio_hub.device_telemetry(device, record_time);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_device_telemetry_account
+  ON endurancetrio_hub.device_telemetry(account);
+CREATE INDEX IF NOT EXISTS endurancetrio_hub.idx_device_telemetry_account_device
+  ON endurancetrio_hub.device_telemetry(account, device);

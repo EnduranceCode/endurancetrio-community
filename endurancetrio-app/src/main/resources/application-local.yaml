@@ -30,7 +30,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/endurancetrio_community
+    url: jdbc:postgresql://localhost:5432/dev_endurancetrio_community
 
   devtools:
     livereload:

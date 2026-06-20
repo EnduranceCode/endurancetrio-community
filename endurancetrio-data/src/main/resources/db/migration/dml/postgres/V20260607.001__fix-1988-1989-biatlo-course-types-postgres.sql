@@ -21,7 +21,7 @@
 -- Description: Fixes course sport from DUATHLON to BIATHLON for biatlo events inserted
 -- in 1988 and 1989, and corrects course titles from "Duatlo" to "Biatlo"
 
-SET search_path TO endurancetrio_community;
+SET search_path TO endurancetrio_hub;
 
 UPDATE
   course

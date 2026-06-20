@@ -20,10 +20,10 @@
 
 -- Description: Inserts the data of the 1989 triathlon related events in Portugal
 
--- endurancetrio_community.event table
+-- endurancetrio_hub.event table
 --
 INSERT INTO
-  endurancetrio_community.event (id, event_reference, title, start_date, end_date, city, county, district)
+  endurancetrio_hub.event (id, event_reference, title, start_date, end_date, city, county, district)
 VALUES
   (40, '19890305APT001', '1º Biatlo de Ponte de Sor', '1989-03-05', '1989-03-05', 'Ponte de Sor', 'Ponte de Sor', 'Portalegre'),
   (41, '19890318FPT001', 'Biatlo Jovem Nauticampo', '1989-03-18', '1989-03-18', 'Lisboa', 'Lisboa', 'Lisboa'),
@@ -53,13 +53,13 @@ VALUES
   (65, '19891014FTP001', 'Triatlo da Golegã', '1989-10-14', '1989-10-14', 'Golegã', 'Golegã', 'Santarém'),
   (66, '19891021FTP001', 'Triatlo Cidade de Figueira da Foz', '1989-10-21', '1989-10-21', 'Figueira da Foz', 'Figueira da Foz', 'Coimbra');
 
-ALTER SEQUENCE endurancetrio_community.seq_event_id RESTART WITH 67;
+ALTER SEQUENCE endurancetrio_hub.seq_event_id RESTART WITH 67;
 
 
--- endurancetrio_community.organizer table
+-- endurancetrio_hub.organizer table
 --
 INSERT INTO
-  endurancetrio_community.organizer (id, name, city, county, district, organizer_type)
+  endurancetrio_hub.organizer (id, name, city, county, district, organizer_type)
 VALUES
   (34, 'Federação de Triatlo de Portugal', 'Murganhal', 'Oeiras', 'Lisboa', 'PRIVATE'),
   (35, 'Associação Industrial Portuguesa', 'Lisboa', 'Lisboa', 'Lisboa', 'PRIVATE'),
@@ -77,13 +77,13 @@ VALUES
   (47, 'Câmara Municipal da Golegã', 'Golegã', 'Golegã', 'Santarém', 'PUBLIC'),
   (48, 'Câmara Municipal da Figueira da Foz', 'Figueira da Foz', 'Figueira da Foz', 'Coimbra', 'PUBLIC');
 
-ALTER SEQUENCE endurancetrio_community.seq_organizer_id RESTART WITH 49;
+ALTER SEQUENCE endurancetrio_hub.seq_organizer_id RESTART WITH 49;
 
 
--- endurancetrio_community.event_organizer table
+-- endurancetrio_hub.event_organizer table
 --
 INSERT INTO
-  endurancetrio_community.event_organizer (event_id, organizer_id)
+  endurancetrio_hub.event_organizer (event_id, organizer_id)
 VALUES
   (40, 16),
   (40, 12),
@@ -131,10 +131,10 @@ VALUES
   (66, 48);
 
 
--- endurancetrio_community.event_file table
+-- endurancetrio_hub.event_file table
 --
 INSERT INTO
-  endurancetrio_community.event_file (id, event_id, title, revision, is_active, file_name, file_type)
+  endurancetrio_hub.event_file (id, event_id, title, revision, is_active, file_name, file_type)
 VALUES
   (78, 40, 'Regulamento', 1, true, '19890305APT001-REG001-01.pdf', 'RULES'),
   (79, 40, 'Percursos', 1, true, '19890305APT001-MAP001-01.pdf', 'COURSE_MAPS'),
@@ -163,13 +163,13 @@ VALUES
   (102, 66, 'Regulamento', 1, true, '19891021FTP001-REG001-01.pdf', 'RULES'),
   (103, 66, 'Percursos', 1, true, '19891021FTP001-MAP001-01.pdf', 'COURSE_MAPS');
 
-ALTER SEQUENCE endurancetrio_community.seq_event_file_id RESTART WITH 104;
+ALTER SEQUENCE endurancetrio_hub.seq_event_file_id RESTART WITH 104;
 
 
--- endurancetrio_community.distance table
+-- endurancetrio_hub.distance table
 --
 INSERT INTO
-  endurancetrio_community.distance (id, distance_type)
+  endurancetrio_hub.distance (id, distance_type)
 VALUES
   (41, 'SPRINT'),
   (42, 'YOUTH'),
@@ -200,13 +200,13 @@ VALUES
   (67, 'STANDARD'),
   (68, 'STANDARD');
 
-ALTER SEQUENCE endurancetrio_community.seq_distance_id RESTART WITH 69;
+ALTER SEQUENCE endurancetrio_hub.seq_distance_id RESTART WITH 69;
 
 
--- endurancetrio_community.duathlon_distance table
+-- endurancetrio_hub.duathlon_distance table
 --
 INSERT INTO
-  endurancetrio_community.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps)
+  endurancetrio_hub.duathlon_distance (id, first_run_distance, first_run_laps, bike_distance, bike_laps, second_run_distance, second_run_laps)
 VALUES
   (41, 5000, 1, 30000, 1, 5000, 1),
   (42, 1000, 1, 8000, 1, 1000, 1),
@@ -218,10 +218,10 @@ VALUES
   (53, 5000, 1, 42000, 1, 5000, 1);
 
 
--- endurancetrio_community.triathlon_distance table
+-- endurancetrio_hub.triathlon_distance table
 --
 INSERT INTO
-  endurancetrio_community.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
+  endurancetrio_hub.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
 VALUES
   (48, 600, 1, 36000, 1, 6000, 1),
   (49, 1000, 1, 50000, 1, 10000, 1),
@@ -243,10 +243,10 @@ VALUES
   (68, 1000, 1, 40000, 1, 10000, 1);
 
 
--- endurancetrio_community.course table
+-- endurancetrio_hub.course table
 --
 INSERT INTO
-  endurancetrio_community.course (id, event_id, title, sport, distance_id)
+  endurancetrio_hub.course (id, event_id, title, sport, distance_id)
 VALUES
   (41, 40, 'Duatlo Sprint', 'DUATHLON', 41),
   (42, 41, 'Duatlo Jovem', 'DUATHLON', 42),
@@ -277,13 +277,13 @@ VALUES
   (67, 65, 'Triatlo de Promoção', 'TRIATHLON', null),
   (68, 66, 'Triatlo Standard', 'TRIATHLON', 68);
 
-ALTER SEQUENCE endurancetrio_community.seq_course_id RESTART WITH 69;
+ALTER SEQUENCE endurancetrio_hub.seq_course_id RESTART WITH 69;
 
 
--- endurancetrio_community.race table
+-- endurancetrio_hub.race table
 --
 INSERT INTO
-  endurancetrio_community.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, race_date, race_time, gun_time, air_temperature, race_status)
+  endurancetrio_hub.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, race_date, race_time, gun_time, air_temperature, race_status)
 VALUES
   (164, '19890305APT001-001', '1º Biatlo de Ponte de Sor', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1989-03-05', '14:00:00', null, null, 'COMPLETED'),
   (165, '19890305APT001-002', '1º Biatlo de Ponte de Sor', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1989-03-05', '14:00:00', null, null, 'COMPLETED'),
@@ -418,13 +418,13 @@ VALUES
   (294, '19891021FTP001-004', 'Triatlo Cidade de Figueira da Foz', 'Equipas femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1989-10-21', '10:00:00', null, null, 'PLANNED'),
   (295, '19891021FTP001-005', 'Triatlo Cidade de Figueira da Foz', 'Equipas masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1989-10-21', '10:00:00', null, null, 'COMPLETED');
 
-ALTER SEQUENCE endurancetrio_community.seq_race_id RESTART WITH 296;
+ALTER SEQUENCE endurancetrio_hub.seq_race_id RESTART WITH 296;
 
 
--- endurancetrio_community.triathlon_based_race table
+-- endurancetrio_hub.triathlon_based_race table
 --
 INSERT INTO
-  endurancetrio_community.triathlon_based_race (id, water_temperature, wetsuit_rule)
+  endurancetrio_hub.triathlon_based_race (id, water_temperature, wetsuit_rule)
 VALUES
   (197, null, 'UNKNOWN'),
   (198, null, 'UNKNOWN'),
@@ -522,10 +522,10 @@ VALUES
   (295, null, 'UNKNOWN');
 
 
--- endurancetrio_community.course_race table
+-- endurancetrio_hub.course_race table
 --
 INSERT INTO
-  endurancetrio_community.course_race (course_id, race_id)
+  endurancetrio_hub.course_race (course_id, race_id)
 VALUES
   (41, 164),
   (41, 165),
@@ -658,10 +658,10 @@ VALUES
   (68, 295);
 
 
--- endurancetrio_community.race_hierarchy table
+-- endurancetrio_hub.race_hierarchy table
 --
 INSERT INTO
-  endurancetrio_community.race_hierarchy (race_id, parent_race_id)
+  endurancetrio_hub.race_hierarchy (race_id, parent_race_id)
 VALUES
   (165, 164),
   (166, 164),
@@ -769,10 +769,10 @@ VALUES
   (295, 293);
 
 
--- endurancetrio_community.results_file table
+-- endurancetrio_hub.results_file table
 --
 INSERT INTO
-  endurancetrio_community.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
+  endurancetrio_hub.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
 VALUES
   (59, 164, '1º Biatlo de Ponte de Sor', 'Geral', 1, true, '19890305APT001-001A-01.pdf'),
   (60, 166, '1º Biatlo de Ponte de Sor', 'Escalões Masculinos', 1, true, '19890305APT001-003B-01.pdf'),
@@ -830,4 +830,4 @@ VALUES
   (112, 288, 'Triatlo da Golegã', 'Geral', 1, true, '19891014FTP001-001A-01.pdf'),
   (113, 291, 'I Triatlo da Figueira da Foz', 'Geral', 1, true, '19891021FTP001-001A-01.pdf');
 
-ALTER SEQUENCE endurancetrio_community.seq_results_file_id RESTART WITH 114;
+ALTER SEQUENCE endurancetrio_hub.seq_results_file_id RESTART WITH 114;

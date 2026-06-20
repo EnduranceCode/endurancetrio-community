@@ -59,24 +59,3 @@ psql -v ON_ERROR_STOP=1 \
     WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'prd_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";
 EOSQL
-
-# Grant schema-level permissions (required for Flyway and JPA to create/alter objects)
-for db in stg_endurancetrio_community prd_endurancetrio_community; do
-    case "$db" in
-        stg_endurancetrio_community)
-            db_user="${STG_DB_USERNAME}"
-            ;;
-        prd_endurancetrio_community)
-            db_user="${PRD_DB_USERNAME}"
-            ;;
-    esac
-    psql -v ON_ERROR_STOP=1 \
-         -v db_user="$db_user" \
-         --username "$POSTGRES_USER" --dbname "$db" <<-'EOSQL'
-        GRANT ALL ON SCHEMA public TO :"db_user";
-        GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO :"db_user";
-        GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO :"db_user";
-        ALTER DEFAULT PRIVILEGES FOR ROLE :"db_user" IN SCHEMA public GRANT ALL ON TABLES TO :"db_user";
-        ALTER DEFAULT PRIVILEGES FOR ROLE :"db_user" IN SCHEMA public GRANT ALL ON SEQUENCES TO :"db_user";
-EOSQL
-done

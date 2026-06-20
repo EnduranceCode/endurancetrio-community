@@ -102,7 +102,7 @@ spring:
     out-of-order: true
     placeholders:
       timezone: UTC
-    schemas: endurancetrio_community
+    schemas: endurancetrio_hub
     table: flyway_schema_history
     validate-on-migrate: true
 
@@ -114,7 +114,7 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        default_schema: endurancetrio_community
+        default_schema: endurancetrio_hub
         format_sql: true
         jdbc:
           time_zone: UTC
