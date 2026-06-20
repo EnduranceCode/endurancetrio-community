@@ -18,34 +18,51 @@
  * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.data.event.model.enumerator;
+package com.endurancetrio.data.competitor.model.enumerator;
 
-import com.endurancetrio.data.event.model.entity.Race;
+import com.endurancetrio.data.competitor.model.entity.Athlete;
 
 /**
- * The {@link RaceStatus} enum represents the status of a {@link Race}
+ * The {@link AthleteGender} enum represents the gender of an {@link Athlete}.
  * <p>
  * It includes the following constants:
  * <ul>
- *   <li>
- *     {@link #PLANNED} : used for the {@link Race races} that are planned but not yet
- *     (or were ever) completed.
- *   </li>
- *   <li>{@link #COMPLETED} : used for the {@link Race races} that were completed.</li>
+ *   <li>{@link #MALE} : used for male athletes.</li>
+ *   <li>{@link #FEMALE} : used for female athletes.</li>
  * </ul>
  */
-public enum RaceStatus {
-  PLANNED("PLANNED"),
-  COMPLETED("COMPLETED");
+public enum AthleteGender {
+  FEMALE("FEMALE", "F"),
+  MALE("MALE", "M");
 
   private final String code;
+  private final String shortCode;
 
-  RaceStatus(String code) {
+  AthleteGender(String code, String shortCode) {
     this.code = code;
+    this.shortCode = shortCode;
   }
 
+  /**
+   * Returns the full code of the gender (e.g., {@code "MALE"}, {@code "FEMALE"}).
+   * <p>
+   * This value is used for persistence and API interchange.
+   *
+   * @return the full gender code
+   */
   public String getCode() {
     return code;
+  }
+
+  /**
+   * Returns the short code of the gender (e.g., {@code "M"}, {@code "F"}).
+   * <p>
+   * This value is intended for compact display in UI tables, result sheets, and scoreboards.
+   *
+   * @return the short gender code
+   */
+  public String getShortCode() {
+    return shortCode;
   }
 
   @Override

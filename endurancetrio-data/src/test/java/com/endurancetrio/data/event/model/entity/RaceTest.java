@@ -23,10 +23,6 @@ package com.endurancetrio.data.event.model.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.endurancetrio.data.event.model.entity.AgeGroup;
-import com.endurancetrio.data.event.model.entity.Course;
-import com.endurancetrio.data.event.model.entity.Race;
-import com.endurancetrio.data.event.model.entity.ResultsFile;
 import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
@@ -48,18 +44,12 @@ class RaceTest {
   private Race underTest;
 
   private Course testCourse;
-  private AgeGroup testAgeGroup;
   private ResultsFile testResultsFile;
 
   @BeforeEach
   void setUp() {
     testCourse = new Course();
     testCourse.setId(1L);
-
-    testAgeGroup = new AgeGroup();
-    testAgeGroup.setId(1L);
-    testAgeGroup.setTitle("Benjamins");
-    testAgeGroup.setShortTitle("BEN");
 
     ResultsFile testParentResultFile = new ResultsFile();
     testParentResultFile.setId(1L);
@@ -75,7 +65,6 @@ class RaceTest {
     testParentRace.setTitle("XVI Duatlo Jovem de Grândola");
     testParentRace.setSubtitle("Benjamins Geral");
     testParentRace.setGenderCategory(GenderCategory.OPEN);
-    testParentRace.setAgeGroup(testAgeGroup);
     testParentRace.setDate(LocalDate.parse("2010-03-06"));
     testParentRace.setTime(LocalTime.parse("14:30:00"));
     testParentRace.setRaceStatus(RaceStatus.COMPLETED);
@@ -92,7 +81,6 @@ class RaceTest {
     underTest.setTitle("XVI Duatlo Jovem de Grândola");
     underTest.setSubtitle("Benjamins Masculinos");
     underTest.setGenderCategory(GenderCategory.MALE);
-    underTest.setAgeGroup(testAgeGroup);
     underTest.setDate(LocalDate.parse("2010-03-06"));
     underTest.setTime(LocalTime.parse("14:30:00"));
     underTest.setRaceStatus(RaceStatus.COMPLETED);
@@ -113,8 +101,6 @@ class RaceTest {
     assertEquals("XVI Duatlo Jovem de Grândola", underTest.getTitle());
     assertEquals("Benjamins Masculinos", underTest.getSubtitle());
     assertEquals(GenderCategory.MALE, underTest.getGenderCategory());
-    assertNotNull(underTest.getAgeGroup());
-    assertEquals(testAgeGroup.getShortTitle(), underTest.getAgeGroup().getShortTitle());
     assertEquals(LocalDate.parse("2010-03-06"), underTest.getDate());
     assertEquals(LocalTime.parse("14:30:00"), underTest.getTime());
     assertEquals(RaceStatus.COMPLETED, underTest.getRaceStatus());

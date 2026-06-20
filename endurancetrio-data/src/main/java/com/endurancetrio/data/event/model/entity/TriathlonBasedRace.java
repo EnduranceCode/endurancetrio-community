@@ -114,7 +114,6 @@ public class TriathlonBasedRace extends Race implements Serializable {
         .add("title='" + super.getTitle() + "'")
         .add("subtitle='" + super.getSubtitle() + "'")
         .add("genderCategory=" + super.getGenderCategory().getCode())
-        .add("ageGroup=" + super.getAgeGroup().getTitle())
         .add("date=" + super.getDate())
         .add("time=" + super.getTime())
         .add("raceStatus=" + super.getRaceStatus().getCode())

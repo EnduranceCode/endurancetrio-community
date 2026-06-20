@@ -22,12 +22,6 @@ package com.endurancetrio.data.event.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.endurancetrio.data.event.model.entity.AgeGroup;
-import com.endurancetrio.data.event.model.entity.Course;
-import com.endurancetrio.data.event.model.entity.DuathlonDistance;
-import com.endurancetrio.data.event.model.entity.Event;
-import com.endurancetrio.data.event.model.entity.Race;
-import com.endurancetrio.data.event.model.entity.ResultsFile;
 import com.endurancetrio.data.event.model.enumerator.DistanceType;
 import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
@@ -70,11 +64,6 @@ class CourseTest {
     testDistance.setSecondRunDistance(180);
     testDistance.setSecondRunLaps(1);
 
-    AgeGroup testAgeGroup = new AgeGroup();
-    testAgeGroup.setId(1L);
-    testAgeGroup.setTitle("Benjamins");
-    testAgeGroup.setShortTitle("BEN");
-
     ResultsFile testResultsFile = new ResultsFile();
     testResultsFile.setId(1L);
 
@@ -86,7 +75,6 @@ class CourseTest {
     testRace.setTitle("XVI Duatlo Jovem de Grândola");
     testRace.setSubtitle("Benjamins Masculinos");
     testRace.setGenderCategory(GenderCategory.MALE);
-    testRace.setAgeGroup(testAgeGroup);
     testRace.setDate(LocalDate.parse("2010-03-06"));
     testRace.setTime(LocalTime.parse("14:30:00"));
     testRace.setRaceStatus(RaceStatus.COMPLETED);

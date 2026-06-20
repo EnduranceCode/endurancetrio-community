@@ -18,7 +18,7 @@
  * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.data.event.model.entity;
+package com.endurancetrio.data.competitor.model.entity;
 
 import com.endurancetrio.data.common.model.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -29,56 +29,60 @@ import java.io.Serial;
 import java.util.StringJoiner;
 
 /**
- * The {@link AgeGroup} entity represents the participants age group category allowed to
- * enter a {@link Race}.
+ * Historical reference entity that documents the {@code age_group} table schema.
  * <p>
- * The {@link AgeGroup}'s fields are defined as follows:
- * <ul>
- *   <li>
- *     {@link #getId() id} : the unique identifier of the {@link AgeGroup} that
- *     is automatically generated and is the primary key.
- *   </li>
- *   <li>{@link #getTitle() title} : the full title of the {@link AgeGroup age group}.</li>
- *   <li>
- *     {@link #getShortTitle() shortTitle} : the abbreviated title of the {@link AgeGroup age group}.
- *   </li>
- * </ul>
+ * This entity exists solely to map the database table for historical data storage. It is NOT used
+ * in application code. The active representation of age group data is the
+ * {@link com.endurancetrio.data.competitor.model.enumerator.AgeGroup} enum, which is stored as a
+ * VARCHAR column in result tables.
+ * <p>
+ * Do NOT import or reference this entity in business logic.
  */
 @Entity(name = "AgeGroup")
 @Table(name = "age_group")
-@SequenceGenerator(name = "seq_endurancetrio_generator", sequenceName = "seq_age_group_id", allocationSize = 1)
+@SequenceGenerator(
+    name = "seq_endurancetrio_generator", sequenceName = "seq_age_group_id", allocationSize = 1
+)
 public class AgeGroup extends BaseEntity<Long> {
 
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Column(name = "title", nullable = false)
-  private String title;
+  @Column(name = "code", nullable = false)
+  private String code;
 
-  @Column(name = "short_title", nullable = false)
-  private String shortTitle;
+  @Column(name = "denomination_en", nullable = false)
+  private String denominationEN;
 
-  /**
-   * Default constructor for the {@link AgeGroup} entity.
-   */
+  @Column(name = "denomination_pt", nullable = false)
+  private String denominationPT;
+
   public AgeGroup() {
     super();
   }
 
-  public String getTitle() {
-    return title;
+  public String getCode() {
+    return code;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setCode(String code) {
+    this.code = code;
   }
 
-  public String getShortTitle() {
-    return shortTitle;
+  public String getDenominationEN() {
+    return denominationEN;
   }
 
-  public void setShortTitle(String shortTitle) {
-    this.shortTitle = shortTitle;
+  public void setDenominationEN(String denominationEN) {
+    this.denominationEN = denominationEN;
+  }
+
+  public String getDenominationPT() {
+    return denominationPT;
+  }
+
+  public void setDenominationPT(String denominationPT) {
+    this.denominationPT = denominationPT;
   }
 
   @Override
@@ -95,8 +99,9 @@ public class AgeGroup extends BaseEntity<Long> {
   public String toString() {
     return new StringJoiner(", ", AgeGroup.class.getSimpleName() + "[", "]")
         .add("id=" + this.getId())
-        .add("title='" + title + "'")
-        .add("shortTitle='" + shortTitle + "'")
+        .add("code='" + code + "'")
+        .add("denominationEN='" + denominationEN + "'")
+        .add("denominationPT='" + denominationPT + "'")
         .toString();
   }
 }
