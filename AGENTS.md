@@ -72,8 +72,8 @@ API keys are bcrypt hashes (cost 12). First account via `FIRST_OWNER` + `FIRST_H
 | `application-{local,dev,prod}.yaml` | profile-specific overrides                               |
 | `application-secrets.yaml`          | credentials (gitignored, from `template-secrets.yaml`)   |
 | `application-test.yaml`             | H2 in-memory DB for tests                                |
-| `sonar-project.properties`          | SonarQube Cloud project key, host, CPD exclusions        |
-| `pom.xml`                           | `<sonar.organization>endurancecode</sonar.organization>` |
+| `sonar-project.properties`          | SonarQube Cloud project key, host, source encoding       |
+| `pom.xml`                           | `<sonar.organization>`, CPD and analysis exclusions       |
 
 Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activate via `-Dspring.profiles.active=local` or `-Dspring-boot.run.profiles=local`.
 
