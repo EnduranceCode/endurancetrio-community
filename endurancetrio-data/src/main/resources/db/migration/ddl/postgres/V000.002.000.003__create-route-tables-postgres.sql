@@ -21,8 +21,8 @@
 -- Description: Creates the EnduranceTrio application route database tables
 --
 
--- The schema `endurancetrio_community` must exist before running this script
-SET search_path TO endurancetrio_community;
+-- The schema `endurancetrio_hub` must exist before running this script
+SET search_path TO endurancetrio_hub;
 
 -- Create sequence for the route table primary key
 CREATE SEQUENCE IF NOT EXISTS seq_route_id START WITH 1 INCREMENT BY 5 CACHE 5;

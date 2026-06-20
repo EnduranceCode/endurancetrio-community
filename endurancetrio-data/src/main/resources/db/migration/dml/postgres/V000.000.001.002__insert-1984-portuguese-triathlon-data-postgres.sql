@@ -21,8 +21,8 @@
 -- Description: Inserts the data of the 1984 triathlon related events in Portugal
 --
 
--- Set the search path to the schema `endurancetrio_community`
-SET search_path TO endurancetrio_community;
+-- Set the search path to the schema `endurancetrio_hub`
+SET search_path TO endurancetrio_hub;
 
 -- event table
 --

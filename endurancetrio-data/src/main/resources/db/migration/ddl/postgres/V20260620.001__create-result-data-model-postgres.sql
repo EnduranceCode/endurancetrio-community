@@ -21,7 +21,7 @@
 -- Description: Creates the athlete, team, para_class, individual_result, team_result,
 --   and team_result_individual_result tables
 
-SET search_path TO endurancetrio_community;
+SET search_path TO endurancetrio_hub;
 
 -- Drop the age_group_id column from the race table
 DROP INDEX IF EXISTS idx_race_age_group_id;

@@ -20,10 +20,10 @@
 
 -- Description: Inserts the data of the 1986 triathlon related events in Portugal
 
--- endurancetrio_community.event table
+-- endurancetrio_hub.event table
 --
 INSERT INTO
-  endurancetrio_community.event (id, event_reference, title, start_date, end_date, city, county, district)
+  endurancetrio_hub.event (id, event_reference, title, start_date, end_date, city, county, district)
 VALUES
   (4, '19860531NAC001', 'Triatlo UNICEF Setúbal', '1986-05-31', '1986-05-31', 'Setúbal', 'Setúbal', 'Setúbal'),
   (5, '19860614NAC001', 'Triatlo de Cascais', '1986-06-14', '1986-06-14', 'Cascais', 'Cascais', 'Lisboa'),
@@ -31,24 +31,24 @@ VALUES
   (7, '19860815NAC001', 'Triatlo de Peniche', '1986-08-15', '1986-08-15', 'Peniche', 'Peniche', 'Leiria'),
   (8, '19860913NAC001', 'Triatlo de Tancos', '1986-09-13', '1986-09-13', 'Santa Margarida', 'Vila Nova da Barquinha', 'Santarém');
 
-ALTER SEQUENCE endurancetrio_community.seq_event_id RESTART WITH 9;
+ALTER SEQUENCE endurancetrio_hub.seq_event_id RESTART WITH 9;
 
 
--- endurancetrio_community.organizer table
+-- endurancetrio_hub.organizer table
 --
 INSERT INTO
-  endurancetrio_community.organizer (id, name, city, county, district, organizer_type)
+  endurancetrio_hub.organizer (id, name, city, county, district, organizer_type)
 VALUES
   (5, 'Organizador #5', 'Espinho', 'Espinho', 'Aveiro', 'PRIVATE'),
   (6, 'Pára-Clube Nacional "Os Bóinas Verdes"', 'Tancos', 'Santarém', 'Santarém', 'CLUB');
 
-ALTER SEQUENCE endurancetrio_community.seq_organizer_id RESTART WITH 7;
+ALTER SEQUENCE endurancetrio_hub.seq_organizer_id RESTART WITH 7;
 
 
--- endurancetrio_community.event_organizer table
+-- endurancetrio_hub.event_organizer table
 --
 INSERT INTO
-  endurancetrio_community.event_organizer (event_id, organizer_id)
+  endurancetrio_hub.event_organizer (event_id, organizer_id)
 VALUES
   (4, 3),
   (5, 3),
@@ -58,10 +58,10 @@ VALUES
   (8, 6);
 
 
--- endurancetrio_community.event_file table
+-- endurancetrio_hub.event_file table
 --
 INSERT INTO
-  endurancetrio_community.event_file (id, event_id, title, revision, is_active, file_name, file_type)
+  endurancetrio_hub.event_file (id, event_id, title, revision, is_active, file_name, file_type)
 VALUES
   (7, 4, 'Regulamento', 1, true, '19860531NAC001-REG001-01.pdf', 'RULES'),
   (8, 4, 'Percursos', 1, true, '19860531NAC001-MAP001-01.pdf', 'COURSE_MAPS'),
@@ -73,26 +73,26 @@ VALUES
   (14, 8, 'Regulamento', 1, true, '19860913NAC001-REG001-01.pdf', 'RULES'),
   (15, 8, 'Percursos', 1, true, '19860913NAC001-MAP001-01.pdf', 'COURSE_MAPS');
 
-ALTER SEQUENCE endurancetrio_community.seq_event_file_id RESTART WITH 16;
+ALTER SEQUENCE endurancetrio_hub.seq_event_file_id RESTART WITH 16;
 
 
--- endurancetrio_community.distance table
+-- endurancetrio_hub.distance table
 --
 INSERT INTO
-  endurancetrio_community.distance (id, distance_type)
+  endurancetrio_hub.distance (id, distance_type)
 VALUES
   (4, 'STANDARD'),
   (5, 'STANDARD'),
   (7, 'STANDARD'),
   (8, 'STANDARD');
 
-ALTER SEQUENCE endurancetrio_community.seq_distance_id RESTART WITH 9;
+ALTER SEQUENCE endurancetrio_hub.seq_distance_id RESTART WITH 9;
 
 
--- endurancetrio_community.triathlon_distance table
+-- endurancetrio_hub.triathlon_distance table
 --
 INSERT INTO
-  endurancetrio_community.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
+  endurancetrio_hub.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
 VALUES
   (4, 1000, 1, 40000, 1, 10000, 1),
   (5, 1000, 1, 45000, 1, 10000, 1),
@@ -100,10 +100,10 @@ VALUES
   (8, 1000, 1, 45000, 1, 10000, 1);
 
 
--- endurancetrio_community.course table
+-- endurancetrio_hub.course table
 --
 INSERT INTO
-  endurancetrio_community.course (id, event_id, title, sport, distance_id)
+  endurancetrio_hub.course (id, event_id, title, sport, distance_id)
 VALUES
   (4, 4, 'Triatlo Standard', 'TRIATHLON', 4),
   (5, 5, 'Triatlo Standard', 'TRIATHLON', 5),
@@ -111,13 +111,13 @@ VALUES
   (7, 7, 'Triatlo Standard', 'TRIATHLON', 7),
   (8, 8, 'Triatlo Standard', 'TRIATHLON', 8);
 
-ALTER SEQUENCE endurancetrio_community.seq_course_id RESTART WITH 9;
+ALTER SEQUENCE endurancetrio_hub.seq_course_id RESTART WITH 9;
 
 
--- endurancetrio_community.race table
+-- endurancetrio_hub.race table
 --
 INSERT INTO
-  endurancetrio_community.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, race_date, race_time, gun_time, air_temperature, race_status)
+  endurancetrio_hub.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, race_date, race_time, gun_time, air_temperature, race_status)
 VALUES
   (10, '19860531NAC001-001', 'Triatlo UNICEF Setúbal', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1986-05-31', '13:00:00', null, null, 'COMPLETED'),
   (11, '19860531NAC001-002', 'Triatlo UNICEF Setúbal', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1986-05-31', '13:00:00', null, null, 'COMPLETED'),
@@ -132,13 +132,13 @@ VALUES
   (20, '19860913NAC001-002', 'Triatlo de Tancos', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1986-09-13', '13:00:00', null, null, 'COMPLETED'),
   (21, '19860913NAC001-003', 'Triatlo de Tancos', 'Masculinos', 'MALE', 1, 'INDIVIDUAL_DERIVED', '1986-09-13', '13:00:00', null, null, 'COMPLETED');
 
-ALTER SEQUENCE endurancetrio_community.seq_race_id RESTART WITH 22;
+ALTER SEQUENCE endurancetrio_hub.seq_race_id RESTART WITH 22;
 
 
--- endurancetrio_community.triathlon_based_race table
+-- endurancetrio_hub.triathlon_based_race table
 --
 INSERT INTO
-  endurancetrio_community.triathlon_based_race (id, water_temperature, wetsuit_rule)
+  endurancetrio_hub.triathlon_based_race (id, water_temperature, wetsuit_rule)
 VALUES
   (10, null, 'UNKNOWN'),
   (11, null, 'UNKNOWN'),
@@ -154,10 +154,10 @@ VALUES
   (21, null, 'UNKNOWN');
 
 
--- endurancetrio_community.course_race table
+-- endurancetrio_hub.course_race table
 --
 INSERT INTO
-  endurancetrio_community.course_race (course_id, race_id)
+  endurancetrio_hub.course_race (course_id, race_id)
 VALUES
   (4, 10),
   (4, 11),
@@ -173,10 +173,10 @@ VALUES
   (7, 21);
 
 
--- endurancetrio_community.race_hierarchy table
+-- endurancetrio_hub.race_hierarchy table
 --
 INSERT INTO
-  endurancetrio_community.race_hierarchy (race_id, parent_race_id)
+  endurancetrio_hub.race_hierarchy (race_id, parent_race_id)
 VALUES
   (10, 10),
   (11, 10),
@@ -188,14 +188,14 @@ VALUES
   (20, 19);
 
 
--- endurancetrio_community.results_file table
+-- endurancetrio_hub.results_file table
 --
 INSERT INTO
-  endurancetrio_community.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
+  endurancetrio_hub.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
 VALUES
   (9, 10, 'Triatlo UNICEF Setúbal', 'Geral', 1, true, '19860531NAC001-001A-01.pdf'),
   (10, 13, 'Triatlo de Cascais', 'Geral', 1, true, '19860614NAC001-001A-01.pdf'),
   (11, 16, 'Triatlo de Peniche', 'Geral', 1, true, '19860815NAC001-001A-01.pdf'),
   (12, 19, 'Triatlo de Tancos', 'Geral', 1, true, '19860913NAC001-001A-01.pdf');
 
-ALTER SEQUENCE endurancetrio_community.seq_results_file_id RESTART WITH 13;
+ALTER SEQUENCE endurancetrio_hub.seq_results_file_id RESTART WITH 13;

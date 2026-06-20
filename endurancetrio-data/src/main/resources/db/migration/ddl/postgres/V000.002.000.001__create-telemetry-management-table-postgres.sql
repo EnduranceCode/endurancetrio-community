@@ -21,8 +21,8 @@
 -- Description: Creates the EnduranceTrio application telemetry management database table
 --
 
--- The schema `endurancetrio_community` must exist before running this script
-SET search_path TO endurancetrio_community;
+-- The schema `endurancetrio_hub` must exist before running this script
+SET search_path TO endurancetrio_hub;
 
 -- Drops tracking_data table and its sequence
 DROP TABLE IF EXISTS tracking_data;

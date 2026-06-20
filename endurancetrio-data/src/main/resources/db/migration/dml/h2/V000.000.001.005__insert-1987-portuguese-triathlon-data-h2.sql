@@ -20,10 +20,10 @@
 
 -- Description: Inserts the data of the 1987 triathlon related events in Portugal
 
--- endurancetrio_community.event table
+-- endurancetrio_hub.event table
 --
 INSERT INTO
-  endurancetrio_community.event (id, event_reference, title, start_date, end_date, city, county, district)
+  endurancetrio_hub.event (id, event_reference, title, start_date, end_date, city, county, district)
 VALUES
   (9, '19870111APT001', 'I Duplo Biatlo de Tomar', '1987-01-11', '1987-01-11', 'Tomar', 'Tomar', 'Santarém'),
   (10, '19870118APT001', 'I Triatlo Experimental de Braga', '1987-01-18', '1987-01-18', 'Braga', 'Braga', 'Braga'),
@@ -41,13 +41,13 @@ VALUES
   (22, '19871004APT001', '1º Triatlo de Lagos', '1987-10-04', '1987-10-04', 'Lagos', 'Lagos', 'Faro'),
   (23, '19871018APT001', 'I Triatlo de Grândola', '1987-10-18', '1987-10-18', 'Grândola', 'Grândola', 'Setúbal');
 
-ALTER SEQUENCE endurancetrio_community.seq_event_id RESTART WITH 24;
+ALTER SEQUENCE endurancetrio_hub.seq_event_id RESTART WITH 24;
 
 
--- endurancetrio_community.organizer table
+-- endurancetrio_hub.organizer table
 --
 INSERT INTO
-  endurancetrio_community.organizer (id, name, city, county, district, organizer_type)
+  endurancetrio_hub.organizer (id, name, city, county, district, organizer_type)
 VALUES
   (7, 'Clube de Actividades de Lazer e Manutenção', 'Tomar', 'Tomar', 'Santarém', 'CLUB'),
   (8, 'Câmara Municipal de Braga', 'Braga', 'Braga', 'Braga', 'PUBLIC'),
@@ -65,13 +65,13 @@ VALUES
   (20, 'Câmara Municipal de Grândola', 'Grândola', 'Grândola', 'Setúbal', 'PUBLIC'),
   (21, 'Clube de Ténis de Grândola', 'Grândola', 'Grândola', 'Setúbal', 'CLUB');
 
-ALTER SEQUENCE endurancetrio_community.seq_organizer_id RESTART WITH 22;
+ALTER SEQUENCE endurancetrio_hub.seq_organizer_id RESTART WITH 22;
 
 
--- endurancetrio_community.event_organizer table
+-- endurancetrio_hub.event_organizer table
 --
 INSERT INTO
-  endurancetrio_community.event_organizer (event_id, organizer_id)
+  endurancetrio_hub.event_organizer (event_id, organizer_id)
 VALUES
   (9, 7),
   (10, 8),
@@ -93,10 +93,10 @@ VALUES
   (23, 21);
 
 
--- endurancetrio_community.event_file table
+-- endurancetrio_hub.event_file table
 --
 INSERT INTO
-  endurancetrio_community.event_file (id, event_id, title, revision, is_active, file_name, file_type)
+  endurancetrio_hub.event_file (id, event_id, title, revision, is_active, file_name, file_type)
 VALUES
   (16, 9, 'Cartaz', 1, true, '19870111APT001-IMG001-01.png', 'POSTER'),
   (17, 9, 'Regulamento', 1, true, '19870111APT001-REG001-01.pdf', 'RULES'),
@@ -132,13 +132,13 @@ VALUES
   (47, 23, 'Cartaz', 1, true, '19871018APT001-IMG001-01.png', 'POSTER'),
   (48, 23, 'Regulamento', 1, true, '19871018APT001-REG001-01.pdf', 'RULES');
 
-ALTER SEQUENCE endurancetrio_community.seq_event_file_id RESTART WITH 49;
+ALTER SEQUENCE endurancetrio_hub.seq_event_file_id RESTART WITH 49;
 
 
--- endurancetrio_community.distance table
+-- endurancetrio_hub.distance table
 --
 INSERT INTO
-  endurancetrio_community.distance (id, distance_type)
+  endurancetrio_hub.distance (id, distance_type)
 VALUES
   (9, 'SPRINT'),
   (10, 'SPRINT'),
@@ -157,13 +157,13 @@ VALUES
   (23, 'STANDARD'),
   (24, 'STANDARD');
 
-ALTER SEQUENCE endurancetrio_community.seq_distance_id RESTART WITH 25;
+ALTER SEQUENCE endurancetrio_hub.seq_distance_id RESTART WITH 25;
 
 
--- endurancetrio_community.biathlon_distance table
+-- endurancetrio_hub.biathlon_distance table
 --
 INSERT INTO
-  endurancetrio_community.biathlon_distance (id, bike_distance, bike_laps, run_distance, run_laps)
+  endurancetrio_hub.biathlon_distance (id, bike_distance, bike_laps, run_distance, run_laps)
 VALUES
   (11, 50000, 1, 10000, 1),
   (12, 40000, 1, 10000, 1),
@@ -171,18 +171,18 @@ VALUES
   (14, 66000, 1, 16000, 1);
 
 
--- endurancetrio_community.double_biathlon_distance table
+-- endurancetrio_hub.double_biathlon_distance table
 --
 INSERT INTO
-  endurancetrio_community.double_biathlon_distance (id, first_bike_distance, first_bike_laps, first_run_distance, first_run_laps, second_bike_distance, second_bike_laps, second_run_distance, second_run_laps)
+  endurancetrio_hub.double_biathlon_distance (id, first_bike_distance, first_bike_laps, first_run_distance, first_run_laps, second_bike_distance, second_bike_laps, second_run_distance, second_run_laps)
 VALUES
   (9, 15000, 1, 5000, 1, 15000, 1, 5000, 1);
 
 
--- endurancetrio_community.triathlon_distance table
+-- endurancetrio_hub.triathlon_distance table
 --
 INSERT INTO
-  endurancetrio_community.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
+  endurancetrio_hub.triathlon_distance (id, swim_distance, swim_laps, bike_distance, bike_laps, run_distance, run_laps)
 VALUES
   (10, 250, 3, 20000, 1, 5000, 1),
   (15, 800, 1, 35000, 1, 8000, 1),
@@ -197,10 +197,10 @@ VALUES
   (24, 1000, 1, 48000, 1, 10000, 1);
 
 
--- endurancetrio_community.course table
+-- endurancetrio_hub.course table
 --
 INSERT INTO
-  endurancetrio_community.course (id, event_id, title, sport, distance_id)
+  endurancetrio_hub.course (id, event_id, title, sport, distance_id)
 VALUES
   (9, 9, 'Duplo Biatlo Sprint', 'DOUBLE_BIATHLON', 9),
   (10, 10, 'Triatlo Sprint', 'TRIATHLON', 10),
@@ -219,13 +219,13 @@ VALUES
   (23, 22, 'Triatlo Standard', 'TRIATHLON', 23),
   (24, 23, 'Triatlo Standard', 'TRIATHLON', 24);
 
-ALTER SEQUENCE endurancetrio_community.seq_course_id RESTART WITH 25;
+ALTER SEQUENCE endurancetrio_hub.seq_course_id RESTART WITH 25;
 
 
--- endurancetrio_community.race table
+-- endurancetrio_hub.race table
 --
 INSERT INTO
-  endurancetrio_community.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, race_date, race_time, gun_time, air_temperature, race_status)
+  endurancetrio_hub.race (id, race_reference, title, subtitle, gender_category, age_group_id, race_type, race_date, race_time, gun_time, air_temperature, race_status)
 VALUES
   (22, '19870111APT001-001', 'I Duplo Biatlo de Tomar', 'Geral', 'OPEN', 1, 'INDIVIDUAL_PARENT', '1987-01-11', '11:00:00', null, null, 'COMPLETED'),
   (23, '19870111APT001-002', 'I Duplo Biatlo de Tomar', 'Femininos', 'FEMALE', 1, 'INDIVIDUAL_DERIVED', '1987-01-11', '11:00:00', null, null, 'COMPLETED'),
@@ -298,13 +298,13 @@ VALUES
   (90, '19871018APT001-004', 'I Triatlo de Grândola', 'Equipas Femininas', 'FEMALE', 1, 'TEAM_BY_TIME', '1987-10-18', '11:00:00', null, null, 'PLANNED'),
   (91, '19871018APT001-005', 'I Triatlo de Grândola', 'Equipas Masculinas', 'MALE', 1, 'TEAM_BY_TIME', '1987-10-18', '11:00:00', null, null, 'COMPLETED');
 
-ALTER SEQUENCE endurancetrio_community.seq_race_id RESTART WITH 92;
+ALTER SEQUENCE endurancetrio_hub.seq_race_id RESTART WITH 92;
 
 
--- endurancetrio_community.triathlon_based_race table
+-- endurancetrio_hub.triathlon_based_race table
 --
 INSERT INTO
-  endurancetrio_community.triathlon_based_race (id, water_temperature, wetsuit_rule)
+  endurancetrio_hub.triathlon_based_race (id, water_temperature, wetsuit_rule)
 VALUES
   (44, null, 'UNKNOWN'),
   (45, null, 'UNKNOWN'),
@@ -356,10 +356,10 @@ VALUES
   (91, null, 'UNKNOWN');
 
 
--- endurancetrio_community.course_race table
+-- endurancetrio_hub.course_race table
 --
 INSERT INTO
-  endurancetrio_community.course_race (course_id, race_id)
+  endurancetrio_hub.course_race (course_id, race_id)
 VALUES
   (9, 22),
   (9, 23),
@@ -431,10 +431,10 @@ VALUES
   (24, 91);
 
 
--- endurancetrio_community.race_hierarchy table
+-- endurancetrio_hub.race_hierarchy table
 --
 INSERT INTO
-  endurancetrio_community.race_hierarchy (race_id, parent_race_id)
+  endurancetrio_hub.race_hierarchy (race_id, parent_race_id)
 VALUES
   (23, 22),
   (24, 22),
@@ -492,10 +492,10 @@ VALUES
   (91, 89);
 
 
--- endurancetrio_community.results_file table
+-- endurancetrio_hub.results_file table
 --
 INSERT INTO
-  endurancetrio_community.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
+  endurancetrio_hub.results_file (id, race_id, title, subtitle, revision, is_active, file_name)
 VALUES
   (13, 22, 'I Duplo Biatlo de Tomar', 'Geral', 1, true, '19870111APT001-001A-01.pdf'),
   (14, 25, 'I Triatlo Experimental de Braga', 'Geral', 1, true, '19870118APT001-001A-01.pdf'),
@@ -517,4 +517,4 @@ VALUES
   (30, 86, '1º Triatlo de Lagos', 'Equipas Masculinas', 1, true, '19871004APT001-005A-01.pdf'),
   (31, 87, 'I Triatlo de Grândola', 'Geral', 1, true, '19871018APT001-001A-01.pdf');
 
-ALTER SEQUENCE endurancetrio_community.seq_results_file_id RESTART WITH 32;
+ALTER SEQUENCE endurancetrio_hub.seq_results_file_id RESTART WITH 32;

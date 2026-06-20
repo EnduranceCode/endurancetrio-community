@@ -23,7 +23,7 @@
 
 -- Insert test data into device_telemetry table
 INSERT INTO
-  endurancetrio_community.device_telemetry (id, account, device, record_time, latitude, longitude, active, version, created_at)
+  endurancetrio_hub.device_telemetry (id, account, device, record_time, latitude, longitude, active, version, created_at)
 VALUES
   (1, 'system', 'SDABC', '2025-09-21T06:00:00Z', 39.510058, -9.136079, TRUE, 0, CURRENT_TIMESTAMP),
   (2, 'system', 'SDDEF', '2025-09-21T06:00:06Z', 39.509001, -9.139602, TRUE, 0, CURRENT_TIMESTAMP),
@@ -35,4 +35,4 @@ VALUES
 
 -- Align the sequence to take in consideration manually inserted records
 -- The next sequence value will be 100, which will help to distinguish the test values
-ALTER SEQUENCE endurancetrio_community.seq_device_telemetry_id RESTART WITH 100;
+ALTER SEQUENCE endurancetrio_hub.seq_device_telemetry_id RESTART WITH 100;
