@@ -20,13 +20,13 @@
 
 package com.endurancetrio.data.event.model.entity;
 
-import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.event.model.converter.GenderCategoryConverter;
 import com.endurancetrio.data.event.model.converter.RaceStatusConverter;
 import com.endurancetrio.data.event.model.converter.RaceTypeConverter;
 import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -37,7 +37,6 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -50,21 +49,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 /**
- * The {@link Race} entity represents a contest within an {@link Event}.
- * <p>
- * A {@link Race} is uniquely defined by its {@link Course} and its start list formation rules,
- * meaning no two {@link Race races} can have identical {@link Course course} and start list
- * formation rules. Additionally, each {@link Race} corresponds to a single start; a {@link Race}
- * cannot have multiple starts.
- * <p>
- * Both individual and collective competitions are represented by this entity. Collective
- * competitions (such as club or team events) derive their classification from the results
- * of individual {@link Race races} which are its {@link #getParentRaces() parent races}.
- * <p>
- * In most cases, a {@link Race} belongs to a single {@link Course}. However, in specific
- * scenarios (e.g., collective youth races whose classification derives from multiple individual
- * {@link Race races}), a {@link Race} may belong to multiple {@link Course courses}.
- * <p>
  * The {@link Race}'s fields are defined as follows:
  * <ul>
  *   <li>
@@ -106,12 +90,9 @@ import java.util.StringJoiner;
  *     If the {@link #getGenderCategory() genderCategory} of the {@link Race} is sufficient to
  *     unequivocally distinguish the {@link #getGenderCategory() genderCategory}, only the
  *     {@link #getGenderCategory() genderCategory} is used as a {@link #getSubtitle() subtitle}
- *     (e.g., "Women"). If the {@link #getGenderCategory() genderCategory} is not sufficient
- *     to unequivocally identify the {@link Race}, the {@link #getAgeGroup() ageGroup} and
- *     the {@link #getGenderCategory() genderCategory} are used (e.g., "Elite Women").
+ *     (e.g., "Women").
  *   </li>
  *   <li>{@link #getGenderCategory() genderCategory} the gender category of the {@link Race}.</li>
- *   <li>{@link #getAgeGroup() ageGroup} : the {@link AgeGroup age group} of the {@link Race}.</li>
  *   <li>{@link #getDate() date} : the date of the {@link Race}.</li>
  *   <li>{@link #getTime() time} : the time scheduled for the starting gun of the {@link Race}.</li>
  *   <li>
@@ -130,7 +111,7 @@ import java.util.StringJoiner;
  *     {@link #getResultsFiles() resultsFiles} : the {@link ResultsFile} of the {@link Race}.
  *   </li>
  * </ul>
- */
+*/
 @Entity(name = "Race")
 @Table(name = "race")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -172,9 +153,6 @@ public class Race extends BaseEntity<Long> {
   @Convert(converter = GenderCategoryConverter.class)
   private GenderCategory genderCategory;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "age_group_id", nullable = false)
-  private AgeGroup ageGroup;
 
   @Column(name = "race_date", nullable = false)
   LocalDate date;
@@ -320,14 +298,6 @@ public class Race extends BaseEntity<Long> {
     this.genderCategory = genderCategory;
   }
 
-  public AgeGroup getAgeGroup() {
-    return ageGroup;
-  }
-
-  public void setAgeGroup(AgeGroup ageGroup) {
-    this.ageGroup = ageGroup;
-  }
-
   public LocalDate getDate() {
     return date;
   }
@@ -395,7 +365,6 @@ public class Race extends BaseEntity<Long> {
         .add("title='" + title + "'")
         .add("subtitle='" + subtitle + "'")
         .add("genderCategory=" + genderCategory.getCode())
-        .add("ageGroup=" + ageGroup.getTitle())
         .add("date=" + date)
         .add("time=" + time)
         .add("raceStatus=" + raceStatus.getCode())

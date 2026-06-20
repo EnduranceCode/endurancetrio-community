@@ -166,4 +166,19 @@ timestamp-based naming convention.
 15. Fixes the course sport and title for biatlo events inserted in 1988 and 1989:
     - [V20260607.001__fix-1988-1989-biatlo-course-types-h2.sql](migration/dml/h2/V20260607.001__fix-1988-1989-biatlo-course-types-h2.sql)
     - [V20260607.001__fix-1988-1989-biatlo-course-types-postgres.sql](migration/dml/postgres/V20260607.001__fix-1988-1989-biatlo-course-types-postgres.sql)
+16. Swaps the course IDs for the course_race junction table:
+    - [V20260610.001__swap-course-ids-course-race-h2.sql](migration/dml/h2/V20260610.001__swap-course-ids-course-race-h2.sql)
+    - [V20260610.001__swap-course-ids-course-race-postgres.sql](migration/dml/postgres/V20260610.001__swap-course-ids-course-race-postgres.sql)
+17. Reverts the course type fixes for biatlo events inserted in 1988 and 1989:
+    - [V20260610.002__revert-1988-1989-biatlo-course-types-h2.sql](migration/dml/h2/V20260610.002__revert-1988-1989-biatlo-course-types-h2.sql)
+    - [V20260610.002__revert-1988-1989-biatlo-course-types-postgres.sql](migration/dml/postgres/V20260610.002__revert-1988-1989-biatlo-course-types-postgres.sql)
+18. Moves race 148 to course 37:
+    - [V20260610.003__move-race-148-to-course-37-h2.sql](migration/dml/h2/V20260610.003__move-race-148-to-course-37-h2.sql)
+    - [V20260610.003__move-race-148-to-course-37-postgres.sql](migration/dml/postgres/V20260610.003__move-race-148-to-course-37-postgres.sql)
+19. Fixes the event-organizer relationships:
+    - [V20260610.004__fix-event-organizers-h2.sql](migration/dml/h2/V20260610.004__fix-event-organizers-h2.sql)
+    - [V20260610.004__fix-event-organizers-postgres.sql](migration/dml/postgres/V20260610.004__fix-event-organizers-postgres.sql)
+20. Creates the result data model tables:
+    - [V20260620.001__create-result-data-model-h2.sql](migration/ddl/h2/V20260620.001__create-result-data-model-h2.sql)
+    - [V20260620.001__create-result-data-model-postgres.sql](migration/ddl/postgres/V20260620.001__create-result-data-model-postgres.sql)
 

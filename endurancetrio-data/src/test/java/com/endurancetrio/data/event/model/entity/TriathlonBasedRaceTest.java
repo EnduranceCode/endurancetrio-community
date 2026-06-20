@@ -35,7 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit test for the {@link TriathlonBasedRaceTest} entity.
+ * Unit test for the {@link TriathlonBasedRace} entity.
  * <p>
  * This test may seem redundant since it only verify getters and setters, but its purpose is to
  * establish a testing culture from the very beginning of the project. It serves as a reminder that
@@ -46,18 +46,12 @@ class TriathlonBasedRaceTest {
   private TriathlonBasedRace underTest;
 
   private Course testCourse;
-  private AgeGroup testAgeGroup;
   private ResultsFile testResultsFile;
 
   @BeforeEach
   void setUp() {
     testCourse = new Course();
     testCourse.setId(1L);
-
-    testAgeGroup = new AgeGroup();
-    testAgeGroup.setId(1L);
-    testAgeGroup.setTitle("Geral");
-    testAgeGroup.setShortTitle("OVERALL");
 
     testResultsFile = new ResultsFile();
     testResultsFile.setId(1L);
@@ -70,7 +64,6 @@ class TriathlonBasedRaceTest {
     underTest.setTitle("Triatlo de Peniche");
     underTest.setSubtitle("Geral");
     underTest.setGenderCategory(GenderCategory.OPEN);
-    underTest.setAgeGroup(testAgeGroup);
     underTest.setDate(LocalDate.parse("1984-08-15"));
     underTest.setTime(LocalTime.parse("16:00:00"));
     underTest.setRaceStatus(RaceStatus.COMPLETED);
@@ -92,8 +85,6 @@ class TriathlonBasedRaceTest {
     assertEquals("Triatlo de Peniche", underTest.getTitle());
     assertEquals("Geral", underTest.getSubtitle());
     assertEquals(GenderCategory.OPEN, underTest.getGenderCategory());
-    assertNotNull(underTest.getAgeGroup());
-    assertEquals(testAgeGroup.getShortTitle(), underTest.getAgeGroup().getShortTitle());
     assertEquals(LocalDate.parse("1984-08-15"), underTest.getDate());
     assertEquals(LocalTime.parse("16:00:00"), underTest.getTime());
     assertEquals(RaceStatus.COMPLETED, underTest.getRaceStatus());

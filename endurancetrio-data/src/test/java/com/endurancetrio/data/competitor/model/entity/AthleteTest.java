@@ -18,36 +18,37 @@
  * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.data.event.model.entity;
+package com.endurancetrio.data.competitor.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
+import com.endurancetrio.data.competitor.model.enumerator.Country;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/**
- * Unit test for the {@link AgeGroupTest} entity.
- * <p>
- * This test may seem redundant since it only verify getters and setters, but its purpose is to
- * establish a testing culture from the very beginning of the project. It serves as a reminder that
- * every part of the application should be testable and that tests should always be present.
- */
-class AgeGroupTest {
+class AthleteTest {
 
-  AgeGroup underTest;
+  private Athlete underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new AgeGroup();
+    underTest = new Athlete();
     underTest.setId(1L);
-    underTest.setTitle("Benjamins");
-    underTest.setShortTitle("BEN");
+    underTest.setFullName("Paulo Paula Carvalho");
+    underTest.setKnownName("Paulo Carvalho");
+    underTest.setGender(AthleteGender.MALE);
+    underTest.setCountry(Country.POR);
+    underTest.setYearOfBirth(1961);
   }
 
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals("Benjamins", underTest.getTitle());
-    assertEquals("BEN", underTest.getShortTitle());
+    assertEquals("Paulo Paula Carvalho", underTest.getFullName());
+    assertEquals("Paulo Carvalho", underTest.getKnownName());
+    assertEquals(AthleteGender.MALE, underTest.getGender());
+    assertEquals(Country.POR, underTest.getCountry());
+    assertEquals(1961, underTest.getYearOfBirth());
   }
 }

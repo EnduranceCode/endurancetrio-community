@@ -20,32 +20,35 @@
 
 package com.endurancetrio.data.event.model.enumerator;
 
-import com.endurancetrio.data.event.model.entity.Race;
-
-/**
- * The {@link RaceStatus} enum represents the status of a {@link Race}
- * <p>
- * It includes the following constants:
- * <ul>
- *   <li>
- *     {@link #PLANNED} : used for the {@link Race races} that are planned but not yet
- *     (or were ever) completed.
- *   </li>
- *   <li>{@link #COMPLETED} : used for the {@link Race races} that were completed.</li>
- * </ul>
- */
-public enum RaceStatus {
-  PLANNED("PLANNED"),
-  COMPLETED("COMPLETED");
+public enum Penalty {
+  DNF("DNF", "Did Not Finish", "Não Completou"),
+  LAP("LAP", "Lapped", "Ultrapassado"),
+  NC("NC", "Not Classified", "Não Classificado"),
+  NE("NE", "Not Eligible", "Não Elegível"),
+  DSQ("DSQ", "Disqualified", "Desclassificado"),
+  DNS("DNS", "Did Not Start", "Não Partiu"),
+  EC("EC", "Error Correction", "Correção de Erro");
 
   private final String code;
+  private final String titleEN;
+  private final String titlePT;
 
-  RaceStatus(String code) {
+  Penalty(String code, String titleEN, String titlePT) {
     this.code = code;
+    this.titleEN = titleEN;
+    this.titlePT = titlePT;
   }
 
   public String getCode() {
     return code;
+  }
+
+  public String getTitleEN() {
+    return titleEN;
+  }
+
+  public String getTitlePT() {
+    return titlePT;
   }
 
   @Override
