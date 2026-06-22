@@ -32,10 +32,20 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 - Service pattern: `interface ThingService` → `class ThingServiceMain` (not `Impl`)
 - Method order in services: CRUD (CREATE → READ → UPDATE → DELETE → UTILITY), then alphabetical
 - Entity base classes: `BaseEntity<T>` (id, equals, hashCode), `AuditableEntity` (version, createdAt, updatedAt)
-- Flyway: `V{major}.{minor}.{patch}.{order}__description.sql` in `endurancetrio-data/src/main/resources/db/migration/{ddl,dml}/{h2,postgres}/`
+- Flyway: `V<yyyymmdd>.<seq>__description.sql` in `endurancetrio-data/src/main/resources/db/migration/{ddl,dml}/{h2,postgres}/`
 - DB naming: snake_case, plural tables, constraint prefixes (`pk_`, `fk_`, `uk_`, `chk_`, `idx_`, `seq_`)
 - Historical reference entities: `AgeGroup` and `ParaClass` under `competitor.model.entity` exist solely to document their database table schemas for historical data storage. They are NOT used in application code. The active counterparts are the enums in `competitor.model.enumerator`, stored as VARCHAR columns in result tables.
 - Config files (`*.yaml`, `*.properties`): keys ordered alphabetically (root-level and nested). See [`docs/development.md`](docs/development.md#configuration-file-key-ordering)
+- Javadoc HTML: must use valid HTML — no self-closing tags (e.g., `<a href="..." />`), no stray closing tags. Verify with `mvn javadoc:aggregate`
+
+## Testing
+
+- Tests use H2 in PostgreSQL compatibility mode (`jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE`)
+- Test config: `endurancetrio-app/src/test/resources/application-test.yaml`
+- Business tests use `@ExtendWith(MockitoExtension.class)` (pure Mockito, no Spring context)
+- Flyway migrations for H2 are in `db/migration/ddl/h2` and `db/migration/dml/h2`
+- Tests do NOT require PostgreSQL — H2 is fully self-contained
+- Full testing conventions documented in [docs/development.md#testing](docs/development.md#testing)
 
 ## Tracker integration (dual-repo)
 
@@ -66,14 +76,14 @@ API keys are bcrypt hashes (cost 12). First account via `FIRST_OWNER` + `FIRST_H
 
 ## Configuration
 
-| File                                | Purpose                                                  |
-|-------------------------------------|----------------------------------------------------------|
-| `application.yaml`                  | defaults (datasource, JPA, Flyway, port 8080)            |
-| `application-{local,dev,prod}.yaml` | profile-specific overrides                               |
-| `application-secrets.yaml`          | credentials (gitignored, from `template-secrets.yaml`)   |
-| `application-test.yaml`             | H2 in-memory DB for tests                                |
-| `sonar-project.properties`          | SonarQube Cloud project key, host, source encoding       |
-| `pom.xml`                           | `<sonar.organization>`, CPD and analysis exclusions       |
+| File                                | Purpose                                                |
+|-------------------------------------|--------------------------------------------------------|
+| `application.yaml`                  | defaults (datasource, JPA, Flyway, port 8080)          |
+| `application-{local,dev,prod}.yaml` | profile-specific overrides                             |
+| `application-secrets.yaml`          | credentials (gitignored, from `template-secrets.yaml`) |
+| `application-test.yaml`             | H2 in-memory DB for tests                              |
+| `sonar-project.properties`          | SonarQube Cloud project key, host, source encoding     |
+| `pom.xml`                           | `<sonar.organization>`, CPD and analysis exclusions    |
 
 Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activate via `-Dspring.profiles.active=local` or `-Dspring-boot.run.profiles=local`.
 
@@ -86,4 +96,5 @@ Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activa
 
 ## Commit messages
 
-Subject: ≤50 chars, capitalized, imperative mood, no period. Body optional (72-char wrap, explains what/why vs. how). Follows [cbea.ms/git-commit](https://cbea.ms/git-commit/).
+Subject: ≤50 chars, capitalized, imperative mood, no period. Body optional (72-char wrap, explains
+what/why vs. how). Follows [cbea.ms/git-commit](https://cbea.ms/git-commit/).

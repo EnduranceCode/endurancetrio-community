@@ -28,9 +28,6 @@ import static com.endurancetrio.app.tracker.constants.TrackerPathsAPI.TRACKER_V1
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioRestController;
 import com.endurancetrio.app.common.response.EnduranceTrioResponse;
-import com.endurancetrio.business.common.dto.ErrorDTO;
-import com.endurancetrio.business.common.exception.EnduranceTrioError;
-import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.tracker.dto.RouteDTO;
 import com.endurancetrio.business.tracker.dto.RouteMetricsDTO;
 import com.endurancetrio.business.tracker.service.RouteService;

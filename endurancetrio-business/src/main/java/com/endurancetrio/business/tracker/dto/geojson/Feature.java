@@ -28,7 +28,7 @@ import java.util.Map;
  * @param type       the type of the GeoJSON object, always "Feature"
  * @param geometry   the geometry of the feature
  * @param properties a map of properties associated with the feature
- * @see <a href="https://geojson.org/" />
+ * @see <a href="https://geojson.org/">geojson.org</a>
  */
 public record Feature(
     String type, Geometry geometry, Map<String, Object> properties) {

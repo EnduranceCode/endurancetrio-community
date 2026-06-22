@@ -21,6 +21,7 @@
 package com.endurancetrio.data.event.model.entity;
 
 import com.endurancetrio.data.common.model.entity.BaseEntity;
+import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
@@ -47,7 +48,7 @@ import java.util.StringJoiner;
  *     {@link #getSubtitle() subtitle} : the subtitle of the {@link Race}. If the
  *     {@link Race#getGenderCategory() genderCategory} alone is sufficient to distinguish the race,
  *     it is used as the {@link #getSubtitle() subtitle} (e.g., "Women"). Otherwise, both the
- *     {@link Race#getAgeGroup() ageGroup} and the {@link Race#getGenderCategory() genderCategory}
+ *     {@link AgeGroup age group} and the {@link Race#getGenderCategory() genderCategory}
  *     are included (e.g., "Elite Women").
  *   </li>
  *   <li>

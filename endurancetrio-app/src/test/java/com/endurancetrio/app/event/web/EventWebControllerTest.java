@@ -61,6 +61,9 @@ class EventWebControllerTest {
   private static final YearsWithEventsDTO PAGE_1 = new YearsWithEventsDTO(List.of(1986, 1985, 1984),
       List.of(1983, 1982), List.of(1989, 1988, 1987), 1, 3, 8, 3, 0, 2
   );
+  private static final YearsWithEventsDTO PAGE_2 = new YearsWithEventsDTO(List.of(1983, 1982),
+      List.of(), List.of(1986, 1985, 1984), 2, 3, 8, 3, 0, -1
+  );
   private static final LocalDate EVENT_DATE = LocalDate.of(1984, Month.AUGUST, 15);
   private static final EventDTO EVENT_DTO = new EventDTO(1L, "Triatlo de Peniche", EVENT_DATE,
       EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of("TRIATHLON")
@@ -178,6 +181,22 @@ class EventWebControllerTest {
         .andExpect(view().name("years-with-events"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attribute("yearsWithEvents", PAGE_1));
+  }
+
+  @Test
+  void eventYearsPageThirdPage() throws Exception {
+    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
+        "Events - EnduranceTrio");
+    when(
+        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports events by year");
+    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+
+    mockMvc.perform(get("/en/events").param("page", "2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("years-with-events"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attribute("yearsWithEvents", PAGE_2));
   }
 
   @Test
