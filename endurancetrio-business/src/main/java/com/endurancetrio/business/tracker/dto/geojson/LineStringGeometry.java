@@ -27,7 +27,7 @@ import java.util.List;
  * Represents a GeoJSON LineString geometry.
  *
  * @param coordinates the coordinates of the LineString as a list of doubles lists
- * @see <a href="https://geojson.org/" />
+ * @see <a href="https://geojson.org/">geojson.org</a>
  */
 public record LineStringGeometry(
     @JsonProperty("coordinates") List<List<Double>> coordinates) implements Geometry {

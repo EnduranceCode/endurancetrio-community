@@ -13,9 +13,10 @@ an overview of the project, see the [main README.md](../README.md).
 6. [Installation](#installation)
 7. [Run the application](#run-the-application)
 8. [Code & Naming Conventions](#code--naming-conventions)
-9. [Programmatic Version Management](#programmatic-version-management)
-10. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
-11. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
+9. [Testing](#testing)
+10. [Programmatic Version Management](#programmatic-version-management)
+11. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
+12. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
 
 ## Technology Stack
 
@@ -821,8 +822,7 @@ public MyEntity() {
 - `@Column(name = "...")` uses snake_case matching the database column.
 - Nullable columns omit `nullable`; required columns use `nullable = false`.
 - Boolean fields use the `is` prefix for the field name (e.g., `isActive`) and `get`/`set` prefix
-  for
-  accessors (e.g., `getActive()`, `setActive()`).
+  for accessors (e.g., `getActive()`, `setActive()`).
 - Enum fields are annotated with `@Convert(converter = XxxConverter.class)` and stored as VARCHAR
   codes, never as ORDINAL.
 - Validation annotations (`@Pattern`, `@AssertTrue`) are placed on the field directly.
@@ -1066,6 +1066,452 @@ spring:
 > `username` appears before the alphabetically-earlier `password` because they form a credentials
 > pair.
 
+## Testing
+
+This section documents the testing standards, conventions, and practices for the project. All tests
+must comply with these rules.
+
+### Testing Approach
+
+All tests are **pure unit tests** — fast, isolated, and requiring no Spring context. There are three
+categories:
+
+| Category                  | Description                                                            | Framework                    |
+|---------------------------|------------------------------------------------------------------------|------------------------------|
+| **Plain POJO tests**      | Entities, DTOs, responses — verify constructors, accessors, `toString` | JUnit 5 only                 |
+| **Mockito-based tests**   | Services, mappers — mock dependencies to isolate the class under test  | JUnit 5 + Mockito            |
+| **Bean Validation tests** | Custom validation annotations — programmatic `Validator` setup         | JUnit 5 + Jakarta Validation |
+
+No test currently loads a Spring application context (`@SpringBootTest`, `@DataJpaTest`,
+`@WebMvcTest`, etc.). If integration tests are added in the future, they must use the existing
+[test configuration](#test-configuration).
+
+### Test Frameworks & Dependencies
+
+| Dependency                            | Scope                            | Used In Module           |
+|---------------------------------------|----------------------------------|--------------------------|
+| **JUnit 5** (Jupiter)                 | Inherited via Spring Boot parent | All modules              |
+| **Mockito**                           | Inherited via Spring Boot parent | `endurancetrio-business` |
+| `spring-boot-starter-data-jpa-test`   | Test                             | `endurancetrio-data`     |
+| `spring-boot-starter-flyway-test`     | Test                             | `endurancetrio-data`     |
+| `com.h2database:h2`                   | Test                             | `endurancetrio-data`     |
+| `spring-boot-starter-validation-test` | Test                             | `endurancetrio-business` |
+| `spring-boot-starter-actuator-test`   | Test                             | `endurancetrio-app`      |
+| `spring-boot-starter-webmvc-test`     | Test                             | `endurancetrio-app`      |
+| `spring-boot-starter-security-test`   | Test                             | `endurancetrio-app`      |
+
+Module-specific test starters are declared **per module** based on what that module needs to test.
+JUnit 5 and Mockito are inherited from the Spring Boot parent POM via `spring-boot-starter-test`.
+
+### Test Class Naming
+
+All test classes must follow the pattern:
+
+```
+{ClassUnderTest}Test.java
+```
+
+| Test Class                   | Tests Class              |
+|------------------------------|--------------------------|
+| `TrackerAccountTest`         | `TrackerAccount`         |
+| `RouteServiceMainTest`       | `RouteServiceMain`       |
+| `DeviceTelemetryMapperTest`  | `DeviceTelemetryMapper`  |
+| `RouteSegmentsValidatorTest` | `RouteSegmentsValidator` |
+
+Service implementations use the `Main` suffix (not `Impl`), so their tests follow the same naming
+(e.g., `RouteServiceMain` → `RouteServiceMainTest`).
+
+### Test Class Declaration
+
+- Class must be **package-private** (no `public` modifier).
+- No class-level annotation for plain POJO tests.
+- `@ExtendWith(MockitoExtension.class)` must be present on Mockito-based tests.
+- Bean Validation tests use a programmatic `Validator` bootstrap in `@BeforeEach` (no Mockito
+  extension required).
+
+```java
+// Plain POJO test — no annotation
+class TrackerAccountTest { ...
+}
+
+// Mockito test — single annotation
+@ExtendWith(MockitoExtension.class)
+class RouteServiceMainTest { ...
+}
+
+// Bean Validation test — programmatic Validator, no Mockito
+class RouteSegmentsValidatorTest { ...
+}
+```
+
+### Test Structure
+
+#### Field Conventions
+
+- **Constants**: `private static final` fields at the top of the class.
+- **Test fixture objects**: declared as `private` instance fields.
+- **Mock dependencies**: annotated with `@Mock`.
+- **Class under test**: annotated with `@InjectMocks`, field named `underTest`.
+
+```java
+private static final String OWNER = "system";
+private static final Long DEVICE_ID = 12345L;
+
+@Mock
+private RouteMapper routeMapper;
+
+@Mock
+private RouteRepository routeRepository;
+
+@InjectMocks
+private RouteServiceMain underTest;
+```
+
+#### Setup Method
+
+A single `@BeforeEach void setUp()` method must create all test fixtures:
+
+```java
+@BeforeEach
+void setUp() {
+    testAccount = new TrackerAccount(OWNER, KEY, true);
+    var device = new DeviceTelemetry();
+    device.setId(DEVICE_ID);
+    existingDevices = Set.of(device);
+}
+```
+
+#### Test Method Naming
+
+Test methods use `camelCase` describing the scenario:
+
+| Pattern           | Examples                                                                               |
+|-------------------|----------------------------------------------------------------------------------------|
+| POJO/Record tests | `dtoShouldRetainValues`, `entityShouldRetainValues`                                    |
+| Happy path        | `create`, `update`, `findAll`, `findById`, `save`, `validateKey`                       |
+| Error/edge case   | `createWithIdShouldThrow`, `updateWithNonExistingRoute`, `validateKeyWithUnknownOwner` |
+| Empty data        | `findAllWhenNoRoutesExist`, `findMostRecentRecordForEachDeviceWithEmptyData`           |
+| Null safety       | `mapNullDTO`, `mapNullEntity`, `updateEntityWithNullDTO`                               |
+| Validation        | `isValid`, `isValidWithInvalidFirstOrder`                                              |
+
+### Mocking Standards
+
+#### Annotations
+
+- `@Mock` for all dependencies.
+- `@InjectMocks` for the class under test.
+
+```java
+
+@Mock
+private RouteMapper routeMapper;
+
+@Mock
+private RouteRepository routeRepository;
+
+@InjectMocks
+private RouteServiceMain underTest;
+```
+
+#### Stubbing Patterns
+
+| Scenario              | Pattern                                                  |
+|-----------------------|----------------------------------------------------------|
+| Return value          | `when(mock.method(...)).thenReturn(value)`               |
+| Return based on input | `when(mock.method(...)).thenAnswer(invocation -> ...)`   |
+| Void method           | `doAnswer(invocation -> { ... }).when(mock).method(...)` |
+| Argument matchers     | `any()`, `anySet()`, `any(RouteDTO.class)`               |
+| Custom matching       | `argThat(arg -> condition)`                              |
+
+#### Verification
+
+```java
+verify(repository, times(1)).
+
+save(entity);
+
+verify(mapper, never()).
+
+map(any());
+```
+
+#### Private Field Injection
+
+Use `ReflectionTestUtils.setField()` only when the class under test has `@Value`-injected fields
+that would normally be set by Spring:
+
+```java
+ReflectionTestUtils.setField(underTest, "firstOwner",OWNER);
+```
+
+### Assertion Style
+
+The project's tests currently use `org.junit.jupiter.api.Assertions.*` static imports for all
+assertions. JUnit 5 assertions (`assertEquals`, `assertNotNull`, `assertThrows`, etc.) remain the
+default and are preferred for consistency with existing test classes.
+
+Other assertion libraries may be used in new tests at the developer's discretion. Notable options:
+
+- **AssertJ** — fluent API with better diagnostics (e.g., `usingRecursiveComparison` for DTO
+  comparison, collection extraction, no parameter-order ambiguity). Already available on the
+  classpath via `spring-boot-starter-test`.
+- **Hamcrest** — matcher-based, legacy. Not recommended.
+- **Truth** — Google's assertion library. Not recommended.
+
+| Assertion                                  | Usage                     |
+|--------------------------------------------|---------------------------|
+| `assertEquals(expected, actual)`           | Value equality            |
+| `assertNotNull(actual)`                    | Non-null check            |
+| `assertNull(actual)`                       | Null check                |
+| `assertTrue(condition)`                    | Boolean condition         |
+| `assertFalse(condition)`                   | Negated boolean condition |
+| `assertThrows(ExceptionClass, executable)` | Exception assertion       |
+| `assertDoesNotThrow(executable)`           | No-exception assertion    |
+
+```java
+assertNotNull(result);
+
+assertEquals(ROUTE_ID, result.id());
+
+assertThrows(EnduranceTrioException .class, () ->underTest.
+
+create(invalidDTO));
+
+verify(routeRepository, times(1)).
+
+save(expectedEntity);
+```
+
+### Bean Validation Tests
+
+Custom validation constraints must be tested with a programmatic `Validator` instance bootstrapped
+via `jakarta.validation.Validation`. The class must be **package-private** and requires no
+`@ExtendWith` annotation.
+
+- The `Validator` field must be named `underTest`.
+- Use a `try-with-resources` block in `@BeforeEach` to acquire and close the
+  `ValidatorFactory` (it implements `AutoCloseable`).
+- Test both valid and invalid inputs — assert the violation set size and individual violation
+  messages.
+
+```java
+class RouteSegmentsValidatorTest {
+
+  private Validator underTest;
+
+  @BeforeEach
+  void setUp() {
+    try (var factory = Validation.buildDefaultValidatorFactory()) {
+      underTest = factory.getValidator();
+    }
+  }
+
+  @Test
+  void isValid() {
+    var violations = underTest.validate(validRoute);
+    assertTrue(violations.isEmpty());
+  }
+
+  @Test
+  void isValidWithInvalidFirstOrder() {
+    Set<ConstraintViolation<RouteDTO>> result = underTest.validate(invalidRoute);
+    assertEquals(1, result.size());
+    assertEquals("Route must start with a segment of order 1",
+        result.iterator().next().getMessage()
+    );
+  }
+}
+```
+
+### Controller & Security Tests (Pure Unit)
+
+The `endurancetrio-app` module tests controllers, security filters, security configuration,
+and exception handlers using pure Mockito — no Spring context is loaded.
+
+#### Controller Tests
+
+Controller tests use `@ExtendWith(MockitoExtension.class)` with `@Mock` on the service interface
+and `@InjectMocks` on the controller implementation. The controller methods are called directly;
+`ResponseEntity<EnduranceTrioResponse<T>>` status codes and body structure are asserted.
+
+```java
+
+@ExtendWith(MockitoExtension.class)
+class RouteRestControllerTest {
+
+  @Mock
+  private RouteService routeService;
+
+  @InjectMocks
+  private RouteRestController underTest;
+
+  @Test
+  void findAllShouldReturnList() {
+    when(routeService.findAll()).thenReturn(List.of(testRoute));
+
+    ResponseEntity<EnduranceTrioResponse<List<RouteDTO>>> response = underTest.findAll();
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(200, response.getBody().status());
+    assertEquals(1, response.getBody().data().size());
+  }
+}
+```
+
+#### Security Filter Tests
+
+Security filter tests use `mock(HttpServletRequest.class)` for the request,
+`MockHttpServletResponse` for the response, and `mock(FilterChain.class)` for the chain.
+Various header combinations (valid, missing, malformed) are exercised.
+
+```java
+
+@ExtendWith(MockitoExtension.class)
+class EnduranceTrioAuthFilterTest {
+
+  @Mock
+  private AuthenticationManager authManager;
+
+  @InjectMocks
+  private EnduranceTrioAuthFilter underTest;
+
+  @BeforeEach
+  void setUp() {
+    request = mock(HttpServletRequest.class);
+    response = new MockHttpServletResponse();
+    filterChain = mock(FilterChain.class);
+  }
+
+  @Test
+  void missingAuthHeaderShouldSkipAuth() {
+    when(request.getHeader("Authorization")).thenReturn(null);
+    when(request.getHeader("ET-Owner")).thenReturn(null);
+
+    underTest.doFilterInternal(request, response, filterChain);
+
+    verify(authManager, never()).authenticate(any());
+    verify(filterChain).doFilter(request, response);
+  }
+}
+```
+
+#### Security Configuration Tests
+
+Configuration tests directly instantiate the config class and use 
+`mock(HttpSecurity.class, RETURNS_SELF)` for the fluent `HttpSecurity` API.
+
+```java
+
+@ExtendWith(MockitoExtension.class)
+class AppSecurityConfigTest {
+
+  @Mock
+  private EnduranceTrioAuthProvider authProvider;
+
+  @Test
+  void corsConfigurationSourceShouldConfigureAllowedOrigins() {
+    AppSecurityConfig config = new AppSecurityConfig("http://localhost:3000",
+        authProvider, entryPoint
+    );
+
+    CorsConfigurationSource source = config.corsConfigurationSource();
+    CorsConfiguration corsConfig = source.getCorsConfiguration(
+        new MockHttpServletRequest("GET", "/api/test"));
+
+    assertNotNull(corsConfig.getAllowedOrigins());
+    assertTrue(corsConfig.getAllowedOrigins().contains("http://localhost:3000"));
+  }
+
+  @Test
+  void securityFilterChainAPIShouldBuildSuccessfully() {
+    AppSecurityConfig config = new AppSecurityConfig("*", authProvider, entryPoint);
+    HttpSecurity http = mock(HttpSecurity.class, RETURNS_SELF);
+    when(http.build()).thenReturn(mock(DefaultSecurityFilterChain.class));
+
+    assertSame(chain, config.securityFilterChainAPI(http));
+  }
+}
+```
+
+#### Exception Handler Tests
+
+Exception handler tests call `@ControllerAdvice` methods directly, asserting that each
+`EnduranceTrioError` code maps to the correct HTTP status.
+
+```java
+
+@ExtendWith(MockitoExtension.class)
+class EnduranceTrioExceptionHandlerAPITest {
+
+  @InjectMocks
+  private EnduranceTrioExceptionHandlerAPI underTest;
+
+  @Test
+  void handledExceptionShouldReturnMappedHttpStatus() {
+    EnduranceTrioException exception = new EnduranceTrioException(
+        new ErrorDTO(EnduranceTrioError.NOT_FOUND));
+
+    ResponseEntity<Object> response = underTest.handledException(exception);
+
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+  }
+}
+```
+
+### Test Configuration
+
+The file `endurancetrio-app/src/test/resources/application-test.yaml` exists and configures H2
+(PostgreSQL compatibility mode) with Flyway pointing to `h2` migration scripts. This configuration
+is intended for future integration tests (`@DataJpaTest`, `@SpringBootTest`, etc.) but is **not
+currently activated** by any test.
+
+```yaml
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    username: user
+    password: password
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
+    enabled: true
+    locations:
+      - classpath:db/migration/ddl/h2
+      - classpath:db/migration/dml/h2
+    schemas: endurancetrio_tracker
+```
+
+### Flyway in Tests
+
+Flyway migration scripts are **duplicated** for H2 alongside PostgreSQL:
+
+- `src/main/resources/db/migration/ddl/h2/` — H2-specific DDL
+- `src/main/resources/db/migration/dml/h2/` — H2-specific DML
+
+When adding a new migration, the H2 variant must be added in the same version as the PostgreSQL
+variant. The `application-test.yaml` configures Flyway to use these H2 scripts.
+
+### Future: Spring Context Integration Tests
+
+The sections above document the **current** pure-Mockito test patterns for the `endurancetrio-app`
+module (controllers, security, exception handlers). The following starters are also declared in
+`endurancetrio-app/pom.xml` and ready for use when Spring-context integration tests are added:
+
+- `spring-boot-starter-webmvc-test` — `@WebMvcTest` + `MockMvc` for controller-layer tests
+- `spring-boot-starter-security-test` — Security-aware test utilities (e.g., `@WithMockUser`,
+  `RequestPostProcessor`)
+- `spring-boot-starter-actuator-test` — Actuator endpoint testing
+
+When writing integration tests that require a Spring context:
+
+1. Use `@ActiveProfiles("test")` to activate the H2/Flyway configuration.
+2. Prefer slice tests (`@WebMvcTest`, `@DataJpaTest`) over full `@SpringBootTest`.
+3. Do **not** use `@MockBean` — keep Mockito-based service tests pure (no Spring context).
+4. Add a `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` + `@Order(N)` only when test
+   ordering is explicitly required.
+
 ## Programmatic Version Management
 
 Community releases are versioned independently of any integrated repositories (such as the
@@ -1293,52 +1739,66 @@ For broader deployment validation (health checks, logs, rollback flow), follow
 
 The **EnduranceTrio** project uses [SonarQube Cloud](https://sonarcloud.io/) for continuous code quality
 inspection. The repository is linked to SonarQube Cloud via the GitHub App integration, which
-automatically decorates pull requests with analysis results and performs automatic analysis
-on every push.
+automatically decorates pull requests with analysis results.
+
+Two analysis methods are available, configured by separate files:
+
+| Method                      | Config file                | Used by                                                             |
+|-----------------------------|----------------------------|---------------------------------------------------------------------|
+| **Automatic Analysis**      | `.sonarcloud.properties`   | SonarCloud's built-in scanner (push/PR on default branch)           |
+| **CLI / CI-based analysis** | `sonar-project.properties` | `mvn verify sonar:sonar` locally, or future GitHub Actions workflow |
+
+Both files are kept aligned and should always define the same exclusions.
 
 ### Repository Configuration
 
-The following configuration is already in place for the project:
+The following configuration is in place for the project:
 
 1. **`pom.xml`** — the `<sonar.organization>` property is set in the root POM to identify the
-   SonarQube Cloud organization (`endurancecode`).
-2. **`sonar-project.properties`** — the root configuration file defines the project key, the
-   SonarQube Cloud host URL, and analysis exclusions (e.g., CPD duplication detection on SQL migration
-   scripts).
+   SonarQube Cloud organization (`endurancecode`). This property is required by the
+   sonar-maven-plugin for CLI/CI analysis.
+2. **`.sonarcloud.properties`** — defines exclusions for **Automatic Analysis**:
+   - `sonar.exclusions` — excludes SQL migration scripts from analysis
+   - `sonar.cpd.exclusions` — excludes SQL migration scripts from duplication detection
+3. **`sonar-project.properties`** — defines the project key, host URL, and all exclusions for
+   **CLI/CI analysis**:
+   - `sonar.exclusions` — excludes SQL migration scripts from analysis
+   - `sonar.cpd.exclusions` — excludes SQL migration scripts from duplication detection
+   - `sonar.coverage.exclusions` — excludes boilerplate code (`**/model/entity/**`,
+     `**/model/enumerator/**`, `**/config/**`) from coverage metrics
+   - `sonar.coverage.jacoco.xmlReportPaths` — path to the JaCoCo XML report
 
-### Prerequisites for Manual Analysis
+### Manual Analysis (CLI)
 
-1. A SonarQube Cloud account with access to the `EnduranceCode` organization.
-2. A SonarQube Cloud token generated at **[Account → Security](https://sonarcloud.io/account/security)**
+A manual analysis can be triggered from the command line. Since it uses the same sonar-maven-plugin
+as the GitHub Actions workflow, it conflicts with Automatic Analysis.
+
+1. Generate a SonarQube Cloud token at **[Account → Security](https://sonarcloud.io/account/security)**
    with the **Analyze Projects** permission.
-3. The `SONAR_TOKEN` environment variable set to the generated token:
+2. Set it as an environment variable:
 
-```shell
-export SONAR_TOKEN=your_sonarcloud_token
-```
+   ```shell
+   export SONAR_TOKEN=your_sonarcloud_token
+   ```
 
-### Run a Manual Analysis
+3. **Disable Automatic Analysis** in the SonarQube Cloud project settings
+   (**Project Settings → Administration → Analysis Method → "Other CI"**). If Automatic Analysis is
+   enabled, the scanner will fail with a conflict error.
 
-Before running a manual analysis, disable **Automatic Analysis** in the SonarQube Cloud project
-settings (**Project Settings → Analysis Method → "Other CI"**). If Automatic Analysis is enabled,
-the scanner will fail with a conflict error.
+4. Run the analysis from the repository root:
 
-To trigger a full project analysis from your local machine, execute the following command from the
-repository root:
+   ```shell
+   ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=endurancecode_endurancetrio-community
+   ```
 
-```shell
-./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=endurancecode_endurancetrio-community
-```
+   This will:
+   - Build the project and run all tests (generating the JaCoCo coverage report)
+   - Execute the SonarScanner, which reads `sonar-project.properties` from the repository root
+   - Send the analysis results (including coverage) to SonarQube Cloud
+   - Apply all configured exclusions (CPD, analysis, and coverage)
 
-This will:
-- Build the project and run all tests
-- Execute the SonarScanner, which reads `sonar-project.properties` from the repository root
-- Send the analysis results to SonarQube Cloud, creating a new baseline for the project
-- Apply any configured exclusions (e.g., CPD for SQL migration scripts)
+5. After the manual analysis completes, **re-enable Automatic Analysis** from the same settings page
+   if you want to resume automatic scans on push.
 
-After the manual analysis completes, Automatic Analysis can be re-enabled from the same settings
-page. SonarQube Cloud will immediately trigger a new analysis using the uploaded results as the
-baseline. The results are available in the
+Results are available in the
 [SonarQube Cloud dashboard](https://sonarcloud.io/project/overview?id=endurancecode_endurancetrio-community).
-Subsequent automatic analyses (triggered by future pushes) will continue to use this latest analysis
-as their baseline.
