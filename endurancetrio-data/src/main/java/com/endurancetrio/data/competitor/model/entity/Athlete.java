@@ -44,7 +44,12 @@ import java.util.StringJoiner;
  *     is automatically generated and is the primary key.
  *   </li>
  *   <li>
- *     {@link #getFullName() fullName} : the athlete's full name.
+ *     {@link #getLongName() longName} : the athlete's longest available name, which may not be
+ *     the full name for historical records.
+ *   </li>
+ *   <li>
+ *     {@link #getBirthName() birthName} : the athlete's name at birth, if different from the
+ *     current name. Used to identify athletes who changed names (e.g., after marriage).
  *   </li>
  *   <li>
  *     {@link #getKnownName() knownName} : the athlete's known or preferred name.
@@ -70,13 +75,16 @@ public class Athlete extends BaseEntity<Long> {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Column(name = "full_name", nullable = false)
-  private String fullName;
+  @Column(name = "long_name", nullable = false)
+  private String longName;
 
-  @Column(name = "known_name")
+  @Column(name = "birth_name")
+  private String birthName;
+
+  @Column(name = "known_name", nullable = false)
   private String knownName;
 
-  @Column(name = "gender")
+  @Column(name = "gender", nullable = false)
   @Convert(converter = AthleteGenderConverter.class)
   private AthleteGender gender;
 
@@ -91,12 +99,20 @@ public class Athlete extends BaseEntity<Long> {
     super();
   }
 
-  public String getFullName() {
-    return fullName;
+  public String getLongName() {
+    return longName;
   }
 
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
+  public void setLongName(String longName) {
+    this.longName = longName;
+  }
+
+  public String getBirthName() {
+    return birthName;
+  }
+
+  public void setBirthName(String birthName) {
+    this.birthName = birthName;
   }
 
   public String getKnownName() {
@@ -145,7 +161,8 @@ public class Athlete extends BaseEntity<Long> {
   public String toString() {
     return new StringJoiner(", ", Athlete.class.getSimpleName() + "[", "]")
         .add("id=" + this.getId())
-        .add("name='" + fullName + "'")
+        .add("name='" + longName + "'")
+        .add("birthName='" + birthName + "'")
         .add("knownName='" + knownName + "'")
         .add("gender=" + Optional.ofNullable(gender).map(AthleteGender::getCode).orElse(null))
         .add("country=" + Optional.ofNullable(country).map(Country::getCode).orElse(null))

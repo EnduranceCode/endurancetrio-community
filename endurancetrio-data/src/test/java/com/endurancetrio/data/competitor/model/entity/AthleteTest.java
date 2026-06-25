@@ -21,6 +21,7 @@
 package com.endurancetrio.data.competitor.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
 import com.endurancetrio.data.competitor.model.enumerator.Country;
@@ -35,8 +36,8 @@ class AthleteTest {
   void setUp() {
     underTest = new Athlete();
     underTest.setId(1L);
-    underTest.setFullName("Paulo Paula Carvalho");
-    underTest.setKnownName("Paulo Carvalho");
+    underTest.setLongName("Paulo José Paula Carvalho");
+    underTest.setKnownName("Paulo Paula Carvalho");
     underTest.setGender(AthleteGender.MALE);
     underTest.setCountry(Country.POR);
     underTest.setYearOfBirth(1961);
@@ -45,8 +46,9 @@ class AthleteTest {
   @Test
   void entityShouldRetainValues() {
     assertEquals(1L, underTest.getId());
-    assertEquals("Paulo Paula Carvalho", underTest.getFullName());
-    assertEquals("Paulo Carvalho", underTest.getKnownName());
+    assertEquals("Paulo José Paula Carvalho", underTest.getLongName());
+    assertNull(underTest.getBirthName());
+    assertEquals("Paulo Paula Carvalho", underTest.getKnownName());
     assertEquals(AthleteGender.MALE, underTest.getGender());
     assertEquals(Country.POR, underTest.getCountry());
     assertEquals(1961, underTest.getYearOfBirth());

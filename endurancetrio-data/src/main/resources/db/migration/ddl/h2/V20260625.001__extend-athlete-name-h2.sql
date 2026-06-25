@@ -1,0 +1,29 @@
+--
+-- Copyright (c) 2011-2026 Ricardo do Canto
+--
+-- This file is part of the EnduranceTrio project.
+--
+-- Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+-- (the "License");
+--
+-- You may not use this file except in compliance with the License. You may obtain a copy
+-- of the License at https://fsl.software/
+--
+-- THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+-- PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+--
+-- IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+-- SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+-- EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+--
+
+-- Description: Renames full_name to long_name and adds birth_name to the athlete table
+--   with correct column ordering.
+
+SET SCHEMA endurancetrio_hub;
+
+ALTER TABLE athlete RENAME COLUMN full_name TO long_name;
+ALTER TABLE athlete ADD COLUMN birth_name VARCHAR(255) AFTER long_name;
+ALTER TABLE athlete ALTER COLUMN known_name SET NOT NULL;
+ALTER TABLE athlete ALTER COLUMN gender SET NOT NULL;
