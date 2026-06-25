@@ -46,15 +46,19 @@ psql -v ON_ERROR_STOP=1 \
      -v prd_pass="$PRD_DB_SECRET" \
      --username "$POSTGRES_USER" <<-'EOSQL'
     -- Staging database
-    SELECT 'CREATE DATABASE stg_endurancetrio_community'
-    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'stg_endurancetrio_community')\gexec
+    SELECT format(
+      'CREATE DATABASE %I ENCODING %s LOCALE_PROVIDER icu ICU_LOCALE %L TEMPLATE template0',
+      'stg_endurancetrio_community', 'UTF8', 'und'
+    ) WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'stg_endurancetrio_community')\gexec
     SELECT format('CREATE USER %I WITH PASSWORD %L', :'stg_user', :'stg_pass')
     WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'stg_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO :"stg_user";
 
     -- Production database
-    SELECT 'CREATE DATABASE prd_endurancetrio_community'
-    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'prd_endurancetrio_community')\gexec
+    SELECT format(
+      'CREATE DATABASE %I ENCODING %s LOCALE_PROVIDER icu ICU_LOCALE %L TEMPLATE template0',
+      'prd_endurancetrio_community', 'UTF8', 'und'
+    ) WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'prd_endurancetrio_community')\gexec
     SELECT format('CREATE USER %I WITH PASSWORD %L', :'prd_user', :'prd_pass')
     WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'prd_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";

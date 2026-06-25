@@ -187,7 +187,7 @@ sudo -u postgres psql
 ```
 
 ```sql
-CREATE DATABASE {DATABASE_NAME} ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8' TEMPLATE = template0;
+CREATE DATABASE {DATABASE_NAME} ENCODING 'UTF8' LOCALE_PROVIDER icu ICU_LOCALE 'und' TEMPLATE template0;
 ```
 
 > **Placeholder Definition**
@@ -1059,7 +1059,7 @@ logging:
 spring:
   datasource:
     password: test
-    url: jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    url: jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;COLLATION=und
     username: sa
 ```
 
@@ -1470,7 +1470,7 @@ currently activated** by any test.
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    url: jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;COLLATION=und
     username: user
     password: password
   flyway:
