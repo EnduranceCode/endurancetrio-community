@@ -181,4 +181,7 @@ timestamp-based naming convention.
 20. Creates the result data model tables:
     - [V20260620.001__create-result-data-model-h2.sql](migration/ddl/h2/V20260620.001__create-result-data-model-h2.sql)
     - [V20260620.001__create-result-data-model-postgres.sql](migration/ddl/postgres/V20260620.001__create-result-data-model-postgres.sql)
+21. Renames full_name to long_name and adds birth_name to the athlete table:
+    - [V20260625.001__extend-athlete-name-h2.sql](migration/ddl/h2/V20260625.001__extend-athlete-name-h2.sql)
+    - [V20260625.001__extend-athlete-name-postgres.sql](migration/ddl/postgres/V20260625.001__extend-athlete-name-postgres.sql)
 

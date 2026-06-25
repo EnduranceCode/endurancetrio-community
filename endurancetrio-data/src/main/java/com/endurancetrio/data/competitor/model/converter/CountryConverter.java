@@ -44,6 +44,10 @@ public class CountryConverter implements AttributeConverter<Country, String> {
 
   @Override
   public Country convertToEntityAttribute(String code) {
+    if (code == null) {
+      return null;
+    }
+
     return Stream.of(Country.values())
         .filter(country -> country.getCode().equals(code))
         .findFirst()
