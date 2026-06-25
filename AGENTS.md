@@ -40,7 +40,7 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 
 ## Testing
 
-- Tests use H2 in PostgreSQL compatibility mode (`jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE`)
+- Tests use H2 in PostgreSQL compatibility mode (`jdbc:h2:mem:endurancetrio_tracker;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;COLLATION=und`)
 - Test config: `endurancetrio-app/src/test/resources/application-test.yaml`
 - Business tests use `@ExtendWith(MockitoExtension.class)` (pure Mockito, no Spring context)
 - Flyway migrations for H2 are in `db/migration/ddl/h2` and `db/migration/dml/h2`
