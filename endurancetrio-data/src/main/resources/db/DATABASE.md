@@ -184,4 +184,7 @@ timestamp-based naming convention.
 21. Renames full_name to long_name and adds birth_name to the athlete table:
     - [V20260625.001__extend-athlete-name-h2.sql](migration/ddl/h2/V20260625.001__extend-athlete-name-h2.sql)
     - [V20260625.001__extend-athlete-name-postgres.sql](migration/ddl/postgres/V20260625.001__extend-athlete-name-postgres.sql)
+22. Inserts athlete and individual_result data for the 1984 Peniche triathlon event:
+    - [V20260626.001__insert-1984-peniche-results-h2.sql](migration/dml/h2/V20260626.001__insert-1984-peniche-results-h2.sql)
+    - [V20260626.001__insert-1984-peniche-results-postgres.sql](migration/dml/postgres/V20260626.001__insert-1984-peniche-results-postgres.sql)
 
