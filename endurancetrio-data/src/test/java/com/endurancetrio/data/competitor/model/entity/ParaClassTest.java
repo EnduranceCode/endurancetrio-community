@@ -22,6 +22,7 @@ package com.endurancetrio.data.competitor.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.endurancetrio.data.competitor.fixtures.ParaClassFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,18 +39,14 @@ class ParaClassTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new ParaClass();
-    underTest.setId(1L);
-    underTest.setCode("PTVI");
-    underTest.setDenominationEN("Vision Impaired");
-    underTest.setDenominationPT("Deficiência Visual");
+    underTest = ParaClassFixture.standard();
   }
 
   @Test
   void entityShouldRetainValues() {
-    assertEquals(1L, underTest.getId());
-    assertEquals("PTVI", underTest.getCode());
-    assertEquals("Vision Impaired", underTest.getDenominationEN());
-    assertEquals("Deficiência Visual", underTest.getDenominationPT());
+    assertEquals(ParaClassFixture.STANDARD_ID, underTest.getId());
+    assertEquals(ParaClassFixture.STANDARD_CODE, underTest.getCode());
+    assertEquals(ParaClassFixture.STANDARD_DENOMINATION_EN, underTest.getDenominationEN());
+    assertEquals(ParaClassFixture.STANDARD_DENOMINATION_PT, underTest.getDenominationPT());
   }
 }

@@ -32,114 +32,112 @@
 <main>
   <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'overview')}"></section>
 
-  <div>
-    <section id="overview" class="section">
-      <div class="columns is-multiline">
-        <div class="column is-half-tablet is-one-third-desktop"
-             data-th-if="${!#lists.isEmpty(event.organizers)}">
-          <div class="endurance-box is-branded-thin is-content-top">
-            <h2 class="title is-4"
-                data-th-text="#{page.event.overview.label.organizers}">Organizers</h2>
-            <div data-th-each="organizer : ${event.organizers}" class="mb-2">
-              <p class="has-text-weight-bold" data-th-text="${organizer.name}">Club Name</p>
-              <p class="has-text-grey"
-                 data-th-text="${organizer.city} + ', ' + ${organizer.county} + ' (' + ${organizer.district} + ')'">
-                City, County (District)
-              </p>
-            </div>
+  <section id="overview" class="section">
+    <div class="columns is-multiline">
+      <div class="column is-half-tablet is-one-third-desktop"
+           data-th-if="${!#lists.isEmpty(event.organizers)}">
+        <div class="endurance-box is-branded-thin is-content-top">
+          <h2 class="title is-4"
+              data-th-text="#{page.event.overview.label.organizers}">Organizers</h2>
+          <div data-th-each="organizer : ${event.organizers}" class="mb-2">
+            <p class="has-text-weight-bold" data-th-text="${organizer.name}">Club Name</p>
+            <p class="has-text-grey"
+               data-th-text="${organizer.city} + ', ' + ${organizer.county} + ' (' + ${organizer.district} + ')'">
+              City, County (District)
+            </p>
           </div>
         </div>
+      </div>
 
-        <div class="column is-half-tablet is-one-third-desktop"
-             data-th-each="race : ${event.races}">
-          <div class="endurance-box is-branded-thin is-content-top">
-            <div class="media">
-              <div class="media-left">
-                <div class="box has-background-grey-200 has-text-centered"
-                     style="min-width: 4.5rem; padding: 0.5rem;">
-                  <p class="title is-3 mb-0"
-                     data-th-text="${#temporals.format(race.date, 'dd')}">15</p>
-                  <p class="subtitle is-6 mb-0 mt-1 has-text-weight-bold"
-                     data-th-if="${race.time != null}"
-                     data-th-text="${#temporals.format(race.time, 'HH:mm')}">10:00</p>
-                </div>
+      <div class="column is-half-tablet is-one-third-desktop"
+           data-th-each="race : ${event.races}">
+        <div class="endurance-box is-branded-thin is-content-top">
+          <div class="media">
+            <div class="media-left">
+              <div class="box has-background-grey-200 has-text-centered"
+                   style="min-width: 4.5rem; padding: 0.5rem;">
+                <p class="title is-3 mb-0"
+                   data-th-text="${#temporals.format(race.date, 'dd')}">15</p>
+                <p class="subtitle is-6 mb-0 mt-1 has-text-weight-bold"
+                   data-th-if="${race.time != null}"
+                   data-th-text="${#temporals.format(race.time, 'HH:mm')}">10:00</p>
               </div>
-              <div class="media-content">
-                <h2 class="title is-4" data-th-text="${race.title}">Triatlo de Peniche</h2>
-                <p class="subtitle is-6" data-th-text="${race.subtitle}">Geral</p>
+            </div>
+            <div class="media-content">
+              <h2 class="title is-4" data-th-text="${race.title}">Triatlo de Peniche</h2>
+              <p class="subtitle is-6" data-th-text="${race.subtitle}">Geral</p>
+            </div>
+          </div>
+
+          <div class="level is-mobile">
+            <div class="level-item" data-th-if="${!#lists.isEmpty(race.sports)}">
+              <div class="tags has-addons">
+                <span class="tag is-medium" data-th-each="sport : ${race.sports}"
+                      data-th-text="#{sport.__${sport}__}">
+                  Triatlo
+                </span>
               </div>
             </div>
 
-            <div class="level is-mobile">
-              <div class="level-item" data-th-if="${!#lists.isEmpty(race.sports)}">
-                <div class="tags has-addons">
-                  <span class="tag is-medium" data-th-each="sport : ${race.sports}"
-                        data-th-text="#{sport.__${sport}__}">
-                    Triatlo
-                  </span>
-                </div>
-              </div>
-
-              <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
-                <div class="tags has-addons">
-                  <span class="tag is-medium" data-th-each="distanceType : ${race.distanceTypes}"
-                        data-th-text="#{distance.type.__${distanceType}__}">
-                    Triatlo
-                  </span>
-                </div>
-              </div>
-
-              <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
-                <div class="tags has-addons">
-                  <span class="tag is-medium" data-th-text="#{race.type.__${race.raceTypeGroup}__}">
-                    Triatlo
-                  </span>
-                </div>
+            <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
+              <div class="tags has-addons">
+                <span class="tag is-medium" data-th-each="distanceType : ${race.distanceTypes}"
+                      data-th-text="#{distance.type.__${distanceType}__}">
+                  Triatlo
+                </span>
               </div>
             </div>
 
-            <div class="level is-mobile" data-th-if="${race.distanceMetadata != null}">
-              <div class="level-item" data-th-each="leg : ${race.distanceMetadata.legs}">
-                <div class="level-item has-text-centered">
-                  <div>
-                    <p class="heading" data-th-if="${leg.coreSport != null}"
-                       data-th-text="#{core.sport.__${leg.coreSport}__}">Natação</p>
-                    <p class="title is-4"
-                       data-th-text="${#numbers.formatInteger(leg.length, 0, 'DEFAULT')}">600</p>
-                  </div>
-                </div>
+            <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
+              <div class="tags has-addons">
+                <span class="tag is-medium" data-th-text="#{race.type.__${race.raceTypeGroup}__}">
+                  Triatlo
+                </span>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="column">
-          <div class="endurance-box is-branded-thin is-content-top">
-            <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}">Help us
-              complete the archive</h2>
-            <div data-th-if="${language == 'pt'}">
-              <p>
-                Se tem documentos, imagens, resultados, fotografias ou qualquer outra informação
-                relacionada com este evento, e se encontrar lacunas ou imprecisões nos dados
-                disponíveis, agradecemos o seu contributo. Por favor, contacte-nos através do email
-                <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
-                com a documentação ou informações que possa partilhar.
-              </p>
-            </div>
-            <div data-th-unless="${language == 'pt'}">
-              <p>
-                If you have documents, images, results, photos, or any other information related to
-                this event, and if you notice any gaps or inaccuracies in the available data, we
-                would appreciate your contribution. Please contact us at
-                <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
-                with any documentation or information you can share.
-              </p>
+          <div class="level is-mobile" data-th-if="${race.distanceMetadata != null}">
+            <div class="level-item" data-th-each="leg : ${race.distanceMetadata.legs}">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading" data-th-if="${leg.coreSport != null}"
+                     data-th-text="#{core.sport.__${leg.coreSport}__}">Natação</p>
+                  <p class="title is-4"
+                     data-th-text="${#numbers.formatInteger(leg.length, 0, 'DEFAULT')}">600</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+
+      <div class="column">
+        <div class="endurance-box is-branded-thin is-content-top">
+          <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}">Help us
+            complete the archive</h2>
+          <div data-th-if="${language == 'pt'}">
+            <p>
+              Se tem documentos, imagens, resultados, fotografias ou qualquer outra informação
+              relacionada com este evento, e se encontrar lacunas ou imprecisões nos dados
+              disponíveis, agradecemos o seu contributo. Por favor, contacte-nos através do email
+              <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+              com a documentação ou informações que possa partilhar.
+            </p>
+          </div>
+          <div data-th-unless="${language == 'pt'}">
+            <p>
+              If you have documents, images, results, photos, or any other information related to
+              this event, and if you notice any gaps or inaccuracies in the available data, we
+              would appreciate your contribution. Please contact us at
+              <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+              with any documentation or information you can share.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer data-th-replace="~{fragments/footer :: footer}"></footer>

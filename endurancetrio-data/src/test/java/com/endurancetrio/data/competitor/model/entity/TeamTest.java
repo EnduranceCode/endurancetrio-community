@@ -22,6 +22,7 @@ package com.endurancetrio.data.competitor.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.endurancetrio.data.competitor.fixtures.TeamFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,22 +39,16 @@ class TeamTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new Team();
-    underTest.setId(1L);
-    underTest.setFullName("Sport Clube");
-    underTest.setShortName("SC");
-    underTest.setCity("Lisbon");
-    underTest.setCounty("Lisbon");
-    underTest.setDistrict("Lisbon");
+    underTest = TeamFixture.standard();
   }
 
   @Test
   void entityShouldRetainValues() {
-    assertEquals(1L, underTest.getId());
-    assertEquals("Sport Clube", underTest.getFullName());
-    assertEquals("SC", underTest.getShortName());
-    assertEquals("Lisbon", underTest.getCity());
-    assertEquals("Lisbon", underTest.getCounty());
-    assertEquals("Lisbon", underTest.getDistrict());
+    assertEquals(TeamFixture.STANDARD_ID, underTest.getId());
+    assertEquals(TeamFixture.STANDARD_FULL_NAME, underTest.getFullName());
+    assertEquals(TeamFixture.STANDARD_SHORT_NAME, underTest.getShortName());
+    assertEquals(TeamFixture.STANDARD_CITY, underTest.getCity());
+    assertEquals(TeamFixture.STANDARD_COUNTY, underTest.getCounty());
+    assertEquals(TeamFixture.STANDARD_DISTRICT, underTest.getDistrict());
   }
 }

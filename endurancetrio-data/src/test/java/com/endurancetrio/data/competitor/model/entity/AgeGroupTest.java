@@ -22,6 +22,7 @@ package com.endurancetrio.data.competitor.model.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.endurancetrio.data.competitor.fixtures.AgeGroupFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,22 +35,18 @@ import org.junit.jupiter.api.Test;
  */
 class AgeGroupTest {
 
-  AgeGroup underTest;
+  private AgeGroup underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new AgeGroup();
-    underTest.setId(1L);
-    underTest.setCode("BEN");
-    underTest.setDenominationEN("Benjamin");
-    underTest.setDenominationPT("Benjamin");
+    underTest = AgeGroupFixture.standard();
   }
 
   @Test
   void entityShouldRetainValues() {
-    assertEquals(1L, underTest.getId());
-    assertEquals("BEN", underTest.getCode());
-    assertEquals("Benjamin", underTest.getDenominationEN());
-    assertEquals("Benjamin", underTest.getDenominationPT());
+    assertEquals(AgeGroupFixture.STANDARD_ID, underTest.getId());
+    assertEquals(AgeGroupFixture.STANDARD_CODE, underTest.getCode());
+    assertEquals(AgeGroupFixture.STANDARD_DENOMINATION_EN, underTest.getDenominationEN());
+    assertEquals(AgeGroupFixture.STANDARD_DENOMINATION_PT, underTest.getDenominationPT());
   }
 }
