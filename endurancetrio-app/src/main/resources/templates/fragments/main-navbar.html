@@ -49,6 +49,14 @@
     <div id="main-navbar" class="navbar-menu">
       <div class="navbar-end">
         <a
+            data-th-href="@{/{language}/athletes(language=${language})}"
+            data-th-text="#{navbar.option.athletes}"
+            data-th-classappend="${metadata.view == 'athletes'} ? 'is-active'"
+            class="navbar-item"
+        >
+          Events
+        </a>
+        <a
             data-th-href="@{/{language}/events(language=${language})}"
             data-th-text="#{navbar.option.events}"
             data-th-classappend="${metadata.view == 'events'} ? 'is-active'"

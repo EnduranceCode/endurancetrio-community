@@ -46,6 +46,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * The {@link EventWebController} handles Thymeleaf views for the events section.
+ */
 @EnduranceTrioWebController
 public class EventWebController {
 
@@ -76,6 +79,15 @@ public class EventWebController {
     this.eventService = eventService;
   }
 
+  /**
+   * Returns the years-with-events listing page with batched year groups.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @param page     the page number from the query string (default {@code 0})
+   * @param request  the current HTTP request for building page metadata
+   * @param model    the model to populate with view attributes
+   * @return the years-with-events view name
+   */
   @GetMapping("/{language:en|pt}/events")
   public String getYearsWithEvents(
       @PathVariable String language, @RequestParam(defaultValue = "0") int page,
@@ -98,6 +110,17 @@ public class EventWebController {
     return VIEW_YEARS_WITH_EVENTS;
   }
 
+  /**
+   * Returns the events-by-year listing page with paginated events for the given year.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @param year     the year to filter events by
+   * @param page     the page number from the query string (default {@code 0}, clamped to
+   *                 non-negative)
+   * @param request  the current HTTP request for building page metadata
+   * @param model    the model to populate with view attributes
+   * @return the events-by-year view name
+   */
   @GetMapping("/{language:en|pt}/events/{year}")
   public String getEventsByYear(
       @PathVariable String language, @PathVariable int year,
@@ -124,6 +147,16 @@ public class EventWebController {
     return VIEW_EVENTS_BY_YEAR;
   }
 
+  /**
+   * Returns the event overview page for the given event.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @param year     the event year
+   * @param id       the event ID
+   * @param request  the current HTTP request for building page metadata
+   * @param model    the model to populate with view attributes
+   * @return the event overview view name
+   */
   @GetMapping("/{language:en|pt}/events/{year}/{id}/overview")
   public String getEventOverview(
       @PathVariable String language, @PathVariable int year, @PathVariable Long id,
@@ -146,6 +179,16 @@ public class EventWebController {
     return VIEW_EVENT_OVERVIEW;
   }
 
+  /**
+   * Returns the event results page for the given event.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @param year     the event year
+   * @param id       the event ID
+   * @param request  the current HTTP request for building page metadata
+   * @param model    the model to populate with view attributes
+   * @return the event results view name
+   */
   @GetMapping("/{language:en|pt}/events/{year}/{id}/results")
   public String getEventResults(
       @PathVariable String language, @PathVariable int year, @PathVariable Long id,

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main>
+  <section class="hero has-background-grey-200">
+    <div class="hero-body">
+      <div class="container is-fullhd">
+        <h1 data-th-text="#{page.athletes.title}" class="title is-1">Athletes</h1>
+        <p class="subtitle is-3" data-th-text="#{page.athletes.subtitle}">
+          Profiles, races, and results
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div data-th-if="${pagination.totalItems() == 0}" class="has-text-centered mt-6">
+      <p data-th-text="#{page.athletes.empty}" class="subtitle is-5">No athletes found</p>
+    </div>
+
+    <div class="fixed-grid has-1-cols-mobile has-3-cols-desktop">
+      <div class="grid">
+        <div data-th-each="athlete : ${athletes}" class="cell">
+          <div class="endurance-box is-branded-thin mb-3">
+            <article class="media">
+              <div class="media-left">
+                <div class="box has-background-grey-200 has-text-centered p-3">
+                  <span class="icon is-large">
+                    <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="media-content">
+                <div class="content">
+                  <a href="#" class="title is-4"
+                     data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}">
+                    Paulo Paula Carvalho
+                  </a>
+                  <br>
+                  <span class="has-text-grey"
+                        data-th-if="${athlete.knownName() != null && !athlete.knownName().isEmpty() && !athlete.knownName().equals(athlete.longName())}"
+                        data-th-text="${athlete.longName()}">
+                    Paulo José Paula Carvalho
+                  </span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="pagination is-centered is-rounded" role="navigation"
+         data-th-if="${pagination.totalPages() > 1}">
+      <a class="pagination-previous"
+         data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+         data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+         data-th-href="${pagination.hasPrevious()}
+           ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() - 1})}
+           : null">
+        <span class="icon">
+          <i class="et et-chevron-double-left"></i>
+        </span>
+      </a>
+
+      <a class="pagination-next"
+         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+         data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+         data-th-href="${pagination.hasNext()}
+           ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() + 1})}
+           : null">
+        <span class="icon">
+          <i class="et et-chevron-double-right"></i>
+        </span>
+      </a>
+    </nav>
+  </section>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

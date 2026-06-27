@@ -26,7 +26,7 @@ logging:
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:dev_endurancetrio_community;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    url: jdbc:h2:mem:dev_endurancetrio_community;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;COLLATION=und
     username: user
     password: password
 

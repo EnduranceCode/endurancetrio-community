@@ -23,8 +23,7 @@ package com.endurancetrio.data.competitor.model.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
-import com.endurancetrio.data.competitor.model.enumerator.Country;
+import com.endurancetrio.data.competitor.fixtures.AthleteFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,23 +33,17 @@ class AthleteTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new Athlete();
-    underTest.setId(1L);
-    underTest.setLongName("Paulo José Paula Carvalho");
-    underTest.setKnownName("Paulo Paula Carvalho");
-    underTest.setGender(AthleteGender.MALE);
-    underTest.setCountry(Country.POR);
-    underTest.setYearOfBirth(1961);
+    underTest = AthleteFixture.standard();
   }
 
   @Test
   void entityShouldRetainValues() {
-    assertEquals(1L, underTest.getId());
-    assertEquals("Paulo José Paula Carvalho", underTest.getLongName());
+    assertEquals(AthleteFixture.STANDARD_ID, underTest.getId());
+    assertEquals(AthleteFixture.STANDARD_LONG_NAME, underTest.getLongName());
     assertNull(underTest.getBirthName());
-    assertEquals("Paulo Paula Carvalho", underTest.getKnownName());
-    assertEquals(AthleteGender.MALE, underTest.getGender());
-    assertEquals(Country.POR, underTest.getCountry());
-    assertEquals(1961, underTest.getYearOfBirth());
+    assertEquals(AthleteFixture.STANDARD_KNOWN_NAME, underTest.getKnownName());
+    assertEquals(AthleteFixture.STANDARD_GENDER, underTest.getGender());
+    assertEquals(AthleteFixture.STANDARD_COUNTRY, underTest.getCountry());
+    assertEquals(AthleteFixture.STANDARD_YEAR_OF_BIRTH, underTest.getYearOfBirth());
   }
 }
