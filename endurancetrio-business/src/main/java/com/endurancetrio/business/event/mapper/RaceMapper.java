@@ -22,6 +22,7 @@ package com.endurancetrio.business.event.mapper;
 
 import com.endurancetrio.business.event.dto.DistanceLegDTO;
 import com.endurancetrio.business.event.dto.DistanceMetadataDTO;
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.enumerator.CoreSport;
 import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
@@ -32,6 +33,7 @@ import com.endurancetrio.data.event.model.entity.Course;
 import com.endurancetrio.data.event.model.entity.Distance;
 import com.endurancetrio.data.event.model.entity.DoubleBiathlonDistance;
 import com.endurancetrio.data.event.model.entity.DuathlonDistance;
+import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.model.entity.SingleSportDistance;
 import com.endurancetrio.data.event.model.entity.TriathlonDistance;
@@ -60,7 +62,29 @@ public class RaceMapper {
 
     return new RaceDTO(entity.getId(), entity.getTitle(), entity.getSubtitle(), entity.getDate(),
         entity.getTime(), getSports(entity.getCourses()), getDistanceTypes(distances),
-        getRaceTypeGroup(entity), getDistanceMetadata(distances)
+        getRaceTypeGroup(entity), getDistanceMetadata(distances), null
+    );
+  }
+
+  /**
+   * Maps a {@link Race} entity to a {@link RaceDTO} including the parent {@link Event} data.
+   * <p>
+   * Unlike {@link #map(Race)}, this method navigates through the race's courses to populate the
+   * {@link RaceDTO#event()} field with the associated {@link Event} information.
+   *
+   * @param entity the Race entity to be mapped
+   * @return the corresponding RaceDTO with event data, or {@code null} if the entity is null
+   */
+  public RaceDTO mapWithEvent(Race entity) {
+    if (entity == null) {
+      return null;
+    }
+
+    List<Distance> distances = getDistances(entity.getCourses());
+
+    return new RaceDTO(entity.getId(), entity.getTitle(), entity.getSubtitle(), entity.getDate(),
+        entity.getTime(), getSports(entity.getCourses()), getDistanceTypes(distances),
+        getRaceTypeGroup(entity), getDistanceMetadata(distances), getEvent(entity)
     );
   }
 
@@ -199,5 +223,38 @@ public class RaceMapper {
         .filter(Objects::nonNull)
         .map(Sport::getCode)
         .toList();
+  }
+
+  /**
+   * Extracts the parent {@link Event} from the given {@link Race} and builds an {@link EventDTO}.
+   * <p>
+   * Uses the first course's event since all courses for a race belong to the same event. Returns
+   * {@code null} if the race has no courses or the event is null.
+   *
+   * @param race the race whose event is to be extracted
+   * @return an {@link EventDTO} with the event data, or {@code null} if not available
+   */
+  private EventDTO getEvent(Race race) {
+    Set<Course> courses = race.getCourses();
+    if (courses == null || courses.isEmpty()) {
+      return null;
+    }
+
+    Event event = courses.iterator().next().getEvent();
+    if (event == null) {
+      return null;
+    }
+
+    List<String> sportCodes = courses.stream()
+        .map(Course::getSport)
+        .filter(Objects::nonNull)
+        .map(Sport::getCode)
+        .distinct()
+        .sorted()
+        .toList();
+
+    return new EventDTO(event.getId(), event.getTitle(), event.getStartDate(), event.getEndDate(),
+        event.getCity(), event.getCounty(), event.getDistrict(), sportCodes
+    );
   }
 }

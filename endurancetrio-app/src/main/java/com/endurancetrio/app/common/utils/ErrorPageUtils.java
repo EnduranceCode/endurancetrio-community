@@ -128,7 +128,7 @@ public final class ErrorPageUtils {
         appProperties
     );
 
-    ModelAndView mav = new ModelAndView(errorView(status.value()));
+    ModelAndView mav = new ModelAndView(errorView(status.value()), status);
     mav.addObject(LANGUAGE, language);
     mav.addObject(METADATA, metadata);
     mav.addObject("status", status.value());

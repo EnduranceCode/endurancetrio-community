@@ -103,7 +103,7 @@ class EventMapperTest {
     entityTest.setCourses(Set.of(course));
 
     raceDTO = new RaceDTO(1L, "Test Race", "Subtitle", START_DATE, null, List.of(), List.of(),
-        "INDIVIDUAL", null
+        "INDIVIDUAL", null, null
     );
 
     EventFile eventFile = new EventFile();
