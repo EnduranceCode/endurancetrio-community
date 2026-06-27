@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main>
+  <section class="hero has-background-grey-200">
+    <div class="hero-body">
+      <div class="container is-fullhd">
+        <div class="media is-hidden-tablet">
+          <div class="media-left">
+            <div class="endurance-box is is-branded-thick is-b">
+              <figure class="image is-64x64">
+                <th:block th:if="${athlete.gender().getCode() == 'MALE'}">
+                  <img th:replace="~{fragments/svg :: mdi-face-man}" alt="Male athlete icon">
+                </th:block>
+                <th:block th:if="${athlete.gender().getCode() == 'FEMALE'}">
+                  <img th:replace="~{fragments/svg :: mdi-face-woman}" alt="Female athlete icon">
+                </th:block>
+              </figure>
+            </div>
+          </div>
+
+          <div class="media-content">
+            <div class="content">
+              <h1 data-th-text="${athlete.knownName()}" class="title is-2" >Known Name</h1>
+              <p data-th-text="${athlete.longName()}"
+                 class="subtitle is-4"
+              >
+                Full Name
+              </p>
+              <p data-th-if="${athlete.birthName() != null}"
+                 data-th-text="${athlete.birthName()}"
+                 class="subtitle is-5 has-text-grey"
+              >
+                Birth Name
+              </p>
+              <p class="subtitle is-5">
+                <span data-th-if="${athlete.country() != null}"
+                      data-th-text="${#locale.language == 'pt' ? athlete.country().getNamePT() : athlete.country().getNameEN()}">
+                  Portugal
+                </span>
+                <span
+                    data-th-if="${athlete.country() != null && athlete.yearOfBirth() != null}"> | </span>
+                <span data-th-if="${athlete.yearOfBirth() != null}"
+                      data-th-text="${athlete.yearOfBirth()}">
+                  1961
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="media is-hidden-mobile">
+          <div class="media-left">
+            <div class="endurance-box is is-branded-thick is-b">
+              <figure class="image is-128x128">
+                <th:block th:if="${athlete.gender().getCode() == 'MALE'}">
+                  <img th:replace="~{fragments/svg :: mdi-face-man}" alt="Male athlete icon">
+                </th:block>
+                <th:block th:if="${athlete.gender().getCode() == 'FEMALE'}">
+                  <img th:replace="~{fragments/svg :: mdi-face-woman}" alt="Female athlete icon">
+                </th:block>
+              </figure>
+            </div>
+          </div>
+
+          <div class="media-content">
+            <div class="content">
+              <h1 data-th-text="${athlete.knownName()}" class="title is-1" >Known Name</h1>
+              <p data-th-text="${athlete.longName()}"
+                 class="subtitle is-3"
+              >
+                Full Name
+              </p>
+              <p data-th-if="${athlete.birthName() != null}"
+                 data-th-text="${athlete.birthName()}"
+                 class="subtitle is-5 has-text-grey"
+              >
+                Birth Name
+              </p>
+              <p class="subtitle is-5">
+                <span data-th-if="${athlete.country() != null}"
+                      data-th-text="${#locale.language == 'pt' ? athlete.country().getNamePT() : athlete.country().getNameEN()}"
+                >
+                  Portugal
+                </span>
+                <span
+                    data-th-if="${athlete.country() != null && athlete.yearOfBirth() != null}"> | </span>
+                <span data-th-if="${athlete.yearOfBirth() != null}"
+                      data-th-text="${athlete.yearOfBirth()}">
+                  1961
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-fullhd">
+      <div data-th-if="${pagination.totalItems() == 0}" class="has-text-centered mt-6">
+        <p data-th-text="#{page.athlete.profile.empty}" class="subtitle is-5">No races found</p>
+      </div>
+
+      <div data-th-each="race : ${races}" class="endurance-box is-branded-thin mb-3">
+        <article class="media">
+          <div class="media-left">
+            <div class="box has-background-grey-200 has-text-centered">
+              <p class="title is-4 mb-0 p-0">
+                <span data-th-text="${#temporals.format(race.date, 'dd-MM')}">15-08</span>
+                <br>
+                <span data-th-text="${#temporals.format(race.date, 'yyyy')}">1984</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="media-content">
+            <div class="content">
+              <a data-th-href="@{/{lang}/events/{year}/{eventId}/results(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id})}">
+                <span data-th-text="${race.title}" class="title is-4">
+                  Triatlo de Peniche
+                </span>
+                <br>
+                <span data-th-text="${race.subtitle}" class="has-text-grey">Geral</span>
+              </a>
+              <div data-th-if="${!#lists.isEmpty(race.sports)}" class="tags mt-2">
+                <span data-th-each="sportCode : ${race.sports}"
+                      data-th-text="#{sport.__${sportCode}__}"
+                      class="tag is-link is-light"
+                >
+                  Triathlon
+                </span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <nav data-th-if="${pagination.totalPages() > 1}"
+           class="pagination is-centered is-rounded" role="navigation"
+      >
+        <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+           data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+           data-th-href="${pagination.hasPrevious()}
+             ? @{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()}, page=${pagination.pageNumber() - 1})}
+             : null"
+           class="pagination-previous"
+        >
+          <span class="icon">
+            <i class="et et-chevron-double-left"></i>
+          </span>
+        </a>
+
+        <a data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+           data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+           data-th-href="${pagination.hasNext()}
+             ? @{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()}, page=${pagination.pageNumber() + 1})}
+             : null"
+           class="pagination-next"
+        >
+          <span class="icon">
+            <i class="et et-chevron-double-right"></i>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </section>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.data.event.model.entity.Course;
+import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.model.entity.SingleSportDistance;
 import com.endurancetrio.data.event.model.entity.TriathlonDistance;
@@ -48,6 +49,14 @@ class RaceMapperTest {
   private static final LocalDate DATE = LocalDate.of(1984, Month.AUGUST, 15);
   private static final LocalTime TIME = LocalTime.of(16, 0);
 
+  private static final Long EVENT_ID = 1L;
+  private static final String EVENT_TITLE = "Test Event";
+  private static final LocalDate START_DATE = DATE;
+  private static final LocalDate END_DATE = DATE;
+  private static final String CITY = "Lisbon";
+  private static final String COUNTY = "Lisbon";
+  private static final String DISTRICT = "Lisbon";
+
   private Race entityTest;
   private Course course;
 
@@ -57,8 +66,18 @@ class RaceMapperTest {
   void setUp() {
     underTest = new RaceMapper();
 
+    Event event = new Event();
+    event.setId(EVENT_ID);
+    event.setTitle(EVENT_TITLE);
+    event.setStartDate(START_DATE);
+    event.setEndDate(END_DATE);
+    event.setCity(CITY);
+    event.setCounty(COUNTY);
+    event.setDistrict(DISTRICT);
+
     course = new Course();
     course.setSport(Sport.TRIATHLON);
+    course.setEvent(event);
 
     entityTest = new Race();
     entityTest.setId(ID);
@@ -159,6 +178,47 @@ class RaceMapperTest {
   @Test
   void mapNullEntity() {
     RaceDTO result = underTest.map((Race) null);
+
+    assertNull(result);
+  }
+
+  @Test
+  void mapWithEventEntityWithTriathlonDistance() {
+    TriathlonDistance distance = new TriathlonDistance();
+    distance.setDistanceType(DistanceType.STANDARD);
+    distance.setSwimDistance(1500);
+    distance.setSwimLaps(1);
+    distance.setBikeDistance(40000);
+    distance.setBikeLaps(2);
+    distance.setRunDistance(10000);
+    distance.setRunLaps(1);
+    course.setDistance(distance);
+
+    RaceDTO result = underTest.mapWithEvent(entityTest);
+
+    assertNotNull(result);
+    assertEquals(ID, result.id());
+    assertEquals("INDIVIDUAL", result.raceTypeGroup());
+    assertNotNull(result.distanceMetadata());
+    assertEquals(3, result.distanceMetadata().legs().size());
+    assertEquals("SWIM", result.distanceMetadata().legs().get(0).coreSport());
+    assertEquals(1500, result.distanceMetadata().legs().get(0).length());
+    assertEquals("BIKE", result.distanceMetadata().legs().get(1).coreSport());
+    assertEquals(40000, result.distanceMetadata().legs().get(1).length());
+    assertEquals("RUN", result.distanceMetadata().legs().get(2).coreSport());
+    assertEquals(10000, result.distanceMetadata().legs().get(2).length());
+    assertEquals(EVENT_ID, result.event().id());
+    assertEquals(EVENT_TITLE, result.event().title());
+    assertEquals(START_DATE, result.event().startDate());
+    assertEquals(END_DATE, result.event().endDate());
+    assertEquals(CITY, result.event().city());
+    assertEquals(COUNTY, result.event().county());
+    assertEquals(DISTRICT, result.event().district());
+  }
+
+  @Test
+  void mapWithEventNullEntity() {
+    RaceDTO result = underTest.mapWithEvent((Race) null);
 
     assertNull(result);
   }

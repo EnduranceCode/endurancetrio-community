@@ -29,9 +29,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.endurancetrio.app.common.handler.EnduranceTrioExceptionHandlerWeb;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
+import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
+import com.endurancetrio.data.competitor.model.enumerator.Country;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,6 +66,8 @@ class AthleteWebControllerTest {
 
   MockMvc mockMvc;
 
+  EnduranceTrioExceptionHandlerWeb exceptionHandler;
+
   @BeforeEach
   void setUp() {
     appProperties = new AppProperties();
@@ -68,12 +78,14 @@ class AthleteWebControllerTest {
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
     athleteWebController = new AthleteWebController(messageService, appProperties, athleteService);
+    exceptionHandler = new EnduranceTrioExceptionHandlerWeb(messageService, appProperties);
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
     viewResolver.setPrefix("/WEB-INF/views/");
     viewResolver.setSuffix(".html");
 
     mockMvc = MockMvcBuilders.standaloneSetup(athleteWebController)
+        .setControllerAdvice(exceptionHandler)
         .setViewResolvers(viewResolver)
         .build();
   }
@@ -270,5 +282,108 @@ class AthleteWebControllerTest {
         ));
 
     verify(athleteService).getAthletes(PageRequest.of(0, 30));
+  }
+
+  @Test
+  void athleteProfileWithEnglishLocale() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(),
+        any()
+    )).thenReturn("Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(),
+        any()
+    )).thenReturn("View athlete profile and race history");
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho",
+            AthleteGender.MALE, Country.POR, 1961
+        ));
+    when(athleteService.getAthleteRaces(eq(1L), any())).thenReturn(
+        new AthleteRacesPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
+
+    mockMvc.perform(get("/en/athletes/1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("athlete-profile"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attributeExists("athlete"))
+        .andExpect(model().attributeExists("races"))
+        .andExpect(model().attributeExists("pagination"));
+  }
+
+  @Test
+  void athleteProfileWithPortugueseLocale() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(),
+        any()
+    )).thenReturn("Perfil do Atleta - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(),
+        any()
+    )).thenReturn("Ver perfil e histórico de provas do atleta");
+    when(athleteService.getAthleteById(4L)).thenReturn(
+        new AthleteDTO(4L, "Paulo Cavaleiro", null, "Paulo Cavaleiro", AthleteGender.MALE,
+            Country.POR, null
+        ));
+    when(athleteService.getAthleteRaces(eq(4L), any())).thenReturn(
+        new AthleteRacesPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
+
+    mockMvc.perform(get("/pt/athletes/4"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("athlete-profile"))
+        .andExpect(model().attribute("language", "pt"))
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attributeExists("athlete"))
+        .andExpect(model().attributeExists("races"))
+        .andExpect(model().attributeExists("pagination"));
+  }
+
+  @Test
+  void athleteProfileMetadataHasCorrectTitle() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(),
+        any()
+    )).thenReturn("Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(),
+        any()
+    )).thenReturn("View athlete profile and race history");
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho",
+            AthleteGender.MALE, Country.POR, 1961
+        ));
+    when(athleteService.getAthleteRaces(eq(1L), any())).thenReturn(
+        new AthleteRacesPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
+
+    mockMvc.perform(get("/en/athletes/1"))
+        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
+                org.hamcrest.Matchers.is("Athlete Profile - EnduranceTrio")
+            )
+        ));
+  }
+
+  @Test
+  void athleteProfileWhenAthleteNotFound() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(),
+        any()
+    )).thenReturn("Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(),
+        any()
+    )).thenReturn("View athlete profile and race history");
+    when(messageService.getMessage(eq("page.error.404.metadata.title"), any(), any())).thenReturn(
+        "Page Not Found");
+    when(messageService.getMessage(eq("page.error.404.metadata.description"), any(),
+        any()
+    )).thenReturn("The requested page was not found");
+    when(athleteService.getAthleteRaces(eq(999L), any())).thenReturn(
+        new AthleteRacesPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
+    when(athleteService.getAthleteById(999L)).thenThrow(new EnduranceTrioException(
+        new com.endurancetrio.business.common.dto.ErrorDTO(EnduranceTrioError.NOT_FOUND,
+            "No athlete found with ID 999"
+        )));
+
+    mockMvc.perform(get("/en/athletes/999")).andExpect(status().isNotFound());
   }
 }

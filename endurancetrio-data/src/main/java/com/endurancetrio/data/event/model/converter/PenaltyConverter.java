@@ -44,6 +44,9 @@ public class PenaltyConverter implements AttributeConverter<Penalty, String> {
 
   @Override
   public Penalty convertToEntityAttribute(String code) {
+    if (code == null) {
+      return null;
+    }
     return Stream.of(Penalty.values())
         .filter(penalty -> penalty.getCode().equals(code.toUpperCase()))
         .findFirst()

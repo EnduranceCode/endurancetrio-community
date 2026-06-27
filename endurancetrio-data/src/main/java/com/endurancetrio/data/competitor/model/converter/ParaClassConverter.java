@@ -44,6 +44,9 @@ public class ParaClassConverter implements AttributeConverter<ParaClass, String>
 
   @Override
   public ParaClass convertToEntityAttribute(String code) {
+    if (code == null) {
+      return null;
+    }
     return Stream.of(ParaClass.values())
         .filter(paraClass -> paraClass.getCode().equals(code.toUpperCase()))
         .findFirst()

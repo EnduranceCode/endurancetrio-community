@@ -30,6 +30,7 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,10 +49,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @EnduranceTrioWebController
 public class AthleteWebController {
 
-  private static final String VIEW_ATHLETES = "athletes";
+  private static final String ATTRIBUTE_ATHLETE = "athlete";
   private static final String ATTRIBUTE_ATHLETES = "athletes";
+  private static final String ATTRIBUTE_RACES = "races";
+  private static final String VIEW_ATHLETE_PROFILE = "athlete-profile";
+  private static final String VIEW_ATHLETES = "athletes";
 
   private static final int PAGE_SIZE = 30;
+  private static final int PROFILE_PAGE_SIZE = 10;
 
   private final MessageService messageService;
   private final AppProperties appProperties;
@@ -100,5 +105,44 @@ public class AthleteWebController {
     model.addAttribute(ATTRIBUTE_ATHLETES, athletesPage.athletes());
 
     return VIEW_ATHLETES;
+  }
+
+  /**
+   * Returns the athlete profile page for a specific athlete, including their races.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @param id       the ID of the athlete
+   * @param page     the page number from the query string (default {@code 0}, clamped to
+   *                 non-negative)
+   * @param request  the current HTTP request for building page metadata
+   * @param model    the model to populate with view attributes
+   * @return the athlete profile view name
+   */
+  @GetMapping("/{language:en|pt}/athletes/{id}")
+  public String getAthleteById(
+      @PathVariable String language,
+      @PathVariable Long id,
+      @RequestParam(defaultValue = "0") int page,
+      HttpServletRequest request, Model model
+  ) {
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_ATHLETE_PROFILE,
+        messageService.getMessage("page.athlete.profile.metadata.title", null, locale),
+        messageService.getMessage("page.athlete.profile.metadata.description", null, locale),
+        request, appProperties
+    );
+
+    int clampedPage = Math.max(0, page);
+    Pageable pageable = PageRequest.of(clampedPage, PROFILE_PAGE_SIZE);
+    AthleteRacesPageDTO athleteRaces = athleteService.getAthleteRaces(id, pageable);
+
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
+    model.addAttribute(ATTRIBUTE_ATHLETE, athleteService.getAthleteById(id));
+    model.addAttribute(ATTRIBUTE_RACES, athleteRaces.races());
+    model.addAttribute(PAGINATION, athleteRaces.pagination());
+
+    return VIEW_ATHLETE_PROFILE;
   }
 }

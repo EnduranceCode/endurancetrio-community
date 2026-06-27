@@ -20,6 +20,9 @@
 
 package com.endurancetrio.business.competitor.service;
 
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import org.springframework.data.domain.Pageable;
 
@@ -36,4 +39,23 @@ public interface AthleteService {
    * metadata
    */
   AthletesPageDTO getAthletes(Pageable pageable);
+
+  /**
+   * Returns the {@link AthleteDTO} for the athlete with the given ID.
+   *
+   * @param id the unique identifier of the athlete
+   * @return the {@link AthleteDTO} for the requested athlete
+   * @throws EnduranceTrioException if no athlete with the given ID is found
+   */
+  AthleteDTO getAthleteById(Long id);
+
+  /**
+   * Returns an {@link AthleteRacesPageDTO} containing the paginated list of races for the athlete
+   * with the given ID, ordered by race date descending.
+   *
+   * @param athleteId the unique identifier of the athlete
+   * @param pageable  the pagination information (page number, page size, etc.)
+   * @return an {@link AthleteRacesPageDTO} with the races for the athlete and pagination metadata
+   */
+  AthleteRacesPageDTO getAthleteRaces(Long athleteId, Pageable pageable);
 }

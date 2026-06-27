@@ -37,10 +37,11 @@ import java.util.List;
  * @param distanceTypes    the distance type codes associated with the race
  * @param raceTypeGroup    the race type group code
  * @param distanceMetadata optional metadata describing the distance composition
+ * @param event            the event that the race belongs to (may be null)
  */
 public record RaceDTO(Long id, String title, String subtitle, LocalDate date, LocalTime time,
                       List<String> sports, List<String> distanceTypes, String raceTypeGroup,
-                      DistanceMetadataDTO distanceMetadata) {
+                      DistanceMetadataDTO distanceMetadata, EventDTO event) {
 
   public RaceDTO {
     if (title == null || title.isBlank()) {

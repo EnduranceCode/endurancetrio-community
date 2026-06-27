@@ -44,6 +44,9 @@ public class AgeGroupConverter implements AttributeConverter<AgeGroup, String> {
 
   @Override
   public AgeGroup convertToEntityAttribute(String code) {
+    if (code == null) {
+      return null;
+    }
     return Stream.of(AgeGroup.values())
         .filter(ageGroup -> ageGroup.getCode().equals(code.toUpperCase()))
         .findFirst()

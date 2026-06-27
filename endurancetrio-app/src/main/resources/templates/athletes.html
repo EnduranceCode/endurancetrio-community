@@ -34,7 +34,7 @@
     <div class="hero-body">
       <div class="container is-fullhd">
         <h1 data-th-text="#{page.athletes.title}" class="title is-1">Athletes</h1>
-        <p class="subtitle is-3" data-th-text="#{page.athletes.subtitle}">
+        <p data-th-text="#{page.athletes.subtitle}" class="subtitle is-3">
           Profiles, races, and results
         </p>
       </div>
@@ -61,14 +61,17 @@
 
               <div class="media-content">
                 <div class="content">
-                  <a href="#" class="title is-4"
-                     data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}">
+                  <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}"
+                     data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}"
+                     class="title is-4"
+                  >
                     Paulo Paula Carvalho
                   </a>
                   <br>
-                  <span class="has-text-grey"
-                        data-th-if="${athlete.knownName() != null && !athlete.knownName().isEmpty() && !athlete.knownName().equals(athlete.longName())}"
-                        data-th-text="${athlete.longName()}">
+                  <span data-th-if="${athlete.knownName() != null && !athlete.knownName().isEmpty() && !athlete.knownName().equals(athlete.longName())}"
+                        data-th-text="${athlete.longName()}"
+                        class="has-text-grey"
+                  >
                     Paulo José Paula Carvalho
                   </span>
                 </div>
@@ -81,23 +84,25 @@
 
     <nav class="pagination is-centered is-rounded" role="navigation"
          data-th-if="${pagination.totalPages() > 1}">
-      <a class="pagination-previous"
-         data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+      <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
          data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
          data-th-href="${pagination.hasPrevious()}
            ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() - 1})}
-           : null">
+           : null"
+         class="pagination-previous"
+      >
         <span class="icon">
           <i class="et et-chevron-double-left"></i>
         </span>
       </a>
 
-      <a class="pagination-next"
-         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+      <a data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
          data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
          data-th-href="${pagination.hasNext()}
            ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() + 1})}
-           : null">
+           : null"
+         class="pagination-next"
+      >
         <span class="icon">
           <i class="et et-chevron-double-right"></i>
         </span>
