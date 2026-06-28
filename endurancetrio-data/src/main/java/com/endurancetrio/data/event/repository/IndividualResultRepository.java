@@ -22,6 +22,7 @@ package com.endurancetrio.data.event.repository;
 
 import com.endurancetrio.data.event.model.entity.IndividualResult;
 import com.endurancetrio.data.event.model.entity.Race;
+import java.util.List;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,29 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IndividualResultRepository
     extends JpaRepository<@NonNull IndividualResult, @NonNull Long> {
+
+
+  /**
+   * Returns a {@link List} of {@link IndividualResult IndividualResult} for the race with the given
+   * {@code raceId}, ordered by their {@link IndividualResult#getRank() rank} ascending.
+   * <p>
+   * The athlete, team, and source result are eagerly fetched to avoid N+1 queries when mapping to
+   * DTOs. For derived results (where {@link IndividualResult#getSourceResult() sourceResult} is not
+   * null), the triathlon performance fields must be read from the source result.
+   *
+   * @param raceId the ID of the race to fetch results for
+   * @return a {@link List} of {@link IndividualResult} for the given race, ordered by rank
+   */
+  @Query(
+      "SELECT ir FROM IndividualResult ir "
+          + "LEFT JOIN FETCH ir.athlete "
+          + "LEFT JOIN FETCH ir.team "
+          + "LEFT JOIN FETCH ir.sourceResult sr "
+          + "LEFT JOIN FETCH sr.team "
+          + "WHERE ir.race.id = :raceId "
+          + "ORDER BY ir.rank ASC"
+  )
+  List<IndividualResult> findByRaceIdWithGraph(@Param("raceId") Long raceId);
 
   /**
    * Returns a {@link Page} of {@link Race races} that have at least one {@link IndividualResult}
