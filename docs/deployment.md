@@ -91,8 +91,8 @@ Key design points:
 
 - [Docker](https://docs.docker.com/engine/install/) and
   [Docker Compose](https://docs.docker.com/compose/install/)
-- [Apache HTTP Server](https://httpd.apache.org/) with `proxy`, `proxy_http`, `headers`,
-  and `rewrite` modules enabled
+- [Apache HTTP Server](https://httpd.apache.org/) with `proxy`, `proxy_http`, `headers`, `rewrite`,
+  and `alias` modules enabled
 - This guide assumes that the Apache Server web root folder is configured as described
   [here](https://github.com/EnduranceCode/server-setup-guide/blob/master/02-01-apache-server-installation.md)
 - A registered domain with DNS records pointing to the server's IP address for each subdomain
@@ -432,6 +432,11 @@ sudo a2enmod proxy
 sudo a2enmod proxy_http
 sudo a2enmod headers
 sudo a2enmod rewrite
+sudo a2enmod alias
+
+# Optional: only if using ModSecurity/OWASP CRS with the JavaDocs subdomain
+sudo a2enmod security2
+
 sudo systemctl reload apache2
 ```
 
@@ -553,7 +558,8 @@ docker compose -p endurancetrio-community stop stg-endurancetrio-community
 ```
 
 Apache will automatically serve the static offline page (502 Bad Gateway when the container 
-is stopped, 503 Service Unavailable during a restart). To bring it back:
+is stopped, 503 Service Unavailable during a restart, 504 Gateway Timeout if the container 
+takes too long to respond). To bring it back:
 
 ```shell
 docker compose -p endurancetrio-community up -d stg-endurancetrio-community
@@ -771,12 +777,16 @@ A correctly configured SSL VirtualHost block for the `stg` subdomain looks like 
         Require all granted
     </Location>
 
-    Header always set X-Robots-Tag "noindex, nofollow"
+    # Disallow search engine crawling
+    <IfModule mod_headers.c>
+        Header always set X-Robots-Tag "noindex, nofollow"
+    </IfModule>
 
     # Offline fallback page
     ProxyErrorOverride On
     ErrorDocument 502 /index.html
     ErrorDocument 503 /index.html
+    ErrorDocument 504 /index.html
     Alias /index.html /srv/www/endurancetrio/index.html
     <Directory /srv/www/endurancetrio>
         Require all granted
@@ -826,23 +836,28 @@ added by **Certbot**.
 For each static VirtualHost that now has an HTTPS redirect, delete the following sections/lines:
 
 ```apache
-DocumentRoot /srv/www/{SECOND_LEVEL_DOMAIN_SLD}
+DocumentRoot /srv/www/<EVENTUAL_PREFIX>.{SECOND_LEVEL_DOMAIN_SLD}
 
 # Directory configuration
-<Directory /srv/www/{SECOND_LEVEL_DOMAIN_SLD}>
-    Options -Indexes +FollowSymLinks -MultiViews
-    # Change to AllowOverride All if runtime configuration via .htaccess is necessary
+<Directory /srv/www/<EVENTUAL_PREFIX>.{SECOND_LEVEL_DOMAIN_SLD}>
+    Options -Indexes -MultiViews
     AllowOverride None
     Require all granted
-
-    # Security headers
-    <IfModule mod_headers.c>
-        Header always set X-Content-Type-Options "nosniff"
-        Header always set X-Frame-Options "SAMEORIGIN"
-    </IfModule>
 </Directory>
 
-CustomLog ${APACHE_LOG_DIR}/{SECOND_LEVEL_DOMAIN_SLD}_access.log combined
+<IfModule mod_security2.c>
+    <Location "/">
+        SecRuleRemoveById 952110
+    </Location>
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Robots-Tag "index, follow"
+</IfModule>
+
+CustomLog ${APACHE_LOG_DIR}/<EVENTUAL_PREFIX>.{SECOND_LEVEL_DOMAIN_SLD}_access.log combined
 ```
 
 Also, within the same file, and on the Reverse Proxy section of the Virtual Host, delete the
@@ -866,7 +881,11 @@ ProxyPassReverse / http://localhost:{APP_PORT}/
 RequestHeader set X-Forwarded-Proto "http"
 RequestHeader set X-Forwarded-Port "80"
 
-CustomLog ${APACHE_LOG_DIR}/<PREFIX>_access.log combined
+<IfModule mod_headers.c>
+    Header always set X-Robots-Tag "index, follow"
+</IfModule>
+
+CustomLog ${APACHE_LOG_DIR}/<EVENTUAL_PREFIX>._access.log combined
 ```
 
 Example of a **clean** redirect:
@@ -1000,10 +1019,42 @@ The static HTML site is generated at `target/reports/apidocs/`.
 ### Upload to the server
 
 ```shell
-rsync -avz --delete target/reports/apidocs/ <user>@<server>:/srv/www/endurancetrio-docs/
+rsync -avz --delete target/reports/apidocs/ <user>@<server>:/tmp/apidocs/
 ```
 
-The `--delete` flag ensures removed classes are reflected in the deployed site.
+The above command copies the files to the `/tmp/apidocs/` folder on the server and the `--delete`
+flag ensures removed classes are reflected in the server.
+
+To actually deploy the JavaDoc site, log into the server and use the
+[`deploy-endurancetrio-javadoc-to-prod.sh`](../apache/scripts/deploy-endurancetrio-javadoc-to-prod.sh)
+script, which automates the deployment of the JavaDoc website to the production environment.
+
+Log into the server and if the script is not available on the server, download it, as well as its
+companion
+[`.env-prod-endurancetrio-javadoc`](../apache/scripts/.env-prod-endurancetrio-javadoc)
+environment file, and make it executable:
+
+```shell
+wget -P ~/ https://raw.githubusercontent.com/EnduranceCode/endurancetrio-community/refs/heads/master/apache/scripts/.env-prod-endurancetrio-javadoc
+wget -P ~/ https://raw.githubusercontent.com/EnduranceCode/endurancetrio-community/refs/heads/master/apache/scripts/deploy-endurancetrio-javadoc-to-prod.sh
+chmod +x ~/deploy-endurancetrio-javadoc-to-prod.sh
+```
+
+Ensure that the values of the variables on `.env-prod-endurancetrio-javadoc` are correct and then
+execute the script to deploy the JavaDoc site:
+
+```shell
+./deploy-endurancetrio-javadoc-to-prod.sh
+```
+
+The script performs the following steps:
+
+1. Loads environment variables from the `.env-prod-endurancetrio-javadoc` file.
+2. Validates the presence of required environment variables.
+3. Creates a timestamped backup of the current production files.
+4. Deploys files from the staging folder to the production folder.
+5. Cleans up the staging folder after deployment.
+6. Logs progress and errors for traceability.
 
 ### Update an existing deployment
 
@@ -1011,7 +1062,13 @@ Repeat both steps:
 
 ```shell
 ./mvnw javadoc:aggregate
-rsync -avz --delete target/reports/apidocs/ <user>@<server>:/srv/www/endurancetrio-docs/
+rsync -avz --delete target/reports/apidocs/ <user>@<server>:/tmp/apidocs/
+```
+
+Then, on the server, execute the script to deploy the JavaDoc site:
+
+```shell
+./deploy-endurancetrio-javadoc-to-prod.sh
 ```
 
 The docs are now accessible at `https://docs.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}/`.
