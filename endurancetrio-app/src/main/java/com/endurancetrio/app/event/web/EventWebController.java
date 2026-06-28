@@ -32,12 +32,14 @@ import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,12 +55,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class EventWebController {
 
   private static final String VIEW_EVENT_OVERVIEW = "event-overview";
-  private static final String VIEW_EVENT_RESULTS = "event-results";
   private static final String VIEW_EVENTS_BY_YEAR = "events-by-year";
+  private static final String VIEW_RACE_RESULTS = "race-results";
   private static final String VIEW_YEARS_WITH_EVENTS = "years-with-events";
 
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
+  private static final String ATTRIBUTE_RACE_ID = "raceId";
+  private static final String ATTRIBUTE_RACE_ID_NEXT = "raceIdNext";
+  private static final String ATTRIBUTE_RACE_ID_PREV = "raceIdPrev";
   private static final String ATTRIBUTE_YEARS_WITH_EVENTS = "yearsWithEvents";
   private static final String ATTRIBUTE_YEAR = "year";
 
@@ -180,35 +185,44 @@ public class EventWebController {
   }
 
   /**
-   * Returns the event results page for the given event.
+   * Returns the race results page for the given event and race.
    *
    * @param language the language path variable ({@code en} or {@code pt})
    * @param year     the event year
-   * @param id       the event ID
+   * @param eventId  the event ID
+   * @param raceId   the race ID
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
-   * @return the event results view name
+   * @return the race results view name
    */
-  @GetMapping("/{language:en|pt}/events/{year}/{id}/results")
-  public String getEventResults(
-      @PathVariable String language, @PathVariable int year, @PathVariable Long id,
-      HttpServletRequest request, Model model
+  @GetMapping("/{language:en|pt}/events/{year}/{eventId}/results/{raceId}")
+  public String getRaceResults(
+      @PathVariable String language, @PathVariable int year, @PathVariable Long eventId,
+      @PathVariable Long raceId, HttpServletRequest request, Model model
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_RESULTS,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_RACE_RESULTS,
         messageService.getMessage("page.event.results.metadata.title", null, locale),
         messageService.getMessage("page.event.results.metadata.description", null, locale),
         request, appProperties
     );
 
-    EventOverviewDTO event = eventService.getEventOverview(id, year);
+    EventOverviewDTO event = eventService.getEventOverview(eventId, year);
+
+    List<RaceDTO> races = event.races();
+    int currentIndex = getCurrentRaceIndex(raceId, races);
+    Long raceIdPrev = getPreviousRaceId(currentIndex, races);
+    Long raceIdNext = getNextRaceId(currentIndex, races);
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
+    model.addAttribute(ATTRIBUTE_RACE_ID, raceId);
+    model.addAttribute(ATTRIBUTE_RACE_ID_PREV, raceIdPrev);
+    model.addAttribute(ATTRIBUTE_RACE_ID_NEXT, raceIdNext);
 
-    return VIEW_EVENT_RESULTS;
+    return VIEW_RACE_RESULTS;
   }
 
   /**
@@ -267,5 +281,48 @@ public class EventWebController {
       case 2 -> batchIndex + 1;
       default -> batchIndex + 2;
     };
+  }
+
+  /**
+   * Finds the index of the race with the given ID in the race list.
+   *
+   * @param raceId the race ID to search for
+   * @param races  the list of races to search
+   * @return the index of the matching race, or {@code -1} if not found
+   */
+  private static int getCurrentRaceIndex(Long raceId, List<RaceDTO> races) {
+    int currentIndex = -1;
+    for (int i = 0; i < races.size(); i++) {
+      if (races.get(i).id().equals(raceId)) {
+        currentIndex = i;
+        break;
+      }
+    }
+    return currentIndex;
+  }
+
+  /**
+   * Returns the ID of the next race after the given position in the list.
+   *
+   * @param currentIndex the index of the current race
+   * @param races        the list of races
+   * @return the ID of the next race, or {@code null} if the current race is the last or was not
+   *         found
+   */
+  private static @Nullable Long getNextRaceId(int currentIndex, List<RaceDTO> races) {
+    return currentIndex >= 0 && currentIndex < races.size() - 1
+        ? races.get(currentIndex + 1).id() : null;
+  }
+
+  /**
+   * Returns the ID of the previous race before the given position in the list.
+   *
+   * @param currentIndex the index of the current race
+   * @param races        the list of races
+   * @return the ID of the previous race, or {@code null} if the current race is the first or was
+   *         not found
+   */
+  private static @Nullable Long getPreviousRaceId(int currentIndex, List<RaceDTO> races) {
+    return currentIndex > 0 ? races.get(currentIndex - 1).id() : null;
   }
 }

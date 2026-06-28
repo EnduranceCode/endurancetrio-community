@@ -56,7 +56,7 @@
                data-th-text="#{page.event.tab.overview}">Overview</a>
           </li>
           <li data-th-classappend="${currentTab == 'results'} ? 'is-active' : ''">
-            <a data-th-href="@{/{language}/events/{year}/{id}/results(language=${language}, year=${year}, id=${event.id()})}"
+            <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${event.races().getFirst().id()})}"
                data-th-text="#{page.event.tab.results}">Results</a>
           </li>
         </ul>

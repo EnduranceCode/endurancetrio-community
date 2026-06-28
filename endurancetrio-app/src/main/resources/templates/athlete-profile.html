@@ -145,7 +145,7 @@
 
           <div class="media-content">
             <div class="content">
-              <a data-th-href="@{/{lang}/events/{year}/{eventId}/results(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id})}">
+              <a data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}">
                 <span data-th-text="${race.title}" class="title is-4">
                   Triatlo de Peniche
                 </span>

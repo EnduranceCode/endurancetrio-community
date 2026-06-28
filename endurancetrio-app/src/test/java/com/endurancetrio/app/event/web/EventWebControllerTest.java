@@ -34,6 +34,7 @@ import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import java.time.LocalDate;
@@ -83,6 +84,20 @@ class EventWebControllerTest {
   private static final EventOverviewDTO EVENT_OVERVIEW = new EventOverviewDTO(
       1L, "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria",
       List.of(), List.of(), List.of()
+  );
+  private static final RaceDTO RACE_1 = new RaceDTO(1L, "Triatlo de Peniche", "Geral", EVENT_DATE,
+      null, List.of("TRIATHLON"), List.of("SPRINT"), "STANDARD", null, null
+  );
+  private static final RaceDTO RACE_2 = new RaceDTO(2L, "Triatlo de Peniche", "Estafetas",
+      EVENT_DATE, null, List.of("TRIATHLON"), List.of("SPRINT"), "RELAY", null, null
+  );
+  private static final RaceDTO RACE_3 = new RaceDTO(3L, "Triatlo de Peniche", "Para", EVENT_DATE,
+      null, List.of("TRIATHLON"), List.of("SPRINT"), "PARA", null, null
+  );
+
+  private static final EventOverviewDTO EVENT_OVERVIEW_WITH_RACES = new EventOverviewDTO(
+      1L, "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria",
+      List.of(), List.of(RACE_1, RACE_2, RACE_3), List.of()
   );
 
   @Mock
@@ -326,7 +341,7 @@ class EventWebControllerTest {
   }
 
   @Test
-  void getEventResultsPageWithEnglishLocale() throws Exception {
+  void getRaceResultsPageWithEnglishLocale() throws Exception {
     when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
         any()
     )).thenReturn("Results - EnduranceTrio");
@@ -335,15 +350,16 @@ class EventWebControllerTest {
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
 
-    mockMvc.perform(get("/en/events/1984/1/results"))
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("event-results"))
+        .andExpect(view().name("race-results"))
         .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attributeExists("metadata"));
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attributeExists("raceId"));
   }
 
   @Test
-  void getEventResultsPageWithPortugueseLocale() throws Exception {
+  void getRaceResultsPageWithPortugueseLocale() throws Exception {
     when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
         any()
     )).thenReturn("Resultados - EnduranceTrio");
@@ -352,10 +368,65 @@ class EventWebControllerTest {
     )).thenReturn("Resultados de eventos de desportos de endurance");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
 
-    mockMvc.perform(get("/pt/events/1984/1/results"))
+    mockMvc.perform(get("/pt/events/1984/1/results/1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("event-results"))
+        .andExpect(view().name("race-results"))
         .andExpect(model().attribute("language", "pt"))
-        .andExpect(model().attributeExists("metadata"));
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attributeExists("raceId"));
+  }
+
+  @Test
+  void getRaceResultsFirstRaceShouldHaveNextButNoPrevious() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
+        any()
+    )).thenReturn("Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
+        any()
+    )).thenReturn("View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("race-results"))
+        .andExpect(model().attribute("raceId", 1L))
+        .andExpect(model().attribute("raceIdPrev", org.hamcrest.Matchers.nullValue()))
+        .andExpect(model().attribute("raceIdNext", 2L));
+  }
+
+  @Test
+  void getRaceResultsMiddleRaceShouldHavePreviousAndNext() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
+        any()
+    )).thenReturn("Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
+        any()
+    )).thenReturn("View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    mockMvc.perform(get("/en/events/1984/1/results/2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("race-results"))
+        .andExpect(model().attribute("raceId", 2L))
+        .andExpect(model().attribute("raceIdPrev", 1L))
+        .andExpect(model().attribute("raceIdNext", 3L));
+  }
+
+  @Test
+  void getRaceResultsLastRaceShouldHavePreviousButNoNext() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
+        any()
+    )).thenReturn("Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
+        any()
+    )).thenReturn("View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    mockMvc.perform(get("/en/events/1984/1/results/3"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("race-results"))
+        .andExpect(model().attribute("raceId", 3L))
+        .andExpect(model().attribute("raceIdPrev", 2L))
+        .andExpect(model().attribute("raceIdNext", org.hamcrest.Matchers.nullValue()));
   }
 }
