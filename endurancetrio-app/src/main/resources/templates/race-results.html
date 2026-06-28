@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main>
+  <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'results')}"></section>
+
+  <div>
+    <section id="results" class="section">
+      <div class="mb-6">
+          <div class="field has-addons">
+            <div class="control">
+              <a class="button is-primary"
+                 data-th-classappend="${raceIdPrev == null} ? 'is-disabled'"
+                 data-th-attr="disabled=${raceIdPrev == null} ? 'disabled' : null"
+                 data-th-href="${raceIdPrev != null}
+                   ? @{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${raceIdPrev})}
+                   : null">
+                <span class="icon">
+                  <i class="et et-chevron-double-left"></i>
+                </span>
+              </a>
+            </div>
+            <div class="control is-expanded">
+              <div class="select is-fullwidth">
+                <label for="race-select" class="label is-sr-only"
+                       data-th-text="#{page.event.results.select.label}">Select a race</label>
+                <select id="race-select" onchange="window.location.href=this.value">
+                  <option data-th-each="race : ${event.races()}"
+                          data-th-value="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}"
+                          data-th-selected="${race.id() == raceId}"
+                          data-th-text="${race.title()} + ' - ' + ${race.subtitle()}">
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <a class="button is-primary"
+                 data-th-classappend="${raceIdNext == null} ? 'is-disabled'"
+                 data-th-attr="disabled=${raceIdNext == null} ? 'disabled' : null"
+                 data-th-href="${raceIdNext != null}
+                   ? @{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${raceIdNext})}
+                   : null">
+                <span class="icon">
+                  <i class="et et-chevron-double-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+      </div>
+
+      <div class="has-text-centered">
+        <div class="columns">
+          <div class="column is-4 is-offset-4">
+            <div data-th-replace="~{fragments/svg :: athletes-training}"></div>
+          </div>
+        </div>
+        <p data-th-text="#{page.event.results.title}" class="title mt-6"></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
