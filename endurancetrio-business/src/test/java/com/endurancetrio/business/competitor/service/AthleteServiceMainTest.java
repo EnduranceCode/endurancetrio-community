@@ -91,9 +91,9 @@ class AthleteServiceMainTest {
         List.of(testCarvalhoEntity, testCavaleiroEntity, testBelloEntity), PAGEABLE, 3L);
 
     when(athleteRepository.findAllOrderedByKnownName(PAGEABLE)).thenReturn(athletePage);
-    when(athleteMapper.mapToAthleteDTO(testCarvalhoEntity)).thenReturn(testCarvalhoDTO);
-    when(athleteMapper.mapToAthleteDTO(testCavaleiroEntity)).thenReturn(testCavaleiroDTO);
-    when(athleteMapper.mapToAthleteDTO(testBelloEntity)).thenReturn(testBelloDTO);
+    when(athleteMapper.map(testCarvalhoEntity)).thenReturn(testCarvalhoDTO);
+    when(athleteMapper.map(testCavaleiroEntity)).thenReturn(testCavaleiroDTO);
+    when(athleteMapper.map(testBelloEntity)).thenReturn(testBelloDTO);
 
     AthletesPageDTO result = underTest.getAthletes(PAGEABLE);
 
@@ -125,7 +125,7 @@ class AthleteServiceMainTest {
     AthleteDTO testAthleteDTO = AthleteDTOFixtures.standard();
 
     when(athleteRepository.findById(ATHLETE_ID)).thenReturn(Optional.of(testAthlete));
-    when(athleteMapper.mapToAthleteDTO(testAthlete)).thenReturn(testAthleteDTO);
+    when(athleteMapper.map(testAthlete)).thenReturn(testAthleteDTO);
 
     AthleteDTO result = underTest.getAthleteById(ATHLETE_ID);
 

@@ -66,7 +66,7 @@ public class AthleteServiceMain implements AthleteService {
   @Transactional(readOnly = true)
   public AthletesPageDTO getAthletes(Pageable pageable) {
     Page<AthleteDTO> athletePage = athleteRepository.findAllOrderedByKnownName(pageable)
-        .map(athleteMapper::mapToAthleteDTO);
+        .map(athleteMapper::map);
 
     return new AthletesPageDTO(athletePage.getContent(), PaginationDTO.from(athletePage));
   }
@@ -74,7 +74,7 @@ public class AthleteServiceMain implements AthleteService {
   @Override
   @Transactional(readOnly = true)
   public AthleteDTO getAthleteById(Long id) {
-    return athleteRepository.findById(id).map(athleteMapper::mapToAthleteDTO).orElseThrow(() -> {
+    return athleteRepository.findById(id).map(athleteMapper::map).orElseThrow(() -> {
       String errorMsg = String.format("No athlete found with ID %d", id);
       LOG.warn(errorMsg);
       return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));

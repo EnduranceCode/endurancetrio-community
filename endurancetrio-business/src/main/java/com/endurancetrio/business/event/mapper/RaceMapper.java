@@ -42,10 +42,14 @@ import com.endurancetrio.data.event.model.enumerator.Sport;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RaceMapper {
+
+  private static final Logger LOG = LoggerFactory.getLogger(RaceMapper.class);
 
   /**
    * Maps a {@link Race} entity to a {@link RaceDTO}.
@@ -201,6 +205,7 @@ public class RaceMapper {
         return RaceTypeGroup.RELAY.getCode();
       }
       default -> {
+        LOG.warn("Unrecognized race type '{}' for race ID {}", race.getRaceType(), race.getId());
         return null;
       }
     }

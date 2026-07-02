@@ -64,8 +64,9 @@ import java.util.StringJoiner;
  *   </li>
  *   <li>
  *     {@link #getSourceResult() sourceResult} : the parent {@link IndividualResult} that this
- *     result is derived from, if any. Performance data should be read from this source
- *     for derived race results.
+ *     result is derived from, if any. The source chain is constrained to a single level:
+ *     a source result must not itself have a source result (it must be a root result).
+ *     Performance data should be read from this source for derived race results.
  *   </li>
  *   <li>
  *     {@link #getPenalty() penalty} : the {@link Penalty} applied to the athlete in this

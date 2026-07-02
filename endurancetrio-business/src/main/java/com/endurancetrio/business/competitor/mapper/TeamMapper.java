@@ -20,30 +20,34 @@
 
 package com.endurancetrio.business.competitor.mapper;
 
-import com.endurancetrio.business.competitor.dto.AthleteDTO;
-import com.endurancetrio.data.competitor.model.entity.Athlete;
+import com.endurancetrio.business.competitor.dto.TeamDTO;
+import com.endurancetrio.data.competitor.model.entity.Team;
 import org.springframework.stereotype.Component;
 
 /**
- * The {@link AthleteMapper} provides mapping between {@link Athlete} entities and
- * {@link AthleteDTO} objects.
+ * The {@link TeamMapper} provides mapping between {@link Team} entities and {@link TeamDTO}
+ * objects.
  */
 @Component
-public class AthleteMapper {
+public class TeamMapper {
 
   /**
-   * Maps an {@link Athlete} entity to an {@link AthleteDTO}.
+   * Maps a {@link Team} entity to a {@link TeamDTO}.
+   * <p>
+   * If the entity is {@code null}, a custom {@code teamName} may be provided for display purposes
+   * when no formal team record exists in the database.
    *
-   * @param entity the Athlete entity to be mapped
-   * @return the corresponding AthleteDTO, or {@code null} if the entity is {@code null}
+   * @param entity   the Team entity to map; may be null
+   * @param teamName the team name to use when the entity is null; may be null
+   * @return the corresponding TeamDTO, or {@code null} if the entity is {@code null}
    */
-  public AthleteDTO map(Athlete entity) {
+  public TeamDTO map(Team entity, String teamName) {
     if (entity == null) {
       return null;
     }
 
-    return new AthleteDTO(entity.getId(), entity.getLongName(), entity.getBirthName(),
-        entity.getKnownName(), entity.getGender(), entity.getCountry(), entity.getYearOfBirth()
+    return new TeamDTO(entity.getId(), entity.getFullName(), teamName, entity.getCity(),
+        entity.getCounty(), entity.getDistrict()
     );
   }
 }

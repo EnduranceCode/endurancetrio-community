@@ -20,6 +20,14 @@
 
 package com.endurancetrio.data.event.model.enumerator;
 
+/**
+ * The {@link Penalty} enum represents the possible penalty codes applied to an athlete's result.
+ * <p>
+ * The declaration order of constants is significant: it defines the sorting priority used when
+ * ranking results with the same rank. {@link Enum#ordinal()} is used as the secondary sort key
+ * in {@code RaceServiceMain}, meaning the first constant (DNF) has the highest priority and the
+ * last (EC) has the lowest. Any reordering of constants may affect race result ordering.
+ */
 public enum Penalty {
   DNF("DNF", "Did Not Finish", "Não Completou"),
   LAP("LAP", "Lapped", "Ultrapassado"),

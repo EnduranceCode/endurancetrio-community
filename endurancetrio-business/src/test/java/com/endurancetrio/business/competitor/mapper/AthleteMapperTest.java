@@ -48,12 +48,12 @@ class AthleteMapperTest {
 
   @Test
   void shouldMapNullToNull() {
-    assertNull(underTest.mapToAthleteDTO(null));
+    assertNull(underTest.map(null));
   }
 
   @Test
   void shouldMapEntityToDTO() {
-    AthleteDTO result = underTest.mapToAthleteDTO(entityTest);
+    AthleteDTO result = underTest.map(entityTest);
 
     assertNotNull(result);
     assertEquals(AthleteFixture.STANDARD_ID, result.id());
@@ -70,7 +70,7 @@ class AthleteMapperTest {
     entityTest.setCountry(null);
     entityTest.setYearOfBirth(null);
 
-    AthleteDTO result = underTest.mapToAthleteDTO(entityTest);
+    AthleteDTO result = underTest.map(entityTest);
 
     assertNotNull(result);
     assertEquals(AthleteFixture.STANDARD_LONG_NAME, result.longName());
