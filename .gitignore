@@ -3,6 +3,10 @@
 application-secrets.yaml
 endurancetrio-app/src/main/resources/static
 
+# Task briefs
+tasks/*
+!tasks/info.md
+
 # Spring Boot
 # -----------
 HELP.md
