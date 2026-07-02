@@ -94,7 +94,20 @@ Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activa
 - CI: `.github/workflows/publish-image.yml` — triggers on release publish or `workflow_dispatch`
 - Deployment Postgres port mapping is loopback-only (`127.0.0.1:${POSTGRES_EXT_PORT:-5432}:5432`), intended for local access on server or SSH tunnel clients
 
+## Task briefs
+
+Local task briefs for AI agent implementation live in `tasks/`. Each file follows the format
+in `.github/ISSUE_TEMPLATE/feature-or-bugfix.md`. The folder is gitignored — only `info.md`
+is committed.
+
+**Handoff convention:** *"Read `tasks/foo.md` and implement it."* The agent parses the document
+and executes against its acceptance criteria.
+
+Once implemented, delete the task file (the PR description captures the change).
+
 ## Commit messages
 
 Subject: ≤50 chars, capitalized, imperative mood, no period. Body optional (72-char wrap, explains
 what/why vs. how). Follows [cbea.ms/git-commit](https://cbea.ms/git-commit/).
+
+Never create commits unless explicitly instructed by the user.
