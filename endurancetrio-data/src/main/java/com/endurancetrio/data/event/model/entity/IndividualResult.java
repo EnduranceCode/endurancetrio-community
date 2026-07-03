@@ -76,19 +76,19 @@ import java.util.StringJoiner;
  *     {@link #getAthlete() athlete} : the {@link Athlete} this result belongs to.
  *   </li>
  *   <li>
- *     {@link #getTeam() team} : the {@link Team} this result belongs to, if applicable.
- *   </li>
- *   <li>
- *     {@link #getTeamName() teamName} : the display name of the {@link Team} as it appears
- *     in this specific {@link Race}. May differ from the team's canonical name.
- *   </li>
- *   <li>
  *     {@link #getAgeGroup() ageGroup} : the {@link AgeGroup} of the athlete for this
  *     specific {@link Race}.
  *   </li>
  *   <li>
  *     {@link #getParaClass() paraClass} : the paratriathlon sport {@link ParaClass} of the
  *     athlete for this specific {@link Race}.
+ *   </li>
+ *   <li>
+ *     {@link #getTeam() team} : the {@link Team} this result belongs to, if applicable.
+ *   </li>
+ *   <li>
+ *     {@link #getTeamName() teamName} : the display name of the {@link Team} as it appears
+ *     in this specific {@link Race}. May differ from the team's canonical name.
  *   </li>
  *   <li>
  *     {@link #getBib() bib} : the athlete's race bib number.
@@ -167,13 +167,6 @@ public class IndividualResult extends BaseEntity<Long> {
   @JoinColumn(name = "athlete_id", referencedColumnName = "id", nullable = false)
   private Athlete athlete;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "team_id", referencedColumnName = "id")
-  private Team team;
-
-  @Column(name = "team_name")
-  private String teamName;
-
   @Convert(converter = AgeGroupConverter.class)
   @Column(name = "age_group")
   private AgeGroup ageGroup;
@@ -181,6 +174,13 @@ public class IndividualResult extends BaseEntity<Long> {
   @Convert(converter = ParaClassConverter.class)
   @Column(name = "para_class")
   private ParaClass paraClass;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "team_id", referencedColumnName = "id")
+  private Team team;
+
+  @Column(name = "team_name")
+  private String teamName;
 
   @Column(name = "bib")
   private String bib;
@@ -276,22 +276,6 @@ public class IndividualResult extends BaseEntity<Long> {
     this.athlete = athlete;
   }
 
-  public Team getTeam() {
-    return team;
-  }
-
-  public void setTeam(Team team) {
-    this.team = team;
-  }
-
-  public String getTeamName() {
-    return teamName;
-  }
-
-  public void setTeamName(String teamName) {
-    this.teamName = teamName;
-  }
-
   public AgeGroup getAgeGroup() {
     return ageGroup;
   }
@@ -306,6 +290,22 @@ public class IndividualResult extends BaseEntity<Long> {
 
   public void setParaClass(ParaClass paraClass) {
     this.paraClass = paraClass;
+  }
+
+  public Team getTeam() {
+    return team;
+  }
+
+  public void setTeam(Team team) {
+    this.team = team;
+  }
+
+  public String getTeamName() {
+    return teamName;
+  }
+
+  public void setTeamName(String teamName) {
+    this.teamName = teamName;
   }
 
   public String getBib() {
@@ -433,10 +433,10 @@ public class IndividualResult extends BaseEntity<Long> {
             .orElse(null))
         .add("penalty=" + Optional.ofNullable(penalty).map(Penalty::getCode).orElse(null))
         .add("athleteId=" + Optional.ofNullable(athlete).map(Athlete::getId).orElse(null))
-        .add("teamId=" + Optional.ofNullable(team).map(Team::getId).orElse(null))
-        .add("teamName='" + teamName + "'")
         .add("ageGroup=" + Optional.ofNullable(ageGroup).map(AgeGroup::getCode).orElse(null))
         .add("paraClass=" + Optional.ofNullable(paraClass).map(ParaClass::getCode).orElse(null))
+        .add("teamId=" + Optional.ofNullable(team).map(Team::getId).orElse(null))
+        .add("teamName='" + teamName + "'")
         .add("bib='" + bib + "'")
         .add("swim=" + swim)
         .add("firstBike=" + firstBike)
