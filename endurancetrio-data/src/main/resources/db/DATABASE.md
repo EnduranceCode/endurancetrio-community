@@ -187,4 +187,10 @@ timestamp-based naming convention.
 22. Inserts athlete and individual_result data for the 1984 Peniche triathlon event:
     - [V20260626.001__insert-1984-peniche-results-h2.sql](migration/dml/h2/V20260626.001__insert-1984-peniche-results-h2.sql)
     - [V20260626.001__insert-1984-peniche-results-postgres.sql](migration/dml/postgres/V20260626.001__insert-1984-peniche-results-postgres.sql)
+23. Reorders the columns of the individual_result table to align with the field order of IndividualResultDTO:
+    - [V20260703.001__reorder-individual-result-columns-h2.sql](migration/ddl/h2/V20260703.001__reorder-individual-result-columns-h2.sql)
+    - [V20260703.001__reorder-individual-result-columns-postgres.sql](migration/ddl/postgres/V20260703.001__reorder-individual-result-columns-postgres.sql)
+24. Re-inserts individual_result data for the 1984 Peniche triathlon event with columns in the new order:
+    - [V20260703.002__reinsert-individual-result-data-h2.sql](migration/dml/h2/V20260703.002__reinsert-individual-result-data-h2.sql)
+    - [V20260703.002__reinsert-individual-result-data-postgres.sql](migration/dml/postgres/V20260703.002__reinsert-individual-result-data-postgres.sql)
 
