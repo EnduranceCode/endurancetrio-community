@@ -26,6 +26,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${DB_ROOT_PASSWORD}
       POSTGRES_USER: postgres
+      TZ: UTC
       STG_DB_USERNAME: ${STG_DB_USERNAME}
       STG_DB_SECRET: ${STG_DB_SECRET}
       PRD_DB_USERNAME: ${PRD_DB_USERNAME}
