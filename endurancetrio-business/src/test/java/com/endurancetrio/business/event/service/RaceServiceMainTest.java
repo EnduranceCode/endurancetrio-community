@@ -81,13 +81,16 @@ class RaceServiceMainTest {
     var distanceTypes = List.of("OLYMPIC");
 
     individualRace = new RaceDTO(RACE_ID, "Elite Men", "Elite", raceDate, raceTime, sports,
-        distanceTypes, "INDIVIDUAL", null, null
+        distanceTypes, "INDIVIDUAL", null, null,
+        "UNKNOWN"
     );
     collectiveRace = new RaceDTO(2L, "Team Race", "Teams", raceDate, raceTime, sports,
-        distanceTypes, "COLLECTIVE", null, null
+        distanceTypes, "COLLECTIVE", null, null,
+        "UNKNOWN"
     );
     relayRace = new RaceDTO(3L, "Relay Race", "Relay", raceDate, raceTime, sports,
-        distanceTypes, "RELAY", null, null
+        distanceTypes, "RELAY", null, null,
+        "UNKNOWN"
     );
 
     result1 = new IndividualResult();
@@ -247,7 +250,8 @@ class RaceServiceMainTest {
   void getRaceResultsWithInvalidRaceTypeGroupShouldThrow() {
     var invalidRace = new RaceDTO(RACE_ID, "Bad Race", "Bad",
         LocalDate.of(2026, Month.JUNE, 1), null, List.of("TRIATHLON"),
-        List.of("SPRINT"), "UNKNOWN", null, null
+        List.of("SPRINT"), "UNKNOWN", null, null,
+        "UNKNOWN"
     );
 
     var exception = assertThrows(EnduranceTrioException.class,

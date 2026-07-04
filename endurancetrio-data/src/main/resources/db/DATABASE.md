@@ -193,4 +193,10 @@ timestamp-based naming convention.
 24. Re-inserts individual_result data for the 1984 Peniche triathlon event with columns in the new order:
     - [V20260703.002__reinsert-individual-result-data-h2.sql](migration/dml/h2/V20260703.002__reinsert-individual-result-data-h2.sql)
     - [V20260703.002__reinsert-individual-result-data-postgres.sql](migration/dml/postgres/V20260703.002__reinsert-individual-result-data-postgres.sql)
+25. Adds `result_status` column to the `race` table:
+    - [V20260703.003__add-result-status-to-race-h2.sql](migration/ddl/h2/V20260703.003__add-result-status-to-race-h2.sql)
+    - [V20260703.003__add-result-status-to-race-postgres.sql](migration/ddl/postgres/V20260703.003__add-result-status-to-race-postgres.sql)
+26. Sets `result_status` on existing race data:
+    - [V20260703.004__set-result-status-on-existing-races-h2.sql](migration/dml/h2/V20260703.004__set-result-status-on-existing-races-h2.sql)
+    - [V20260703.004__set-result-status-on-existing-races-postgres.sql](migration/dml/postgres/V20260703.004__set-result-status-on-existing-races-postgres.sql)
 

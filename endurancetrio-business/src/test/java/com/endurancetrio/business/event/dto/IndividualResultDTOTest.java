@@ -53,7 +53,7 @@ class IndividualResultDTOTest {
   @BeforeEach
   void setUp() {
     RaceDTO race = new RaceDTO(1L, "Elite Men", "Elite", LocalDate.of(2026, Month.JUNE, 1), null,
-        List.of("TRIATHLON"), List.of("OLYMPIC"), "INDIVIDUAL", null, null
+        List.of("TRIATHLON"), List.of("OLYMPIC"), "INDIVIDUAL", null, null, "UNKNOWN"
     );
     underTest = new IndividualResultDTO(ID, race, RANK, PENALTY, AthleteDTOFixtures.standard(),
         AgeGroup.ELITE, null, TeamDTOFixtures.standard(), BIB, SWIM, null, null, null, BIKE, null,
