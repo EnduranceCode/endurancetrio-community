@@ -56,7 +56,7 @@ class RaceDTOTest {
   @BeforeEach
   void setUp() {
     underTest = new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES,
-        RACE_TYPE_GROUP, DISTANCE_METADATA, null
+        RACE_TYPE_GROUP, DISTANCE_METADATA, null, "UNKNOWN"
     );
   }
 
@@ -77,7 +77,7 @@ class RaceDTOTest {
   void shouldRejectNullSubtitle() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, null, DATE, TIME, SPORTS, DISTANCE_TYPES, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -86,7 +86,7 @@ class RaceDTOTest {
   void shouldRejectBlankSubtitle() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, " ", DATE, TIME, SPORTS, DISTANCE_TYPES, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -94,7 +94,7 @@ class RaceDTOTest {
   @Test
   void timeCanBeNull() {
     RaceDTO dto = new RaceDTO(ID, TITLE, SUBTITLE, DATE, null, SPORTS, DISTANCE_TYPES,
-        RACE_TYPE_GROUP, DISTANCE_METADATA, null
+        RACE_TYPE_GROUP, DISTANCE_METADATA, null, "UNKNOWN"
     );
     assertNull(dto.time());
   }
@@ -102,7 +102,7 @@ class RaceDTOTest {
   @Test
   void distanceMetadataCanBeNull() {
     RaceDTO dto = new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES,
-        RACE_TYPE_GROUP, null, null
+        RACE_TYPE_GROUP, null, null, "UNKNOWN"
     );
     assertNull(dto.distanceMetadata());
   }
@@ -111,7 +111,7 @@ class RaceDTOTest {
   void shouldRejectNullTitle() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, null, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -120,7 +120,7 @@ class RaceDTOTest {
   void shouldRejectBlankTitle() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, " ", SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -129,7 +129,7 @@ class RaceDTOTest {
   void shouldRejectNullDate() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, SUBTITLE, null, TIME, SPORTS, DISTANCE_TYPES, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -138,7 +138,7 @@ class RaceDTOTest {
   void shouldRejectNullSports() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, null, DISTANCE_TYPES, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -147,7 +147,7 @@ class RaceDTOTest {
   void shouldRejectNullDistanceTypes() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, null, RACE_TYPE_GROUP,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -156,7 +156,7 @@ class RaceDTOTest {
   void shouldRejectNullRaceTypeGroup() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES, null,
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }
@@ -165,7 +165,7 @@ class RaceDTOTest {
   void shouldRejectBlankRaceTypeGroup() {
     assertThrows(IllegalArgumentException.class,
         () -> new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES, "",
-            DISTANCE_METADATA, null
+            DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
   }

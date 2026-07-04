@@ -86,13 +86,13 @@ class EventWebControllerTest {
       List.of(), List.of(), List.of()
   );
   private static final RaceDTO RACE_1 = new RaceDTO(1L, "Triatlo de Peniche", "Geral", EVENT_DATE,
-      null, List.of("TRIATHLON"), List.of("SPRINT"), "STANDARD", null, null
+      null, List.of("TRIATHLON"), List.of("SPRINT"), "STANDARD", null, null, "UNKNOWN"
   );
   private static final RaceDTO RACE_2 = new RaceDTO(2L, "Triatlo de Peniche", "Estafetas",
-      EVENT_DATE, null, List.of("TRIATHLON"), List.of("SPRINT"), "RELAY", null, null
+      EVENT_DATE, null, List.of("TRIATHLON"), List.of("SPRINT"), "RELAY", null, null, "UNKNOWN"
   );
   private static final RaceDTO RACE_3 = new RaceDTO(3L, "Triatlo de Peniche", "Para", EVENT_DATE,
-      null, List.of("TRIATHLON"), List.of("SPRINT"), "PARA", null, null
+      null, List.of("TRIATHLON"), List.of("SPRINT"), "PARA", null, null, "UNKNOWN"
   );
 
   private static final EventOverviewDTO EVENT_OVERVIEW_WITH_RACES = new EventOverviewDTO(

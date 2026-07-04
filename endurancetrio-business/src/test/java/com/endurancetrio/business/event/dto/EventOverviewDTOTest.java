@@ -50,7 +50,7 @@ class EventOverviewDTOTest {
   );
   private static final List<RaceDTO> RACES = List.of(
       new RaceDTO(1L, "Race 1", "Elite", LocalDate.of(2026, Month.JUNE, 1), null,
-          List.of("TRIATHLON"), List.of("SPRINT"), "TRIATHLON", null, null
+          List.of("TRIATHLON"), List.of("SPRINT"), "TRIATHLON", null, null, "UNKNOWN"
       )
   );
   private static final List<EventFileDTO> FILES = List.of(

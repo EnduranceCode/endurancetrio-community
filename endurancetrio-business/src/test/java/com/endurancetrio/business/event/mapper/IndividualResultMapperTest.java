@@ -85,7 +85,8 @@ class IndividualResultMapperTest {
   @BeforeEach
   void setUp() {
     raceDTO = new RaceDTO(1L, "Elite Men", "Elite", LocalDate.of(2026, Month.JUNE, 1),
-        LocalTime.of(10, 0), List.of("TRIATHLON"), List.of("OLYMPIC"), "INDIVIDUAL", null, null
+        LocalTime.of(10, 0), List.of("TRIATHLON"), List.of("OLYMPIC"), "INDIVIDUAL", null, null,
+        "UNKNOWN"
     );
 
     Athlete athlete = AthleteFixture.standard();

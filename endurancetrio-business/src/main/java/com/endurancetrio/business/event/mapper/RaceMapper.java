@@ -66,7 +66,8 @@ public class RaceMapper {
 
     return new RaceDTO(entity.getId(), entity.getTitle(), entity.getSubtitle(), entity.getDate(),
         entity.getTime(), getSports(entity.getCourses()), getDistanceTypes(distances),
-        getRaceTypeGroup(entity), getDistanceMetadata(distances), null
+        getRaceTypeGroup(entity), getDistanceMetadata(distances), null,
+        entity.getResultStatus().getCode()
     );
   }
 
@@ -88,7 +89,8 @@ public class RaceMapper {
 
     return new RaceDTO(entity.getId(), entity.getTitle(), entity.getSubtitle(), entity.getDate(),
         entity.getTime(), getSports(entity.getCourses()), getDistanceTypes(distances),
-        getRaceTypeGroup(entity), getDistanceMetadata(distances), getEvent(entity)
+        getRaceTypeGroup(entity), getDistanceMetadata(distances), getEvent(entity),
+        entity.getResultStatus().getCode()
     );
   }
 

@@ -33,6 +33,7 @@ import com.endurancetrio.data.event.model.entity.SingleSportDistance;
 import com.endurancetrio.data.event.model.entity.TriathlonDistance;
 import com.endurancetrio.data.event.model.enumerator.DistanceType;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
+import com.endurancetrio.data.event.model.enumerator.ResultStatus;
 import com.endurancetrio.data.event.model.enumerator.Sport;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -87,6 +88,7 @@ class RaceMapperTest {
     entityTest.setTime(TIME);
     entityTest.setRaceType(RaceType.INDIVIDUAL_PARENT);
     entityTest.addCourse(course);
+    entityTest.setResultStatus(ResultStatus.COMPLETE);
   }
 
   @Test
@@ -114,6 +116,7 @@ class RaceMapperTest {
     assertEquals(1, result.distanceMetadata().legs().size());
     assertNull(result.distanceMetadata().legs().getFirst().coreSport());
     assertEquals(7500, result.distanceMetadata().legs().getFirst().length());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 
   @Test
@@ -141,6 +144,7 @@ class RaceMapperTest {
     assertEquals(40000, result.distanceMetadata().legs().get(1).length());
     assertEquals("RUN", result.distanceMetadata().legs().get(2).coreSport());
     assertEquals(10000, result.distanceMetadata().legs().get(2).length());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 
   @Test
@@ -151,6 +155,7 @@ class RaceMapperTest {
 
     assertNotNull(result);
     assertEquals("COLLECTIVE", result.raceTypeGroup());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 
   @Test
@@ -161,6 +166,7 @@ class RaceMapperTest {
 
     assertNotNull(result);
     assertEquals("RELAY", result.raceTypeGroup());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 
   @Test
@@ -173,6 +179,7 @@ class RaceMapperTest {
     assertTrue(result.sports().isEmpty());
     assertTrue(result.distanceTypes().isEmpty());
     assertNull(result.distanceMetadata());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 
   @Test
@@ -214,6 +221,7 @@ class RaceMapperTest {
     assertEquals(CITY, result.event().city());
     assertEquals(COUNTY, result.event().county());
     assertEquals(DISTRICT, result.event().district());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 
   @Test

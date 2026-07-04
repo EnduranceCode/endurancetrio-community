@@ -69,7 +69,8 @@ class AthleteRacesPageDTOTest {
 
   private static RaceDTO createRaceDTO() {
     return new RaceDTO(1L, "Triatlo de Peniche", "geral", LocalDate.of(1984, Month.AUGUST, 15),
-        null, List.of("SWIM"), List.of("SPRINT"), "INDIVIDUAL", null, null
+        null, List.of("SWIM"), List.of("SPRINT"), "INDIVIDUAL", null, null,
+        "UNKNOWN"
     );
   }
 }

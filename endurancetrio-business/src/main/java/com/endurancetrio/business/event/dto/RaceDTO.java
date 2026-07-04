@@ -38,10 +38,12 @@ import java.util.List;
  * @param raceTypeGroup    the race type group code
  * @param distanceMetadata optional metadata describing the distance composition
  * @param event            the event that the race belongs to (may be null)
+ * @param resultStatus     the result data availability status code
  */
 public record RaceDTO(Long id, String title, String subtitle, LocalDate date, LocalTime time,
                       List<String> sports, List<String> distanceTypes, String raceTypeGroup,
-                      DistanceMetadataDTO distanceMetadata, EventDTO event) {
+                      DistanceMetadataDTO distanceMetadata, EventDTO event,
+                      String resultStatus) {
 
   public RaceDTO {
     if (title == null || title.isBlank()) {
@@ -61,6 +63,9 @@ public record RaceDTO(Long id, String title, String subtitle, LocalDate date, Lo
     }
     if (raceTypeGroup == null || raceTypeGroup.isBlank()) {
       throw new IllegalArgumentException("raceTypeGroup must not be null or blank");
+    }
+    if (resultStatus == null || resultStatus.isBlank()) {
+      throw new IllegalArgumentException("resultStatus must not be null or blank");
     }
   }
 }

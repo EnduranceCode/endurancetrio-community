@@ -20,13 +20,15 @@
 
 package com.endurancetrio.data.event.model.entity;
 
+import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.event.model.converter.GenderCategoryConverter;
 import com.endurancetrio.data.event.model.converter.RaceStatusConverter;
 import com.endurancetrio.data.event.model.converter.RaceTypeConverter;
+import com.endurancetrio.data.event.model.converter.ResultStatusConverter;
 import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
-import com.endurancetrio.data.common.model.entity.BaseEntity;
+import com.endurancetrio.data.event.model.enumerator.ResultStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -110,6 +112,10 @@ import java.util.StringJoiner;
  *   <li>
  *     {@link #getResultsFiles() resultsFiles} : the {@link ResultsFile} of the {@link Race}.
  *   </li>
+ *   <li>
+ *     {@link #getResultStatus() resultStatus} : the {@link ResultStatus status} of the
+ *     result data availability for the {@link Race}.
+ *   </li>
  * </ul>
 */
 @Entity(name = "Race")
@@ -173,6 +179,10 @@ public class Race extends BaseEntity<Long> {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "race_id", referencedColumnName = "id")
   private Set<ResultsFile> resultsFiles;
+
+  @Column(name = "result_status", nullable = false)
+  @Convert(converter = ResultStatusConverter.class)
+  private ResultStatus resultStatus;
 
   /**
    * Default constructor for the {@link Race} entity.
@@ -346,6 +356,14 @@ public class Race extends BaseEntity<Long> {
     this.resultsFiles = resultsFiles;
   }
 
+  public ResultStatus getResultStatus() {
+    return resultStatus;
+  }
+
+  public void setResultStatus(ResultStatus resultStatus) {
+    this.resultStatus = resultStatus;
+  }
+
   @Override
   public boolean equals(Object o) {
     return super.equals(o);
@@ -370,6 +388,7 @@ public class Race extends BaseEntity<Long> {
         .add("raceStatus=" + raceStatus.getCode())
         .add("gunTime=" + gunTime)
         .add("airTemperature=" + airTemperature)
+        .add("resultStatus=" + resultStatus.getCode())
         .toString();
   }
 }

@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
+import com.endurancetrio.data.event.model.enumerator.ResultStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -87,6 +88,7 @@ class RaceTest {
     underTest.setGunTime(LocalTime.parse("14:33:30"));
     underTest.setAirTemperature(18.0);
     underTest.getResultsFiles().add(testResultsFile);
+    underTest.setResultStatus(ResultStatus.COMPLETE);
   }
 
   @Test
@@ -109,5 +111,6 @@ class RaceTest {
     assertNotNull(underTest.getResultsFiles());
     assertEquals(1, underTest.getResultsFiles().size());
     assertEquals(testResultsFile, underTest.getResultsFiles().iterator().next());
+    assertEquals(ResultStatus.COMPLETE, underTest.getResultStatus());
   }
 }
