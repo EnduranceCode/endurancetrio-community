@@ -53,6 +53,7 @@ psql -v ON_ERROR_STOP=1 \
     SELECT format('CREATE USER %I WITH PASSWORD %L', :'stg_user', :'stg_pass')
     WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'stg_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO :"stg_user";
+    ALTER DATABASE stg_endurancetrio_community SET timezone TO 'UTC';
 
     -- Production database
     SELECT format(
@@ -62,4 +63,5 @@ psql -v ON_ERROR_STOP=1 \
     SELECT format('CREATE USER %I WITH PASSWORD %L', :'prd_user', :'prd_pass')
     WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'prd_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";
+    ALTER DATABASE prd_endurancetrio_community SET timezone TO 'UTC';
 EOSQL
