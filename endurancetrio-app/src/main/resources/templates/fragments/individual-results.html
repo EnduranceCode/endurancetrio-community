@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head>
+  <title>Individual Results</title>
+</head>
+
+<body>
+<div data-th-fragment="individual-results-table(entry, activeColumns)" class="table-container">
+  <table data-th-with="IndividualResultColumns=${T(com.endurancetrio.app.event.enumerator.IndividualResultColumns)}"
+         data-sortable class="table is-fullwidth is-hoverable is-narrow is-striped">
+    <thead>
+    <tr>
+      <th data-th-attr="data-sort=${IndividualResultColumns.RANK.getCode()}"
+          scope="col"
+          class="is-narrow is-sorted-asc has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort-ascending"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.rank}"></span>
+        </span>
+      </th>
+      <th data-th-attr="data-sort=${IndividualResultColumns.ATHLETE.getCode()}"
+          scope="col">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.athlete}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.AGE_GROUP.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.AGE_GROUP.getCode()}"
+          scope="col"
+          class="has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.ageGroup}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.PARA_CLASS.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.PARA_CLASS.getCode()}"
+          scope="col"
+          class="has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.paraClass}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.TEAM.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.TEAM.getCode()}"
+          scope="col">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.team}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.BIB.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.BIB.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.bib}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.SWIM.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.SWIM.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.swim}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.FIRST_BIKE.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.FIRST_BIKE.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.firstBike}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.FIRST_RUN.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.FIRST_RUN.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.firstRun}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.T1.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.T1.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.t1}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.BIKE.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.BIKE.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.bike}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.T2.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.T2.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.t2}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.RUN.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.RUN.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.run}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.SECOND_RUN.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.SECOND_RUN.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.secondRun}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.T3.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.T3.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.t3}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.SECOND_BIKE.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.SECOND_BIKE.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.secondBike}"></span>
+        </span>
+      </th>
+      <th data-th-attr="data-sort=${IndividualResultColumns.TOTAL.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.total}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.GAP.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.GAP.getCode()}"
+          scope="col"
+          class="is-narrow has-text-centered">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.gap}"></span>
+        </span>
+      </th>
+      <th data-th-if="${activeColumns.contains(IndividualResultColumns.POINTS.getCode())}"
+          data-th-attr="data-sort=${IndividualResultColumns.POINTS.getCode()}"
+          scope="col"
+          class="has-text-right">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="et et-sort"></i>
+          </span>
+          <span data-th-text="#{page.event.results.label.points}"></span>
+        </span>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="result : ${entry.value}"
+        data-th-classappend="${result.penalty() != null} ? 'has-text-grey-light'">
+      <td class="has-text-centered">
+        <span data-th-if="${result.penalty() == null}"
+              data-th-text="${result.rank()}">
+        </span>
+        <span data-th-unless="${result.penalty() == null}"
+              data-th-text="${result.penalty()}"
+              class="tag is-light">
+        </span>
+      </td>
+      <td>
+        <a data-th-href="@{/{language}/athletes/{id}(language=${language}, id=${result.athlete().id()})}"
+           data-th-text="${result.athlete().knownName()}">
+        </a>
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.AGE_GROUP.getCode())}"
+          data-th-text="${result.ageGroup() != null ? result.ageGroup().code : ''}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.PARA_CLASS.getCode())}"
+          data-th-text="${result.paraClass() != null ? result.paraClass().code : ''}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.TEAM.getCode())}"
+          data-th-text="${result.team() != null ? result.team().shortName() : ''}">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.BIB.getCode())}"
+          data-th-text="${result.bib()}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.SWIM.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.swim())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.FIRST_BIKE.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.firstBike())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.FIRST_RUN.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.firstRun())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.T1.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.t1())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.BIKE.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.bike())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.T2.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.t2())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.RUN.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.run())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.SECOND_RUN.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.secondRun())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.T3.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.t3())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.SECOND_BIKE.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.secondBike())}"
+          class="has-text-centered">
+      </td>
+      <td class="has-text-centered has-text-weight-semibold">
+        <span data-th-if="${result.penalty() == null}"
+              data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.total())}">
+        </span>
+        <span data-th-unless="${result.penalty() == null}"
+              data-th-text="${result.penalty()}"
+              class="tag is-light">
+        </span>
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.GAP.getCode())}"
+          data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.gap())}"
+          class="has-text-centered">
+      </td>
+      <td data-th-if="${activeColumns.contains(IndividualResultColumns.POINTS.getCode())}"
+          data-th-text="${result.points()}"
+          class="has-text-right">
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div data-th-fragment="individual-results-tabs(individualResults, activeColumns, language)">
+  <div data-th-with="AgeGroup=${T(com.endurancetrio.data.competitor.model.enumerator.AgeGroup}" class="tabs">
+    <ul data-tabs>
+      <li data-th-each="entry : ${individualResults}"
+          data-th-attr="data-target=${entry.key.name()}"
+          data-th-classappend="${entry.key.name() == AgeGroup.OPEN.getCode()} ? 'is-active'">
+        <a data-th-text="${entry.key.name() == AgeGroup.OPEN.getCode()
+          ? (language == 'pt' ? entry.key.denominationPT : entry.key.denominationEN)
+          : entry.key.code}">
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div data-th-each="entry : ${individualResults}"
+       data-th-classappend="${entry.key.name() == AgeGroup.OPEN.getCode()} ? 'is-active'"
+       data-tab-content
+       data-th-id="${entry.key.name()}">
+    <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry}, ${activeColumns})}"></div>
+  </div>
+</div>
+</body>
+</html>

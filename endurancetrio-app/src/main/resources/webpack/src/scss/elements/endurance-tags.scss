@@ -29,18 +29,18 @@
   &.#{iv.$class-prefix}is-swim {
     @include cv.register-vars(
       (
-        "tag-h": #{hue(et.$et-blue-500)},
-        "tag-s": #{saturation(et.$et-blue-500)},
-        "tag-background-l": #{lightness(et.$et-blue-500)},
-        "tag-color-l": 100%,
+        'tag-h': #{hue(et.$et-blue-500)},
+        'tag-s': #{saturation(et.$et-blue-500)},
+        'tag-background-l': #{lightness(et.$et-blue-500)},
+        'tag-color-l': 100%,
       )
     );
 
     &.#{iv.$class-prefix}is-light {
       @include cv.register-vars(
         (
-          "tag-background-l": #{lightness(et.$et-blue-050)},
-          "tag-color-l": #{lightness(et.$et-blue-700)},
+          'tag-background-l': #{lightness(et.$et-blue-050)},
+          'tag-color-l': #{lightness(et.$et-blue-700)},
         )
       );
     }
@@ -49,18 +49,18 @@
   &.#{iv.$class-prefix}is-bike {
     @include cv.register-vars(
       (
-        "tag-h": #{hue(et.$et-yellow-500)},
-        "tag-s": #{saturation(et.$et-yellow-500)},
-        "tag-background-l": #{lightness(et.$et-yellow-500)},
-        "tag-color-l": 15%,
+        'tag-h': #{hue(et.$et-yellow-500)},
+        'tag-s': #{saturation(et.$et-yellow-500)},
+        'tag-background-l': #{lightness(et.$et-yellow-500)},
+        'tag-color-l': 15%,
       )
     );
 
     &.#{iv.$class-prefix}is-light {
       @include cv.register-vars(
         (
-          "tag-background-l": #{lightness(et.$et-yellow-050)},
-          "tag-color-l": #{lightness(et.$et-yellow-700)},
+          'tag-background-l': #{lightness(et.$et-yellow-050)},
+          'tag-color-l': #{lightness(et.$et-yellow-700)},
         )
       );
     }
@@ -69,18 +69,18 @@
   &.#{iv.$class-prefix}is-run {
     @include cv.register-vars(
       (
-        "tag-h": #{hue(et.$et-red-500)},
-        "tag-s": #{saturation(et.$et-red-500)},
-        "tag-background-l": #{lightness(et.$et-red-500)},
-        "tag-color-l": 100%,
+        'tag-h': #{hue(et.$et-red-500)},
+        'tag-s': #{saturation(et.$et-red-500)},
+        'tag-background-l': #{lightness(et.$et-red-500)},
+        'tag-color-l': 100%,
       )
     );
 
     &.#{iv.$class-prefix}is-light {
       @include cv.register-vars(
         (
-          "tag-background-l": #{lightness(et.$et-red-050)},
-          "tag-color-l": #{lightness(et.$et-red-700)},
+          'tag-background-l': #{lightness(et.$et-red-050)},
+          'tag-color-l': #{lightness(et.$et-red-700)},
         )
       );
     }

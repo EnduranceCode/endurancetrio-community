@@ -20,15 +20,22 @@
 
 @charset "utf-8";
 
-@use 'bulma/sass/themes/light';
-@use 'bulma/sass/themes/setup';
+// Sortable table headers
+// -------------------------------------------------------------------------------------------------
+//
+// Styles for <th> elements with a data-sort attribute (click-to-sort columns). Sets cursor,
+// user-select, and white-space on the header cell, and prevents icon-text wrapping inside
+// the cell.
+//
+// Usage:
+//   <th data-sort="name">Name</th>
 
-:root {
-  @include light.light-theme;
-  @include setup.setup-theme;
-}
+th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
 
-.table {
-  --bulma-table-row-hover-background-color: var(--bulma-primary-90);
-  --bulma-table-striped-row-even-hover-background-color: var(--bulma-primary-90);
+  .icon-text {
+    flex-wrap: nowrap;
+  }
 }

@@ -30,16 +30,28 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
+import com.endurancetrio.business.common.dto.ErrorDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioError;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
+import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
+import com.endurancetrio.business.event.service.RaceService;
+import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,16 +66,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @EnduranceTrioWebController
 public class EventWebController {
 
+  private static final Logger LOG = LoggerFactory.getLogger(EventWebController.class);
+
   private static final String VIEW_EVENT_OVERVIEW = "event-overview";
   private static final String VIEW_EVENTS_BY_YEAR = "events-by-year";
   private static final String VIEW_RACE_RESULTS = "race-results";
   private static final String VIEW_YEARS_WITH_EVENTS = "years-with-events";
 
+  private static final String ATTRIBUTE_ACTIVE_COLUMNS = "activeColumns";
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
   private static final String ATTRIBUTE_RACE_ID = "raceId";
   private static final String ATTRIBUTE_RACE_ID_NEXT = "raceIdNext";
   private static final String ATTRIBUTE_RACE_ID_PREV = "raceIdPrev";
+  private static final String ATTRIBUTE_RACE_RESULTS = "raceResults";
   private static final String ATTRIBUTE_YEARS_WITH_EVENTS = "yearsWithEvents";
   private static final String ATTRIBUTE_YEAR = "year";
 
@@ -73,15 +89,17 @@ public class EventWebController {
   private final MessageService messageService;
   private final AppProperties appProperties;
   private final EventService eventService;
+  private final RaceService raceService;
 
   @Autowired
   public EventWebController(
-      MessageService messageService, AppProperties appProperties,
-      EventService eventService
+      MessageService messageService, AppProperties appProperties, EventService eventService,
+      RaceService raceService
   ) {
     this.messageService = messageService;
     this.appProperties = appProperties;
     this.eventService = eventService;
+    this.raceService = raceService;
   }
 
   /**
@@ -215,12 +233,26 @@ public class EventWebController {
     Long raceIdPrev = getPreviousRaceId(currentIndex, races);
     Long raceIdNext = getNextRaceId(currentIndex, races);
 
+    RaceDTO currentRace = races.stream()
+        .filter(race -> race.id().equals(raceId))
+        .findFirst()
+        .orElseThrow(() -> {
+          String errorMsg = String.format("No race found with ID %d for event %d", raceId, eventId);
+          LOG.warn(errorMsg);
+          return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
+        });
+
+    RaceResultsDTO raceResults = raceService.getRaceResults(currentRace);
+    Set<String> activeColumns = computeActiveColumns(raceResults);
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
     model.addAttribute(ATTRIBUTE_RACE_ID, raceId);
     model.addAttribute(ATTRIBUTE_RACE_ID_PREV, raceIdPrev);
     model.addAttribute(ATTRIBUTE_RACE_ID_NEXT, raceIdNext);
+    model.addAttribute(ATTRIBUTE_RACE_RESULTS, raceResults);
+    model.addAttribute(ATTRIBUTE_ACTIVE_COLUMNS, activeColumns);
 
     return VIEW_RACE_RESULTS;
   }
@@ -267,12 +299,32 @@ public class EventWebController {
     );
   }
 
-  private static int getBatchGroupPreviousPage(int batchIndex) {
-    return switch (batchIndex) {
-      case 0 -> -1;
-      case 1 -> 0;
-      default -> batchIndex - 2;
-    };
+  /**
+   * Computes the set of column names that have at least one non-null value across all OPEN results.
+   * <p>
+   * Only the OPEN group is scanned so that column visibility is consistent across all age-group
+   * tables.
+   *
+   * @param raceResults the race results
+   * @return a set of column names with non-null data in the OPEN group
+   */
+  private static @NonNull Set<String> computeActiveColumns(RaceResultsDTO raceResults) {
+    Set<String> active = new HashSet<>();
+
+    if (raceResults.individualResults() != null) {
+      List<IndividualResultDTO> openResults = raceResults.individualResults().get(AgeGroup.OPEN);
+      if (openResults != null) {
+        for (IndividualResultDTO result : openResults) {
+          for (IndividualResultColumns column : IndividualResultColumns.values()) {
+            if (column.isActive(result)) {
+              active.add(column.getCode());
+            }
+          }
+        }
+      }
+    }
+
+    return active;
   }
 
   private static int getBatchGroupNextPage(int batchIndex, int totalBatches) {
@@ -280,6 +332,14 @@ public class EventWebController {
       case 0, 1 -> -1;
       case 2 -> batchIndex + 1;
       default -> batchIndex + 2;
+    };
+  }
+
+  private static int getBatchGroupPreviousPage(int batchIndex) {
+    return switch (batchIndex) {
+      case 0 -> -1;
+      case 1 -> 0;
+      default -> batchIndex - 2;
     };
   }
 

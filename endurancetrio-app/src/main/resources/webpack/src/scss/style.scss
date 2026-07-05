@@ -28,7 +28,6 @@
 @forward 'bulma/sass/base';
 // @forward 'bulma/sass/base/skeleton';
 
-
 // Elements
 // Add/remove individual elements partials as the template evolves
 // -------------------------------------------------------------------------------------------------
@@ -43,7 +42,8 @@
 // @forward 'bulma/sass/elements/loader';
 // @forward 'bulma/sass/elements/notification';
 // @forward 'bulma/sass/elements/progress';
-// @forward 'bulma/sass/elements/table';
+@forward 'bulma/sass/elements/table';
+@forward 'elements/endurance-table-sort';
 @forward 'bulma/sass/elements/tag';
 @forward 'elements/endurance-tags';
 @forward 'bulma/sass/elements/title';

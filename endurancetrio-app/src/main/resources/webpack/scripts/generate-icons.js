@@ -94,7 +94,7 @@ for (const { name, svg } of entries) {
     `  mask-image: ${dataUri};`,
     `  -webkit-mask-image: ${dataUri};`,
     `}`,
-    '',
+    ''
   );
 }
 
