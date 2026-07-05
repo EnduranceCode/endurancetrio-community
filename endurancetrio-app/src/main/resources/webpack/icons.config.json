@@ -1,5 +1,7 @@
 {
   "mdi": [
+    "arrow-up",
+    "arrow-down",
     "chevron-double-left",
     "chevron-double-right",
     "email-newsletter",
@@ -7,7 +9,10 @@
     "face-woman",
     "file-document",
     "file-image",
-    "head-cog-outline"
+    "head-cog-outline",
+    "sort",
+    "sort-ascending",
+    "sort-descending"
   ],
   "custom": {
     "kofi": "src/icons/kofi.svg"

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head>
+  <title>Individual Results</title>
+</head>
+
+<body>
+<div data-th-fragment="results-unknown(language)">
+  <article class="message is-warning">
+    <div class="message-header" data-th-text="#{page.event.results.status.unknown.info}"></div>
+    <div data-th-if="${language == 'pt'}" class="message-body">
+      <p class="mb-4">
+        Tem acesso a <strong>listas de classificados, folhas de tempos, relatos da prova ou
+        recortes de jornais</strong> desta prova? Mesmo registos parciais ou manuscritos podem
+        ajudar-nos a começar a documentar a sua história.
+      </p>
+      <p class="mb-4">
+        O seu contributo pode ser a própria base do arquivo desta prova. <strong>Será creditado
+        como colaborador original.</strong>
+      </p>
+      <p>
+        Envie-nos a sua informação
+        para <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+      </p>
+    </div>
+    <div data-th-unless="${language == 'pt'}" class="message-body">
+      <p class="mb-4">
+        Do you have access to <strong>finisher lists, timing sheets, race reports, or newspaper
+        clippings</strong> from this race? Even partial or handwritten records can help us begin
+        documenting its history.
+      </p>
+      <p class="mb-4">
+        Your contribution can be the very foundation of this race's archive. <strong>You'll be
+        credited as the original contributor.</strong>
+      </p>
+      <p>
+        Send us your information
+        to <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+      </p>
+    </div>
+  </article>
+</div>
+
+<div data-th-fragment="results-pending(language)">
+  <div class="endurance-box is-branded-thin has-text-centered">
+    <p data-th-text="#{page.event.results.status.pending.info}" class="title mt-4"></p>
+    <div class="columns">
+      <div class="column is-4 is-offset-4 has-text-centered">
+        <div class="p-6">
+          <div data-th-replace="~{fragments/svg :: athletes-training}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div data-th-fragment="results-incomplete(language)">
+  <article class="message is-info mt-6">
+    <div class="message-header" data-th-text="#{page.event.results.status.incomplete.info}"></div>
+    <div data-th-if="${language == 'pt'}" class="message-body">
+      <p class="mb-4">
+        Tem <strong>fotografias, recortes de jornais, programas de prova ou memórias
+        pessoais</strong> desta prova? Mesmo tempos parciais ou um certificado de finalista
+        podem ajudar a reconstruir a sua história.
+      </p>
+      <p class="mb-4">
+        Cada contributo, grande ou pequeno, aproxima-nos de um arquivo completo para as
+        futuras gerações de atletas. <strong>Será creditado como colaborador.</strong>
+      </p>
+      <p>
+        Envie-nos a sua informação
+        para <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+      </p>
+    </div>
+    <div data-th-unless="${language == 'pt'}" class="message-body">
+      <p class="mb-4">
+        Do you have <strong>photos, newspaper clippings, race programs, or personal
+        memories</strong> from this race? Even partial split times or a finisher certificate
+        can help piece together its story.
+      </p>
+      <p class="mb-4">
+        Every contribution, big or small, brings us closer to a complete archive for future
+        generations of athletes. <strong>You'll be credited as a contributor.</strong>
+      </p>
+      <p>
+        Send us your information to
+        <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+      </p>
+    </div>
+  </article>
+</div>
+
+<div data-th-fragment="results-empty(language)">
+  <div class="endurance-box is-branded-thin has-text-centered">
+    <p data-th-text="#{page.event.results.status.empty.info}" class="title is-4 m-4"></p>
+  </div>
+</div>
+</body>
+</html>

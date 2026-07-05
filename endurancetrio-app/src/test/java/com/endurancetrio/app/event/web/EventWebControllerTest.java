@@ -29,17 +29,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.endurancetrio.app.common.service.MessageService;
+import com.endurancetrio.app.competitor.fixtures.AthleteDTOFixtures;
+import com.endurancetrio.app.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.dto.PaginationDTO;
+import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.TeamDTO;
 import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
+import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
+import com.endurancetrio.business.event.service.RaceService;
+import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
+import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
+import com.endurancetrio.data.event.model.enumerator.Penalty;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Map;
+import org.hamcrest.Matchers;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,6 +120,9 @@ class EventWebControllerTest {
   @Mock
   EventService eventService;
 
+  @Mock
+  RaceService raceService;
+
   AppProperties appProperties;
 
   EventWebController eventWebController;
@@ -121,7 +138,9 @@ class EventWebControllerTest {
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
-    eventWebController = new EventWebController(messageService, appProperties, eventService);
+    eventWebController = new EventWebController(messageService, appProperties, eventService,
+        raceService
+    );
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
     viewResolver.setPrefix("/WEB-INF/views/");
@@ -348,14 +367,17 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
         any()
     )).thenReturn("View endurance sports event results");
-    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(null, Map.of()));
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attributeExists("raceId"));
+        .andExpect(model().attribute("raceId", 1L))
+        .andExpect(model().attribute("activeColumns", org.hamcrest.Matchers.empty()));
   }
 
   @Test
@@ -366,14 +388,17 @@ class EventWebControllerTest {
     when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
         any()
     )).thenReturn("Resultados de eventos de desportos de endurance");
-    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(null, Map.of()));
 
     mockMvc.perform(get("/pt/events/1984/1/results/1"))
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attributeExists("raceId"));
+        .andExpect(model().attribute("raceId", 1L))
+        .andExpect(model().attribute("activeColumns", org.hamcrest.Matchers.empty()));
   }
 
   @Test
@@ -385,13 +410,16 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(null, Map.of()));
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("raceId", 1L))
         .andExpect(model().attribute("raceIdPrev", org.hamcrest.Matchers.nullValue()))
-        .andExpect(model().attribute("raceIdNext", 2L));
+        .andExpect(model().attribute("raceIdNext", 2L))
+        .andExpect(model().attribute("activeColumns", org.hamcrest.Matchers.empty()));
   }
 
   @Test
@@ -403,13 +431,16 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(null, Map.of()));
 
     mockMvc.perform(get("/en/events/1984/1/results/2"))
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("raceId", 2L))
         .andExpect(model().attribute("raceIdPrev", 1L))
-        .andExpect(model().attribute("raceIdNext", 3L));
+        .andExpect(model().attribute("raceIdNext", 3L))
+        .andExpect(model().attribute("activeColumns", org.hamcrest.Matchers.empty()));
   }
 
   @Test
@@ -421,12 +452,57 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(null, Map.of()));
 
     mockMvc.perform(get("/en/events/1984/1/results/3"))
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("raceId", 3L))
         .andExpect(model().attribute("raceIdPrev", 2L))
-        .andExpect(model().attribute("raceIdNext", org.hamcrest.Matchers.nullValue()));
+        .andExpect(model().attribute("raceIdNext", org.hamcrest.Matchers.nullValue()))
+        .andExpect(model().attribute("activeColumns", org.hamcrest.Matchers.empty()));
+  }
+
+  @Test
+  void getRaceResultsShouldDetectAllColumnsWithFullResults() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(),
+        any()
+    )).thenReturn("Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(),
+        any()
+    )).thenReturn("View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    IndividualResultDTO fullResult = getIndividualResultDTO();
+
+    Map<AgeGroup, List<IndividualResultDTO>> individualResults = Map.of(AgeGroup.OPEN,
+        List.of(fullResult)
+    );
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(RACE_1, individualResults));
+
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("race-results"))
+        .andExpect(model().attribute("activeColumns",
+            Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "paraClass", "team", "bib",
+                "swim", "firstBike", "firstRun", "t1", "bike", "t2", "run", "secondRun", "t3",
+                "secondBike", "total", "gap", "points"
+            )
+        ));
+  }
+
+  private static @NonNull IndividualResultDTO getIndividualResultDTO() {
+    AthleteDTO athlete = AthleteDTOFixtures.standard();
+    TeamDTO team = TeamDTOFixtures.standard();
+
+    return new IndividualResultDTO(1L, RACE_1, 1, Penalty.DNF, athlete, AgeGroup.CAT_A,
+        ParaClass.AQ_S1, team, "101", Duration.ofMinutes(10), Duration.ofMinutes(20),
+        Duration.ofMinutes(15), Duration.ofSeconds(30), Duration.ofMinutes(40),
+        Duration.ofSeconds(45), Duration.ofMinutes(25), Duration.ofMinutes(5),
+        Duration.ofSeconds(10), Duration.ofMinutes(50), Duration.ofHours(1), Duration.ofMinutes(2),
+        100
+    );
   }
 }
