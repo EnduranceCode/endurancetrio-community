@@ -67,7 +67,7 @@ const bulmaTableSort = {
     const index = this.getCellIndex(clickedTh);
     const rows = Array.from(tbody.querySelectorAll('tr'));
 
-    const sorted = rows.sort((a, b) => {
+    rows.sort((a, b) => {
       const aVal = (a.querySelector(`td:nth-child(${index})`)?.textContent ?? '').trim();
       const bVal = (b.querySelector(`td:nth-child(${index})`)?.textContent ?? '').trim();
 
@@ -80,7 +80,7 @@ const bulmaTableSort = {
       return isAsc ? -result : result;
     });
 
-    sorted.forEach((row) => tbody.appendChild(row));
+    rows.forEach((row) => tbody.appendChild(row));
   },
 
   /** Returns the 1-based column index of a header cell. */
@@ -93,7 +93,7 @@ const bulmaTableSort = {
     const na = Number(a);
     const nb = Number(b);
 
-    if (!isNaN(na) && !isNaN(nb)) {
+    if (!Number.isNaN(na) && !Number.isNaN(nb)) {
       return na - nb;
     }
 
