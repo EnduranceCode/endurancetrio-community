@@ -199,4 +199,7 @@ timestamp-based naming convention.
 26. Sets `result_status` on existing race data:
     - [V20260703.004__set-result-status-on-existing-races-h2.sql](migration/dml/h2/V20260703.004__set-result-status-on-existing-races-h2.sql)
     - [V20260703.004__set-result-status-on-existing-races-postgres.sql](migration/dml/postgres/V20260703.004__set-result-status-on-existing-races-postgres.sql)
+27. Creates the insight section database tables:
+    - [V20260707.001__create-insight-tables-h2.sql](migration/ddl/h2/V20260707.001__create-insight-tables-h2.sql)
+    - [V20260707.001__create-insight-tables-postgres.sql](migration/ddl/postgres/V20260707.001__create-insight-tables-postgres.sql)
 
