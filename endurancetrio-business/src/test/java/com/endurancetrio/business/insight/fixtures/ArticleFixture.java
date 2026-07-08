@@ -15,24 +15,25 @@
  *
  * IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
  * SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
- * EVEN IF WE HAVE BEEN INFORMED OF THE POSSIBILITY IN ADVANCE.
+ * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
  */
 
-package com.endurancetrio.data.insight.fixtures;
+package com.endurancetrio.business.insight.fixtures;
 
 import com.endurancetrio.data.insight.model.entity.Article;
+import com.endurancetrio.data.insight.model.entity.ArticleContent;
 import com.endurancetrio.data.insight.model.entity.Author;
 import java.time.LocalDateTime;
 import java.time.Month;
 
 /**
  * Fixture class providing pre-configured {@link Article} entity instances for unit tests in the
- * {@code endurancetrio-data} module.
+ * {@code endurancetrio-business} module.
  * <p>
- * This class is duplicated in {@code endurancetrio-business} under {@code insight.fixtures} because
- * the modules do not share a test-jar dependency. Each module keeps its own copy of the fixtures it
+ * This class is duplicated in {@code endurancetrio-data} under {@code insight.fixtures} because the
+ * modules do not share a test-jar dependency. Each module keeps its own copy of the fixtures it
  * needs, keeping the build simple and avoiding cross-module test-jar complications. If you add or
- * modify a factory method here, apply the same change to the business module's copy.
+ * modify a factory method here, apply the same change to the data module's copy.
  */
 public class ArticleFixture {
 
@@ -45,14 +46,56 @@ public class ArticleFixture {
   private ArticleFixture() {
   }
 
+  /**
+   * Creates a standard {@link Article} entity with default test values.
+   *
+   * @return a standard Article entity instance
+   */
   public static Article standard() {
     Article entity = base();
     entity.addContent(ArticleContentFixture.standard());
     return entity;
   }
 
+  /**
+   * Creates an {@link Article} entity without any {@link ArticleContent}.
+   *
+   * @return an Article entity instance with no content
+   */
   public static Article withoutContent() {
     return base();
+  }
+
+  /**
+   * Creates an {@link Article} entity with a single Portuguese {@link ArticleContent}.
+   *
+   * @return an Article entity instance with Portuguese content
+   */
+  public static Article withPortugueseContent() {
+    ArticleContent content = new ArticleContent();
+    content.setLocale(ArticleContentFixture.PT_LOCALE);
+    content.setTitle(ArticleContentFixture.PT_TITLE);
+    content.setIntroText(ArticleContentFixture.PT_INTRO_TEXT);
+
+    Article entity = base();
+    entity.addContent(content);
+    return entity;
+  }
+
+  /**
+   * Creates an {@link Article} entity with standard content and a featured image.
+   *
+   * @return an Article entity instance with a featured image
+   */
+  public static Article withFeaturedImage() {
+    ArticleContent content = ArticleContentFixture.standard();
+
+    Article entity = base();
+    entity.setFeaturedImage("/images/featured.jpg");
+    entity.setFeaturedImageWidth(1200);
+    entity.setFeaturedImageHeight(630);
+    entity.addContent(content);
+    return entity;
   }
 
   private static Article base() {
