@@ -28,7 +28,6 @@ import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.mapper.ArticleMapper;
 import com.endurancetrio.data.insight.repository.ArticleRepository;
-import java.util.List;
 import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,13 +73,10 @@ public class InsightServiceMain implements InsightService {
 
   @Override
   @Transactional(readOnly = true)
-  public InsightPageDTO getArticlesByEvent(Long eventId, Locale locale) {
-    List<ArticleDTO> articles = articleRepository.findByEventId(eventId)
-        .stream()
-        .map(entity -> articleMapper.map(entity, locale))
-        .toList();
+  public InsightPageDTO getArticlesByEvent(Long eventId, Pageable pageable, Locale locale) {
+    var articlePage = articleRepository.findByEventId(eventId, pageable)
+        .map(entity -> articleMapper.map(entity, locale));
 
-    PaginationDTO pagination = new PaginationDTO(0, 1, articles.size(), false, false);
-    return new InsightPageDTO(articles, pagination);
+    return new InsightPageDTO(articlePage.getContent(), PaginationDTO.from(articlePage));
   }
 }

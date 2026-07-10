@@ -12,7 +12,8 @@
     "head-cog-outline",
     "sort",
     "sort-ascending",
-    "sort-descending"
+    "sort-descending",
+    "tally-mark-1"
   ],
   "custom": {
     "kofi": "src/icons/kofi.svg"

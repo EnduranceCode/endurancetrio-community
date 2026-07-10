@@ -42,6 +42,8 @@ import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
+import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -68,12 +70,14 @@ public class EventWebController {
 
   private static final Logger LOG = LoggerFactory.getLogger(EventWebController.class);
 
+  private static final String VIEW_EVENT_INSIGHTS = "event-insights";
   private static final String VIEW_EVENT_OVERVIEW = "event-overview";
   private static final String VIEW_EVENTS_BY_YEAR = "events-by-year";
   private static final String VIEW_RACE_RESULTS = "race-results";
   private static final String VIEW_YEARS_WITH_EVENTS = "years-with-events";
 
   private static final String ATTRIBUTE_ACTIVE_COLUMNS = "activeColumns";
+  private static final String ATTRIBUTE_ARTICLES = "articles";
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
   private static final String ATTRIBUTE_RACE_ID = "raceId";
@@ -89,16 +93,18 @@ public class EventWebController {
   private final MessageService messageService;
   private final AppProperties appProperties;
   private final EventService eventService;
+  private final InsightService insightService;
   private final RaceService raceService;
 
   @Autowired
   public EventWebController(
       MessageService messageService, AppProperties appProperties, EventService eventService,
-      RaceService raceService
+      InsightService insightService, RaceService raceService
   ) {
     this.messageService = messageService;
     this.appProperties = appProperties;
     this.eventService = eventService;
+    this.insightService = insightService;
     this.raceService = raceService;
   }
 
@@ -168,6 +174,44 @@ public class EventWebController {
     model.addAttribute(ATTRIBUTE_EVENTS, eventPage.events());
 
     return VIEW_EVENTS_BY_YEAR;
+  }
+
+  /**
+   * Returns the event-scoped insights page with related articles.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @param year     the event year
+   * @param id       the event ID
+   * @param page     the page number from the query string (default {@code 0})
+   * @param request  the current HTTP request for building page metadata
+   * @param model    the model to populate with view attributes
+   * @return the event insights view name
+   */
+  @GetMapping("/{language:en|pt}/events/{year}/{id}/insights")
+  public String getEventInsights(
+      @PathVariable String language, @PathVariable int year, @PathVariable Long id,
+      @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
+  ) {
+    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+
+    EventOverviewDTO event = eventService.getEventOverview(id, year);
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_INSIGHTS,
+        messageService.getMessage("page.event.insights.metadata.title", null, locale),
+        messageService.getMessage("page.event.insights.metadata.description", null, locale),
+        request, appProperties
+    );
+
+    Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+    InsightPageDTO insightPage = insightService.getArticlesByEvent(id, pageable, locale);
+
+    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(METADATA, metadata);
+    model.addAttribute(ATTRIBUTE_EVENT, event);
+    model.addAttribute(ATTRIBUTE_ARTICLES, insightPage.articles());
+    model.addAttribute(PAGINATION, insightPage.pagination());
+
+    return VIEW_EVENT_INSIGHTS;
   }
 
   /**

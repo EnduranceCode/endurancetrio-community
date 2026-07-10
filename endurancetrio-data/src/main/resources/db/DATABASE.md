@@ -72,7 +72,11 @@ must respect the following naming convention (which is compatible with the
 
 > ***yyyymmdd*** : Date of the script's creation (e.g., `20260531`)
 >
-> ***nnn*** : Sequence number for scripts created on the same date (e.g., `001`, `002`)
+> ***nnn*** : Sequence number for scripts created on the same date, starting at `001` for each
+> new date. The counter is shared across DDL and DML directories — since Flyway applies all
+> locations into a single `flyway_schema_history` table, version numbers must be unique across
+> all scripts regardless of their type (e.g., if a DDL script uses `V20260531.001`, the next
+> script on the same date must be `V20260531.002`).
 >
 > ***free-description*** : A short free description of the scripts actions with words separated
 > with dashes
@@ -202,4 +206,7 @@ timestamp-based naming convention.
 27. Creates the insight section database tables:
     - [V20260707.001__create-insight-tables-h2.sql](migration/ddl/h2/V20260707.001__create-insight-tables-h2.sql)
     - [V20260707.001__create-insight-tables-postgres.sql](migration/ddl/postgres/V20260707.001__create-insight-tables-postgres.sql)
+28. Inserts sample insight articles for development and testing:
+    - [V20260707.002__insert-sample-insights-h2.sql](migration/dml/h2/V20260707.002__insert-sample-insights-h2.sql)
+    - [V20260707.002__insert-sample-insights-postgres.sql](migration/dml/postgres/V20260707.002__insert-sample-insights-postgres.sql)
 
