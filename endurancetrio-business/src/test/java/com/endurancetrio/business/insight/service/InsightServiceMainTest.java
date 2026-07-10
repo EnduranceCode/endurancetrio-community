@@ -125,22 +125,27 @@ class InsightServiceMainTest {
   }
 
   @Test
-  void getArticlesByEventShouldReturnArticles() {
-    when(articleRepository.findByEventId(EVENT_ID)).thenReturn(List.of(testArticle));
+  void getArticlesByEventShouldReturnPaginatedResults() {
+    Page<Article> articlePage = new PageImpl<>(List.of(testArticle), PAGEABLE, 1L);
+    when(articleRepository.findByEventId(EVENT_ID, PAGEABLE)).thenReturn(articlePage);
     when(articleMapper.map(testArticle, LOCALE)).thenReturn(testArticleDTO);
 
-    InsightPageDTO result = underTest.getArticlesByEvent(EVENT_ID, LOCALE);
+    InsightPageDTO result = underTest.getArticlesByEvent(EVENT_ID, PAGEABLE, LOCALE);
 
     assertNotNull(result);
     assertEquals(1, result.articles().size());
     assertEquals(testArticleDTO, result.articles().getFirst());
+    assertEquals(0, result.pagination().pageNumber());
+    assertEquals(1, result.pagination().totalPages());
+    assertEquals(1L, result.pagination().totalItems());
   }
 
   @Test
-  void getArticlesByEventWithEmptyData() {
-    when(articleRepository.findByEventId(EVENT_ID)).thenReturn(List.of());
+  void getArticlesByEventWithEmptyPage() {
+    Page<Article> articlePage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(articleRepository.findByEventId(EVENT_ID, PAGEABLE)).thenReturn(articlePage);
 
-    InsightPageDTO result = underTest.getArticlesByEvent(EVENT_ID, LOCALE);
+    InsightPageDTO result = underTest.getArticlesByEvent(EVENT_ID, PAGEABLE, LOCALE);
 
     assertNotNull(result);
     assertEquals(0, result.articles().size());

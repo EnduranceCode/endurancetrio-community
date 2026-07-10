@@ -56,12 +56,14 @@ public interface InsightService {
   ArticleDTO getArticleBySlug(String slug, Locale locale);
 
   /**
-   * Returns an {@link InsightPageDTO} containing all {@link ArticleDTO articles} associated with
-   * the given event ID, with content resolved for the requested locale.
+   * Returns an {@link InsightPageDTO} containing a paginated list of {@link ArticleDTO articles}
+   * associated with the given event ID, with content resolved for the requested locale.
    *
-   * @param eventId the ID of the event to filter articles by
-   * @param locale  the requested locale for content resolution
-   * @return an {@link InsightPageDTO} with the articles linked to the given event
+   * @param eventId  the ID of the event to filter articles by
+   * @param pageable the pagination information (page number, page size, etc.)
+   * @param locale   the requested locale for content resolution
+   * @return an {@link InsightPageDTO} with the articles linked to the given event and pagination
+   * metadata
    */
-  InsightPageDTO getArticlesByEvent(Long eventId, Locale locale);
+  InsightPageDTO getArticlesByEvent(Long eventId, Pageable pageable, Locale locale);
 }

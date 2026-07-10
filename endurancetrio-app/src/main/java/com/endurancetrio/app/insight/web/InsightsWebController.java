@@ -30,8 +30,6 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
-import com.endurancetrio.business.event.dto.EventOverviewDTO;
-import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.service.InsightService;
@@ -51,30 +49,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 @EnduranceTrioWebController
 public class InsightsWebController {
 
-  private static final String VIEW_EVENT_INSIGHTS = "event-insights";
   private static final String VIEW_INSIGHT_ARTICLE = "insight-article";
   private static final String VIEW_INSIGHTS = "insights";
 
   private static final String ATTRIBUTE_ARTICLE = "article";
   private static final String ATTRIBUTE_ARTICLES = "articles";
-  private static final String ATTRIBUTE_EVENT = "event";
 
   private static final int PAGE_SIZE = 10;
 
   private final MessageService messageService;
   private final AppProperties appProperties;
   private final InsightService insightService;
-  private final EventService eventService;
 
   @Autowired
   public InsightsWebController(
-      MessageService messageService, AppProperties appProperties, InsightService insightService,
-      EventService eventService
+      MessageService messageService, AppProperties appProperties, InsightService insightService
   ) {
     this.messageService = messageService;
     this.appProperties = appProperties;
     this.insightService = insightService;
-    this.eventService = eventService;
   }
 
   /**
@@ -139,40 +132,5 @@ public class InsightsWebController {
     model.addAttribute(ATTRIBUTE_ARTICLE, article);
 
     return VIEW_INSIGHT_ARTICLE;
-  }
-
-  /**
-   * Returns the event-scoped insights page with related articles.
-   *
-   * @param language the language path variable ({@code en} or {@code pt})
-   * @param year     the event year
-   * @param id       the event ID
-   * @param request  the current HTTP request for building page metadata
-   * @param model    the model to populate with view attributes
-   * @return the event insights view name
-   */
-  @GetMapping("/{language:en|pt}/events/{year}/{id}/insights")
-  public String getEventInsights(
-      @PathVariable String language, @PathVariable int year,
-      @PathVariable Long id, HttpServletRequest request, Model model
-  ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
-    EventOverviewDTO event = eventService.getEventOverview(id, year);
-
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_INSIGHTS,
-        messageService.getMessage("page.insights.event.metadata.title", null, locale),
-        messageService.getMessage("page.insights.event.metadata.description", null, locale),
-        request, appProperties
-    );
-
-    InsightPageDTO insightPage = insightService.getArticlesByEvent(id, locale);
-
-    model.addAttribute(LANGUAGE, locale.getLanguage());
-    model.addAttribute(METADATA, metadata);
-    model.addAttribute(ATTRIBUTE_EVENT, event);
-    model.addAttribute(ATTRIBUTE_ARTICLES, insightPage.articles());
-
-    return VIEW_EVENT_INSIGHTS;
   }
 }

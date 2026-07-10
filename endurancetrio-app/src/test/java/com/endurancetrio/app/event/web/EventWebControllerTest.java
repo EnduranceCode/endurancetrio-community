@@ -32,6 +32,7 @@ import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.competitor.fixtures.AthleteDTOFixtures;
 import com.endurancetrio.app.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.app.insight.fixtures.ArticleDTOFixtures;
 import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.TeamDTO;
@@ -44,6 +45,9 @@ import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
+import com.endurancetrio.business.insight.dto.ArticleDTO;
+import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
@@ -60,6 +64,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -114,11 +119,22 @@ class EventWebControllerTest {
       List.of(), List.of(RACE_1, RACE_2, RACE_3), List.of()
   );
 
+  private static final ArticleDTO INSIGHT_ARTICLE_EN = ArticleDTOFixtures.standard();
+  private static final ArticleDTO INSIGHT_ARTICLE_PT = ArticleDTOFixtures.portuguese();
+  private static final PaginationDTO INSIGHT_PAGINATION = new PaginationDTO(0, 1, 1, false, false);
+  private static final InsightPageDTO EVENT_INSIGHT_PAGE = new InsightPageDTO(
+      List.of(INSIGHT_ARTICLE_EN), INSIGHT_PAGINATION);
+  private static final InsightPageDTO EVENT_INSIGHT_PAGE_PT = new InsightPageDTO(
+      List.of(INSIGHT_ARTICLE_PT), INSIGHT_PAGINATION);
+
   @Mock
   MessageService messageService;
 
   @Mock
   EventService eventService;
+
+  @Mock
+  InsightService insightService;
 
   @Mock
   RaceService raceService;
@@ -139,7 +155,7 @@ class EventWebControllerTest {
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
     eventWebController = new EventWebController(messageService, appProperties, eventService,
-        raceService
+        insightService, raceService
     );
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -323,6 +339,50 @@ class EventWebControllerTest {
         .andExpect(model().attribute("year", 1984))
         .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
         .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));
+  }
+
+  @Test
+  void getEventInsightsPageWithEnglishLocale() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(),
+        any()
+    )).thenReturn("Event Insights - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(),
+        any()
+    )).thenReturn("Articles related to this event");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
+        EVENT_INSIGHT_PAGE);
+
+    mockMvc.perform(get("/en/events/1984/1/insights"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-insights"))
+        .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attribute("event", EVENT_OVERVIEW))
+        .andExpect(model().attribute("articles", EVENT_INSIGHT_PAGE.articles()))
+        .andExpect(model().attribute("pagination", INSIGHT_PAGINATION));
+  }
+
+  @Test
+  void getEventInsightsPageWithPortugueseLocale() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(),
+        any()
+    )).thenReturn("Perspetivas do Evento - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(),
+        any()
+    )).thenReturn("Artigos relacionados com este evento");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
+        EVENT_INSIGHT_PAGE_PT);
+
+    mockMvc.perform(get("/pt/events/1984/1/insights"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-insights"))
+        .andExpect(model().attribute("language", "pt"))
+        .andExpect(model().attributeExists("metadata"))
+        .andExpect(model().attribute("event", EVENT_OVERVIEW))
+        .andExpect(model().attribute("articles", EVENT_INSIGHT_PAGE_PT.articles()))
+        .andExpect(model().attribute("pagination", INSIGHT_PAGINATION));
   }
 
   @Test

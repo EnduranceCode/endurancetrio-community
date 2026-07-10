@@ -48,30 +48,27 @@
 
     <div id="main-navbar" class="navbar-menu">
       <div class="navbar-end">
-        <a
-            data-th-href="@{/{language}/athletes(language=${language})}"
-            data-th-text="#{navbar.option.athletes}"
-            data-th-classappend="${metadata.view == 'athletes'} ? 'is-active'"
-            class="navbar-item"
-        >
-          Events
-        </a>
-        <a
-            data-th-href="@{/{language}/events(language=${language})}"
-            data-th-text="#{navbar.option.events}"
-            data-th-classappend="${metadata.view == 'events'} ? 'is-active'"
-            class="navbar-item"
-        >
-          Events
-        </a>
-        <a
-            data-th-href="@{/{language}/about(language=${language})}"
-            data-th-text="#{navbar.option.about}"
-            data-th-classappend="${metadata.view == 'about'} ? 'is-active'"
-            class="navbar-item"
-        >
-          About
-        </a>
+        <a data-th-with="isAthlete=(${metadata.view == 'athletes' || metadata.view == 'athlete-profile'})"
+           data-th-href="@{/{language}/athletes(language=${language})}"
+           data-th-text="#{navbar.option.athletes}"
+           data-th-classappend="${isAthlete} ? 'is-active'"
+           class="navbar-item"></a>
+        <a data-th-with="isEvents=(${metadata.view == 'event-insights' || metadata.view == 'event-overview' || metadata.view == 'events-by-year' || metadata.view == 'years-with-events'})"
+           data-th-href="@{/{language}/events(language=${language})}"
+           data-th-text="#{navbar.option.events}"
+           data-th-classappend="${isEvents} ? 'is-active'"
+           class="navbar-item"></a>
+        <a data-th-with="isInsights=(${metadata.view == 'insights' || metadata.view == 'insight-article'})"
+           data-th-href="@{/{language}/insights(language=${language})}"
+           data-th-text="#{navbar.option.insights}"
+           data-th-classappend="${isInsights} ? 'is-active'"
+           class="navbar-item"
+        ></a>
+        <a data-th-href="@{/{language}/about(language=${language})}"
+           data-th-text="#{navbar.option.about}"
+           data-th-classappend="${metadata.view == 'about'} ? 'is-active'"
+           class="navbar-item"
+        ></a>
         <div class="navbar-item">
           <label class="switch-inner-label is-rounded is-outlined">
             <input id="language-selector" type="checkbox" data-th-checked="${language == 'pt'}">

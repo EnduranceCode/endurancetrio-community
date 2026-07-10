@@ -32,13 +32,9 @@ import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.insight.fixtures.ArticleDTOFixtures;
 import com.endurancetrio.business.common.dto.PaginationDTO;
-import com.endurancetrio.business.event.dto.EventOverviewDTO;
-import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.service.InsightService;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,20 +59,12 @@ class InsightsWebControllerTest {
   private static final InsightPageDTO INSIGHT_PAGE_PT = new InsightPageDTO(List.of(ARTICLE_PT),
       PAGINATION
   );
-  private static final LocalDate EVENT_DATE = LocalDate.of(1984, Month.AUGUST, 15);
-  private static final EventOverviewDTO EVENT_OVERVIEW = new EventOverviewDTO(1L,
-      "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(),
-      List.of(), List.of()
-  );
 
   @Mock
   MessageService messageService;
 
   @Mock
   InsightService insightService;
-
-  @Mock
-  EventService eventService;
 
   AppProperties appProperties;
 
@@ -93,8 +81,7 @@ class InsightsWebControllerTest {
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
-    insightsWebController = new InsightsWebController(messageService, appProperties, insightService,
-        eventService
+    insightsWebController = new InsightsWebController(messageService, appProperties, insightService
     );
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -216,45 +203,5 @@ class InsightsWebControllerTest {
                 org.hamcrest.Matchers.is(ArticleDTOFixtures.STANDARD_TITLE)
             )
         ));
-  }
-
-  @Test
-  void getEventInsightsPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.insights.event.metadata.title"), any(),
-        any()
-    )).thenReturn("Event Insights - EnduranceTrio");
-    when(messageService.getMessage(eq("page.insights.event.metadata.description"), any(),
-        any()
-    )).thenReturn("Articles related to this event");
-    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
-    when(insightService.getArticlesByEvent(eq(1L), any())).thenReturn(INSIGHT_PAGE);
-
-    mockMvc.perform(get("/en/events/1984/1/insights"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("event-insights"))
-        .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("event", EVENT_OVERVIEW))
-        .andExpect(model().attribute("articles", INSIGHT_PAGE.articles()));
-  }
-
-  @Test
-  void getEventInsightsPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.insights.event.metadata.title"), any(),
-        any()
-    )).thenReturn("Perspetivas do Evento - EnduranceTrio");
-    when(messageService.getMessage(eq("page.insights.event.metadata.description"), any(),
-        any()
-    )).thenReturn("Artigos relacionados com este evento");
-    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
-    when(insightService.getArticlesByEvent(eq(1L), any())).thenReturn(INSIGHT_PAGE_PT);
-
-    mockMvc.perform(get("/pt/events/1984/1/insights"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("event-insights"))
-        .andExpect(model().attribute("language", "pt"))
-        .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("event", EVENT_OVERVIEW))
-        .andExpect(model().attribute("articles", INSIGHT_PAGE_PT.articles()));
   }
 }
