@@ -37,12 +37,27 @@ import org.springframework.stereotype.Repository;
 public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonNull Long> {
 
   /**
-   * Finds an {@link Article} by its unique URL slug.
+   * Returns a {@link Page} of all {@link Article articles} ordered by their published date
+   * descending.
    *
-   * @param slug the URL slug of the {@link Article}
-   * @return an {@link Optional} containing the {@link Article} if found, or empty if not found
+   * @param pageable the pagination information
+   * @return a {@link Page} of {@link Article articles} ordered by published date descending
    */
-  Optional<Article> findBySlug(String slug);
+  Page<Article> findAllByOrderByPublishedDateDesc(@NonNull Pageable pageable);
+
+  /**
+   * Returns a {@link Page} of {@link Article articles} authored by the athlete with the given ID,
+   * ordered by published date descending.
+   *
+   * @param athleteId the ID of the {@link com.endurancetrio.data.competitor.model.entity.Athlete}
+   * @param pageable  the pagination information
+   * @return a {@link Page} of {@link Article articles} authored by the given athlete
+   */
+  @Query(
+      "SELECT DISTINCT a FROM Article a JOIN a.author au JOIN au.athlete at "
+          + "WHERE at.id = :athleteId ORDER BY a.publishedDate DESC"
+  )
+  Page<Article> findByAthleteId(@Param("athleteId") Long athleteId, @NonNull Pageable pageable);
 
   /**
    * Returns a {@link Page} of {@link Article articles} associated with a given event ID.
@@ -55,11 +70,10 @@ public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonN
   Page<Article> findByEventId(@Param("eventId") Long eventId, @NonNull Pageable pageable);
 
   /**
-   * Returns a {@link Page} of all {@link Article articles} ordered by their published date
-   * descending.
+   * Finds an {@link Article} by its unique URL slug.
    *
-   * @param pageable the pagination information
-   * @return a {@link Page} of {@link Article articles} ordered by published date descending
+   * @param slug the URL slug of the {@link Article}
+   * @return an {@link Optional} containing the {@link Article} if found, or empty if not found
    */
-  Page<Article> findAllByOrderByPublishedDateDesc(@NonNull Pageable pageable);
+  Optional<Article> findBySlug(String slug);
 }

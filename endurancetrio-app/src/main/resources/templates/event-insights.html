@@ -38,10 +38,9 @@
         Insights about Event Title
       </h2>
 
-      <div data-th-if="${#lists.isEmpty(articles)}" data-th-remove="tag">
-        <div class="endurance-box is-branded-thin has-text-centered">
-          <p data-th-text="#{page.event.insights.empty}" class="title is-4 m-4"></p>
-        </div>
+      <div data-th-if="${#lists.isEmpty(articles)}"
+           class="endurance-box is-branded-thin has-text-centered">
+        <p data-th-text="#{page.event.insights.empty}" class="title is-4 m-4"></p>
       </div>
 
       <div data-th-unless="${#lists.isEmpty(articles)}" data-th-remove="tag">

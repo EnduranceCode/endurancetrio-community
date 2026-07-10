@@ -33,6 +33,8 @@ import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
+import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import com.endurancetrio.business.insight.service.InsightService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @EnduranceTrioWebController
 public class AthleteWebController {
 
+  private static final String ATTRIBUTE_ARTICLES = "articles";
   private static final String ATTRIBUTE_ATHLETE = "athlete";
   private static final String ATTRIBUTE_ATHLETES = "athletes";
   private static final String ATTRIBUTE_RACES = "races";
@@ -61,15 +64,17 @@ public class AthleteWebController {
   private final MessageService messageService;
   private final AppProperties appProperties;
   private final AthleteService athleteService;
+  private final InsightService insightService;
 
   @Autowired
   public AthleteWebController(
       MessageService messageService, AppProperties appProperties,
-      AthleteService athleteService
+      AthleteService athleteService, InsightService insightService
   ) {
     this.messageService = messageService;
     this.appProperties = appProperties;
     this.athleteService = athleteService;
+    this.insightService = insightService;
   }
 
   /**
@@ -108,7 +113,8 @@ public class AthleteWebController {
   }
 
   /**
-   * Returns the athlete profile page for a specific athlete, including their races.
+   * Returns the athlete profile page for a specific athlete, including their races and all
+   * authored insight articles.
    *
    * @param language the language path variable ({@code en} or {@code pt})
    * @param id       the ID of the athlete
@@ -137,11 +143,15 @@ public class AthleteWebController {
     Pageable pageable = PageRequest.of(clampedPage, PROFILE_PAGE_SIZE);
     AthleteRacesPageDTO athleteRaces = athleteService.getAthleteRaces(id, pageable);
 
+    InsightPageDTO athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(),
+        locale);
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
+    model.addAttribute(PAGINATION, athleteRaces.pagination());
+    model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles.articles());
     model.addAttribute(ATTRIBUTE_ATHLETE, athleteService.getAthleteById(id));
     model.addAttribute(ATTRIBUTE_RACES, athleteRaces.races());
-    model.addAttribute(PAGINATION, athleteRaces.pagination());
 
     return VIEW_ATHLETE_PROFILE;
   }

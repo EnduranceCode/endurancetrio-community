@@ -52,6 +52,18 @@ public class InsightServiceMain implements InsightService {
 
   @Override
   @Transactional(readOnly = true)
+  public ArticleDTO getArticleBySlug(String slug, Locale locale) {
+    var article = articleRepository.findBySlug(slug).orElseThrow(() -> {
+      String errorMsg = String.format("No article found with slug '%s'", slug);
+      LOG.warn(errorMsg);
+      return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
+    });
+
+    return articleMapper.map(article, locale);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public InsightPageDTO getArticles(int page, Pageable pageable, Locale locale) {
     var articlePage = articleRepository.findAllByOrderByPublishedDateDesc(pageable)
         .map(entity -> articleMapper.map(entity, locale));
@@ -61,14 +73,11 @@ public class InsightServiceMain implements InsightService {
 
   @Override
   @Transactional(readOnly = true)
-  public ArticleDTO getArticleBySlug(String slug, Locale locale) {
-    var article = articleRepository.findBySlug(slug).orElseThrow(() -> {
-      String errorMsg = String.format("No article found with slug '%s'", slug);
-      LOG.warn(errorMsg);
-      return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
-    });
+  public InsightPageDTO getArticlesByAthleteId(Long athleteId, Pageable pageable, Locale locale) {
+    var articlePage = articleRepository.findByAthleteId(athleteId, pageable)
+        .map(entity -> articleMapper.map(entity, locale));
 
-    return articleMapper.map(article, locale);
+    return new InsightPageDTO(articlePage.getContent(), PaginationDTO.from(articlePage));
   }
 
   @Override

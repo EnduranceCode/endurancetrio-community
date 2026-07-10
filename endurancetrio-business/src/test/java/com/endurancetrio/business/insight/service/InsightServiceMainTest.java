@@ -54,6 +54,7 @@ class InsightServiceMainTest {
   private static final Locale LOCALE = Locale.ENGLISH;
   private static final String SLUG = "test-article";
   private static final Long EVENT_ID = 1L;
+  private static final Long ATHLETE_ID = 1L;
   private static final Pageable PAGEABLE = PageRequest.of(0, 10);
 
   @Mock
@@ -146,6 +147,34 @@ class InsightServiceMainTest {
     when(articleRepository.findByEventId(EVENT_ID, PAGEABLE)).thenReturn(articlePage);
 
     InsightPageDTO result = underTest.getArticlesByEvent(EVENT_ID, PAGEABLE, LOCALE);
+
+    assertNotNull(result);
+    assertEquals(0, result.articles().size());
+    assertEquals(0, result.pagination().totalItems());
+  }
+
+  @Test
+  void getArticlesByAthleteIdShouldReturnPaginatedResults() {
+    Page<Article> articlePage = new PageImpl<>(List.of(testArticle), PAGEABLE, 1L);
+    when(articleRepository.findByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(articlePage);
+    when(articleMapper.map(testArticle, LOCALE)).thenReturn(testArticleDTO);
+
+    InsightPageDTO result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
+
+    assertNotNull(result);
+    assertEquals(1, result.articles().size());
+    assertEquals(testArticleDTO, result.articles().getFirst());
+    assertEquals(0, result.pagination().pageNumber());
+    assertEquals(1, result.pagination().totalPages());
+    assertEquals(1L, result.pagination().totalItems());
+  }
+
+  @Test
+  void getArticlesByAthleteIdWithEmptyPage() {
+    Page<Article> articlePage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(articleRepository.findByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(articlePage);
+
+    InsightPageDTO result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
 
     assertNotNull(result);
     assertEquals(0, result.articles().size());

@@ -33,6 +33,17 @@ import org.springframework.data.domain.Pageable;
 public interface InsightService {
 
   /**
+   * Returns an {@link ArticleDTO} identified by its unique URL slug, with content resolved for the
+   * requested locale.
+   *
+   * @param slug   the unique URL slug of the article
+   * @param locale the requested locale for content resolution
+   * @return the {@link ArticleDTO} with locale-resolved content
+   * @throws EnduranceTrioException if no article with the given slug is found
+   */
+  ArticleDTO getArticleBySlug(String slug, Locale locale);
+
+  /**
    * Returns an {@link InsightPageDTO} containing a paginated list of all
    * {@link ArticleDTO articles}, ordered by published date descending.
    *
@@ -45,15 +56,16 @@ public interface InsightService {
   InsightPageDTO getArticles(int page, Pageable pageable, Locale locale);
 
   /**
-   * Returns an {@link ArticleDTO} identified by its unique URL slug, with content resolved for the
-   * requested locale.
+   * Returns an {@link InsightPageDTO} containing a paginated list of {@link ArticleDTO articles}
+   * authored by the athlete with the given ID, with content resolved for the requested locale.
    *
-   * @param slug   the unique URL slug of the article
-   * @param locale the requested locale for content resolution
-   * @return the {@link ArticleDTO} with locale-resolved content
-   * @throws EnduranceTrioException if no article with the given slug is found
+   * @param athleteId the ID of the athlete to filter articles by
+   * @param pageable  the pagination information (page number, page size, etc.)
+   * @param locale    the requested locale for content resolution
+   * @return an {@link InsightPageDTO} with the articles authored by the given athlete and
+   * pagination metadata
    */
-  ArticleDTO getArticleBySlug(String slug, Locale locale);
+  InsightPageDTO getArticlesByAthleteId(Long athleteId, Pageable pageable, Locale locale);
 
   /**
    * Returns an {@link InsightPageDTO} containing a paginated list of {@link ArticleDTO articles}
