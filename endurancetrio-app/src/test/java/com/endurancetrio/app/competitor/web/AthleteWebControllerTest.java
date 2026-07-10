@@ -37,6 +37,9 @@ import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
+import com.endurancetrio.business.insight.dto.ArticleDTO;
+import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
 import com.endurancetrio.data.competitor.model.enumerator.Country;
 import java.util.List;
@@ -60,6 +63,9 @@ class AthleteWebControllerTest {
   @Mock
   AthleteService athleteService;
 
+  @Mock
+  InsightService insightService;
+
   AppProperties appProperties;
 
   AthleteWebController athleteWebController;
@@ -77,7 +83,8 @@ class AthleteWebControllerTest {
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
-    athleteWebController = new AthleteWebController(messageService, appProperties, athleteService);
+    athleteWebController = new AthleteWebController(messageService, appProperties, athleteService,
+        insightService);
     exceptionHandler = new EnduranceTrioExceptionHandlerWeb(messageService, appProperties);
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -300,6 +307,10 @@ class AthleteWebControllerTest {
         new AthleteRacesPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(
+        new InsightPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
 
     mockMvc.perform(get("/en/athletes/1"))
         .andExpect(status().isOk())
@@ -308,7 +319,10 @@ class AthleteWebControllerTest {
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attributeExists("athlete"))
         .andExpect(model().attributeExists("races"))
-        .andExpect(model().attributeExists("pagination"));
+        .andExpect(model().attributeExists("pagination"))
+        .andExpect(model().attributeExists("articles"));
+
+    verify(insightService).getArticlesByAthleteId(eq(1L), eq(Pageable.unpaged()), any());
   }
 
   @Test
@@ -327,6 +341,10 @@ class AthleteWebControllerTest {
         new AthleteRacesPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
+    when(insightService.getArticlesByAthleteId(eq(4L), any(), any())).thenReturn(
+        new InsightPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
 
     mockMvc.perform(get("/pt/athletes/4"))
         .andExpect(status().isOk())
@@ -335,7 +353,10 @@ class AthleteWebControllerTest {
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attributeExists("athlete"))
         .andExpect(model().attributeExists("races"))
-        .andExpect(model().attributeExists("pagination"));
+        .andExpect(model().attributeExists("pagination"))
+        .andExpect(model().attributeExists("articles"));
+
+    verify(insightService).getArticlesByAthleteId(eq(4L), eq(Pageable.unpaged()), any());
   }
 
   @Test
@@ -354,12 +375,18 @@ class AthleteWebControllerTest {
         new AthleteRacesPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(
+        new InsightPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
 
     mockMvc.perform(get("/en/athletes/1"))
         .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
                 org.hamcrest.Matchers.is("Athlete Profile - EnduranceTrio")
             )
         ));
+
+    verify(insightService).getArticlesByAthleteId(eq(1L), eq(Pageable.unpaged()), any());
   }
 
   @Test
@@ -377,6 +404,10 @@ class AthleteWebControllerTest {
     )).thenReturn("The requested page was not found");
     when(athleteService.getAthleteRaces(eq(999L), any())).thenReturn(
         new AthleteRacesPageDTO(List.of(),
+            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
+        ));
+    when(insightService.getArticlesByAthleteId(eq(999L), any(), any())).thenReturn(
+        new InsightPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
     when(athleteService.getAthleteById(999L)).thenThrow(new EnduranceTrioException(
