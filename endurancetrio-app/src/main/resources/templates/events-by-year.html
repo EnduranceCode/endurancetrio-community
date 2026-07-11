@@ -44,7 +44,7 @@
     <div data-th-each="event : ${events}" class="endurance-box is-branded-thin mb-3">
       <article class="media">
         <div class="media-left">
-          <div class="box has-background-grey-200 has-text-centered"
+          <div class="box has-background-grey-700 has-text-centered"
                style="min-width: 4.5rem; padding: 0.5rem;">
             <p class="title is-3 mb-0" data-th-text="${#temporals.format(event.startDate, 'dd')}">
               15
@@ -58,19 +58,16 @@
 
         <div class="media-content">
           <div class="content">
-            <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${year}, id=${event.id})}"
-               class="title is-4" data-th-text="${event.title}">
-              Triatlo de Peniche
+            <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${year}, id=${event.id})}">
+              <span data-th-text="${event.title}" class="title is-4"></span>
+              <br>
+              <span class="has-text-grey"
+                    data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'">
+              </span>
             </a>
-            <br>
-            <span class="has-text-grey"
-                  data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'">
-              Peniche, Peniche (Leiria)
-            </span>
             <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}">
               <span class="tag is-link is-light" data-th-each="sportCode : ${event.sportCodes}"
                     data-th-text="#{sport.__${sportCode}__}">
-                Triathlon
               </span>
             </div>
           </div>

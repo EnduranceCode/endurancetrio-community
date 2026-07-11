@@ -114,7 +114,7 @@
          data-th-with="isDerived=${race.raceType == RaceType.INDIVIDUAL_DERIVED || race.raceType == RaceType.TEAM_RELAY_DERIVED || race.raceType == RaceType.MIXED_RELAY_DERIVED}"
          data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}"
          class="endurance-box is-branded-thin mb-3">
-        <div data-th-classappend="${isDerived} ? 'has-background-grey-200' : p-0"
+        <div data-th-classappend="${isDerived} ? 'has-background-grey-100' : p-0"
              class="box is-shadowless">
           <div class="endurance-media">
             <div class="endurance-media-left has-background-grey-700">
