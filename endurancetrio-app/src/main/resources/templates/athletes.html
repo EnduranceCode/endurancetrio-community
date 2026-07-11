@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-200">
+  <section class="hero has-background-grey-700">
     <div class="hero-body">
       <div class="container is-fullhd">
         <h1 data-th-text="#{page.athletes.title}" class="title is-1">Athletes</h1>
@@ -49,10 +49,10 @@
     <div class="fixed-grid has-1-cols-mobile has-3-cols-desktop">
       <div class="grid">
         <div data-th-each="athlete : ${athletes}" class="cell">
-          <div class="endurance-box is-branded-thin mb-3">
+          <div class="box mb-2">
             <article class="media">
               <div class="media-left">
-                <div class="box has-background-grey-200 has-text-centered p-3">
+                <div class="endurance-box has-text-centered p-3">
                   <span class="icon is-large">
                     <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
                   </span>
