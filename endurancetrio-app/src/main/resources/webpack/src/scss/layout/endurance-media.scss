@@ -1,0 +1,268 @@
+/*
+ * Copyright (c) 2011-2026 Ricardo do Canto
+ *
+ * This file is part of the EnduranceTrio project.
+ *
+ * Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+ * (the "License");
+ *
+ * You may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at https://fsl.software/
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+ * PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+ *
+ * IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+ * SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+ * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+ */
+
+@charset "utf-8";
+
+@use "sass:list";
+
+@use "bulma/sass/utilities/css-variables" as cv;
+@use "bulma/sass/utilities/initial-variables" as iv;
+@use "bulma/sass/utilities/extends";
+@use "bulma/sass/utilities/mixins" as mx;
+
+/// Gap between the left column and content on tablet+.
+/// @group endurance-media
+/// @type {Length}
+/// @access public
+/// @see $endurance-media-left-margin
+$endurance-media-gap: 1.5rem !default;
+
+/// Vertical gap when stacked (mobile), and left-column margin on mobile.
+/// @group endurance-media
+/// @type {Length}
+/// @access public
+/// @see $endurance-media-gap
+$endurance-media-left-margin: 0.75rem !default;
+
+/// Square pixel-size variants available for `.endurance-media-left`.
+/// Generates `is-{N}x{N}` modifiers.
+/// @group endurance-media
+/// @type {List}
+/// @access public
+$endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
+
+/// CSS Grid media-object layout — two-column on tablet+, stacked on mobile.
+///
+/// Wraps Bulma's `.media` concept with CSS Grid for stricter alignment.
+/// On mobile the left column takes full width; on tablet+ it shrinks to
+/// `auto` while the content column fills the remaining space (`1fr`).
+///
+/// @example html - Basic usage
+///   <div class="endurance-media">
+///     <div class="endurance-media-left">
+///       <img src="avatar.jpg" alt="Avatar">
+///     </div>
+///     <div class="endurance-media-content">
+///       <p class="title is-3">Name</p>
+///       <p class="subtitle is-5">Description</p>
+///     </div>
+///   </div>
+///
+/// @group endurance-media
+/// @access public
+.#{iv.$class-prefix}endurance-media {
+  @extend %block;
+  @include cv.register-vars(
+    (
+      "endurance-media-gap": #{$endurance-media-gap},
+      "endurance-media-left-margin": #{$endurance-media-left-margin},
+    )
+  );
+  column-gap: cv.getVar("endurance-media-gap");
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: cv.getVar("endurance-media-gap");
+
+  @include mx.mobile {
+    row-gap: cv.getVar("endurance-media-left-margin");
+  }
+
+  @include mx.tablet {
+    grid-template-columns: auto 1fr;
+  }
+}
+
+/// Left column — image or text badge. Behaves like Bulma's `.media-left`.
+///
+/// On mobile the column takes full width; on tablet+ it is sized by its
+/// content. Supports square pixel sizes (`is-64x64`), aspect ratios
+/// (`is-16by9`), OpenGraph sizes (`is-og-320x167`), and min-width
+/// variants (`is-min-width-4rem`).
+///
+/// Images inside the left column are aligned top, clipped to rounded
+/// corners, and fill the available space with `object-fit: cover`.
+///
+/// @example html - Image badge
+///   <div class="endurance-media-left is-og-320x167">
+///     <img src="photo.jpg" alt="Photo">
+///   </div>
+///
+/// @example html - Text badge
+///   <div class="endurance-media-left has-background-grey-300">
+///     <p class="title is-3">12-05</p>
+///     <p class="subtitle is-4">2026</p>
+///   </div>
+///
+/// @example html - Text badge with min-width
+///   <div class="endurance-media-left is-min-width-6rem">
+///     <p class="title is-3">Label</p>
+///   </div>
+///
+/// @group endurance-media
+/// @access public
+.#{iv.$class-prefix}endurance-media-left {
+  border-radius: cv.getVar("radius-large");
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: cv.getVar("box-padding");
+
+  @include mx.mobile {
+    margin-bottom: cv.getVar("endurance-media-left-margin");
+    max-width: 100%;
+    width: 100%;
+  }
+
+  img,
+  .#{iv.$class-prefix}has-ratio {
+    height: 100%;
+    width: 100%;
+  }
+
+  img {
+    object-fit: cover;
+  }
+
+  // Pixel sizes
+  @each $dimension in $endurance-media-dimensions {
+    &.#{iv.$class-prefix}is-#{$dimension}x#{$dimension} {
+      aspect-ratio: 1;
+
+      @include mx.tablet {
+        height: $dimension * 1px;
+        width: $dimension * 1px;
+      }
+    }
+  }
+
+  // Aspect ratios
+  &.#{iv.$class-prefix}is-square {
+    aspect-ratio: 1;
+  }
+
+  @each $pair in iv.$aspect-ratios {
+    $w: list.nth($pair, 1);
+    $h: list.nth($pair, 2);
+
+    &.#{iv.$class-prefix}is-#{$w}by#{$h} {
+      aspect-ratio: #{$w} / #{$h};
+      width: 100%;
+    }
+  }
+
+  // OpenGraph ratio pixel sizes (~1.91:1)
+  &.#{iv.$class-prefix}is-og-1200x628 {
+    aspect-ratio: 1200 / 628;
+
+    @include mx.tablet {
+      height: 628px;
+      width: 1200px;
+    }
+  }
+
+  &.#{iv.$class-prefix}is-og-600x314 {
+    aspect-ratio: 1200 / 628;
+
+    @include mx.tablet {
+      height: 314px;
+      width: 600px;
+    }
+  }
+
+  &.#{iv.$class-prefix}is-og-480x251 {
+    aspect-ratio: 1200 / 628;
+
+    @include mx.tablet {
+      height: 251px;
+      width: 480px;
+    }
+  }
+
+  &.#{iv.$class-prefix}is-og-320x167 {
+    aspect-ratio: 1200 / 628;
+
+    @include mx.tablet {
+      height: 167px;
+      width: 320px;
+    }
+  }
+
+  &:has(img) {
+    justify-content: flex-start;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  // Min-width variants for text badges
+  &.#{iv.$class-prefix}is-min-width-4rem {
+    min-width: 4rem;
+  }
+
+  &.#{iv.$class-prefix}is-min-width-6rem {
+    min-width: 6rem;
+  }
+
+  &.#{iv.$class-prefix}is-min-width-8rem {
+    min-width: 8rem;
+  }
+}
+
+/// Content column — flex column that fills the remaining grid space.
+/// Behaves like Bulma's `.media-content`. The `min-width: 0` prevents
+/// long unbreakable content from overflowing the `1fr` track.
+///
+/// @group endurance-media
+/// @access public
+.#{iv.$class-prefix}endurance-media-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/// Footer row inside the content column — pinned to the bottom via
+/// `margin-top: auto`. On mobile, gains a top border and centered text
+/// to visually separate from the main content.
+///
+/// @example html - Footer with tags
+///   <div class="endurance-media">
+///     <div class="endurance-media-left is-64x64">
+///       <img src="icon.png" alt="Icon">
+///     </div>
+///     <div class="endurance-media-content">
+///       <p class="title is-3">Title</p>
+///       <p class="subtitle is-5">Description</p>
+///       <p class="endurance-media-footer">
+///         <span class="tag is-link is-light">Tag</span>
+///       </p>
+///     </div>
+///   </div>
+///
+/// @group endurance-media
+/// @access public
+.#{iv.$class-prefix}endurance-media-footer {
+  margin-top: auto;
+
+  @include mx.mobile {
+    border-top: 1px solid cv.getVar("border-weak");
+    padding-top: 0.75rem;
+    text-align: center;
+  }
+}

@@ -38,6 +38,7 @@ import com.endurancetrio.business.event.mapper.IndividualResultMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -81,15 +82,15 @@ class RaceServiceMainTest {
     var distanceTypes = List.of("OLYMPIC");
 
     individualRace = new RaceDTO(RACE_ID, "Elite Men", "Elite", raceDate, raceTime, sports,
-        distanceTypes, "INDIVIDUAL", null, null,
+        distanceTypes, RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null, null,
         "UNKNOWN"
     );
     collectiveRace = new RaceDTO(2L, "Team Race", "Teams", raceDate, raceTime, sports,
-        distanceTypes, "COLLECTIVE", null, null,
+        distanceTypes, RaceType.TEAM_BY_RANK, "COLLECTIVE", null, null,
         "UNKNOWN"
     );
-    relayRace = new RaceDTO(3L, "Relay Race", "Relay", raceDate, raceTime, sports,
-        distanceTypes, "RELAY", null, null,
+    relayRace = new RaceDTO(3L, "Relay Race", "Relay", raceDate, raceTime, sports, distanceTypes,
+        RaceType.TEAM_RELAY_PARENT, "RELAY", null, null,
         "UNKNOWN"
     );
 
@@ -249,8 +250,8 @@ class RaceServiceMainTest {
   @Test
   void getRaceResultsWithInvalidRaceTypeGroupShouldThrow() {
     var invalidRace = new RaceDTO(RACE_ID, "Bad Race", "Bad",
-        LocalDate.of(2026, Month.JUNE, 1), null, List.of("TRIATHLON"),
-        List.of("SPRINT"), "UNKNOWN", null, null,
+        LocalDate.of(2026, Month.JUNE, 1), null, List.of("TRIATHLON"), List.of("SPRINT"),
+        RaceType.INDIVIDUAL_PARENT, "UNKNOWN", null, null,
         "UNKNOWN"
     );
 

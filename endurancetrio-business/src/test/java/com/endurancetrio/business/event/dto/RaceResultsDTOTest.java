@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
 import com.endurancetrio.business.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
@@ -46,7 +47,8 @@ class RaceResultsDTOTest {
   @BeforeEach
   void setUp() {
     race = new RaceDTO(1L, "Elite Men", "Elite", LocalDate.of(2026, Month.JUNE, 1), null,
-        List.of("TRIATHLON"), List.of("OLYMPIC"), "INDIVIDUAL", null, null, "UNKNOWN"
+        List.of("TRIATHLON"), List.of("OLYMPIC"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null,
+        null, "UNKNOWN"
     );
     individualResult = new IndividualResultDTO(1L, race, 1, null, AthleteDTOFixtures.standard(),
         AGE_GROUP, null, TeamDTOFixtures.standard(), "101", Duration.ofMinutes(20), null, null, null,

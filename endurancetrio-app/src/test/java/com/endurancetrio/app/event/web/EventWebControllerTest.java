@@ -51,6 +51,7 @@ import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
@@ -105,13 +106,16 @@ class EventWebControllerTest {
       List.of(), List.of(), List.of()
   );
   private static final RaceDTO RACE_1 = new RaceDTO(1L, "Triatlo de Peniche", "Geral", EVENT_DATE,
-      null, List.of("TRIATHLON"), List.of("SPRINT"), "STANDARD", null, null, "UNKNOWN"
+      null, List.of("TRIATHLON"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "STANDARD", null,
+      null, "UNKNOWN"
   );
   private static final RaceDTO RACE_2 = new RaceDTO(2L, "Triatlo de Peniche", "Estafetas",
-      EVENT_DATE, null, List.of("TRIATHLON"), List.of("SPRINT"), "RELAY", null, null, "UNKNOWN"
+      EVENT_DATE, null, List.of("TRIATHLON"), List.of("SPRINT"), RaceType.TEAM_RELAY_PARENT,
+      "RELAY", null, null, "UNKNOWN"
   );
   private static final RaceDTO RACE_3 = new RaceDTO(3L, "Triatlo de Peniche", "Para", EVENT_DATE,
-      null, List.of("TRIATHLON"), List.of("SPRINT"), "PARA", null, null, "UNKNOWN"
+      null, List.of("TRIATHLON"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "PARA", null, null,
+      "UNKNOWN"
   );
 
   private static final EventOverviewDTO EVENT_OVERVIEW_WITH_RACES = new EventOverviewDTO(

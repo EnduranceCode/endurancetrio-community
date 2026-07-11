@@ -42,6 +42,7 @@ import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -85,8 +86,8 @@ class IndividualResultMapperTest {
   @BeforeEach
   void setUp() {
     raceDTO = new RaceDTO(1L, "Elite Men", "Elite", LocalDate.of(2026, Month.JUNE, 1),
-        LocalTime.of(10, 0), List.of("TRIATHLON"), List.of("OLYMPIC"), "INDIVIDUAL", null, null,
-        "UNKNOWN"
+        LocalTime.of(10, 0), List.of("TRIATHLON"), List.of("OLYMPIC"), RaceType.INDIVIDUAL_PARENT,
+        "INDIVIDUAL", null, null, "UNKNOWN"
     );
 
     Athlete athlete = AthleteFixture.standard();

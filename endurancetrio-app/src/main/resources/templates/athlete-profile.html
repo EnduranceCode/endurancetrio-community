@@ -30,13 +30,13 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-200">
+  <section class="hero has-background-grey-700">
     <div class="hero-body">
       <div class="container is-fullhd">
-        <div class="media is-hidden-tablet">
-          <div class="media-left">
+        <div class="endurance-media">
+          <div class="endurance-media-left">
             <div class="endurance-box is is-branded-thick is-b">
-              <figure class="image is-64x64">
+              <figure class="image is-96x96">
                 <div data-th-if="${athlete.gender().getCode() == 'MALE'}" data-th-remove="tag">
                   <img data-th-replace="~{fragments/svg :: mdi-face-man}" alt="Male athlete icon">
                 </div>
@@ -47,77 +47,50 @@
             </div>
           </div>
 
-          <div class="media-content">
-            <div class="content">
-              <h1 data-th-text="${athlete.knownName()}" class="title is-2" >Known Name</h1>
-              <p data-th-text="${athlete.longName()}"
-                 class="subtitle is-4"
-              >
-                Full Name
-              </p>
-              <p data-th-if="${athlete.birthName() != null}"
-                 data-th-text="${athlete.birthName()}"
-                 class="subtitle is-5 has-text-grey"
-              >
-                Birth Name
-              </p>
-              <p class="subtitle is-5">
-                <span data-th-if="${athlete.country() != null}"
-                      data-th-text="${#locale.language == 'pt' ? athlete.country().getNamePT() : athlete.country().getNameEN()}">
-                  Portugal
-                </span>
-                <span
-                    data-th-if="${athlete.country() != null && athlete.yearOfBirth() != null}"> | </span>
-                <span data-th-if="${athlete.yearOfBirth() != null}"
-                      data-th-text="${athlete.yearOfBirth()}">
-                  1961
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="media is-hidden-mobile">
-          <div class="media-left">
-            <div class="endurance-box is is-branded-thick is-b">
-              <figure class="image is-128x128">
-                <div data-th-if="${athlete.gender().getCode() == 'MALE'}" data-th-remove="tag">
-                  <img data-th-replace="~{fragments/svg :: mdi-face-man}" alt="Male athlete icon">
+          <div class="endurance-media-content">
+            <div class="level">
+              <div class="level-left">
+                <div class="level-item">
+                  <div>
+                    <h1 data-th-text="${athlete.knownName()}" class="title is-2 has-text-centered-mobile">
+                    </h1>
+                    <p data-th-text="${athlete.longName()}" class="subtitle is-4 has-text-centered-mobile">
+                    </p>
+                    <p data-th-if="${athlete.birthName() != null}"
+                       data-th-text="${athlete.birthName()}"
+                       class="subtitle is-5 has-text-grey has-text-centered-mobile">
+                    </p>
+                  </div>
                 </div>
-                <div data-th-if="${athlete.gender().getCode() == 'FEMALE'}" data-th-remove="tag">
-                  <img data-th-replace="~{fragments/svg :: mdi-face-woman}" alt="Female athlete icon">
-                </div>
-              </figure>
+              </div>
             </div>
-          </div>
 
-          <div class="media-content">
-            <div class="content">
-              <h1 data-th-text="${athlete.knownName()}" class="title is-1" >Known Name</h1>
-              <p data-th-text="${athlete.longName()}"
-                 class="subtitle is-3"
-              >
-                Full Name
-              </p>
-              <p data-th-if="${athlete.birthName() != null}"
-                 data-th-text="${athlete.birthName()}"
-                 class="subtitle is-5 has-text-grey"
-              >
-                Birth Name
-              </p>
-              <p class="subtitle is-5">
-                <span data-th-if="${athlete.country() != null}"
-                      data-th-text="${#locale.language == 'pt' ? athlete.country().getNamePT() : athlete.country().getNameEN()}"
-                >
-                  Portugal
-                </span>
-                <span
-                    data-th-if="${athlete.country() != null && athlete.yearOfBirth() != null}"> | </span>
-                <span data-th-if="${athlete.yearOfBirth() != null}"
-                      data-th-text="${athlete.yearOfBirth()}">
-                  1961
-                </span>
-              </p>
+            <div data-th-if="${athlete.country() != null || athlete.yearOfBirth() != null}"
+                 class="endurance-media-footer">
+              <!-- Level Visible on Mobile & Hidden on Tablet and Superior -->
+              <div class="level is-mobile is-hidden-tablet">
+                <div data-th-if="${athlete.country() != null}" class="level-item">
+                  <p data-th-text="${#locale.language == 'pt' ? athlete.country().getNamePT() : athlete.country().getNameEN()}"
+                     class="subtitle is-5">
+                  </p>
+                </div>
+                <div data-th-if="${athlete.yearOfBirth() != null}" class="level-item">
+                  <p data-th-text="${athlete.yearOfBirth()}" class="subtitle is-5"></p>
+                </div>
+              </div>
+              <!-- Level Hidden on Mobile & Visible on Tablet and Superior -->
+              <div class="level is-hidden-mobile">
+                <div class="level-left">
+                  <div data-th-if="${athlete.country() != null}" class="level-item">
+                    <p data-th-text="${#locale.language == 'pt' ? athlete.country().getNamePT() : athlete.country().getNameEN()}"
+                       class="subtitle is-5">
+                    </p>
+                  </div>
+                  <div data-th-if="${athlete.yearOfBirth() != null}" class="level-item">
+                    <p data-th-text="${athlete.yearOfBirth()}" class="subtitle is-5"></p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -125,7 +98,8 @@
     </div>
   </section>
 
-  <section class="section">
+  <section data-th-with="RaceType=${T(com.endurancetrio.data.event.model.enumerator.RaceType)}"
+           class="section">
     <div class="container is-fullhd">
       <div data-th-if="${pagination.totalItems() == 0}"
            class="endurance-box is-branded-thin has-text-centered">
@@ -137,39 +111,39 @@
       </div>
 
       <a data-th-each="race : ${races}"
+         data-th-with="isDerived=${race.raceType == RaceType.INDIVIDUAL_DERIVED || race.raceType == RaceType.TEAM_RELAY_DERIVED || race.raceType == RaceType.MIXED_RELAY_DERIVED}"
          data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}"
          class="endurance-box is-branded-thin mb-3">
-        <article class="media">
-          <div class="media-left">
-            <div class="box has-background-grey-200 has-text-centered"
-                 style="min-width: 8rem; padding: 0.5rem 1rem;">
-              <p data-th-text="${#temporals.format(race.date, 'dd-MM')}" class="title is-3 mb-0">
+        <div data-th-classappend="${isDerived} ? 'has-background-grey-200' : p-0"
+             class="box is-shadowless">
+          <div class="endurance-media">
+            <div class="endurance-media-left has-background-grey-700">
+              <p data-th-text="${#temporals.format(race.date, 'dd-MM')}"
+                 data-th-classappend="${isDerived} ? is-5 : is-3"
+                 class="title mb-0">
               </p>
               <p data-th-text="${#temporals.format(race.date, 'yyyy')}"
-                 class="subtitle is-4 mb-0 has-text-weight-bold"></p>
+                 data-th-classappend="${isDerived} ? is-6 : is-4"
+                 class="subtitle mb-0 has-text-weight-bold">
+              </p>
             </div>
-          </div>
-
-          <div class="media-content">
-            <div class="content">
-              <div>
-                <span data-th-text="${race.title}" class="title is-4">
-                  Triatlo de Peniche
-                </span>
-                <br>
-                <span data-th-text="${race.subtitle}" class="has-text-grey">Geral</span>
-              </div>
-              <div data-th-if="${!#lists.isEmpty(race.sports)}" class="tags mt-2">
+            <div class="endurance-media-content">
+              <p data-th-text="${race.title}"
+                 data-th-classappend="${isDerived} ? 'has-text-grey-dark is-5' : 'is-3'"
+                 class="title"></p>
+              <p data-th-text="${race.subtitle}"
+                 data-th-classappend="${isDerived} ? 'has-text-grey-dark is-6' : 'is-5'"
+                 class="subtitle"></p>
+              <p class="endurance-media-footer">
                 <span data-th-each="sportCode : ${race.sports}"
                       data-th-text="#{sport.__${sportCode}__}"
-                      class="tag is-link is-light"
-                >
-                  Triathlon
+                      data-th-classappend="${!isDerived} ? 'is-medium'"
+                      class="tag is-link is-light">
                 </span>
-              </div>
+              </p>
             </div>
           </div>
-        </article>
+        </div>
       </a>
 
       <nav data-th-if="${pagination.totalPages() > 1}"
@@ -207,57 +181,22 @@
       <a data-th-each="article : ${articles}"
          data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
          class="endurance-box is-branded-thin">
-        <div class="columns is-hidden-tablet">
-          <div class="column is-narrow">
-            <div data-th-if="${article.featuredImage != null}" class="card-image">
-              <figure class="image">
-                <img data-th-src="${article.featuredImage}"
-                     data-th-alt="${article.title}"
-                     alt="Article Title"/>
-              </figure>
-            </div>
-            <div data-th-unless="${article.featuredImage != null}" class="card-image">
-              <figure class="image">
-                <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-                     data-th-alt="${article.title}"
-                     alt="Article Title"/>
-              </figure>
-            </div>
+        <div class="endurance-media">
+          <div class="endurance-media-left is-og-320x167 ">
+            <img data-th-src="${article.featuredImage}"
+                 data-th-alt="${article.title}"
+                 alt="Article Title"/>
           </div>
-          <div class="column">
+          <div class="endurance-media-content">
             <p data-th-text="${article.title}" class="title is-3"></p>
             <div class="subtitle is-5">
               <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+            </div>
+            <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
+              <p data-th-text="${#temporals.format(article.publishedDate, 'dd MMMM yyyy')}"></p>
             </div>
           </div>
         </div>
-
-        <article class="media is-hidden-mobile">
-          <div class="media-left">
-            <div data-th-if="${article.featuredImage != null}" class="card-image">
-              <figure class="image" style="max-width: 12rem;">
-                <img data-th-src="${article.featuredImage}"
-                     data-th-alt="${article.title}"
-                     alt="Article Title"/>
-              </figure>
-            </div>
-            <div data-th-unless="${article.featuredImage != null}" class="card-image">
-              <figure class="image" style="max-width: 12rem;">
-                <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-                     data-th-alt="${article.title}"
-                     alt="Article Title"/>
-              </figure>
-            </div>
-          </div>
-
-          <div data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
-             class="media-content">
-            <p data-th-text="${article.title}" class="title is-3"></p>
-            <div class="subtitle is-5">
-              <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
-            </div>
-          </div>
-        </article>
       </a>
     </div>
   </section>

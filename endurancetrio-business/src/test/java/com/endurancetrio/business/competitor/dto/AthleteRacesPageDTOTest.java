@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.business.competitor.fixtures.PaginationDTOFixtures;
 import com.endurancetrio.business.event.dto.RaceDTO;
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -69,8 +70,8 @@ class AthleteRacesPageDTOTest {
 
   private static RaceDTO createRaceDTO() {
     return new RaceDTO(1L, "Triatlo de Peniche", "geral", LocalDate.of(1984, Month.AUGUST, 15),
-        null, List.of("SWIM"), List.of("SPRINT"), "INDIVIDUAL", null, null,
-        "UNKNOWN"
+        null, List.of("SWIM"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null,
+        null, "UNKNOWN"
     );
   }
 }

@@ -94,6 +94,7 @@
 @forward 'bulma/sass/layout/hero';
 @forward 'bulma/sass/layout/level';
 @forward 'bulma/sass/layout/media';
+@forward 'layout/endurance-media';
 @forward 'bulma/sass/layout/section';
 
 // Helpers
@@ -111,7 +112,7 @@
 @forward 'bulma/sass/helpers/spacing';
 @forward 'bulma/sass/helpers/typography';
 @forward 'bulma/sass/helpers/visibility';
-// @forward 'bulma/sass/helpers/other';
+@forward 'bulma/sass/helpers/other';
 
 // Icon system (generated)
 // -------------------------------------------------------------------------------------------------

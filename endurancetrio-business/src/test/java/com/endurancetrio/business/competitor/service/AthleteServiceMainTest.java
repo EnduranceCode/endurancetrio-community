@@ -150,10 +150,12 @@ class AthleteServiceMainTest {
     Race race2 = createRace(3L, "Race 2", LocalDate.of(1984, Month.AUGUST, 15));
 
     RaceDTO race1DTO = new RaceDTO(1L, "Race 1", "Subtitle 1", LocalDate.of(1984, Month.AUGUST, 15),
-        null, List.of("SWIM"), List.of("SPRINT"), "INDIVIDUAL", null, null, "UNKNOWN"
+        null, List.of("SWIM"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null,
+        null, "UNKNOWN"
     );
     RaceDTO race2DTO = new RaceDTO(3L, "Race 2", "Subtitle 2", LocalDate.of(1984, Month.AUGUST, 15),
-        null, List.of("SWIM"), List.of("SPRINT"), "INDIVIDUAL", null, null, "UNKNOWN"
+        null, List.of("SWIM"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null,
+        null, "UNKNOWN"
     );
 
     Page<Race> racePage = new PageImpl<>(List.of(race1, race2), PAGEABLE, 2L);
