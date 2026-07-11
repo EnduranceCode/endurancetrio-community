@@ -112,6 +112,7 @@ class RaceMapperTest {
     assertEquals(1, result.distanceTypes().size());
     assertTrue(result.distanceTypes().contains(DistanceType.SPRINT.getCode()));
     assertEquals("INDIVIDUAL", result.raceTypeGroup());
+    assertEquals(RaceType.INDIVIDUAL_PARENT, result.raceType());
     assertNotNull(result.distanceMetadata());
     assertEquals(1, result.distanceMetadata().legs().size());
     assertNull(result.distanceMetadata().legs().getFirst().coreSport());
@@ -136,6 +137,7 @@ class RaceMapperTest {
     assertNotNull(result);
     assertEquals(ID, result.id());
     assertEquals("INDIVIDUAL", result.raceTypeGroup());
+    assertEquals(RaceType.INDIVIDUAL_PARENT, result.raceType());
     assertNotNull(result.distanceMetadata());
     assertEquals(3, result.distanceMetadata().legs().size());
     assertEquals("SWIM", result.distanceMetadata().legs().get(0).coreSport());
@@ -155,6 +157,7 @@ class RaceMapperTest {
 
     assertNotNull(result);
     assertEquals("COLLECTIVE", result.raceTypeGroup());
+    assertEquals(RaceType.TEAM_BY_RANK, result.raceType());
     assertEquals("COMPLETE", result.resultStatus());
   }
 
@@ -166,6 +169,7 @@ class RaceMapperTest {
 
     assertNotNull(result);
     assertEquals("RELAY", result.raceTypeGroup());
+    assertEquals(RaceType.TEAM_RELAY_PARENT, result.raceType());
     assertEquals("COMPLETE", result.resultStatus());
   }
 
@@ -206,6 +210,7 @@ class RaceMapperTest {
     assertNotNull(result);
     assertEquals(ID, result.id());
     assertEquals("INDIVIDUAL", result.raceTypeGroup());
+    assertEquals(RaceType.INDIVIDUAL_PARENT, result.raceType());
     assertNotNull(result.distanceMetadata());
     assertEquals(3, result.distanceMetadata().legs().size());
     assertEquals("SWIM", result.distanceMetadata().legs().get(0).coreSport());

@@ -23,6 +23,7 @@ package com.endurancetrio.business.event.dto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -50,7 +51,8 @@ class EventOverviewDTOTest {
   );
   private static final List<RaceDTO> RACES = List.of(
       new RaceDTO(1L, "Race 1", "Elite", LocalDate.of(2026, Month.JUNE, 1), null,
-          List.of("TRIATHLON"), List.of("SPRINT"), "TRIATHLON", null, null, "UNKNOWN"
+          List.of("TRIATHLON"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "TRIATHLON", null,
+          null, "UNKNOWN"
       )
   );
   private static final List<EventFileDTO> FILES = List.of(

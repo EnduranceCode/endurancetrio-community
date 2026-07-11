@@ -38,6 +38,7 @@ import com.endurancetrio.data.event.model.entity.EventFile;
 import com.endurancetrio.data.event.model.entity.Organizer;
 import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.model.enumerator.FileType;
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import com.endurancetrio.data.event.model.enumerator.Sport;
 import java.time.LocalDate;
 import java.time.Month;
@@ -103,7 +104,7 @@ class EventMapperTest {
     entityTest.setCourses(Set.of(course));
 
     raceDTO = new RaceDTO(1L, "Test Race", "Subtitle", START_DATE, null, List.of(), List.of(),
-        "INDIVIDUAL", null, null, "UNKNOWN"
+        RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null, null, "UNKNOWN"
     );
 
     EventFile eventFile = new EventFile();

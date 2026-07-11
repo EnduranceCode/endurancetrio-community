@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -35,14 +36,15 @@ import java.util.List;
  * @param time             an optional start time for the race
  * @param sports           the sport codes associated with the race
  * @param distanceTypes    the distance type codes associated with the race
+ * @param raceType         the race type
  * @param raceTypeGroup    the race type group code
  * @param distanceMetadata optional metadata describing the distance composition
  * @param event            the event that the race belongs to (may be null)
  * @param resultStatus     the result data availability status code
  */
 public record RaceDTO(Long id, String title, String subtitle, LocalDate date, LocalTime time,
-                      List<String> sports, List<String> distanceTypes, String raceTypeGroup,
-                      DistanceMetadataDTO distanceMetadata, EventDTO event,
+                      List<String> sports, List<String> distanceTypes, RaceType raceType,
+                      String raceTypeGroup, DistanceMetadataDTO distanceMetadata, EventDTO event,
                       String resultStatus) {
 
   public RaceDTO {
@@ -60,6 +62,9 @@ public record RaceDTO(Long id, String title, String subtitle, LocalDate date, Lo
     }
     if (distanceTypes == null) {
       throw new IllegalArgumentException("distanceTypes must not be null");
+    }
+    if (raceType == null) {
+      throw new IllegalArgumentException("raceType must not be null");
     }
     if (raceTypeGroup == null || raceTypeGroup.isBlank()) {
       throw new IllegalArgumentException("raceTypeGroup must not be null or blank");
