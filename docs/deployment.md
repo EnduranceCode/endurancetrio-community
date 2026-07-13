@@ -294,6 +294,15 @@ SSH tunnel, to connect without exposing PostgreSQL to the public internet.
 
 ### DBeaver access via SSH tunnel
 
+The deployment server must allow SSH TCP forwarding for tunneling to work. Verify that
+`AllowTcpForwarding` is set to `yes` in `/etc/ssh/sshd_config` on the server. If it is set to `no`,
+update the setting and restart the SSH service:
+
+```shell
+sudo sed -i 's/^AllowTcpForwarding no/AllowTcpForwarding yes/' /etc/ssh/sshd_config
+sudo systemctl restart sshd
+```
+
 When using DBeaver from your local machine, configure an SSH tunnel to the server and connect
 through loopback:
 
