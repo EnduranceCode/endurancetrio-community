@@ -28,6 +28,9 @@ import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.mapper.ArticleMapper;
 import com.endurancetrio.data.insight.repository.ArticleRepository;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +72,19 @@ public class InsightServiceMain implements InsightService {
         .map(entity -> articleMapper.map(entity, locale));
 
     return new InsightPageDTO(articlePage.getContent(), PaginationDTO.from(articlePage));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<ArticleDTO> getArticlesByIds(List<Long> ids, Locale locale) {
+    var entities = articleRepository.findAllById(ids);
+    var idOrder = new ArrayList<>(ids);
+
+    return entities.stream()
+        .map(entity -> articleMapper.map(entity, locale))
+        .filter(java.util.Objects::nonNull)
+        .sorted(Comparator.comparingInt(dto -> idOrder.indexOf(dto.id())))
+        .toList();
   }
 
   @Override

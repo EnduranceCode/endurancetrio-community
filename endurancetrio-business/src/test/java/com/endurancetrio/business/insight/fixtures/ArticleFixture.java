@@ -58,6 +58,18 @@ public class ArticleFixture {
   }
 
   /**
+   * Creates an {@link Article} entity with the given ID and default test values.
+   *
+   * @param id the ID to assign to the article
+   * @return an Article entity instance with the given ID
+   */
+  public static Article withId(Long id) {
+    Article entity = base();
+    entity.setId(id);
+    return entity;
+  }
+
+  /**
    * Creates an {@link Article} entity without any {@link ArticleContent}.
    *
    * @return an Article entity instance with no content

@@ -23,6 +23,7 @@ package com.endurancetrio.business.insight.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
@@ -68,11 +69,16 @@ class InsightServiceMainTest {
 
   private Article testArticle;
   private ArticleDTO testArticleDTO;
+  private Article secondArticle;
+  private ArticleDTO secondArticleDTO;
 
   @BeforeEach
   void setUp() {
     testArticle = ArticleFixture.standard();
     testArticleDTO = ArticleDTOFixture.standard();
+
+    secondArticle = ArticleFixture.withId(2L);
+    secondArticleDTO = ArticleDTOFixture.withId(2L);
   }
 
   @Test
@@ -101,6 +107,44 @@ class InsightServiceMainTest {
     assertNotNull(result);
     assertEquals(0, result.articles().size());
     assertEquals(0, result.pagination().totalItems());
+  }
+
+  @Test
+  void getArticlesByIdsShouldReturnArticlesInRequestedOrder() {
+    var ids = List.of(2L, 1L);
+    when(articleRepository.findAllById(ids)).thenReturn(List.of(testArticle, secondArticle));
+    when(articleMapper.map(testArticle, LOCALE)).thenReturn(testArticleDTO);
+    when(articleMapper.map(secondArticle, LOCALE)).thenReturn(secondArticleDTO);
+
+    List<ArticleDTO> result = underTest.getArticlesByIds(ids, LOCALE);
+
+    assertNotNull(result);
+    assertEquals(2, result.size());
+    assertEquals(Long.valueOf(2L), result.get(0).id());
+    assertEquals(Long.valueOf(1L), result.get(1).id());
+  }
+
+  @Test
+  void getArticlesByIdsShouldExcludeUnresolvableArticles() {
+    var ids = List.of(1L);
+    when(articleRepository.findAllById(ids)).thenReturn(List.of(testArticle));
+    when(articleMapper.map(testArticle, LOCALE)).thenReturn(null);
+
+    List<ArticleDTO> result = underTest.getArticlesByIds(ids, LOCALE);
+
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  void getArticlesByIdsWithEmptyIdList() {
+    var ids = List.<Long>of();
+    when(articleRepository.findAllById(ids)).thenReturn(List.of());
+
+    List<ArticleDTO> result = underTest.getArticlesByIds(ids, LOCALE);
+
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
   }
 
   @Test

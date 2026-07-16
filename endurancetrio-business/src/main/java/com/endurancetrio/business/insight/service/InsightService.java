@@ -23,6 +23,7 @@ package com.endurancetrio.business.insight.service;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import java.util.List;
 import java.util.Locale;
 import org.springframework.data.domain.Pageable;
 
@@ -54,6 +55,17 @@ public interface InsightService {
    * metadata
    */
   InsightPageDTO getArticles(int page, Pageable pageable, Locale locale);
+
+  /**
+   * Returns a list of {@link ArticleDTO articles} for the given IDs, preserving the order of the
+   * provided ID list. Articles that are not found or have no locale-resolved content are silently
+   * excluded.
+   *
+   * @param ids    the list of article IDs to fetch, in the desired display order
+   * @param locale the requested locale for content resolution
+   * @return an ordered list of {@link ArticleDTO articles} matching the given IDs
+   */
+  List<ArticleDTO> getArticlesByIds(List<Long> ids, Locale locale);
 
   /**
    * Returns an {@link InsightPageDTO} containing a paginated list of {@link ArticleDTO articles}
