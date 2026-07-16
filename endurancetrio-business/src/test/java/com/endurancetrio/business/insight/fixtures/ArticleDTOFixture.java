@@ -42,4 +42,18 @@ public class ArticleDTOFixture {
         null, null, ArticleContentFixture.STANDARD_LOCALE
     );
   }
+
+  /**
+   * Creates an {@link ArticleDTO} with the given ID and default test values.
+   *
+   * @param id the ID to assign to the DTO
+   * @return an ArticleDTO instance with the given ID
+   */
+  public static ArticleDTO withId(Long id) {
+    return new ArticleDTO(id, ArticleFixture.STANDARD_SLUG,
+        ArticleContentFixture.STANDARD_TITLE, null, ArticleContentFixture.STANDARD_INTRO_TEXT, null,
+        AuthorFixture.STANDARD_KNOWN_NAME, ArticleFixture.STANDARD_PUBLISHED_DATE, null, null, null,
+        null, null, ArticleContentFixture.STANDARD_LOCALE
+    );
+  }
 }
