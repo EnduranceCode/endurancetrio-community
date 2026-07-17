@@ -209,4 +209,7 @@ timestamp-based naming convention.
 28. Inserts sample insight articles for development and testing:
     - [V20260707.002__insert-sample-insights-h2.sql](migration/dml/h2/V20260707.002__insert-sample-insights-h2.sql)
     - [V20260707.002__insert-sample-insights-postgres.sql](migration/dml/postgres/V20260707.002__insert-sample-insights-postgres.sql)
+29. Adds indexes to optimize query to find non derived races with most recent added results:
+    - [V20260717.001__add-indexes-for-most-recent-added-results-races-h2.sql](migration/ddl/h2/V20260717.001__add-indexes-for-most-recent-added-results-races-h2.sql)
+    - [V20260717.001__add-indexes-for-most-recent-added-results-races-postgres.sql](migration/ddl/postgres/V20260717.001__add-indexes-for-most-recent-added-results-races-postgres.sql)
 

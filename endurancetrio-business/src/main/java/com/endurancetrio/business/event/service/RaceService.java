@@ -24,11 +24,26 @@ import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The {@link RaceService} defines the business operations for managing race data.
  */
 public interface RaceService {
+
+  /**
+   * Returns a {@link Page} of the most recent non-derived {@link RaceDTO races} that have at least
+   * one result recorded in the database.
+   * <p>
+   * Derived race types ({@code INDIVIDUAL_DERIVED}, {@code TEAM_RELAY_DERIVED},
+   * {@code MIXED_RELAY_DERIVED}) are excluded. Results are ordered by the most recent result
+   * creation date descending.
+   *
+   * @param pageable the pagination information
+   * @return a {@link Page} of {@link RaceDTO races}
+   */
+  Page<RaceDTO> getNonDerivedRacesWithMostRecentAddedResults(Pageable pageable);
 
   /**
    * Returns a {@link RaceResultsDTO} containing the results of the given {@code race}, grouped by

@@ -35,16 +35,26 @@ public class CacheConfig {
   @Bean
   public CacheManager cacheManager() {
     CaffeineCacheManager manager = new CaffeineCacheManager();
-    manager.registerCustomCache("raceResults", Caffeine.newBuilder()
-        .maximumSize(500)
-        .expireAfterWrite(1, TimeUnit.HOURS)
-        .recordStats()
-        .build());
+
     manager.registerCustomCache("eventOverview", Caffeine.newBuilder()
         .maximumSize(200)
         .expireAfterWrite(1, TimeUnit.HOURS)
         .recordStats()
         .build());
+
+    manager.registerCustomCache("raceResults", Caffeine.newBuilder()
+        .maximumSize(500)
+        .expireAfterWrite(1, TimeUnit.HOURS)
+        .recordStats()
+        .build());
+
+    manager.registerCustomCache("nonDerivedRecentRacesWithMostRecentAddedResults",
+        Caffeine.newBuilder()
+        .maximumSize(50)
+        .expireAfterWrite(24, TimeUnit.HOURS)
+        .recordStats()
+        .build());
+
     return manager;
   }
 }

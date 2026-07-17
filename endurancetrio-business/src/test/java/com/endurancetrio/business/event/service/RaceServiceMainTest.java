@@ -35,11 +35,15 @@ import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
+import com.endurancetrio.business.event.mapper.RaceMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
+import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
+import com.endurancetrio.data.event.model.enumerator.ResultStatus;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
+import com.endurancetrio.data.event.repository.RaceRepository;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,6 +55,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
 class RaceServiceMainTest {
@@ -64,6 +71,12 @@ class RaceServiceMainTest {
 
   @Mock
   private IndividualResultMapper individualResultMapper;
+
+  @Mock
+  private RaceRepository raceRepository;
+
+  @Mock
+  private RaceMapper raceMapper;
 
   @InjectMocks
   private RaceServiceMain underTest;
@@ -260,5 +273,48 @@ class RaceServiceMainTest {
     );
 
     assertEquals(EnduranceTrioError.INTERNAL_ERROR.getCode(), exception.getCode());
+  }
+
+  @Test
+  void getNonDerivedRacesWithMostRecentAddedResultsShouldReturnData() {
+    var race = new Race();
+    race.setId(10L);
+    race.setTitle("Test Race");
+    race.setSubtitle("Sub");
+    race.setDate(LocalDate.of(2026, Month.JULY, 1));
+    race.setRaceType(RaceType.INDIVIDUAL_PARENT);
+    race.setResultStatus(ResultStatus.COMPLETE);
+
+    var raceDto = new RaceDTO(10L, "Test Race", "Sub", LocalDate.of(2026, Month.JULY, 1), null,
+        List.of(), List.of(), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null, null, "COMPLETE"
+    );
+
+    Page<Long> idPage = new PageImpl<>(List.of(10L), PageRequest.of(0, 5), 1);
+
+    when(raceRepository.findNonDerivedRaceIdsWithMostRecentAddedResults(
+        PageRequest.of(0, 5))).thenReturn(idPage);
+    when(raceRepository.findRacesByIdInWithCoursesAndEvent(List.of(10L))).thenReturn(List.of(race));
+    when(raceMapper.mapWithoutDistanceWithEvent(race)).thenReturn(raceDto);
+
+    Page<RaceDTO> result = underTest.getNonDerivedRacesWithMostRecentAddedResults(
+        PageRequest.of(0, 5));
+
+    assertNotNull(result);
+    assertEquals(1, result.getContent().size());
+    assertEquals(raceDto, result.getContent().getFirst());
+  }
+
+  @Test
+  void getNonDerivedRacesWithMostRecentAddedResultsShouldReturnEmptyPage() {
+    Page<Long> emptyIdPage = new PageImpl<>(List.of(), PageRequest.of(0, 5), 0);
+
+    when(raceRepository.findNonDerivedRaceIdsWithMostRecentAddedResults(
+        PageRequest.of(0, 5))).thenReturn(emptyIdPage);
+
+    Page<RaceDTO> result = underTest.getNonDerivedRacesWithMostRecentAddedResults(
+        PageRequest.of(0, 5));
+
+    assertNotNull(result);
+    assertTrue(result.getContent().isEmpty());
   }
 }
