@@ -21,6 +21,7 @@
 package com.endurancetrio.business.event.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -234,5 +235,52 @@ class RaceMapperTest {
     RaceDTO result = underTest.mapWithEvent((Race) null);
 
     assertNull(result);
+  }
+
+  @Test
+  void mapWithoutDistanceWithEventShouldReturnDtoWithEvent() {
+    RaceDTO result = underTest.mapWithoutDistanceWithEvent(entityTest);
+
+    assertNotNull(result);
+    assertEquals(ID, result.id());
+    assertEquals(TITLE, result.title());
+    assertEquals(SUBTITLE, result.subtitle());
+    assertEquals(DATE, result.date());
+    assertEquals(TIME, result.time());
+    assertFalse(result.sports().isEmpty());
+    assertTrue(result.distanceTypes().isEmpty());
+    assertEquals(RaceType.INDIVIDUAL_PARENT, result.raceType());
+    assertEquals("INDIVIDUAL", result.raceTypeGroup());
+    assertNull(result.distanceMetadata());
+    assertNotNull(result.event());
+    assertEquals(EVENT_ID, result.event().id());
+    assertEquals(EVENT_TITLE, result.event().title());
+    assertEquals(START_DATE, result.event().startDate());
+    assertEquals(END_DATE, result.event().endDate());
+    assertEquals(CITY, result.event().city());
+    assertEquals(COUNTY, result.event().county());
+    assertEquals(DISTRICT, result.event().district());
+    assertEquals("COMPLETE", result.resultStatus());
+  }
+
+  @Test
+  void mapWithoutDistanceWithEventNullEntity() {
+    RaceDTO result = underTest.mapWithoutDistanceWithEvent(null);
+
+    assertNull(result);
+  }
+
+  @Test
+  void mapWithoutDistanceWithEventNoCourses() {
+    entityTest.setCourses(Set.of());
+
+    RaceDTO result = underTest.mapWithoutDistanceWithEvent(entityTest);
+
+    assertNotNull(result);
+    assertTrue(result.sports().isEmpty());
+    assertTrue(result.distanceTypes().isEmpty());
+    assertNull(result.distanceMetadata());
+    assertNull(result.event());
+    assertEquals("COMPLETE", result.resultStatus());
   }
 }

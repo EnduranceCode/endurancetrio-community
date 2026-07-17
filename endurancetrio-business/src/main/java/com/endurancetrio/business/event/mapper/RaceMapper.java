@@ -53,6 +53,12 @@ public class RaceMapper {
 
   /**
    * Maps a {@link Race} entity to a {@link RaceDTO}.
+   * <p>
+   * This method navigates through the race's courses and its distance to populate the sports
+   * and distance metadata fields. The caller must ensure that courses and their distances are
+   * eagerly fetched to avoid lazy-initialization errors. This method doesn't populate
+   * the {@link RaceDTO#event()} field in the RaceDTO; use {@link #mapWithEvent(Race)}
+   * if event data is needed.
    *
    * @param entity the Race entity to be mapped
    * @return the corresponding RaceDTO, or {@code null} if the entity is {@code null}
@@ -75,7 +81,9 @@ public class RaceMapper {
    * Maps a {@link Race} entity to a {@link RaceDTO} including the parent {@link Event} data.
    * <p>
    * Unlike {@link #map(Race)}, this method navigates through the race's courses to populate the
-   * {@link RaceDTO#event()} field with the associated {@link Event} information.
+   * {@link RaceDTO#event()} field with the associated {@link Event} information. The caller must
+   * ensure that courses and their events and distances are eagerly fetched to avoid
+   * lazy-initialization errors.
    *
    * @param entity the Race entity to be mapped
    * @return the corresponding RaceDTO with event data, or {@code null} if the entity is null
@@ -91,6 +99,29 @@ public class RaceMapper {
         entity.getTime(), getSports(entity.getCourses()), getDistanceTypes(distances),
         entity.getRaceType(), getRaceTypeGroup(entity), getDistanceMetadata(distances),
         getEvent(entity), entity.getResultStatus().getCode()
+    );
+  }
+
+  /**
+   * Maps a {@link Race} entity to a {@link RaceDTO} with courses and event data but without
+   * distance information.
+   * <p>
+   * Unlike {@link #mapWithEvent(Race)}, this method does not navigate through the courses'
+   * distances. The resulting {@link RaceDTO} has a {@code null} distance metadata, and the event
+   * populated from the first course. The caller must ensure that courses and their events
+   * are eagerly fetched to avoid lazy-initialization errors.
+   *
+   * @param entity the Race entity to be mapped
+   * @return the corresponding RaceDTO with event data, or {@code null} if the entity is {@code null}
+   */
+  public RaceDTO mapWithoutDistanceWithEvent(Race entity) {
+    if (entity == null) {
+      return null;
+    }
+
+    return new RaceDTO(entity.getId(), entity.getTitle(), entity.getSubtitle(), entity.getDate(),
+        entity.getTime(), getSports(entity.getCourses()), List.of(), entity.getRaceType(),
+        getRaceTypeGroup(entity), null, getEvent(entity), entity.getResultStatus().getCode()
     );
   }
 

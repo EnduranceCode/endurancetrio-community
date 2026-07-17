@@ -85,7 +85,7 @@ public class AthleteServiceMain implements AthleteService {
   @Transactional(readOnly = true)
   public AthleteRacesPageDTO getAthleteRaces(Long athleteId, Pageable pageable) {
     Page<RaceDTO> racePage = individualResultRepository.findRacesByAthleteId(athleteId, pageable)
-        .map(raceMapper::mapWithEvent);
+        .map(raceMapper::mapWithoutDistanceWithEvent);
 
     return new AthleteRacesPageDTO(racePage.getContent(), PaginationDTO.from(racePage));
   }

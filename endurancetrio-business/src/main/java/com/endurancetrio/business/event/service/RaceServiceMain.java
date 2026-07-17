@@ -28,14 +28,19 @@ import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
+import com.endurancetrio.business.event.mapper.RaceMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
+import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
+import com.endurancetrio.data.event.repository.RaceRepository;
 import java.time.Duration;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -44,6 +49,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,14 +62,50 @@ public class RaceServiceMain implements RaceService {
 
   private final IndividualResultRepository individualResultRepository;
   private final IndividualResultMapper individualResultMapper;
+  private final RaceRepository raceRepository;
+  private final RaceMapper raceMapper;
 
   @Autowired
   public RaceServiceMain(
       IndividualResultRepository individualResultRepository,
-      IndividualResultMapper individualResultMapper
+      IndividualResultMapper individualResultMapper,
+      RaceRepository raceRepository,
+      RaceMapper raceMapper
   ) {
     this.individualResultRepository = individualResultRepository;
     this.individualResultMapper = individualResultMapper;
+    this.raceRepository = raceRepository;
+    this.raceMapper = raceMapper;
+  }
+
+  @Override
+  @Cacheable(
+      value = "nonDerivedRecentRacesWithMostRecentAddedResults",
+      key = "#pageable.pageNumber + '-' + #pageable.pageSize"
+  )
+  @Transactional(readOnly = true)
+  public Page<RaceDTO> getNonDerivedRacesWithMostRecentAddedResults(Pageable pageable) {
+    Page<Long> raceIds = raceRepository.findNonDerivedRaceIdsWithMostRecentAddedResults(pageable);
+
+    if (raceIds.isEmpty()) {
+      return new PageImpl<>(List.of(), pageable, 0);
+    }
+
+    List<Long> orderedRaceIds = raceIds.getContent();
+    List<Race> raceEntities = raceRepository.findRacesByIdInWithCoursesAndEvent(orderedRaceIds);
+
+    Map<Long, Race> raceEntitiesMap = HashMap.newHashMap(raceEntities.size());
+    for (Race race : raceEntities) {
+      raceEntitiesMap.put(race.getId(), race);
+    }
+
+    List<RaceDTO> races = orderedRaceIds.stream()
+        .map(raceEntitiesMap::get)
+        .filter(Objects::nonNull)
+        .map(raceMapper::mapWithoutDistanceWithEvent)
+        .toList();
+
+    return new PageImpl<>(races, pageable, raceIds.getTotalElements());
   }
 
   @Override

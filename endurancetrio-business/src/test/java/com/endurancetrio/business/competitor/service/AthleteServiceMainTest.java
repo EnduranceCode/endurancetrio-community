@@ -162,8 +162,8 @@ class AthleteServiceMainTest {
 
     when(individualResultRepository.findRacesByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(
         racePage);
-    when(raceMapper.mapWithEvent(race1)).thenReturn(race1DTO);
-    when(raceMapper.mapWithEvent(race2)).thenReturn(race2DTO);
+    when(raceMapper.mapWithoutDistanceWithEvent(race1)).thenReturn(race1DTO);
+    when(raceMapper.mapWithoutDistanceWithEvent(race2)).thenReturn(race2DTO);
 
     AthleteRacesPageDTO result = underTest.getAthleteRaces(ATHLETE_ID, PAGEABLE);
 
