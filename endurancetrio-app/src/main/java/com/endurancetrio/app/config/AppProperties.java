@@ -20,6 +20,7 @@
 
 package com.endurancetrio.app.config;
 
+import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
 public class AppProperties {
 
   private String copyrightYear;
+  private List<Long> featuredArticleIds;
   private Google google = new Google();
   private KoFi kofi = new KoFi();
   private OpenGraph openGraph = new OpenGraph();
@@ -56,6 +58,14 @@ public class AppProperties {
 
   public void setCopyrightYear(String copyrightYear) {
     this.copyrightYear = copyrightYear;
+  }
+
+  public List<Long> getFeaturedArticleIds() {
+    return featuredArticleIds;
+  }
+
+  public void setFeaturedArticleIds(List<Long> featuredArticleIds) {
+    this.featuredArticleIds = featuredArticleIds;
   }
 
   public OpenGraph getOpenGraph() {

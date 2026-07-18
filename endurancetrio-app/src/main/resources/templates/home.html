@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head data-th-replace="~{fragments/head :: head(${metadata})}">
+  <title></title>
+</head>
+
+<body>
+<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+
+<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+
+<main>
+  <section class="hero is-medium">
+    <div class="hero-body">
+      <div class="columns is-desktop is-8 is-vcentered">
+        <div class="column">
+          <div data-th-if="${language == 'pt'}" data-th-remove="tag">
+            <p class="subtitle has-text-centered">
+              A <strong>EnduranceTrio</strong> está a construir o arquivo definitivo do triatlo
+              português! O primeiro grande passo é registar todos os eventos e resultados desde
+              o primeiro triatlo.
+            </p>
+            <p class="subtitle has-text-centered">
+              Explore as nossas origens, reviva grandes conquistas e junte-se a nós para completar
+              a base de dados do nosso desporto!
+            </p>
+          </div>
+          <div data-th-unless="${language == 'pt'}" data-th-remove="tag">
+            <p class="subtitle has-text-centered">
+              <strong>EnduranceTrio</strong> is building the ultimate archive of Portuguese
+              triathlon! Our first major step is to map every event and result since the first
+              triathlon.
+            </p>
+            <p class="subtitle has-text-centered">
+              Explore our roots, relive historic achievements, and join us in completing the
+              definitive database of our sport!
+            </p>
+          </div>
+
+          <div class="buttons is-centered">
+            <a data-th-href="@{/{language}/about(language=${language})}"
+               data-th-text="#{page.home.button.about}"
+               class="button is-dark">
+            </a>
+            <a data-th-href="@{/{language}/events/1984/1/overview(language=${language})}"
+               data-th-text="#{page.home.button.explore}"
+               class="button is-link">
+            </a>
+          </div>
+        </div>
+        <div class="column">
+          <figure class="image">
+            <svg data-th-replace="~{fragments/svg :: database-schema}"></svg>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="hero is-medium has-background-grey-100">
+    <div class="hero-body">
+      <h2 data-th-text="#{page.home.featured-articles.title}" class="title is-2 mb-6"></h2>
+
+      <div data-th-if="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
+        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
+      </div>
+
+      <div data-th-unless="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
+        <div class="columns is-multiline is-8">
+          <div data-th-each="article : ${featuredArticles}" class="column is-half">
+            <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
+               class="is-clickable"
+            >
+              <div class="card">
+                <div data-th-if="${article.featuredImage != null}" class="card-image">
+                  <figure class="image">
+                    <img data-th-src="${article.featuredImage}"
+                         data-th-alt="${article.title}"
+                         alt="Article Title"/>
+                  </figure>
+                </div>
+                <div data-th-unless="${article.featuredImage != null}" class="card-image">
+                  <figure class="image">
+                    <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+                         data-th-alt="${article.title}"
+                         alt="Article Title"/>
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <div class="mb-3">
+                    <p data-th-text="${article.title}" class="title is-3"></p>
+                    <p data-th-text="${article.authorName}" class="subtitle is-5"></p>
+                  </div>
+                  <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero is-medium">
+    <div class="hero-body">
+      <h2 data-th-text="#{page.home.latest-results.title}" class="title is-2 mb-2"></h2>
+      <p data-th-text="#{page.home.latest-results.subtitle}" class="subtitle is-5 has-text-grey mb-6"></p>
+
+      <div data-th-if="${#lists.isEmpty(latestRaces)}" data-th-remove="tag">
+        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
+      </div>
+
+      <div data-th-unless="${#lists.isEmpty(latestRaces)}" data-th-remove="tag">
+        <div class="columns is-desktop is-6 is-vcentered">
+          <div class="column">
+            <figure class="image">
+              <svg data-th-replace="~{fragments/svg :: spreadsheets}"></svg>
+            </figure>
+          </div>
+          <div class="column">
+            <div data-th-each="race : ${latestRaces}" class="endurance-box is-branded-thin">
+              <a data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}"
+                 class="is-clickable"
+              >
+                <article class="media">
+                  <div class="media-left">
+                    <div class="box has-background-grey-700 has-text-centered p-3">
+                      <p class="title is-4 mb-1"
+                         data-th-text="${#temporals.format(race.date, 'dd-MM')}">15</p>
+                      <p class="subtitle is-4 mb-0 has-text-weight-bold"
+                         data-th-text="${#temporals.format(race.date, 'yyyy')}">Aug</p>
+                    </div>
+                  </div>
+                  <div class="media-content">
+                    <div class="content">
+                      <span data-th-text="${race.title}" class="title is-4"></span>
+                      <br>
+                      <span data-th-text="${race.subtitle}" class="subtitle is-6"></span>
+                    </div>
+                  </div>
+                </article>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero is-medium has-background-grey-100">
+    <div class="hero-body">
+      <h2 data-th-text="#{page.home.latest-events.title}" class="title is-2 mb-2"></h2>
+      <p data-th-text="#{page.home.latest-events.subtitle}" class="subtitle is-5 has-text-grey mb-6"></p>
+
+      <div data-th-if="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
+        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
+      </div>
+
+      <div data-th-unless="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
+        <div class="columns is-multiline">
+          <div data-th-each="event : ${latestEvents}" class="column is-half">
+            <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
+               class="is-clickable"
+            >
+              <div class="endurance-box is-branded-thin">
+                <article class="media">
+                  <div class="media-left">
+                    <div class="box has-background-grey-700 has-text-centered p-3">
+                      <p class="title is-4 mb-1"
+                         data-th-text="${#temporals.format(event.startDate, 'dd-MM')}">15</p>
+                      <p class="subtitle is-4 mb-0 has-text-weight-bold"
+                         data-th-text="${#temporals.format(event.startDate, 'yyyy')}">Aug</p>
+                    </div>
+                  </div>
+                  <div class="media-content">
+                    <div class="content">
+                      <span data-th-text="${event.title}" class="title is-4"></span>
+                      <br>
+                      <span class="has-text-grey"
+                            data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
+                      >
+                      </span>
+                      <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}">
+                        <span class="tag is-link is-light"
+                              data-th-each="sportCode : ${event.sportCodes}"
+                              data-th-text="#{sport.__${sportCode}__}"
+                        >
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="buttons is-centered mt-6">
+          <a data-th-href="@{/{language}/events(language=${language})}"
+             data-th-text="#{page.home.button.events}"
+             class="button is-medium is-link">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer data-th-replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

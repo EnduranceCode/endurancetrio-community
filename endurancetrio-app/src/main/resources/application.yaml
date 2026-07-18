@@ -20,6 +20,7 @@
 
 app:
   copyright-year: 2011-2026
+  featured-article-ids: ${FEATURED_ARTICLE_IDS:1,2}
   initialization:
     first-account-owner: ${FIRST_OWNER:}
     first-account-key-hash: ${FIRST_HASH:}
