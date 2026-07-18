@@ -97,6 +97,12 @@ $endurance-box-stripe-height-extra-thick: 9px !default;
   }
 }
 
-.#{iv.$class-prefix}column > .#{iv.$class-prefix}endurance-box {
+.#{iv.$class-prefix}column > .#{iv.$class-prefix}endurance-box,
+.#{iv.$class-prefix}column > a > .#{iv.$class-prefix}endurance-box {
+  height: 100%;
+}
+
+.#{iv.$class-prefix}column > a {
+  display: block;
   height: 100%;
 }
