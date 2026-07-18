@@ -65,4 +65,16 @@ public interface EventService {
    *         given {@code id} and {@code year} is found
    */
   EventOverviewDTO getEventOverview(Long id, int year);
+
+  /**
+   * Returns an {@link EventsPageDTO} containing the most recently added {@link EventDTO events},
+   * ordered by their creation timestamp descending. Courses are eagerly fetched to derive sport
+   * codes without additional queries.
+   *
+   * @param pageable the pagination information; use
+   *                 {@link org.springframework.data.domain.PageRequest#of(int, int)
+   *                 PageRequest.of(0, limit)} to retrieve the most recent N events
+   * @return an {@link EventsPageDTO} with the most recently added events and pagination metadata
+   */
+  EventsPageDTO getMostRecentAddedEvents(Pageable pageable);
 }

@@ -22,10 +22,12 @@ package com.endurancetrio.data.event.repository;
 
 import com.endurancetrio.data.event.model.entity.Distance;
 import com.endurancetrio.data.event.model.entity.Event;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -78,4 +80,40 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
    */
   @Query("SELECT DISTINCT YEAR(e.startDate) FROM Event e ORDER BY YEAR(e.startDate) DESC")
   List<Integer> findDistinctYears();
+
+  /**
+   * Returns a {@link List} of {@link Event events} matching the given IDs, with their courses
+   * eagerly fetched to avoid N+1 queries when mapping to DTOs that require sport codes.
+   * <p>
+   * The returned list may not preserve the order of the input IDs. The caller is responsible for
+   * restoring the desired order after fetching.
+   *
+   * @param ids the IDs of the events to fetch
+   * @return a {@link List} of {@link Event events} with courses loaded
+   */
+  @Query(
+      "SELECT DISTINCT e FROM Event e LEFT JOIN FETCH e.courses WHERE e.id IN :ids"
+  )
+  List<Event> findEventsByIdInWithCourses(@Param("ids") Collection<Long> ids);
+
+  /**
+   * Returns a {@link Page} of IDs of the most recently added {@link Event events}, ordered by their
+   * {@link com.endurancetrio.data.common.model.entity.AuditableEntity#getCreatedAt() createdAt}
+   * descending and, as a tiebreaker, by {@link Event#getId() id} descending.
+   * <p>
+   * This query selects only IDs to avoid the PostgreSQL restriction that ORDER BY expressions
+   * must appear in the SELECT list when DISTINCT is used, which occurs when fetching collections
+   * with JOIN FETCH. Use {@link #findEventsByIdInWithCourses(Collection)} to load the full
+   * entity graph for the returned IDs.
+   *
+   * @param pageable the pagination information; use
+   *                 {@link PageRequest#of(int, int) PageRequest.of(0, limit)} to retrieve the most
+   *                 recent N events
+   * @return a {@link Page} of event IDs
+   */
+  @Query(
+      value = "SELECT e.id FROM Event e ORDER BY e.createdAt DESC, e.id DESC",
+      countQuery = "SELECT COUNT(e.id) FROM Event e"
+  )
+  Page<Long> findMostRecentAddedEventIds(Pageable pageable);
 }
