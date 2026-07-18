@@ -212,4 +212,6 @@ timestamp-based naming convention.
 29. Adds indexes to optimize query to find non derived races with most recent added results:
     - [V20260717.001__add-indexes-for-most-recent-added-results-races-h2.sql](migration/ddl/h2/V20260717.001__add-indexes-for-most-recent-added-results-races-h2.sql)
     - [V20260717.001__add-indexes-for-most-recent-added-results-races-postgres.sql](migration/ddl/postgres/V20260717.001__add-indexes-for-most-recent-added-results-races-postgres.sql)
-
+30. Adds an index to optimize query to find most recent added events:
+    - [V20260718.001__add-index-for-most-recent-added-events-h2.sql](migration/ddl/h2/V20260718.001__add-index-for-most-recent-added-events-h2.sql)
+    - [V20260718.001__add-index-for-most-recent-added-events-postgres.sql](migration/ddl/postgres/V20260718.001__add-index-for-most-recent-added-events-postgres.sql)

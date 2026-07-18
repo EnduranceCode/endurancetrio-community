@@ -213,6 +213,80 @@ class EventServiceMainTest {
     assertEquals(EnduranceTrioError.NOT_FOUND.getCode(), exception.getCode());
   }
 
+  @Test
+  void getMostRecentAddedEventsShouldReturnEventsWithSportCodes() {
+    Event event1 = createEvent(1L, "Event 1", LocalDate.of(2026, Month.JULY, 10),
+        LocalDate.of(2026, Month.JULY, 10), "City1", "County1", "District1",
+        Set.of(createCourse(Sport.TRIATHLON), createCourse(Sport.ROAD_RUNNING))
+    );
+    Event event2 = createEvent(2L, "Event 2", LocalDate.of(2026, Month.JULY, 5),
+        LocalDate.of(2026, Month.JULY, 5), "City2", "County2", "District2",
+        Set.of(createCourse(Sport.DUATHLON))
+    );
+
+    EventDTO expectedDTO1 = new EventDTO(1L, "Event 1", LocalDate.of(2026, Month.JULY, 10),
+        LocalDate.of(2026, Month.JULY, 10), "City1", "County1", "District1",
+        List.of("ROAD_RUNNING", "TRIATHLON")
+    );
+    EventDTO expectedDTO2 = new EventDTO(2L, "Event 2", LocalDate.of(2026, Month.JULY, 5),
+        LocalDate.of(2026, Month.JULY, 5), "City2", "County2", "District2", List.of("DUATHLON")
+    );
+
+    Pageable pageable = PageRequest.of(0, 5);
+    Page<Long> idPage = new PageImpl<>(List.of(1L, 2L), pageable, 2L);
+    when(eventRepository.findMostRecentAddedEventIds(pageable)).thenReturn(idPage);
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L, 2L))).thenReturn(
+        List.of(event1, event2));
+    when(eventMapper.mapToEventDTO(event1)).thenReturn(expectedDTO1);
+    when(eventMapper.mapToEventDTO(event2)).thenReturn(expectedDTO2);
+
+    EventsPageDTO result = underTest.getMostRecentAddedEvents(pageable);
+
+    assertNotNull(result);
+    assertEquals(2, result.events().size());
+    assertEquals(expectedDTO1, result.events().get(0));
+    assertEquals(expectedDTO2, result.events().get(1));
+    assertEquals(0, result.pagination().pageNumber());
+    assertEquals(1, result.pagination().totalPages());
+    assertEquals(2L, result.pagination().totalItems());
+  }
+
+  @Test
+  void getMostRecentAddedEventsShouldReturnEmptyPage() {
+    Pageable pageable = PageRequest.of(0, 5);
+    Page<Long> emptyIdPage = new PageImpl<>(List.of(), pageable, 0L);
+    when(eventRepository.findMostRecentAddedEventIds(pageable)).thenReturn(emptyIdPage);
+
+    EventsPageDTO result = underTest.getMostRecentAddedEvents(pageable);
+
+    assertNotNull(result);
+    assertEquals(0, result.events().size());
+    assertEquals(0, result.pagination().totalItems());
+  }
+
+  @Test
+  void getMostRecentAddedEventsShouldReturnEmptySportCodes() {
+    Event event = createEvent(1L, "Event", LocalDate.of(2026, Month.JULY, 1),
+        LocalDate.of(2026, Month.JULY, 1), "City", "County", "District", Set.of()
+    );
+
+    EventDTO expectedDTO = new EventDTO(1L, "Event", LocalDate.of(2026, Month.JULY, 1),
+        LocalDate.of(2026, Month.JULY, 1), "City", "County", "District", List.of()
+    );
+
+    Pageable pageable = PageRequest.of(0, 5);
+    Page<Long> idPage = new PageImpl<>(List.of(1L), pageable, 1L);
+    when(eventRepository.findMostRecentAddedEventIds(pageable)).thenReturn(idPage);
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L))).thenReturn(List.of(event));
+    when(eventMapper.mapToEventDTO(event)).thenReturn(expectedDTO);
+
+    EventsPageDTO result = underTest.getMostRecentAddedEvents(pageable);
+
+    assertNotNull(result);
+    assertEquals(1, result.events().size());
+    assertEquals(expectedDTO, result.events().getFirst());
+  }
+
   private Event createEvent(
       Long id, String title, LocalDate startDate, LocalDate endDate,
       String city, String county, String district, Set<Course> courses

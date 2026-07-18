@@ -40,20 +40,30 @@ public class CacheConfig {
         .maximumSize(200)
         .expireAfterWrite(1, TimeUnit.HOURS)
         .recordStats()
-        .build());
+        .build()
+    );
 
     manager.registerCustomCache("raceResults", Caffeine.newBuilder()
         .maximumSize(500)
         .expireAfterWrite(1, TimeUnit.HOURS)
         .recordStats()
-        .build());
+        .build()
+    );
+
+    manager.registerCustomCache("mostRecentAddedEvents", Caffeine.newBuilder()
+        .maximumSize(20)
+        .expireAfterWrite(24, TimeUnit.HOURS)
+        .recordStats()
+        .build()
+    );
 
     manager.registerCustomCache("nonDerivedRecentRacesWithMostRecentAddedResults",
         Caffeine.newBuilder()
         .maximumSize(50)
         .expireAfterWrite(24, TimeUnit.HOURS)
         .recordStats()
-        .build());
+        .build()
+    );
 
     return manager;
   }

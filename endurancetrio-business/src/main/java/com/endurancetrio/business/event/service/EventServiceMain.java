@@ -30,7 +30,10 @@ import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.mapper.EventMapper;
 import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.repository.EventRepository;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +83,35 @@ public class EventServiceMain implements EventService {
     });
 
     return eventMapper.mapToEventOverviewDTO(event);
+  }
+
+  @Override
+  @Cacheable(
+      value = "mostRecentAddedEvents",
+      key = "#pageable.pageNumber + '-' + #pageable.pageSize"
+  )
+  @Transactional(readOnly = true)
+  public EventsPageDTO getMostRecentAddedEvents(Pageable pageable) {
+    Page<Long> eventIds = eventRepository.findMostRecentAddedEventIds(pageable);
+
+    if (eventIds.isEmpty()) {
+      return new EventsPageDTO(List.of(), PaginationDTO.from(eventIds));
+    }
+
+    List<Long> orderedEventIds = eventIds.getContent();
+    List<Event> eventEntities = eventRepository.findEventsByIdInWithCourses(orderedEventIds);
+
+    Map<Long, Event> eventEntitiesMap = HashMap.newHashMap(eventEntities.size());
+    for (Event event : eventEntities) {
+      eventEntitiesMap.put(event.getId(), event);
+    }
+
+    List<EventDTO> events = orderedEventIds.stream()
+        .map(eventEntitiesMap::get)
+        .filter(Objects::nonNull)
+        .map(eventMapper::mapToEventDTO)
+        .toList();
+
+    return new EventsPageDTO(events, PaginationDTO.from(eventIds));
   }
 }
