@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<section data-th-fragment="event-hero(event, language, year, currentTab)"
+<section data-th-fragment="event-hero(language, event, year, articlesCount, currentTab)"
          class="hero has-background-grey-300">
   <div class="hero-body">
     <div class="container is-fullhd">
@@ -52,10 +52,10 @@
       <div class="tabs is-right">
         <ul>
           <li data-th-classappend="${currentTab == 'overview'} ? 'is-active' : ''">
-            <a th:href="@{/{language}/events/{year}/{id}/overview(language=${language}, year=${year}, id=${event.id()})}"
+            <a data-th-ref="@{/{language}/events/{year}/{id}/overview(language=${language}, year=${year}, id=${event.id()})}"
                data-th-text="#{page.event.tab.overview}">Overview</a>
           </li>
-          <li data-th-classappend="${currentTab == 'insights'} ? 'is-active' : ''">
+          <li data-th-if="${articlesCount > 0}" data-th-classappend="${currentTab == 'insights'} ? 'is-active' : ''">
             <a data-th-href="@{/{language}/events/{year}/{id}/insights(language=${language}, year=${year}, id=${event.id()})}"
                data-th-text="#{page.event.tab.insights}">Insights</a>
           </li>

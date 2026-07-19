@@ -90,4 +90,12 @@ public interface InsightService {
    * metadata
    */
   InsightPageDTO getArticlesByEvent(Long eventId, Pageable pageable, Locale locale);
+
+  /**
+   * Returns the number of {@link ArticleDTO articles} related to the event with the given ID.
+   *
+   * @param eventId the ID of the event to count articles for
+   * @return the number of articles related to the given event (0 if none)
+   */
+  long getArticlesCountByEvent(Long eventId);
 }

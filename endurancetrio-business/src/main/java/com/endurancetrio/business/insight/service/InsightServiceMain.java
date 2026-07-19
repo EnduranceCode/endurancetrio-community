@@ -104,4 +104,10 @@ public class InsightServiceMain implements InsightService {
 
     return new InsightPageDTO(articlePage.getContent(), PaginationDTO.from(articlePage));
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public long getArticlesCountByEvent(Long eventId) {
+    return articleRepository.countByEventId(eventId);
+  }
 }

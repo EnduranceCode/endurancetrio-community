@@ -20,6 +20,7 @@
 
 package com.endurancetrio.app.event.web;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -126,6 +127,7 @@ class EventWebControllerTest {
   private static final ArticleDTO INSIGHT_ARTICLE_EN = ArticleDTOFixtures.standard();
   private static final ArticleDTO INSIGHT_ARTICLE_PT = ArticleDTOFixtures.portuguese();
   private static final PaginationDTO INSIGHT_PAGINATION = new PaginationDTO(0, 1, 1, false, false);
+  private static final Long ARTICLES_COUNT = 3L;
   private static final InsightPageDTO EVENT_INSIGHT_PAGE = new InsightPageDTO(
       List.of(INSIGHT_ARTICLE_EN), INSIGHT_PAGINATION);
   private static final InsightPageDTO EVENT_INSIGHT_PAGE_PT = new InsightPageDTO(
@@ -354,6 +356,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("Articles related to this event");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
     when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
         EVENT_INSIGHT_PAGE);
 
@@ -376,6 +379,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("Artigos relacionados com este evento");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
     when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
         EVENT_INSIGHT_PAGE_PT);
 
@@ -387,6 +391,14 @@ class EventWebControllerTest {
         .andExpect(model().attribute("event", EVENT_OVERVIEW))
         .andExpect(model().attribute("articles", EVENT_INSIGHT_PAGE_PT.articles()))
         .andExpect(model().attribute("pagination", INSIGHT_PAGINATION));
+  }
+
+  @Test
+  void getEventInsightsPageWithNoArticlesShouldThrowNotFound() {
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(0L);
+
+    assertThrows(Exception.class, () -> mockMvc.perform(get("/en/events/1984/1/insights")));
   }
 
   @Test

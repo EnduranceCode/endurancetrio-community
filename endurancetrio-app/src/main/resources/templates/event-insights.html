@@ -30,21 +30,14 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'insights')}"></section>
+  <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'insights')}"></section>
 
   <section class="section">
     <h2 data-th-text="#{page.event.insights.title(${event.title()})}" class="title is-2">
       Insights about Event Title
     </h2>
 
-    <div data-th-if="${#lists.isEmpty(articles)}"
-         class="endurance-box is-branded-thin has-text-centered">
-      <p data-th-text="#{page.event.insights.empty}" class="title is-4 m-4"></p>
-    </div>
-
-    <div data-th-unless="${#lists.isEmpty(articles)}" data-th-remove="tag">
-      <div data-th-replace="~{fragments/insights-list :: insights-list(${language}, ${pagination}, ${articles}, '/events/' + ${year} + '/' + ${event.id()} + '/insights')}">
-      </div>
+    <div data-th-replace="~{fragments/insights-list :: insights-list(${language}, ${pagination}, ${articles}, '/events/' + ${year} + '/' + ${event.id()} + '/insights')}">
     </div>
   </section>
 </main>

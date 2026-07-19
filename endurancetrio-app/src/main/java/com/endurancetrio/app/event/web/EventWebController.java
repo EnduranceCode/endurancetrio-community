@@ -32,6 +32,7 @@ import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
+
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
@@ -78,6 +79,7 @@ public class EventWebController {
 
   private static final String ATTRIBUTE_ACTIVE_COLUMNS = "activeColumns";
   private static final String ATTRIBUTE_ARTICLES = "articles";
+  private static final String ATTRIBUTE_ARTICLES_COUNT = "articlesCount";
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
   private static final String ATTRIBUTE_RACE_ID = "raceId";
@@ -202,6 +204,14 @@ public class EventWebController {
         request, appProperties
     );
 
+    long articlesCount = insightService.getArticlesCountByEvent(id);
+
+    if (articlesCount == 0) {
+      String errorMsg = String.format("No articles found for event %d", id);
+      LOG.warn(errorMsg);
+      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
+    }
+
     Pageable pageable = PageRequest.of(page, PAGE_SIZE);
     InsightPageDTO insightPage = insightService.getArticlesByEvent(id, pageable, locale);
 
@@ -209,6 +219,7 @@ public class EventWebController {
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
     model.addAttribute(ATTRIBUTE_ARTICLES, insightPage.articles());
+    model.addAttribute(ATTRIBUTE_ARTICLES_COUNT, articlesCount);
     model.addAttribute(PAGINATION, insightPage.pagination());
 
     return VIEW_EVENT_INSIGHTS;
@@ -239,9 +250,12 @@ public class EventWebController {
 
     EventOverviewDTO event = eventService.getEventOverview(id, year);
 
+    long articlesCount = insightService.getArticlesCountByEvent(id);
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
+    model.addAttribute(ATTRIBUTE_ARTICLES_COUNT, articlesCount);
 
     return VIEW_EVENT_OVERVIEW;
   }
@@ -289,6 +303,8 @@ public class EventWebController {
     RaceResultsDTO raceResults = raceService.getRaceResults(currentRace);
     Set<String> activeColumns = computeActiveColumns(raceResults);
 
+    long articlesCount = insightService.getArticlesCountByEvent(eventId);
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
@@ -297,6 +313,7 @@ public class EventWebController {
     model.addAttribute(ATTRIBUTE_RACE_ID_NEXT, raceIdNext);
     model.addAttribute(ATTRIBUTE_RACE_RESULTS, raceResults);
     model.addAttribute(ATTRIBUTE_ACTIVE_COLUMNS, activeColumns);
+    model.addAttribute(ATTRIBUTE_ARTICLES_COUNT, articlesCount);
 
     return VIEW_RACE_RESULTS;
   }

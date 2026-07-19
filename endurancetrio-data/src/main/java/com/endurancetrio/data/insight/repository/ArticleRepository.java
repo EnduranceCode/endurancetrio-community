@@ -37,6 +37,15 @@ import org.springframework.stereotype.Repository;
 public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonNull Long> {
 
   /**
+   * Returns the number of {@link Article articles} related to the event with the given ID.
+   *
+   * @param eventId the ID of the {@link com.endurancetrio.data.event.model.entity.Event}
+   * @return the number of articles related to the given event (0 if none)
+   */
+  @Query("SELECT COUNT(DISTINCT a) FROM Article a JOIN a.relatedEvents e WHERE e.id = :eventId")
+  long countByEventId(@Param("eventId") Long eventId);
+
+  /**
    * Returns a {@link Page} of all {@link Article articles} ordered by their published date
    * descending.
    *
