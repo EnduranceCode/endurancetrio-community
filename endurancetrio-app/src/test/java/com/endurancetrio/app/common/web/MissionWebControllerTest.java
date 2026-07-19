@@ -25,10 +25,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,14 +41,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @ExtendWith(MockitoExtension.class)
-class AboutWebControllerTest {
+class MissionWebControllerTest {
 
   @Mock
   MessageService messageService;
 
   AppProperties appProperties;
 
-  AboutWebController aboutWebController;
+  MissionWebController missionWebController;
 
   MockMvc mockMvc;
 
@@ -61,55 +61,69 @@ class AboutWebControllerTest {
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
-    aboutWebController = new AboutWebController(messageService, appProperties);
+    missionWebController = new MissionWebController(messageService, appProperties);
 
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
     viewResolver.setPrefix("/WEB-INF/views/");
     viewResolver.setSuffix(".html");
 
-    mockMvc = MockMvcBuilders.standaloneSetup(aboutWebController)
+    mockMvc = MockMvcBuilders.standaloneSetup(missionWebController)
         .setViewResolvers(viewResolver)
         .build();
   }
 
   @Test
-  void aboutPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.about.metadata.title"), any(), any()))
-        .thenReturn("About - EnduranceTrio");
-    when(messageService.getMessage(eq("page.about.metadata.description"), any(), any()))
+  void missionPageWithEnglishLocale() throws Exception {
+    when(messageService.getMessage(eq("page.mission.metadata.title"), any(), any())).thenReturn(
+        "Mission - EnduranceTrio");
+    when(messageService.getMessage(eq("page.mission.metadata.description"), any(), any()))
         .thenReturn("A central hub for endurance sports data and resources");
 
-    mockMvc.perform(get("/en/about"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("about"))
+    mockMvc.perform(get("/en/mission"))
+        .andExpect(status().isOk()).andExpect(view().name("mission"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"));
   }
 
   @Test
-  void aboutPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.about.metadata.title"), any(), any()))
-        .thenReturn("Sobre - EnduranceTrio");
-    when(messageService.getMessage(eq("page.about.metadata.description"), any(), any()))
+  void missionPageWithPortugueseLocale() throws Exception {
+    when(messageService.getMessage(eq("page.mission.metadata.title"), any(), any())).thenReturn(
+        "Missão - EnduranceTrio");
+    when(messageService.getMessage(eq("page.mission.metadata.description"), any(), any()))
         .thenReturn("Uma plataforma central para dados e recursos de desportos de endurance");
 
-    mockMvc.perform(get("/pt/about"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("about"))
+    mockMvc.perform(get("/pt/mission"))
+        .andExpect(status().isOk()).andExpect(view().name("mission"))
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"));
   }
 
   @Test
-  void aboutPageMetadataHasCorrectTitle() throws Exception {
-    when(messageService.getMessage(eq("page.about.metadata.title"), any(), any()))
-        .thenReturn("About - EnduranceTrio");
-    when(messageService.getMessage(eq("page.about.metadata.description"), any(), any()))
+  void missionPageMetadataHasCorrectTitle() throws Exception {
+    when(messageService.getMessage(eq("page.mission.metadata.title"), any(), any())).thenReturn(
+        "Mission - EnduranceTrio");
+    when(messageService.getMessage(eq("page.mission.metadata.description"), any(), any()))
         .thenReturn("A central hub for endurance sports data and resources");
 
-    mockMvc.perform(get("/en/about"))
+    mockMvc.perform(get("/en/mission"))
         .andExpect(model().attribute("metadata",
             org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is("About - EnduranceTrio"))));
+                org.hamcrest.Matchers.is("Mission - EnduranceTrio")
+            )
+        ));
+  }
+
+  @Test
+  void aboutRedirectsToMissionEnglish() throws Exception {
+    mockMvc.perform(get("/en/about"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/en/mission"));
+  }
+
+  @Test
+  void aboutRedirectsToMissionPortuguese() throws Exception {
+    mockMvc.perform(get("/pt/about"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/pt/mission"));
   }
 }

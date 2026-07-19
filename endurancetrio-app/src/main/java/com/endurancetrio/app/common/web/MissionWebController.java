@@ -21,13 +21,14 @@
 package com.endurancetrio.app.common.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 
+import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
-import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
+import com.endurancetrio.app.common.utils.WebUtils;
 import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -37,26 +38,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @EnduranceTrioWebController
-public class AboutWebController {
+public class MissionWebController {
 
-  private static final String VIEW = "about";
+  private static final String VIEW = "mission";
 
   private final MessageService messageService;
   private final AppProperties appProperties;
 
   @Autowired
-  public AboutWebController(MessageService messageService, AppProperties appProperties) {
+  public MissionWebController(MessageService messageService, AppProperties appProperties) {
     this.messageService = messageService;
     this.appProperties = appProperties;
   }
 
-  @GetMapping("/{language:en|pt}/about")
-  public String about(@PathVariable String language, HttpServletRequest request, Model model) {
+  @GetMapping("/{language:en|pt}/mission")
+  public String mission(@PathVariable String language, HttpServletRequest request, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW,
-        messageService.getMessage("page.about.metadata.title", null, locale),
-        messageService.getMessage("page.about.metadata.description", null, locale), request,
+        messageService.getMessage("page.mission.metadata.title", null, locale),
+        messageService.getMessage("page.mission.metadata.description", null, locale), request,
         appProperties
     );
 
@@ -64,5 +65,11 @@ public class AboutWebController {
     model.addAttribute(METADATA, metadata);
 
     return VIEW;
+  }
+
+  @GetMapping("/{language:en|pt}/about")
+  public String redirectAboutToMission(@PathVariable String language) {
+
+    return WebUtils.redirect(language, "/mission");
   }
 }

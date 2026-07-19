@@ -1,10 +1,10 @@
 RewriteEngine On
 RewriteBase /
 
-# Internally serve /en/about from /en/about.html (invisible)
+# Internally serve /en/mission from /en/mission.html (invisible)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ $1.html [END,L]
 
-# Temporary 302 redirect: /en/about.html → /en/about
+# Temporary 302 redirect: /en/mission.html → /en/mission
 RewriteRule ^(.+)\.html$ $1 [R=302,L]
