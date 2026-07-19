@@ -145,11 +145,7 @@
               >
                 <article class="media">
                   <div class="media-left">
-                    <div class="box has-background-grey-700 has-text-centered p-3">
-                      <p class="title is-4 mb-1"
-                         data-th-text="${#temporals.format(race.date, 'dd-MM')}">15</p>
-                      <p class="subtitle is-4 mb-0 has-text-weight-bold"
-                         data-th-text="${#temporals.format(race.date, 'yyyy')}">Aug</p>
+                    <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${race.date})}">
                     </div>
                   </div>
                   <div class="media-content">
@@ -183,14 +179,10 @@
             <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
                class="is-clickable"
             >
-              <div class="endurance-box is-branded-thin">
+              <div class="endurance-box is-branded-thin is-content-top">
                 <article class="media">
                   <div class="media-left">
-                    <div class="box has-background-grey-700 has-text-centered p-3">
-                      <p class="title is-4 mb-1"
-                         data-th-text="${#temporals.format(event.startDate, 'dd-MM')}">15</p>
-                      <p class="subtitle is-4 mb-0 has-text-weight-bold"
-                         data-th-text="${#temporals.format(event.startDate, 'yyyy')}">Aug</p>
+                    <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}">
                     </div>
                   </div>
                   <div class="media-content">

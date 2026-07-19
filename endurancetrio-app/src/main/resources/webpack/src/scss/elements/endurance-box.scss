@@ -32,9 +32,6 @@ $endurance-box-stripe-height-extra-thick: 9px !default;
 .#{iv.$class-prefix}endurance-box {
   @extend .#{iv.$class-prefix}box;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-height: auto;
 
   background-image: linear-gradient(
@@ -62,6 +59,18 @@ $endurance-box-stripe-height-extra-thick: 9px !default;
 
   &.#{iv.$class-prefix}is-branded-extra-thick {
     background-size: 100% $endurance-box-stripe-height-extra-thick;
+  }
+
+  &.#{iv.$class-prefix}is-small,
+  &.#{iv.$class-prefix}is-medium,
+  &.#{iv.$class-prefix}is-large,
+  &.#{iv.$class-prefix}is-halfheight,
+  &.#{iv.$class-prefix}is-halfheight-with-navbar,
+  &.#{iv.$class-prefix}is-fullheight,
+  &.#{iv.$class-prefix}is-fullheight-with-navbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   &.#{iv.$class-prefix}is-small {
@@ -93,6 +102,8 @@ $endurance-box-stripe-height-extra-thick: 9px !default;
   }
 
   &.#{iv.$class-prefix}is-content-top {
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
   }
 }

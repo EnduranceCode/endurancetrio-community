@@ -30,17 +30,18 @@
 
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main class="section">
-  <section class="container is-fluid">
+<main>
+  <section class="section">
     <h1 data-th-text="#{page.events.title}" class="title is-1">Event's years</h1>
 
     <div class="is-hidden-desktop">
       <div class="fixed-grid has-1-cols">
-        <div class="grid">
+        <div class="grid is-gap-3">
           <div class="cell" data-th-each="year : ${yearsWithEvents.years}">
-            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
-               class="endurance-box is-medium is-branded-thin has-background-grey-700 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1984</span>
+            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}">
+              <div class="endurance-box is-medium is-branded has-background-grey-300 has-text-centered">
+                <span class="title is-1" data-th-text="${year}">1984</span>
+              </div>
             </a>
           </div>
         </div>
@@ -73,34 +74,38 @@
 
     <div class="is-hidden-touch">
       <div class="fixed-grid has-3-cols">
-        <div data-th-if="${!yearsWithEvents.nextYears.isEmpty()}" class="grid">
+        <div data-th-if="${!yearsWithEvents.nextYears.isEmpty()}" class="grid is-gap-3">
           <div class="cell" data-th-each="year : ${yearsWithEvents.years}">
-            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
-               class="endurance-box is-medium is-branded-thin has-background-grey-700 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1984</span>
+            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}">
+              <div class="endurance-box is-medium is-branded has-background-grey-300 has-text-centered">
+                <span class="title is-1" data-th-text="${year}">1984</span>
+              </div>
             </a>
           </div>
           <div class="cell" data-th-each="year : ${yearsWithEvents.nextYears}"
                data-th-classappend="${yearStat.last ? (yearsWithEvents.nextYears.size() == 2 ? 'is-col-span-2' : (yearsWithEvents.nextYears.size() == 1 ? 'is-col-span-3' : '')) : ''}">
-            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
-               class="endurance-box is-medium is-branded-thin has-background-grey-700 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1984</span>
+            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}">
+              <div class="endurance-box is-medium is-branded has-background-grey-300 has-text-centered">
+                <span class="title is-1" data-th-text="${year}">1984</span>
+              </div>
             </a>
           </div>
         </div>
 
-        <div data-th-if="${yearsWithEvents.nextYears.isEmpty()}" class="grid">
+        <div data-th-if="${yearsWithEvents.nextYears.isEmpty()}" class="grid is-gap-3">
           <div class="cell" data-th-each="year : ${yearsWithEvents.previousYears}">
-            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
-               class="endurance-box is-medium is-branded-thin has-background-grey-700 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1984</span>
+            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}">
+              <div class="endurance-box is-medium is-branded has-background-grey-300 has-text-centered">
+                <span class="title is-1" data-th-text="${year}">1984</span>
+              </div>
             </a>
           </div>
           <div class="cell" data-th-each="year : ${yearsWithEvents.years}"
                data-th-classappend="${yearStat.last ? (yearsWithEvents.years.size() == 2 ? 'is-col-span-2' : (yearsWithEvents.years.size() == 1 ? 'is-col-span-3' : '')) : ''}">
-            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}"
-               class="endurance-box is-medium is-branded-thin has-background-grey-700 has-text-centered">
-              <span class="title is-1" data-th-text="${year}">1984</span>
+            <a data-th-href="@{/{lang}/events/{year}(lang=${language}, year=${year})}">
+              <div class="endurance-box is-medium is-branded has-background-grey-300 has-text-centered">
+                <span class="title is-1" data-th-text="${year}">1984</span>
+              </div>
             </a>
           </div>
         </div>

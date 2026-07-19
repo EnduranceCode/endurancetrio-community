@@ -20,12 +20,12 @@
 
 @charset "utf-8";
 
-@use "sass:list";
+@use 'sass:list';
 
-@use "bulma/sass/utilities/css-variables" as cv;
-@use "bulma/sass/utilities/initial-variables" as iv;
-@use "bulma/sass/utilities/extends";
-@use "bulma/sass/utilities/mixins" as mx;
+@use 'bulma/sass/utilities/css-variables' as cv;
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use 'bulma/sass/utilities/extends';
+@use 'bulma/sass/utilities/mixins' as mx;
 
 /// Gap between the left column and content on tablet+.
 /// @group endurance-media
@@ -40,6 +40,14 @@ $endurance-media-gap: 1.5rem !default;
 /// @access public
 /// @see $endurance-media-gap
 $endurance-media-left-margin: 0.75rem !default;
+
+/// Padding inside `.endurance-media-left` text badges.
+/// Equivalent to Bulma's `.p-3` helper class.
+/// @group endurance-media
+/// @type {Length}
+/// @access public
+/// @see $endurance-media-left-margin
+$endurance-media-left-padding: 0.75rem !default;
 
 /// Square pixel-size variants available for `.endurance-media-left`.
 /// Generates `is-{N}x{N}` modifiers.
@@ -71,17 +79,18 @@ $endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
   @extend %block;
   @include cv.register-vars(
     (
-      "endurance-media-gap": #{$endurance-media-gap},
-      "endurance-media-left-margin": #{$endurance-media-left-margin},
+      'endurance-media-gap': #{$endurance-media-gap},
+      'endurance-media-left-margin': #{$endurance-media-left-margin},
+      'endurance-media-left-padding': #{$endurance-media-left-padding},
     )
   );
-  column-gap: cv.getVar("endurance-media-gap");
+  column-gap: cv.getVar('endurance-media-gap');
   display: grid;
   grid-template-columns: 1fr;
-  row-gap: cv.getVar("endurance-media-gap");
+  row-gap: cv.getVar('endurance-media-gap');
 
   @include mx.mobile {
-    row-gap: cv.getVar("endurance-media-left-margin");
+    row-gap: cv.getVar('endurance-media-left-margin');
   }
 
   @include mx.tablet {
@@ -118,15 +127,16 @@ $endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
 /// @group endurance-media
 /// @access public
 .#{iv.$class-prefix}endurance-media-left {
-  border-radius: cv.getVar("radius-large");
+  align-self: start;
+  border-radius: cv.getVar('radius-large');
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: cv.getVar("box-padding");
+  padding: cv.getVar('endurance-media-left-padding');
 
   @include mx.mobile {
-    margin-bottom: cv.getVar("endurance-media-left-margin");
+    margin-bottom: cv.getVar('endurance-media-left-margin');
     max-width: 100%;
     width: 100%;
   }
@@ -261,7 +271,7 @@ $endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
   margin-top: auto;
 
   @include mx.mobile {
-    border-top: 1px solid cv.getVar("border-weak");
+    border-top: 1px solid cv.getVar('border-weak');
     padding-top: 0.75rem;
     text-align: center;
   }

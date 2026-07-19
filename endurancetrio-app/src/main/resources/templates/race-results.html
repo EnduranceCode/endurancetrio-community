@@ -32,102 +32,100 @@
 <main>
   <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'results')}"></section>
 
-  <div>
-    <section data-th-with="ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}"
-             id="results"
-             class="section">
-      <div class="mb-6">
-          <div class="field has-addons">
-            <div class="control">
-              <a class="button is-primary"
-                 data-th-classappend="${raceIdPrev == null} ? 'is-disabled'"
-                 data-th-attr="disabled=${raceIdPrev == null} ? 'disabled' : null"
-                 data-th-href="${raceIdPrev != null}
+  <section data-th-with="ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}"
+           id="results"
+           class="section">
+    <div class="mb-6">
+      <div class="field has-addons">
+        <div class="control">
+          <a class="button is-primary"
+             data-th-classappend="${raceIdPrev == null} ? 'is-disabled'"
+             data-th-attr="disabled=${raceIdPrev == null} ? 'disabled' : null"
+             data-th-href="${raceIdPrev != null}
                    ? @{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${raceIdPrev})}
                    : null">
                 <span class="icon">
                   <i class="et et-chevron-double-left"></i>
                 </span>
-              </a>
-            </div>
-            <div class="control is-expanded">
-              <div class="select is-fullwidth">
-                <label for="race-select" class="label is-sr-only"
-                       data-th-text="#{page.event.results.select.label}">Select a race</label>
-                <select id="race-select" onchange="window.location.href=this.value">
-                  <option data-th-each="race : ${event.races()}"
-                          data-th-value="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}"
-                          data-th-selected="${race.id() == raceId}"
-                          data-th-text="${race.title()} + ' - ' + ${race.subtitle()}">
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="control">
-              <a class="button is-primary"
-                 data-th-classappend="${raceIdNext == null} ? 'is-disabled'"
-                 data-th-attr="disabled=${raceIdNext == null} ? 'disabled' : null"
-                 data-th-href="${raceIdNext != null}
+          </a>
+        </div>
+        <div class="control is-expanded">
+          <div class="select is-fullwidth">
+            <label for="race-select" class="label is-sr-only"
+                   data-th-text="#{page.event.results.select.label}">Select a race</label>
+            <select id="race-select" onchange="window.location.href=this.value">
+              <option data-th-each="race : ${event.races()}"
+                      data-th-value="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}"
+                      data-th-selected="${race.id() == raceId}"
+                      data-th-text="${race.title()} + ' - ' + ${race.subtitle()}">
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control">
+          <a class="button is-primary"
+             data-th-classappend="${raceIdNext == null} ? 'is-disabled'"
+             data-th-attr="disabled=${raceIdNext == null} ? 'disabled' : null"
+             data-th-href="${raceIdNext != null}
                    ? @{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${raceIdNext})}
                    : null">
                 <span class="icon">
                   <i class="et et-chevron-double-right"></i>
                 </span>
-              </a>
-            </div>
-          </div>
+          </a>
+        </div>
       </div>
+    </div>
 
-      <div data-th-if="${raceResults.individualResults() != null}" data-th-remove="tag">
-        <div data-th-if="${#maps.size(raceResults.individualResults()) == 1}"
-             data-th-with="entry=${raceResults.individualResults().entrySet().iterator().next()}"
+    <div data-th-if="${raceResults.individualResults() != null}" data-th-remove="tag">
+      <div data-th-if="${#maps.size(raceResults.individualResults()) == 1}"
+           data-th-with="entry=${raceResults.individualResults().entrySet().iterator().next()}"
+           data-th-remove="tag">
+        <div data-th-if="${!#lists.isEmpty(entry.value)}" data-th-remove="tag">
+          <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry}, ${activeColumns})}"></div>
+        </div>
+
+        <div data-th-unless="${!#lists.isEmpty(entry.value)}"
+             data-th-switch="${raceResults.race.resultStatus}"
              data-th-remove="tag">
-          <div data-th-if="${!#lists.isEmpty(entry.value)}" data-th-remove="tag">
-            <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry}, ${activeColumns})}"></div>
-          </div>
-
-          <div data-th-unless="${!#lists.isEmpty(entry.value)}"
-               data-th-switch="${raceResults.race.resultStatus}"
-               data-th-remove="tag">
-            <div data-th-case="${ResultStatus.UNKNOWN.getCode()}" data-th-remove="tag">
-              <div data-th-replace="~{fragments/result-status :: results-unknown(${language})}">
-              </div>
-            </div>
-
-            <div data-th-case="${ResultStatus.PENDING.getCode()}" data-th-remove="tag">
-              <div data-th-replace="~{fragments/result-status :: results-pending(${language})}">
-              </div>
-            </div>
-
-            <div data-th-case="${ResultStatus.EMPTY.getCode()}" data-th-remove="tag">
-              <div data-th-replace="~{fragments/result-status :: results-empty(${language})}">
-              </div>
-            </div>
-
-            <div data-th-case="*" data-th-remove="tag">
-              <div data-th-replace="~{fragments/result-status :: results-pending(${language})}">
-              </div>
+          <div data-th-case="${ResultStatus.UNKNOWN.getCode()}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/result-status :: results-unknown(${language})}">
             </div>
           </div>
-        </div>
 
-        <div data-th-if="${#maps.size(raceResults.individualResults()) > 1}" data-th-remove="tag">
-          <div data-th-replace="~{fragments/individual-results :: individual-results-tabs(${raceResults.individualResults()}, ${activeColumns}, ${language})}">
+          <div data-th-case="${ResultStatus.PENDING.getCode()}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/result-status :: results-pending(${language})}">
+            </div>
           </div>
-        </div>
 
-        <div data-th-if="${raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}"
-             data-th-remove="tag">
-          <div data-th-replace="~{fragments/result-status :: results-incomplete(${language})}">
+          <div data-th-case="${ResultStatus.EMPTY.getCode()}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/result-status :: results-empty(${language})}">
+            </div>
+          </div>
+
+          <div data-th-case="*" data-th-remove="tag">
+            <div data-th-replace="~{fragments/result-status :: results-pending(${language})}">
+            </div>
           </div>
         </div>
       </div>
 
-      <div data-th-unless="${raceResults.individualResults() != null}" data-th-remove="tag">
-        <div data-th-replace="~{fragments/result-status :: results-pending(${language})}"></div>
+      <div data-th-if="${#maps.size(raceResults.individualResults()) > 1}" data-th-remove="tag">
+        <div data-th-replace="~{fragments/individual-results :: individual-results-tabs(${raceResults.individualResults()}, ${activeColumns}, ${language})}">
+        </div>
       </div>
-    </section>
-  </div>
+
+      <div data-th-if="${raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}"
+           data-th-remove="tag">
+        <div data-th-replace="~{fragments/result-status :: results-incomplete(${language})}">
+        </div>
+      </div>
+    </div>
+
+    <div data-th-unless="${raceResults.individualResults() != null}" data-th-remove="tag">
+      <div data-th-replace="~{fragments/result-status :: results-pending(${language})}"></div>
+    </div>
+  </section>
 </main>
 
 <footer data-th-replace="~{fragments/footer :: footer}"></footer>

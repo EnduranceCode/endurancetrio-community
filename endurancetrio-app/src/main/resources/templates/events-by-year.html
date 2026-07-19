@@ -29,8 +29,8 @@
 
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main class="section">
-  <section class="container is-fluid">
+<main>
+  <section class="section">
     <h1 data-th-text="#{page.events.year.title(${#strings.toString(year)})}" class="title is-1">
       Events in 1984
     </h1>
@@ -41,39 +41,37 @@
       </p>
     </div>
 
-    <div data-th-each="event : ${events}" class="endurance-box is-branded-thin mb-3">
-      <article class="media">
-        <div class="media-left">
-          <div class="box has-background-grey-700 has-text-centered"
-               style="min-width: 4.5rem; padding: 0.5rem;">
-            <p class="title is-3 mb-0" data-th-text="${#temporals.format(event.startDate, 'dd')}">
-              15
-            </p>
-            <p class="subtitle is-7 mb-0 has-text-weight-bold"
-               data-th-text="${#temporals.format(event.startDate, 'MMM')}">
-              Aug
-            </p>
-          </div>
-        </div>
-
-        <div class="media-content">
-          <div class="content">
-            <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${year}, id=${event.id})}">
-              <span data-th-text="${event.title}" class="title is-4"></span>
-              <br>
-              <span class="has-text-grey"
-                    data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'">
-              </span>
-            </a>
-            <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}">
-              <span class="tag is-link is-light" data-th-each="sportCode : ${event.sportCodes}"
-                    data-th-text="#{sport.__${sportCode}__}">
-              </span>
+    <a  data-th-each="event : ${events}"
+        data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${year}, id=${event.id})}"
+    >
+      <div class="endurance-box is-branded-thin mb-3">
+        <article class="media">
+          <div class="media-left">
+            <div data-th-replace="~{fragments/calendar :: date-ddmmm(date=${event.startDate})}">
             </div>
           </div>
-        </div>
-      </article>
-    </div>
+
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <span data-th-text="${event.title}" class="title is-4"></span>
+                <br>
+                <span class="has-text-grey"
+                      data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
+                >
+                </span>
+              </p>
+              <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}">
+                <span class="tag is-link is-light" data-th-each="sportCode : ${event.sportCodes}"
+                      data-th-text="#{sport.__${sportCode}__}"
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </a>
 
     <nav class="pagination is-centered is-rounded" role="navigation"
          data-th-if="${pagination.totalPages() > 1}">
