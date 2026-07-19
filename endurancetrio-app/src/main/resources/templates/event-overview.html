@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'overview')}"></section>
+  <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'overview')}"></section>
 
   <section id="overview" class="section">
     <div class="columns is-multiline">

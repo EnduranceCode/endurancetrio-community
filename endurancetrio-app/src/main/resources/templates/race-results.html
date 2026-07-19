@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section data-th-replace="~{fragments/event-hero :: event-hero(${event}, ${language}, ${year}, 'results')}"></section>
+  <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'results')}"></section>
 
   <section data-th-with="ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}"
            id="results"

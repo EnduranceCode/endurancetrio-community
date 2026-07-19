@@ -224,4 +224,22 @@ class InsightServiceMainTest {
     assertEquals(0, result.articles().size());
     assertEquals(0, result.pagination().totalItems());
   }
+
+  @Test
+  void getArticlesCountByEventShouldReturnCount() {
+    when(articleRepository.countByEventId(EVENT_ID)).thenReturn(3L);
+
+    long result = underTest.getArticlesCountByEvent(EVENT_ID);
+
+    assertEquals(3L, result);
+  }
+
+  @Test
+  void getArticlesCountByEventWhenNoArticlesShouldReturnZero() {
+    when(articleRepository.countByEventId(EVENT_ID)).thenReturn(0L);
+
+    long result = underTest.getArticlesCountByEvent(EVENT_ID);
+
+    assertEquals(0L, result);
+  }
 }
