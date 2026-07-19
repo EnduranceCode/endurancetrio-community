@@ -197,8 +197,8 @@ public class EventWebController {
     EventOverviewDTO event = eventService.getEventOverview(id, year);
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_INSIGHTS,
-        messageService.getMessage("page.event.insights.metadata.title", null, locale),
-        messageService.getMessage("page.event.insights.metadata.description", null, locale),
+        messageService.getMessage("page.event.insights.metadata.title", new Object[]{event.title()}, locale),
+        messageService.getMessage("page.event.insights.metadata.description", new Object[]{event.title()}, locale),
         request, appProperties
     );
 

@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-700">
+  <section class="hero has-background-grey-300">
     <div class="hero-body">
       <div class="container is-fullhd">
         <h1 data-th-text="#{page.athletes.title}" class="title is-1">Athletes</h1>
@@ -49,35 +49,36 @@
     <div class="fixed-grid has-1-cols-mobile has-3-cols-desktop">
       <div class="grid">
         <div data-th-each="athlete : ${athletes}" class="cell">
-          <div class="box mb-2">
-            <article class="media">
-              <div class="media-left">
-                <div class="endurance-box has-text-centered p-3">
+          <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}">
+            <div class="box mb-2">
+              <article class="media">
+                <div class="media-left">
+                  <div class="endurance-box has-text-centered p-3">
                   <span class="icon is-large">
                     <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
                   </span>
+                  </div>
                 </div>
-              </div>
 
-              <div class="media-content">
-                <div class="content">
-                  <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}"
-                     data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}"
-                     class="title is-4"
-                  >
-                    Paulo Paula Carvalho
-                  </a>
-                  <br>
-                  <span data-th-if="${athlete.knownName() != null && !athlete.knownName().isEmpty() && !athlete.knownName().equals(athlete.longName())}"
-                        data-th-text="${athlete.longName()}"
-                        class="has-text-grey"
-                  >
+                <div class="media-content">
+                  <div class="content">
+                    <span data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}"
+                       class="title is-4"
+                    >
+                      Paulo Paula Carvalho
+                    </span>
+                    <br>
+                    <span data-th-if="${athlete.knownName() != null && !athlete.knownName().isEmpty() && !athlete.knownName().equals(athlete.longName())}"
+                          data-th-text="${athlete.longName()}"
+                          class="has-text-grey"
+                    >
                     Paulo José Paula Carvalho
                   </span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          </div>
+              </article>
+            </div>
+          </a>
         </div>
       </div>
     </div>

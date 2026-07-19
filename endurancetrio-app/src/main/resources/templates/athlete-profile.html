@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-700">
+  <section class="hero has-background-grey-300">
     <div class="hero-body">
       <div class="container is-fullhd">
         <div class="endurance-media">
@@ -113,34 +113,36 @@
       <a data-th-each="race : ${races}"
          data-th-with="isDerived=${race.raceType == RaceType.INDIVIDUAL_DERIVED || race.raceType == RaceType.TEAM_RELAY_DERIVED || race.raceType == RaceType.MIXED_RELAY_DERIVED}"
          data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}"
-         class="endurance-box is-branded-thin mb-3">
-        <div data-th-classappend="${isDerived} ? 'has-background-grey-100' : p-0"
-             class="box is-shadowless">
-          <div class="endurance-media">
-            <div class="endurance-media-left has-background-grey-700">
-              <p data-th-text="${#temporals.format(race.date, 'dd-MM')}"
-                 data-th-classappend="${isDerived} ? is-5 : is-3"
-                 class="title mb-0">
-              </p>
-              <p data-th-text="${#temporals.format(race.date, 'yyyy')}"
-                 data-th-classappend="${isDerived} ? is-6 : is-4"
-                 class="subtitle mb-0 has-text-weight-bold">
-              </p>
-            </div>
-            <div class="endurance-media-content">
-              <p data-th-text="${race.title}"
-                 data-th-classappend="${isDerived} ? 'has-text-grey-dark is-5' : 'is-3'"
-                 class="title"></p>
-              <p data-th-text="${race.subtitle}"
-                 data-th-classappend="${isDerived} ? 'has-text-grey-dark is-6' : 'is-5'"
-                 class="subtitle"></p>
-              <p class="endurance-media-footer">
+      >
+        <div class="endurance-box is-branded-thin mb-3">
+          <div data-th-classappend="${isDerived} ? 'has-background-grey-100' : p-0"
+               class="box is-shadowless">
+            <div class="endurance-media">
+              <div class="endurance-media-left has-background-grey-600">
+                <p data-th-text="${#temporals.format(race.date, 'dd-MM')}"
+                   data-th-classappend="${isDerived} ? is-6 : is-5"
+                   class="title mb-1">
+                </p>
+                <p data-th-text="${#temporals.format(race.date, 'yyyy')}"
+                   data-th-classappend="${isDerived} ? is-6 : is-5"
+                   class="subtitle mb-0 has-text-weight-bold">
+                </p>
+              </div>
+              <div class="endurance-media-content">
+                <p data-th-text="${race.title}"
+                   data-th-classappend="${isDerived} ? 'has-text-grey-dark is-5' : 'is-3'"
+                   class="title"></p>
+                <p data-th-text="${race.subtitle}"
+                   data-th-classappend="${isDerived} ? 'has-text-grey-dark is-6' : 'is-5'"
+                   class="subtitle"></p>
+                <p class="endurance-media-footer">
                 <span data-th-each="sportCode : ${race.sports}"
                       data-th-text="#{sport.__${sportCode}__}"
                       data-th-classappend="${!isDerived} ? 'is-medium'"
                       class="tag is-link is-light">
                 </span>
-              </p>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -180,20 +182,22 @@
 
       <a data-th-each="article : ${articles}"
          data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
-         class="endurance-box is-branded-thin">
-        <div class="endurance-media">
-          <div class="endurance-media-left is-og-320x167 ">
-            <img data-th-src="${article.featuredImage}"
-                 data-th-alt="${article.title}"
-                 alt="Article Title"/>
-          </div>
-          <div class="endurance-media-content">
-            <p data-th-text="${article.title}" class="title is-3"></p>
-            <div class="subtitle is-5">
-              <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+      >
+        <div class="endurance-box is-branded-thin">
+          <div class="endurance-media">
+            <div class="endurance-media-left is-og-320x167 ">
+              <img data-th-src="${article.featuredImage}"
+                   data-th-alt="${article.title}"
+                   alt="Article Title"/>
             </div>
-            <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
-              <p data-th-text="${#temporals.format(article.publishedDate, 'dd MMMM yyyy')}"></p>
+            <div class="endurance-media-content">
+              <p data-th-text="${article.title}" class="title is-3"></p>
+              <div class="subtitle is-5">
+                <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+              </div>
+              <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
+                <p data-th-text="${#temporals.format(article.publishedDate, 'dd MMMM yyyy')}"></p>
+              </div>
             </div>
           </div>
         </div>
