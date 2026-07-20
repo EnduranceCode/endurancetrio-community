@@ -65,15 +65,25 @@
                     <span data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}"
                        class="title is-4"
                     >
-                      Paulo Paula Carvalho
                     </span>
                     <br>
-                    <span data-th-if="${athlete.knownName() != null && !athlete.knownName().isEmpty() && !athlete.knownName().equals(athlete.longName())}"
-                          data-th-text="${athlete.longName()}"
-                          class="has-text-grey"
+                    <span data-th-if="${athlete.country != null}"
+                          data-th-text="${athlete.country().getCode()}"
+                          class="subtitle is-6"
                     >
-                    Paulo José Paula Carvalho
-                  </span>
+                    </span>
+                    <span class="icon-text">
+                      <span data-th-if="${athlete.country != null && athlete.yearOfBirth() !=null}"
+                            class="icon"
+                      >
+                        <i class="et et-tally-mark-1"></i>
+                      </span>
+                    </span>
+                    <span data-th-if="${athlete.yearOfBirth() != null}"
+                          data-th-text="${athlete.yearOfBirth()}"
+                          class="subtitle is-6"
+                    >
+                    </span>
                   </div>
                 </div>
               </article>
