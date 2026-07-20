@@ -215,3 +215,6 @@ timestamp-based naming convention.
 30. Adds an index to optimize query to find most recent added events:
     - [V20260718.001__add-index-for-most-recent-added-events-h2.sql](migration/ddl/h2/V20260718.001__add-index-for-most-recent-added-events-h2.sql)
     - [V20260718.001__add-index-for-most-recent-added-events-postgres.sql](migration/ddl/postgres/V20260718.001__add-index-for-most-recent-added-events-postgres.sql)
+31. Correct and update athlete and event data:
+    - [V20260720.001__correct-update-athlete-and-event-data-h2.sql](migration/dml/h2/V20260720.001__correct-update-athlete-and-event-data-h2.sql)
+    - [V20260720.001__correct-update-athlete-and-event-data-postgres.sql](migration/dml/postgres/V20260720.001__correct-update-athlete-and-event-data-postgres.sql)
