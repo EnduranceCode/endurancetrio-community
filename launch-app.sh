@@ -25,4 +25,4 @@ echo "--------------------------------------------------------------------------
 echo -e "[\e[34mINFO\e[0m] Starting EnduranceTrio Application..."
 echo "------------------------------------------------------------------------------------------------------------------------"
 echo
-./mvnw spring-boot:run -pl endurancetrio-app -Dspring-boot.run.profiles=local -Dfrontend.build.script=build:dev
+./mvnw spring-boot:run -pl endurancetrio-app -Dspring-boot.run.profiles=local -Dfrontend.build.script=build:dev -Dspring-boot.run.jvmArguments="-Duser.timezone=UTC"

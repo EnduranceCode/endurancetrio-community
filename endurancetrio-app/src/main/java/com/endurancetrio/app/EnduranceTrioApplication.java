@@ -20,6 +20,8 @@
 
 package com.endurancetrio.app;
 
+import java.util.TimeZone;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
@@ -31,6 +33,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class EnduranceTrioApplication {
 
   public static void main(String[] args) {
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     SpringApplication.run(EnduranceTrioApplication.class, args);
   }
 }

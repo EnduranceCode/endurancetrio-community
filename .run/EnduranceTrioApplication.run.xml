@@ -5,7 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="com.endurancetrio.app.EnduranceTrioApplication" />
     <module name="endurancetrio-app" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/endurancetrio-app" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local -Duser.timezone=UTC" />
     <method v="2">
       <option name="Make" enabled="true" />
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="GenerateFrontendAssets" run_configuration_type="MavenRunConfiguration" />

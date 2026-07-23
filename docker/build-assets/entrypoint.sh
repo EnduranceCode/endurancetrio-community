@@ -52,6 +52,7 @@ GC_LOG_OPTS="-Xlog:gc*:file=${GC_LOG_FILE}::filecount=5,filesize=10M"
 
 # 6. Drop privileges and execute the main Java application
 exec su-exec "$APP_USER" java \
+    -Duser.timezone=UTC \
     -Xms"${JAVA_XMS}" \
     -Xmx"${JAVA_XMX}" \
     -XX:+UseG1GC \
