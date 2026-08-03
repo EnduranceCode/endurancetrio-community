@@ -23,7 +23,9 @@ package com.endurancetrio.business.insight.mapper;
 import com.endurancetrio.business.insight.dto.AuthorDTO;
 import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.insight.model.entity.Author;
+import java.util.Objects;
 import java.util.Optional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,13 +34,11 @@ public class AuthorMapper {
   /**
    * Maps an {@link Author} entity to an {@link AuthorDTO}.
    *
-   * @param entity the Author entity to be mapped
-   * @return the corresponding AuthorDTO, or {@code null} if the entity is {@code null}
+   * @param entity the Author entity to be mapped; must not be {@code null}
+   * @return the corresponding AuthorDTO
    */
-  public AuthorDTO map(Author entity) {
-    if (entity == null) {
-      return null;
-    }
+  public AuthorDTO map(@NonNull Author entity) {
+    Objects.requireNonNull(entity, "Author must not be null");
 
     Long athleteId = Optional.ofNullable(entity.getAthlete()).map(BaseEntity::getId).orElse(null);
 

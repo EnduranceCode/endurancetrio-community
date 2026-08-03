@@ -23,6 +23,7 @@ package com.endurancetrio.business.insight.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.endurancetrio.business.insight.dto.AuthorDTO;
 import com.endurancetrio.business.insight.fixtures.AuthorFixture;
@@ -74,8 +75,6 @@ class AuthorMapperTest {
 
   @Test
   void mapNullEntity() {
-    AuthorDTO result = underTest.map(null);
-
-    assertNull(result);
+    assertThrows(NullPointerException.class, () -> underTest.map(null));
   }
 }
