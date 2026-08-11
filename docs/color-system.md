@@ -26,6 +26,7 @@ consistently without custom CSS overrides.
 7. [Color Usage Recommendations](#color-usage-recommendations)
 8. [Accessibility Guidance](#accessibility-guidance)
 9. [Palette Swatch Reference](#palette-swatch-reference)
+10. [GIMP and Inkscape Palette File](#gimp-and-inkscape-palette-file)
 
 ## Brand Foundations
 
@@ -308,3 +309,36 @@ A visual reference of all four Material Design palettes with HEX and HSL notatio
 available as a PDF in the `docs/assets` directory:
 
 [`docs/assets/endurancetrio-color-palettes.pdf`](./assets/endurancetrio-color-palettes.pdf)
+
+## GIMP and Inkscape Palette File
+
+For image-editing work, the full color system is also available as a single GIMP Palette (`.gpl`)
+file at [`docs/assets/endurancetrio-color-palette.gpl`](./assets/endurancetrio-color-palette.gpl).
+The format is natively supported by both [GIMP](https://www.gimp.org) and
+[Inkscape](https://inkscape.org).
+
+The file contains 52 swatches: `Black` and `White`, plus the ten-step (050–900) Grey, Blue, Yellow,
+Red, and Green palettes listed above. The RGB values match the HEX reference exactly, and the
+palette is laid out in four columns (`Columns: 4`).
+
+### Installing in GIMP
+
+Copy the file into your GIMP palettes directory, then open the Palettes dialog (*Windows → Dockable
+Dialogs → Palettes*) and refresh it.
+
+| Platform | Palettes directory                                     |
+|----------|--------------------------------------------------------|
+| Linux    | `~/.config/GIMP/2.10/palettes/` (use `3.0` for GIMP 3) |
+| Windows  | `%APPDATA%\GIMP\2.10\palettes\`                        |
+| macOS    | `~/Library/Application Support/GIMP/2.10/palettes/`    |
+
+### Installing in Inkscape
+
+Copy the file into your Inkscape palettes directory, restart Inkscape, then select the palette from
+the *Swatches* dropdown.
+
+| Platform | Palettes directory                                 |
+|----------|----------------------------------------------------|
+| Linux    | `~/.config/inkscape/palettes/`                     |
+| Windows  | `%APPDATA%\inkscape\palettes\`                     |
+| macOS    | `~/Library/Application Support/inkscape/palettes/` |
