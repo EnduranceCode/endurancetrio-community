@@ -23,6 +23,8 @@ package com.endurancetrio.app.common.utils;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The {@link PageMetadataUtils} class provides utility methods for building
@@ -31,6 +33,8 @@ import jakarta.servlet.http.HttpServletRequest;
  * elements and other layout fragments (e.g. navigation bar, footer).
  */
 public final class PageMetadataUtils {
+
+  private static final Pattern LANGUAGE_SEGMENT = Pattern.compile("/(en|pt)(?=/|$)");
 
   private PageMetadataUtils() {
     throw new IllegalStateException("Utility Class");
@@ -64,12 +68,15 @@ public final class PageMetadataUtils {
   ) {
     String appVersion = properties.getVersion();
     String baseUrl = getBaseUrl(request);
+    String requestUrl = request.getRequestURL().toString();
 
     PageMetadata metadata = new PageMetadata();
     metadata.setAppVersion(appVersion == null || appVersion.isBlank() ? "" : appVersion);
     metadata.setCopyrightYear(properties.getCopyrightYear());
     metadata.setDescription(description);
-    metadata.setCanonicalUrl(request.getRequestURL().toString());
+    metadata.setCanonicalUrl(requestUrl);
+    metadata.setHreflangUrlEn(buildAlternateUrl(requestUrl, "en"));
+    metadata.setHreflangUrlPt(buildAlternateUrl(requestUrl, "pt"));
     metadata.setOgImage(baseUrl + properties.getOpenGraph().getDefaultImg());
     metadata.setFacebookPageId(properties.getSocial().getFacebookPageId());
     metadata.setGoogleAdsenseId(properties.getGoogle().getAdsenseId());
@@ -81,5 +88,30 @@ public final class PageMetadataUtils {
     metadata.setView(view);
 
     return metadata;
+  }
+
+  /**
+   * Builds the alternate-language URL for the given request URL by swapping the language segment.
+   * <p>
+   * When the URL carries a {@code /en/} or {@code /pt/} language segment, it is replaced with the
+   * target language. A bare-root URL (e.g. {@code https://example.com/}) has the target language
+   * appended. Any other URL without a language segment (e.g. an error dispatch to {@code /error})
+   * yields {@code null}, so pages that are not localized content omit hreflang links.
+   *
+   * @param url        the full request URL
+   * @param targetLang the target language segment ({@code en} or {@code pt})
+   * @return the alternate-language URL, or {@code null} when no alternate exists
+   */
+  private static String buildAlternateUrl(String url, String targetLang) {
+    Matcher matcher = LANGUAGE_SEGMENT.matcher(url);
+    if (matcher.find()) {
+      return matcher.replaceFirst("/" + targetLang);
+    }
+    String path = url.substring(url.indexOf("://") + 3);
+    int slashIndex = path.indexOf('/');
+    if (slashIndex < 0 || slashIndex == path.length() - 1) {
+      return url.replaceFirst("/$", "") + "/" + targetLang;
+    }
+    return null;
   }
 }

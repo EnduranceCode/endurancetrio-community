@@ -34,6 +34,8 @@ public class PageMetadata {
   private String description;
   private String facebookPageId;
   private String googleAdsenseId;
+  private String hreflangUrlEn;
+  private String hreflangUrlPt;
   private String kofiUserId;
   private String ogImage;
   private Integer ogImageHeight;
@@ -92,6 +94,22 @@ public class PageMetadata {
 
   public void setGoogleAdsenseId(String googleAdsenseId) {
     this.googleAdsenseId = googleAdsenseId;
+  }
+
+  public String getHreflangUrlEn() {
+    return hreflangUrlEn;
+  }
+
+  public void setHreflangUrlEn(String hreflangUrlEn) {
+    this.hreflangUrlEn = hreflangUrlEn;
+  }
+
+  public String getHreflangUrlPt() {
+    return hreflangUrlPt;
+  }
+
+  public void setHreflangUrlPt(String hreflangUrlPt) {
+    this.hreflangUrlPt = hreflangUrlPt;
   }
 
   public String getKofiUserId() {

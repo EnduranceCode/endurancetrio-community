@@ -57,6 +57,12 @@
   <!-- End Google Tag Manager -->
 
   <link rel="canonical" data-th-href="${metadata.canonicalUrl}">
+  <link rel="alternate" hreflang="en" data-th-href="${metadata.hreflangUrlEn}"
+        data-th-if="${metadata.hreflangUrlEn != null}">
+  <link rel="alternate" hreflang="pt" data-th-href="${metadata.hreflangUrlPt}"
+        data-th-if="${metadata.hreflangUrlPt != null}">
+  <link rel="alternate" hreflang="x-default" data-th-href="${metadata.hreflangUrlEn}"
+        data-th-if="${metadata.hreflangUrlEn != null}">
   <link rel="icon" data-th-href="@{/favicon.ico}" sizes="32x32">
   <link rel="icon" data-th-href="@{/favicon.svg}" type="image/svg+xml">
   <link rel="apple-touch-icon" data-th-href="@{/apple-touch-icon.png}">
