@@ -193,6 +193,8 @@ public class AppSecurityConfig {
                     "/apple-touch-icon.png",
                     "/favicon.ico",
                     "/favicon.svg",
+                    "/robots.txt",
+                    "/sitemap.xml",
                     "/swagger-ui.html",
                     SWAGGER_UI_PATTERN,
                     API_DOCS_PATTERN,

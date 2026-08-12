@@ -33,7 +33,7 @@ import java.util.Set;
 public class LocaleRedirectFilter implements Filter {
 
   private static final Set<String> STATIC_ROOT_FILES = Set.of(
-      "/favicon.ico", "/favicon.svg", "/apple-touch-icon.png");
+      "/favicon.ico", "/favicon.svg", "/apple-touch-icon.png", "/robots.txt", "/sitemap.xml");
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

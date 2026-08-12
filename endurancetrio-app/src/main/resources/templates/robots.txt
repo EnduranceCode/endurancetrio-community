@@ -1,0 +1,14 @@
+# EnduranceTrio Community
+#
+# Scraping of this website is not allowed. Access is granted to search
+# engine crawlers and other compliant bots that follow these rules.
+
+User-agent: *
+Disallow: /api/
+Disallow: /actuator/
+Disallow: /swagger-ui/
+Disallow: /v3/api-docs/
+Disallow: /swagger-resources/
+Disallow: /error
+
+Sitemap: [[${siteUrl}]]/sitemap.xml

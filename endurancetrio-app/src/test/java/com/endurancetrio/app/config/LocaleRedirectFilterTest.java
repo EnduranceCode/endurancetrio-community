@@ -174,4 +174,24 @@ class LocaleRedirectFilterTest {
 
     verify(filterChain).doFilter(request, response);
   }
+
+  @Test
+  void shouldPassRobotsTxtRequests() throws Exception {
+    when(request.getRequestURI()).thenReturn("/robots.txt");
+
+    underTest.doFilter(request, response, filterChain);
+
+    verify(filterChain).doFilter(request, response);
+    verify(response, never()).sendRedirect(any());
+  }
+
+  @Test
+  void shouldPassSitemapXmlRequests() throws Exception {
+    when(request.getRequestURI()).thenReturn("/sitemap.xml");
+
+    underTest.doFilter(request, response, filterChain);
+
+    verify(filterChain).doFilter(request, response);
+    verify(response, never()).sendRedirect(any());
+  }
 }
