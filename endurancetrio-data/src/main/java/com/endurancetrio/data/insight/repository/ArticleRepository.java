@@ -21,6 +21,7 @@
 package com.endurancetrio.data.insight.repository;
 
 import com.endurancetrio.data.insight.model.entity.Article;
+import java.util.List;
 import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
@@ -77,6 +78,15 @@ public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonN
    */
   @Query("SELECT DISTINCT a FROM Article a JOIN a.relatedEvents e WHERE e.id = :eventId")
   Page<Article> findByEventId(@Param("eventId") Long eventId, @NonNull Pageable pageable);
+
+  /**
+   * Returns a {@link List} of all published {@link Article articles} (i.e. with a non-null
+   * published date), ordered by their published date descending.
+   *
+   * @return a {@link List} of published {@link Article articles} ordered by published date
+   *         descending
+   */
+  List<Article> findByPublishedDateIsNotNullOrderByPublishedDateDesc();
 
   /**
    * Finds an {@link Article} by its unique URL slug.

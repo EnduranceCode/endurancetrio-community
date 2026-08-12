@@ -97,6 +97,14 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
   List<Event> findEventsByIdInWithCourses(@Param("ids") Collection<Long> ids);
 
   /**
+   * Returns a {@link List} of all {@link Event events} ordered by their
+   * {@link Event#getStartDate() startDate} descending.
+   *
+   * @return a {@link List} of {@link Event events} ordered by start date descending
+   */
+  List<Event> findAllByOrderByStartDateDesc();
+
+  /**
    * Returns a {@link Page} of IDs of the most recently added {@link Event events}, ordered by their
    * {@link com.endurancetrio.data.common.model.entity.AuditableEntity#getCreatedAt() createdAt}
    * descending and, as a tiebreaker, by {@link Event#getId() id} descending.

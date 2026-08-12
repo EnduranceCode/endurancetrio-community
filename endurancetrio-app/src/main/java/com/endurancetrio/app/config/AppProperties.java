@@ -33,24 +33,9 @@ public class AppProperties {
   private Google google = new Google();
   private KoFi kofi = new KoFi();
   private OpenGraph openGraph = new OpenGraph();
+  private String siteUrl;
   private Social social = new Social();
   private String version;
-
-  public Google getGoogle() {
-    return google;
-  }
-
-  public void setGoogle(Google google) {
-    this.google = google;
-  }
-
-  public KoFi getKoFi() {
-    return kofi;
-  }
-
-  public void setKoFi(KoFi kofi) {
-    this.kofi = kofi;
-  }
 
   public String getCopyrightYear() {
     return copyrightYear;
@@ -68,12 +53,36 @@ public class AppProperties {
     this.featuredArticleIds = featuredArticleIds;
   }
 
+  public Google getGoogle() {
+    return google;
+  }
+
+  public void setGoogle(Google google) {
+    this.google = google;
+  }
+
+  public KoFi getKoFi() {
+    return kofi;
+  }
+
+  public void setKoFi(KoFi kofi) {
+    this.kofi = kofi;
+  }
+
   public OpenGraph getOpenGraph() {
     return openGraph;
   }
 
   public void setOpenGraph(OpenGraph openGraph) {
     this.openGraph = openGraph;
+  }
+
+  public String getSiteUrl() {
+    return siteUrl;
+  }
+
+  public void setSiteUrl(String siteUrl) {
+    this.siteUrl = siteUrl;
   }
 
   public Social getSocial() {

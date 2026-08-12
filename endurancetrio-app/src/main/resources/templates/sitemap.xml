@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <url th:each="entry : ${entries}">
+    <loc th:text="${entry.urlEn()}">https://endurancetrio.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" th:href="${entry.urlEn()}"/>
+    <xhtml:link rel="alternate" hreflang="pt" th:href="${entry.urlPt()}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" th:href="${entry.urlEn()}"/>
+    <lastmod th:text="${entry.lastModified()}">2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority th:text="${entry.priority()}">0.5</priority>
+  </url>
+</urlset>

@@ -429,6 +429,17 @@ Templates are read directly from the source tree using a `file:` prefix (configu
 `application-local.yaml`). Saving a template triggers a LiveReload signal via DevTools and
 the browser auto-refreshes — no build step, compilation, or manual refresh is needed.
 
+#### XML sitemap template (`.xml`)
+
+`templates/sitemap.xml` is rendered in XML template mode (`TemplateMode.XML`) by
+`SitemapController`. XML mode ignores the `data-th-*` prefix used in HTML templates, so the sitemap
+uses `th:*` attributes and declares `xmlns:th`. Because the file is a Thymeleaf template, it carries
+`th:*` attributes that exist in no published schema, so XML schema validation (including IntelliJ
+IDEA's, which additionally cannot download the sitemaps.org schema on restricted networks) reports
+warnings on it. This is expected and harmless: the rendered `/sitemap.xml` output is the valid
+document, as verified by `SitemapControllerTest`. To silence the IntelliJ warnings once per machine,
+press Alt+Enter on the reported URI and choose *Ignore external resource*.
+
 #### Frontend changes (`.scss`, `.js`)
 
 For continuous frontend rebuilds, run `FrontendAssetsWatch` in a separate IntelliJ run tab.

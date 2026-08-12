@@ -32,6 +32,7 @@ app:
     default-img: /img/endurancetrio-open-graph.png
     default-img-height: 628
     default-img-width: 1200
+  site-url: ${SITE_URL:https://endurancetrio.com}
   social:
     facebook-page-id: ${FACEBOOK_PAGE_ID:}
     twitter-site: ${TWITTER_SITE:}
