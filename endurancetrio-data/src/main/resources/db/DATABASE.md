@@ -218,3 +218,9 @@ timestamp-based naming convention.
 31. Correct and update athlete and event data:
     - [V20260720.001__correct-update-athlete-and-event-data-h2.sql](migration/dml/h2/V20260720.001__correct-update-athlete-and-event-data-h2.sql)
     - [V20260720.001__correct-update-athlete-and-event-data-postgres.sql](migration/dml/postgres/V20260720.001__correct-update-athlete-and-event-data-postgres.sql)
+32. Changes the insight article full_text column to the unbounded TEXT type:
+    - [V20260814.001__change-insight-article-full-text-type-h2.sql](migration/ddl/h2/V20260814.001__change-insight-article-full-text-type-h2.sql)
+    - [V20260814.001__change-insight-article-full-text-type-postgres.sql](migration/ddl/postgres/V20260814.001__change-insight-article-full-text-type-postgres.sql)
+33. Updates the insight articles with Paulo Cavaleiro's and Paulo Carvalho's Peniche 1984 stories
+    - [V20260814.002__update-insights-articles-h2.sql](migration/dml/h2/V20260814.002__update-insights-articles-h2.sql)
+    - [V20260814.002__update-insights-articles-postgres.sql](migration/dml/postgres/V20260814.002__update-insights-articles-postgres.sql)
