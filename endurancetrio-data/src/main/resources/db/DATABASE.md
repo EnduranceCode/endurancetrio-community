@@ -224,3 +224,6 @@ timestamp-based naming convention.
 33. Updates the insight articles with Paulo Cavaleiro's and Paulo Carvalho's Peniche 1984 stories
     - [V20260814.002__update-insights-articles-h2.sql](migration/dml/h2/V20260814.002__update-insights-articles-h2.sql)
     - [V20260814.002__update-insights-articles-postgres.sql](migration/dml/postgres/V20260814.002__update-insights-articles-postgres.sql)
+34. Process the event id 2 race results
+    - [V20260816.001__process-event-2-results-h2.sql](migration/dml/h2/V20260816.001__process-event-2-results-h2.sql)
+    - [V20260816.001__process-event-2-results-postgres.sql](migration/dml/postgres/V20260816.001__process-event-2-results-postgres.sql)
