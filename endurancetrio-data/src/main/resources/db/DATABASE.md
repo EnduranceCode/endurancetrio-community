@@ -230,3 +230,6 @@ timestamp-based naming convention.
 35. Processe the event ID 3 race results:
     - [V20260817.001__process-event-3-results-h2.sql](migration/dml/h2/V20260817.001__process-event-3-results-h2.sql)
     - [V20260817.001__process-event-3-results-postgres.sql](migration/dml/postgres/V20260817.001__process-event-3-results-postgres.sql)
+36. Inserts the English translation of Paulo Cavaleiro's insight article:
+    - [V20260817.002__insert-insight-1-english-translation-h2.sql](migration/dml/h2/V20260817.002__insert-insight-1-english-translation-h2.sql)
+    - [V20260817.002__insert-insight-1-english-translation-postgres.sql](migration/dml/postgres/V20260817.002__insert-insight-1-english-translation-postgres.sql)
