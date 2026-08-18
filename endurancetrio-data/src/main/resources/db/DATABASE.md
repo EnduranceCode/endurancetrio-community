@@ -233,3 +233,6 @@ timestamp-based naming convention.
 36. Inserts the English translation of Paulo Cavaleiro's insight article:
     - [V20260817.002__insert-insight-1-english-translation-h2.sql](migration/dml/h2/V20260817.002__insert-insight-1-english-translation-h2.sql)
     - [V20260817.002__insert-insight-1-english-translation-postgres.sql](migration/dml/postgres/V20260817.002__insert-insight-1-english-translation-postgres.sql)
+37. Processe the event ID 4 race results:
+    - [V20260818.001__process-event-4-results-h2.sql](migration/dml/h2/V20260818.001__process-event-4-results-h2.sql)
+    - [V20260818.001__process-event-4-results-postgres.sql](migration/dml/postgres/V20260818.001__process-event-4-results-postgres.sql)
