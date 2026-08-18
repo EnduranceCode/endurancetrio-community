@@ -41,6 +41,7 @@ class IndividualResultDTOTest {
   private static final Long ID = 1L;
   private static final Integer RANK = 1;
   private static final Penalty PENALTY = Penalty.DNF;
+  private static final String TEAM_NAME = "Team Alpha";
   private static final String BIB = "101";
   private static final Duration SWIM = Duration.ofMinutes(20);
   private static final Duration BIKE = Duration.ofMinutes(60);
@@ -58,8 +59,8 @@ class IndividualResultDTOTest {
         null, "UNKNOWN"
     );
     underTest = new IndividualResultDTO(ID, race, RANK, PENALTY, AthleteDTOFixtures.standard(),
-        AgeGroup.ELITE, null, TeamDTOFixtures.standard(), BIB, SWIM, null, null, null, BIKE, null,
-        RUN, null, null, null, TOTAL, GAP, POINTS
+        AgeGroup.ELITE, null, TeamDTOFixtures.standard(), TEAM_NAME, BIB, SWIM, null, null, null,
+        BIKE, null, RUN, null, null, null, TOTAL, GAP, POINTS
     );
   }
 
@@ -73,6 +74,7 @@ class IndividualResultDTOTest {
     assertEquals(AgeGroup.ELITE, underTest.ageGroup());
     assertNull(underTest.paraClass());
     assertNotNull(underTest.team());
+    assertEquals(TEAM_NAME, underTest.teamName());
     assertEquals(BIB, underTest.bib());
     assertEquals(SWIM, underTest.swim());
     assertNull(underTest.firstBike());

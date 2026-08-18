@@ -153,6 +153,7 @@ class IndividualResultMapperTest {
     assertEquals(AgeGroup.ELITE, result.ageGroup());
     assertNull(result.paraClass());
     assertEquals(teamDTO, result.team());
+    assertEquals("Team Alpha", result.teamName());
     assertEquals("101", result.bib());
     assertEquals(Duration.ofMinutes(20), result.swim());
     assertNull(result.firstBike());
@@ -186,6 +187,7 @@ class IndividualResultMapperTest {
     assertEquals(AgeGroup.SEN, result.ageGroup());
     assertEquals(ParaClass.WT_PTS4, result.paraClass());
     assertEquals(teamDTO, result.team());
+    assertEquals("Team Alpha", result.teamName());
     assertEquals("202", result.bib());
     assertNull(result.swim());
     assertNull(result.firstBike());
@@ -263,6 +265,6 @@ class IndividualResultMapperTest {
 
   private void stubMappers() {
     when(athleteMapper.map(any())).thenReturn(athleteDTO);
-    when(teamMapper.map(any(), any())).thenReturn(teamDTO);
+    when(teamMapper.map(any())).thenReturn(teamDTO);
   }
 }

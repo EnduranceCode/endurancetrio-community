@@ -573,12 +573,11 @@ class EventWebControllerTest {
     AthleteDTO athlete = AthleteDTOFixtures.standard();
     TeamDTO team = TeamDTOFixtures.standard();
 
-    return new IndividualResultDTO(1L, RACE_1, 1, Penalty.DNF, athlete, AgeGroup.CAT_A,
-        ParaClass.AQ_S1, team, "101", Duration.ofMinutes(10), Duration.ofMinutes(20),
-        Duration.ofMinutes(15), Duration.ofSeconds(30), Duration.ofMinutes(40),
-        Duration.ofSeconds(45), Duration.ofMinutes(25), Duration.ofMinutes(5),
-        Duration.ofSeconds(10), Duration.ofMinutes(50), Duration.ofHours(1), Duration.ofMinutes(2),
-        100
+    return new IndividualResultDTO(1L, RACE_1, 1, Penalty.DNF, athlete, AgeGroup.CAT_A, ParaClass.AQ_S1, team,
+        "Team Alpha", "101", Duration.ofMinutes(10), Duration.ofMinutes(20), Duration.ofMinutes(15),
+        Duration.ofSeconds(30), Duration.ofMinutes(40), Duration.ofSeconds(45), Duration.ofMinutes(25),
+        Duration.ofMinutes(5), Duration.ofSeconds(10), Duration.ofMinutes(50), Duration.ofHours(1),
+        Duration.ofMinutes(2), 100
     );
   }
 }

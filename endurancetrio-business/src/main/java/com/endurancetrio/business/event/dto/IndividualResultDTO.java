@@ -39,6 +39,7 @@ import java.time.Duration;
  * @param ageGroup   the age group classification of the athlete (may be null)
  * @param paraClass  the para-classification of the athlete (may be null)
  * @param team       the team the athlete represented (may be null)
+ * @param teamName   the team name as recorded for this result (may be null)
  * @param bib        the athlete's bib number
  * @param swim       the swim split time (may be null)
  * @param firstBike  the first bike split time (may be null)
@@ -54,12 +55,10 @@ import java.time.Duration;
  * @param gap        the time gap to the overall winner (may be null)
  * @param points     the points awarded for this result (may be null)
  */
-public record IndividualResultDTO(Long id, RaceDTO race, Integer rank, Penalty penalty,
-                                  AthleteDTO athlete, AgeGroup ageGroup, ParaClass paraClass,
-                                  TeamDTO team, String bib, Duration swim, Duration firstBike,
-                                  Duration firstRun, Duration t1, Duration bike, Duration t2,
-                                  Duration run, Duration secondRun, Duration t3,
-                                  Duration secondBike, Duration total, Duration gap,
-                                  Integer points) {
+public record IndividualResultDTO(Long id, RaceDTO race, Integer rank, Penalty penalty, AthleteDTO athlete,
+                                  AgeGroup ageGroup, ParaClass paraClass, TeamDTO team, String teamName, String bib,
+                                  Duration swim, Duration firstBike, Duration firstRun, Duration t1, Duration bike,
+                                  Duration t2, Duration run, Duration secondRun, Duration t3, Duration secondBike,
+                                  Duration total, Duration gap, Integer points) {
 
 }

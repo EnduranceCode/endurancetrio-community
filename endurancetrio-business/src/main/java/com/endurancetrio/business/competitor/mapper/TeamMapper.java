@@ -33,20 +33,16 @@ public class TeamMapper {
 
   /**
    * Maps a {@link Team} entity to a {@link TeamDTO}.
-   * <p>
-   * If the entity is {@code null}, a custom {@code teamName} may be provided for display purposes
-   * when no formal team record exists in the database.
    *
-   * @param entity   the Team entity to map; may be null
-   * @param teamName the team name to use when the entity is null; may be null
+   * @param entity the Team entity to map; may be null
    * @return the corresponding TeamDTO, or {@code null} if the entity is {@code null}
    */
-  public TeamDTO map(Team entity, String teamName) {
+  public TeamDTO map(Team entity) {
     if (entity == null) {
       return null;
     }
 
-    return new TeamDTO(entity.getId(), entity.getFullName(), teamName, entity.getCity(),
+    return new TeamDTO(entity.getId(), entity.getFullName(), entity.getShortName(), entity.getCity(),
         entity.getCounty(), entity.getDistrict()
     );
   }
