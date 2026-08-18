@@ -43,27 +43,16 @@ class TeamMapperTest {
 
   @Test
   void mapNullEntity() {
-    assertNull(underTest.map(null, "Some Club"));
+    assertNull(underTest.map(null));
   }
 
   @Test
-  void mapEntityWithTeamName() {
-    TeamDTO result = underTest.map(entity, "Team Portugal");
+  void mapEntity() {
+    TeamDTO result = underTest.map(entity);
     assertNotNull(result);
     assertEquals(TeamFixture.STANDARD_ID, result.id());
     assertEquals(TeamFixture.STANDARD_FULL_NAME, result.fullName());
-    assertEquals("Team Portugal", result.shortName());
-    assertEquals(TeamFixture.STANDARD_CITY, result.city());
-    assertEquals(TeamFixture.STANDARD_COUNTY, result.county());
-    assertEquals(TeamFixture.STANDARD_DISTRICT, result.district());
-  }
-
-  @Test
-  void mapEntityWithNullTeamName() {
-    TeamDTO result = underTest.map(entity, null);
-    assertNotNull(result);
-    assertEquals(TeamFixture.STANDARD_FULL_NAME, result.fullName());
-    assertNull(result.shortName());
+    assertEquals(TeamFixture.STANDARD_SHORT_NAME, result.shortName());
     assertEquals(TeamFixture.STANDARD_CITY, result.city());
     assertEquals(TeamFixture.STANDARD_COUNTY, result.county());
     assertEquals(TeamFixture.STANDARD_DISTRICT, result.district());

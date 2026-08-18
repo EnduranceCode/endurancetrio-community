@@ -72,21 +72,19 @@ public class IndividualResultMapper {
     if (sourceEntity == null) {
       return new IndividualResultDTO(entity.getId(), race, rank, entity.getPenalty(),
           athleteMapper.map(entity.getAthlete()), entity.getAgeGroup(), entity.getParaClass(),
-          teamMapper.map(entity.getTeam(), entity.getTeamName()), entity.getBib(), entity.getSwim(),
-          entity.getFirstBike(), entity.getFirstRun(), entity.getT1(), entity.getBike(),
-          entity.getT2(), entity.getRun(), entity.getSecondRun(), entity.getT3(),
-          entity.getSecondBike(), entity.getTotal(), gap, entity.getPoints()
+          teamMapper.map(entity.getTeam()), entity.getTeamName(), entity.getBib(), entity.getSwim(),
+          entity.getFirstBike(), entity.getFirstRun(), entity.getT1(), entity.getBike(), entity.getT2(),
+          entity.getRun(), entity.getSecondRun(), entity.getT3(), entity.getSecondBike(), entity.getTotal(), gap,
+          entity.getPoints()
       );
     }
 
     return new IndividualResultDTO(entity.getId(), race, rank, sourceEntity.getPenalty(),
-        athleteMapper.map(entity.getAthlete()), sourceEntity.getAgeGroup(),
-        sourceEntity.getParaClass(),
-        teamMapper.map(sourceEntity.getTeam(), sourceEntity.getTeamName()), sourceEntity.getBib(),
-        sourceEntity.getSwim(), sourceEntity.getFirstBike(), sourceEntity.getFirstRun(),
-        sourceEntity.getT1(), sourceEntity.getBike(), sourceEntity.getT2(), sourceEntity.getRun(),
-        sourceEntity.getSecondRun(), sourceEntity.getT3(), sourceEntity.getSecondBike(),
-        sourceEntity.getTotal(), gap, sourceEntity.getPoints()
+        athleteMapper.map(entity.getAthlete()), sourceEntity.getAgeGroup(), sourceEntity.getParaClass(),
+        teamMapper.map(sourceEntity.getTeam()), sourceEntity.getTeamName(), sourceEntity.getBib(),
+        sourceEntity.getSwim(), sourceEntity.getFirstBike(), sourceEntity.getFirstRun(), sourceEntity.getT1(),
+        sourceEntity.getBike(), sourceEntity.getT2(), sourceEntity.getRun(), sourceEntity.getSecondRun(),
+        sourceEntity.getT3(), sourceEntity.getSecondBike(), sourceEntity.getTotal(), gap, sourceEntity.getPoints()
     );
   }
 

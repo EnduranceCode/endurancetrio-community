@@ -52,7 +52,7 @@
       <th data-th-if="${activeColumns.contains(IndividualResultColumns.AGE_GROUP.getCode())}"
           data-th-attr="data-sort=${IndividualResultColumns.AGE_GROUP.getCode()}"
           scope="col"
-          class="has-text-centered">
+          class="is-narrow has-text-centered">
         <span class="icon-text">
           <span class="icon">
             <i class="et et-sort"></i>
@@ -63,7 +63,7 @@
       <th data-th-if="${activeColumns.contains(IndividualResultColumns.PARA_CLASS.getCode())}"
           data-th-attr="data-sort=${IndividualResultColumns.PARA_CLASS.getCode()}"
           scope="col"
-          class="has-text-centered">
+          class="is-narrow has-text-centered">
         <span class="icon-text">
           <span class="icon">
             <i class="et et-sort"></i>
@@ -262,7 +262,7 @@
           class="has-text-centered">
       </td>
       <td data-th-if="${activeColumns.contains(IndividualResultColumns.TEAM.getCode())}"
-          data-th-text="${result.team() != null ? result.team().shortName() : ''}">
+          data-th-text="${result.team() != null ? result.teamName() : ''}">
       </td>
       <td data-th-if="${activeColumns.contains(IndividualResultColumns.BIB.getCode())}"
           data-th-text="${result.bib()}"
@@ -330,8 +330,9 @@
   </table>
 </div>
 
-<div data-th-fragment="individual-results-tabs(individualResults, activeColumns, language)">
-  <div data-th-with="AgeGroup=${T(com.endurancetrio.data.competitor.model.enumerator.AgeGroup}" class="tabs">
+<div data-th-fragment="individual-results-tabs(individualResults, activeColumns, language)"
+     data-th-with="AgeGroup=${T(com.endurancetrio.data.competitor.model.enumerator.AgeGroup)}">
+  <div class="tabs">
     <ul data-tabs>
       <li data-th-each="entry : ${individualResults}"
           data-th-attr="data-target=${entry.key.name()}"

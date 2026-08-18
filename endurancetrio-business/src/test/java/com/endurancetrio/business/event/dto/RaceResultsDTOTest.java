@@ -51,8 +51,8 @@ class RaceResultsDTOTest {
         null, "UNKNOWN"
     );
     individualResult = new IndividualResultDTO(1L, race, 1, null, AthleteDTOFixtures.standard(),
-        AGE_GROUP, null, TeamDTOFixtures.standard(), "101", Duration.ofMinutes(20), null, null, null,
-        Duration.ofMinutes(60), null, Duration.ofMinutes(35), null, null, null,
+        AGE_GROUP, null, TeamDTOFixtures.standard(), "Team Alpha", "101", Duration.ofMinutes(20),
+        null, null, null, Duration.ofMinutes(60), null, Duration.ofMinutes(35), null, null, null,
         Duration.ofMinutes(116).plusSeconds(20), Duration.ZERO, 1000
     );
 

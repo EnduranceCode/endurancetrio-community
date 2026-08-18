@@ -25,6 +25,7 @@ import klaroConfig from './klaro-config.js';
 
 import bulmaModal from './bulma-modal.js';
 import bulmaNavbar from './bulma-navbar.js';
+import bulmaTab from './bulma-tab.js';
 import bulmaTableSort from './bulma-table-sort.js';
 import languageSelector from './language-selector.js';
 
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   bulmaModal.init();
   bulmaNavbar.init();
+  bulmaTab.init();
   languageSelector.init();
   bulmaTableSort.init();
 });
