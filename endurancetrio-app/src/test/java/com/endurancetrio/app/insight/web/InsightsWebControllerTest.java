@@ -20,6 +20,8 @@
 
 package com.endurancetrio.app.insight.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.insight.fixtures.ArticleDTOFixtures;
@@ -43,8 +46,12 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 class InsightsWebControllerTest {
@@ -168,6 +175,43 @@ class InsightsWebControllerTest {
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attribute("article", ARTICLE_PT));
+  }
+
+  @Test
+  void getInsightDetailPageMetadataHasJsonLd() throws Exception {
+    when(insightService.getArticleBySlug(eq(ARTICLE_EN.slug()), any())).thenReturn(ARTICLE_EN);
+
+    MvcResult result = mockMvc.perform(get("/en/insights/" + ARTICLE_EN.slug()))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    PageMetadata metadata =
+        (PageMetadata) result.getModelAndView().getModel().get("metadata");
+    JsonNode jsonLd = JsonMapper.builder().build().readTree(metadata.getJsonLd());
+
+    assertEquals(ArticleDTOFixtures.STANDARD_TITLE, jsonLd.get("headline").asString());
+    assertEquals("http://localhost/en/insights/race-analysis-2024", jsonLd.get("url").asString());
+    assertEquals("2024-06-15", jsonLd.get("datePublished").asString());
+    assertEquals("http://localhost/img/endurancetrio-open-graph.png", jsonLd.get("image")
+        .asString());
+  }
+
+  @Test
+  void getInsightDetailPageMetadataOmitsDatePublishedWhenArticleHasNone() throws Exception {
+    ArticleDTO articleWithoutDate = ArticleDTOFixtures.withoutPublishedDate();
+    when(insightService.getArticleBySlug(eq(articleWithoutDate.slug()), any())).thenReturn(
+        articleWithoutDate
+    );
+
+    MvcResult result = mockMvc.perform(get("/en/insights/" + articleWithoutDate.slug()))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    PageMetadata metadata =
+        (PageMetadata) result.getModelAndView().getModel().get("metadata");
+    JsonNode jsonLd = JsonMapper.builder().build().readTree(metadata.getJsonLd());
+
+    assertFalse(jsonLd.has("datePublished"));
   }
 
   @Test

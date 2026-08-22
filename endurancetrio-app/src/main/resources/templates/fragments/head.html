@@ -67,6 +67,11 @@
   <link rel="icon" data-th-href="@{/favicon.svg}" type="image/svg+xml">
   <link rel="apple-touch-icon" data-th-href="@{/apple-touch-icon.png}">
 
+  <!-- JSON-LD structured data, serialized server-side (see JsonLdUtils) -->
+  <script type="application/ld+json" data-th-if="${metadata.jsonLd != null}"
+          data-th-utext="${metadata.jsonLd}">
+  </script>
+
   <link rel="stylesheet" data-th-href="@{/css/style.css}">
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
 
