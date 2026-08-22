@@ -28,6 +28,7 @@ import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
+import com.endurancetrio.app.common.utils.JsonLdUtils;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
@@ -126,14 +127,15 @@ public class InsightsWebController {
     String metaTitle = (article.metaTitle() != null && !article.metaTitle().isBlank())
         ? article.metaTitle() + BRAND_SUFFIX
         : article.title() + BRAND_SUFFIX;
-    String metaDescription =
-        (article.metaDescription() != null && !article.metaDescription().isBlank())
+
+    String metaDescription = (article.metaDescription() != null && !article.metaDescription().isBlank())
             ? article.metaDescription()
             : article.introText();
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_INSIGHT_ARTICLE, metaTitle,
         metaDescription, request, appProperties
     );
+    metadata.setJsonLd(JsonLdUtils.buildArticleJsonLd(article, metadata, PageMetadataUtils.getBaseUrl(request)));
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);

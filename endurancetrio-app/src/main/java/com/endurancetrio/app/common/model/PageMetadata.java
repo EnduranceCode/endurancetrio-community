@@ -23,8 +23,8 @@ package com.endurancetrio.app.common.model;
 /**
  * The {@link PageMetadata} class holds page-level metadata used across shared template fragments in
  * the application. This includes HTML {@code <head>} elements (title, description, canonical URL,
- * Open Graph tags) as well as view-specific data consumed by other layout components such as the
- * navigation bar and footer.
+ * Open Graph tags), JSON-LD structured data payloads, as well as view-specific data consumed by
+ * other layout components such as the navigation bar and footer.
  */
 public class PageMetadata {
 
@@ -36,6 +36,7 @@ public class PageMetadata {
   private String googleAdsenseId;
   private String hreflangUrlEn;
   private String hreflangUrlPt;
+  private String jsonLd;
   private String kofiUserId;
   private String ogImage;
   private Integer ogImageHeight;
@@ -118,6 +119,14 @@ public class PageMetadata {
 
   public void setKofiUserId(String kofiUserId) {
     this.kofiUserId = kofiUserId;
+  }
+
+  public String getJsonLd() {
+    return jsonLd;
+  }
+
+  public void setJsonLd(String jsonLd) {
+    this.jsonLd = jsonLd;
   }
 
   public String getOgImage() {

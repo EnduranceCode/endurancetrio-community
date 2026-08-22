@@ -27,6 +27,16 @@ import com.endurancetrio.business.insight.dto.ArticleDTO;
  */
 public class ArticleDTOFixture {
 
+  public static final String FEATURED_IMAGE = "/img/insights/insights-001.jpg";
+  public static final Integer FEATURED_IMAGE_WIDTH = 1200;
+  public static final Integer FEATURED_IMAGE_HEIGHT = 628;
+
+  public static final String META_TITLE = "Race Analysis 2024 - EnduranceTrio Insights";
+
+  public static final String SPECIAL_TITLE = "How a \"poor\" country shaped my journey";
+  public static final String SPECIAL_INTRO_TEXT = "<p>Intro with \"quotes\" & <b>html</b></p>";
+  public static final String SPECIAL_AUTHOR_NAME = "Author O'Brien";
+
   private ArticleDTOFixture() {
   }
 
@@ -53,6 +63,72 @@ public class ArticleDTOFixture {
     return new ArticleDTO(id, ArticleFixture.STANDARD_SLUG,
         ArticleContentFixture.STANDARD_TITLE, null, ArticleContentFixture.STANDARD_INTRO_TEXT, null,
         AuthorFixture.STANDARD_KNOWN_NAME, ArticleFixture.STANDARD_PUBLISHED_DATE, null, null, null,
+        null, null, ArticleContentFixture.STANDARD_LOCALE
+    );
+  }
+
+  /**
+   * Creates an {@link ArticleDTO} with a featured image and its dimensions.
+   *
+   * @return an ArticleDTO instance with a featured image
+   */
+  public static ArticleDTO withFeaturedImage() {
+    return new ArticleDTO(ArticleFixture.STANDARD_ID, ArticleFixture.STANDARD_SLUG,
+        ArticleContentFixture.STANDARD_TITLE, null, ArticleContentFixture.STANDARD_INTRO_TEXT, null,
+        AuthorFixture.STANDARD_KNOWN_NAME, ArticleFixture.STANDARD_PUBLISHED_DATE,
+        FEATURED_IMAGE, FEATURED_IMAGE_WIDTH, FEATURED_IMAGE_HEIGHT, null, null,
+        ArticleContentFixture.STANDARD_LOCALE
+    );
+  }
+
+  /**
+   * Creates an {@link ArticleDTO} without a published date.
+   *
+   * @return an ArticleDTO instance without a published date
+   */
+  public static ArticleDTO withoutPublishedDate() {
+    return new ArticleDTO(ArticleFixture.STANDARD_ID, ArticleFixture.STANDARD_SLUG,
+        ArticleContentFixture.STANDARD_TITLE, null, ArticleContentFixture.STANDARD_INTRO_TEXT, null,
+        AuthorFixture.STANDARD_KNOWN_NAME, null, null, null, null, null, null,
+        ArticleContentFixture.STANDARD_LOCALE
+    );
+  }
+
+  /**
+   * Creates an {@link ArticleDTO} with a meta title and a blank meta description.
+   *
+   * @return an ArticleDTO instance with a blank meta description
+   */
+  public static ArticleDTO withBlankMetaDescription() {
+    return new ArticleDTO(ArticleFixture.STANDARD_ID, ArticleFixture.STANDARD_SLUG,
+        ArticleContentFixture.STANDARD_TITLE, null, ArticleContentFixture.STANDARD_INTRO_TEXT, null,
+        AuthorFixture.STANDARD_KNOWN_NAME, ArticleFixture.STANDARD_PUBLISHED_DATE, null, null, null,
+        META_TITLE, "   ", ArticleContentFixture.STANDARD_LOCALE
+    );
+  }
+
+  /**
+   * Creates an {@link ArticleDTO} with a blank featured image.
+   *
+   * @return an ArticleDTO instance with a blank featured image
+   */
+  public static ArticleDTO withBlankFeaturedImage() {
+    return new ArticleDTO(ArticleFixture.STANDARD_ID, ArticleFixture.STANDARD_SLUG,
+        ArticleContentFixture.STANDARD_TITLE, null, ArticleContentFixture.STANDARD_INTRO_TEXT, null,
+        AuthorFixture.STANDARD_KNOWN_NAME, ArticleFixture.STANDARD_PUBLISHED_DATE, "", null, null,
+        null, null, ArticleContentFixture.STANDARD_LOCALE
+    );
+  }
+
+  /**
+   * Creates an {@link ArticleDTO} whose text fields contain double quotes, apostrophes and HTML.
+   *
+   * @return an ArticleDTO instance with special characters
+   */
+  public static ArticleDTO withSpecialCharacters() {
+    return new ArticleDTO(ArticleFixture.STANDARD_ID, ArticleFixture.STANDARD_SLUG,
+        SPECIAL_TITLE, null, SPECIAL_INTRO_TEXT, null,
+        SPECIAL_AUTHOR_NAME, ArticleFixture.STANDARD_PUBLISHED_DATE, null, null, null,
         null, null, ArticleContentFixture.STANDARD_LOCALE
     );
   }
