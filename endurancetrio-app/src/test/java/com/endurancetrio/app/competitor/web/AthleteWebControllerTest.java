@@ -391,25 +391,11 @@ class AthleteWebControllerTest {
 
   @Test
   void athleteProfileWhenAthleteNotFound() throws Exception {
-    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(),
-        any()
-    )).thenReturn("Athlete Profile - EnduranceTrio");
-    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(),
-        any()
-    )).thenReturn("View athlete profile and race history");
     when(messageService.getMessage(eq("page.error.404.metadata.title"), any(), any())).thenReturn(
         "Page Not Found");
     when(messageService.getMessage(eq("page.error.404.metadata.description"), any(),
         any()
     )).thenReturn("The requested page was not found");
-    when(athleteService.getAthleteRaces(eq(999L), any())).thenReturn(
-        new AthleteRacesPageDTO(List.of(),
-            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
-        ));
-    when(insightService.getArticlesByAthleteId(eq(999L), any(), any())).thenReturn(
-        new InsightPageDTO(List.of(),
-            new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
-        ));
     when(athleteService.getAthleteById(999L)).thenThrow(new EnduranceTrioException(
         new com.endurancetrio.business.common.dto.ErrorDTO(EnduranceTrioError.NOT_FOUND,
             "No athlete found with ID 999"

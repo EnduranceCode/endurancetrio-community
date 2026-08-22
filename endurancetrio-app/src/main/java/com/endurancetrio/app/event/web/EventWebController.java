@@ -160,9 +160,12 @@ public class EventWebController {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS_BY_YEAR,
-        messageService.getMessage("page.events.year.metadata.title", null, locale),
-        messageService.getMessage("page.events.year.metadata.description", null, locale), request,
-        appProperties
+        messageService.getMessage("page.events.year.metadata.title",
+            new Object[]{String.valueOf(year)}, locale
+        ),
+        messageService.getMessage("page.events.year.metadata.description",
+            new Object[]{String.valueOf(year)}, locale
+        ), request, appProperties
     );
 
     int clampedPage = Math.max(0, page);
@@ -198,9 +201,11 @@ public class EventWebController {
 
     EventOverviewDTO event = eventService.getEventOverview(id, year);
 
+    Object[] messageArgs = {event.title(), String.valueOf(year)};
+
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_INSIGHTS,
-        messageService.getMessage("page.event.insights.metadata.title", new Object[]{event.title()}, locale),
-        messageService.getMessage("page.event.insights.metadata.description", new Object[]{event.title()}, locale),
+        messageService.getMessage("page.event.insights.metadata.title", messageArgs, locale),
+        messageService.getMessage("page.event.insights.metadata.description", messageArgs, locale),
         request, appProperties
     );
 
@@ -242,13 +247,15 @@ public class EventWebController {
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_OVERVIEW,
-        messageService.getMessage("page.event.overview.metadata.title", null, locale),
-        messageService.getMessage("page.event.overview.metadata.description", null, locale), request,
-        appProperties
-    );
-
     EventOverviewDTO event = eventService.getEventOverview(id, year);
+
+    Object[] messageArgs = {event.title(), String.valueOf(year), event.city()};
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_OVERVIEW,
+        messageService.getMessage("page.event.overview.metadata.title", messageArgs, locale),
+        messageService.getMessage("page.event.overview.metadata.description", messageArgs, locale),
+        request, appProperties
+    );
 
     long articlesCount = insightService.getArticlesCountByEvent(id);
 
@@ -278,12 +285,6 @@ public class EventWebController {
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_RACE_RESULTS,
-        messageService.getMessage("page.event.results.metadata.title", null, locale),
-        messageService.getMessage("page.event.results.metadata.description", null, locale),
-        request, appProperties
-    );
-
     EventOverviewDTO event = eventService.getEventOverview(eventId, year);
 
     List<RaceDTO> races = event.races();
@@ -299,6 +300,14 @@ public class EventWebController {
           LOG.warn(errorMsg);
           return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
         });
+
+    Object[] messageArgs = {currentRace.title(), event.title(), String.valueOf(year)};
+
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_RACE_RESULTS,
+        messageService.getMessage("page.event.results.metadata.title", messageArgs, locale),
+        messageService.getMessage("page.event.results.metadata.description", messageArgs, locale),
+        request, appProperties
+    );
 
     RaceResultsDTO raceResults = raceService.getRaceResults(currentRace);
     Set<String> activeColumns = computeActiveColumns(raceResults);

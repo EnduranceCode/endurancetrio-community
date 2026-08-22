@@ -148,9 +148,6 @@ class InsightsWebControllerTest {
 
   @Test
   void getInsightDetailPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.insights.detail.metadata.description"), any(),
-        any()
-    )).thenReturn("Full article view");
     when(insightService.getArticleBySlug(eq(ARTICLE_EN.slug()), any())).thenReturn(ARTICLE_EN);
 
     mockMvc.perform(get("/en/insights/" + ARTICLE_EN.slug()))
@@ -163,9 +160,6 @@ class InsightsWebControllerTest {
 
   @Test
   void getInsightDetailPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.insights.detail.metadata.description"), any(),
-        any()
-    )).thenReturn("Visualização completa do artigo");
     when(insightService.getArticleBySlug(eq(ARTICLE_PT.slug()), any())).thenReturn(ARTICLE_PT);
 
     mockMvc.perform(get("/pt/insights/" + ARTICLE_PT.slug()))
@@ -178,29 +172,46 @@ class InsightsWebControllerTest {
 
   @Test
   void getInsightDetailPageMetadataUsesMetaTitle() throws Exception {
-    when(messageService.getMessage(eq("page.insights.detail.metadata.description"), any(),
-        any()
-    )).thenReturn("Full article view");
     when(insightService.getArticleBySlug(eq(ARTICLE_WITH_META.slug()), any())).thenReturn(
         ARTICLE_WITH_META);
 
     mockMvc.perform(get("/en/insights/" + ARTICLE_WITH_META.slug()))
         .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is(ArticleDTOFixtures.META_TITLE)
+                org.hamcrest.Matchers.is(ArticleDTOFixtures.META_TITLE + " | EnduranceTrio")
             )
         ));
   }
 
   @Test
   void getInsightDetailPageMetadataUsesTitleFallback() throws Exception {
-    when(messageService.getMessage(eq("page.insights.detail.metadata.description"), any(),
-        any()
-    )).thenReturn("Full article view");
     when(insightService.getArticleBySlug(eq(ARTICLE_EN.slug()), any())).thenReturn(ARTICLE_EN);
 
     mockMvc.perform(get("/en/insights/" + ARTICLE_EN.slug()))
         .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is(ArticleDTOFixtures.STANDARD_TITLE)
+                org.hamcrest.Matchers.is(ArticleDTOFixtures.STANDARD_TITLE + " | EnduranceTrio")
+            )
+        ));
+  }
+
+  @Test
+  void getInsightDetailPageMetadataUsesMetaDescription() throws Exception {
+    when(insightService.getArticleBySlug(eq(ARTICLE_WITH_META.slug()), any())).thenReturn(
+        ARTICLE_WITH_META);
+
+    mockMvc.perform(get("/en/insights/" + ARTICLE_WITH_META.slug()))
+        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("description",
+                org.hamcrest.Matchers.is(ArticleDTOFixtures.META_DESCRIPTION)
+            )
+        ));
+  }
+
+  @Test
+  void getInsightDetailPageMetadataUsesIntroTextFallback() throws Exception {
+    when(insightService.getArticleBySlug(eq(ARTICLE_EN.slug()), any())).thenReturn(ARTICLE_EN);
+
+    mockMvc.perform(get("/en/insights/" + ARTICLE_EN.slug()))
+        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("description",
+                org.hamcrest.Matchers.is(ArticleDTOFixtures.STANDARD_INTRO_TEXT)
             )
         ));
   }

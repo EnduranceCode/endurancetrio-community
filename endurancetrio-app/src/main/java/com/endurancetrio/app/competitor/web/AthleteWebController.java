@@ -30,6 +30,7 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
@@ -133,10 +134,15 @@ public class AthleteWebController {
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
+    AthleteDTO athlete = athleteService.getAthleteById(id);
+
     PageMetadata metadata = PageMetadataUtils.create(VIEW_ATHLETE_PROFILE,
-        messageService.getMessage("page.athlete.profile.metadata.title", null, locale),
-        messageService.getMessage("page.athlete.profile.metadata.description", null, locale),
-        request, appProperties
+        messageService.getMessage("page.athlete.profile.metadata.title",
+            new Object[]{athlete.knownName()}, locale
+        ),
+        messageService.getMessage("page.athlete.profile.metadata.description",
+            new Object[]{athlete.knownName()}, locale
+        ), request, appProperties
     );
 
     int clampedPage = Math.max(0, page);
@@ -150,7 +156,7 @@ public class AthleteWebController {
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, athleteRaces.pagination());
     model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles.articles());
-    model.addAttribute(ATTRIBUTE_ATHLETE, athleteService.getAthleteById(id));
+    model.addAttribute(ATTRIBUTE_ATHLETE, athlete);
     model.addAttribute(ATTRIBUTE_RACES, athleteRaces.races());
 
     return VIEW_ATHLETE_PROFILE;
