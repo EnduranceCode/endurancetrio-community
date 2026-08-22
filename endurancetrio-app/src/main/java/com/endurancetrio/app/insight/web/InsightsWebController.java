@@ -55,6 +55,8 @@ public class InsightsWebController {
   private static final String ATTRIBUTE_ARTICLE = "article";
   private static final String ATTRIBUTE_ARTICLES = "articles";
 
+  private static final String BRAND_SUFFIX = " | EnduranceTrio";
+
   private static final int PAGE_SIZE = 10;
 
   private final MessageService messageService;
@@ -120,11 +122,17 @@ public class InsightsWebController {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
     ArticleDTO article = insightService.getArticleBySlug(slug, locale);
-    String metaTitle = article.metaTitle() != null ? article.metaTitle() : article.title();
+
+    String metaTitle = (article.metaTitle() != null && !article.metaTitle().isBlank())
+        ? article.metaTitle() + BRAND_SUFFIX
+        : article.title() + BRAND_SUFFIX;
+    String metaDescription =
+        (article.metaDescription() != null && !article.metaDescription().isBlank())
+            ? article.metaDescription()
+            : article.introText();
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_INSIGHT_ARTICLE, metaTitle,
-        messageService.getMessage("page.insights.detail.metadata.description", null, locale),
-        request, appProperties
+        metaDescription, request, appProperties
     );
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
