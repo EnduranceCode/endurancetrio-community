@@ -217,6 +217,23 @@ Confirm the schema creation:
 \dn
 ```
 
+Install the PostgreSQL `pg_trgm` extension in the application schema. This extension is required by
+the accent-folded athlete search indexes created by Flyway. Install it as a PostgreSQL administrator
+so the application user does not need database-wide `CREATE` permission:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA {SCHEMA_NAME};
+```
+
+Confirm the extension installation:
+
+```sql
+SELECT extname, extnamespace::regnamespace FROM pg_extension WHERE extname = 'pg_trgm';
+```
+
+The result should show `pg_trgm` in `{SCHEMA_NAME}`. The extension must be installed in the
+application schema because Flyway resolves the `gin_trgm_ops` operator class using that schema.
+
 [Create a user](https://www.postgresql.org/docs/current/sql-createuser.html) for the
 **EnduranceTrio** database/schema management:
 
@@ -279,6 +296,22 @@ sudo systemctl status postgresql
 ```sql
 SELECT * FROM information_schema.role_table_grants  WHERE grantee = '{USERNAME}';
 ```
+
+If the error mentions `permission denied to create extension "pg_trgm"`, install the extension as a
+PostgreSQL administrator:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA {SCHEMA_NAME};
+```
+
+Alternatively, grant the application user database-level `CREATE` permission and restart the
+application so Flyway can install the trusted extension:
+
+```sql
+GRANT CREATE ON DATABASE {DATABASE_NAME} TO {USERNAME};
+```
+
+The failed Flyway migration is rolled back and will be retried on the next application startup.
 
 ## Tracker Domain Development
 

@@ -251,7 +251,8 @@ script mounted at `/docker-entrypoint-initdb.d/`. This script:
 2. Creates the `stg_endurancetrio_community` database
 3. Creates the staging and production database users with their respective passwords
 4. Grants all privileges on each database to its corresponding user
-5. Grants schema-level permissions for Flyway and JPA
+5. Creates the `endurancetrio_hub` schema in each database
+6. Installs the PostgreSQL `pg_trgm` extension in the `endurancetrio_hub` schema
 
 The `init-db.sh` script reads the `STG_DB_USERNAME`, `STG_DB_SECRET`, `PRD_DB_USERNAME` 
 and `PRD_DB_SECRET` variables from the container environment (passed via docker-compose).
@@ -260,6 +261,49 @@ and `PRD_DB_SECRET` variables from the container environment (passed via docker-
 > empty. The bind mount at `/opt/endurancetrio-community/db/` is mounted at `/var/lib/postgresql`
 > inside the container. PostgreSQL 18+ stores data in a major-version-specific subdirectory
 > (e.g., `/var/lib/postgresql/data/18/`). The init script is not executed again once data exists.
+
+### Enabling `pg_trgm` on an existing deployment
+
+The athlete directory migration uses PostgreSQL's `pg_trgm` extension for accent-folded search
+indexes. Fresh databases receive the extension automatically from `init-db.sh`. Existing databases
+must be prepared once because PostgreSQL initialization scripts are not rerun when the data directory
+already exists.
+
+Run the following commands as the PostgreSQL administrator before deploying the application version
+that contains the athlete directory search migration:
+
+```shell
+docker compose -p endurancetrio-community exec postgres psql \
+  --username postgres \
+  --dbname stg_endurancetrio_community \
+  --command 'CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA endurancetrio_hub;'
+
+docker compose -p endurancetrio-community exec postgres psql \
+  --username postgres \
+  --dbname prd_endurancetrio_community \
+  --command 'CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA endurancetrio_hub;'
+```
+
+Verify either database with:
+
+```shell
+docker compose -p endurancetrio-community exec postgres psql \
+  --username postgres \
+  --dbname stg_endurancetrio_community \
+  --command "SELECT extname, extnamespace::regnamespace FROM pg_extension WHERE extname = 'pg_trgm';"
+```
+
+The result should show `pg_trgm` in `endurancetrio_hub`. Repeat the verification for the production
+database when applicable.
+
+If an application container has already failed to start with `permission denied to create extension
+\"pg_trgm\"`, run the commands above and restart the affected service. Flyway rolled back the failed
+migration and will retry it on startup. Granting database-level `CREATE` to the application user is
+an alternative:
+
+```sql
+GRANT CREATE ON DATABASE {DATABASE_NAME} TO {APPLICATION_USERNAME};
+```
 
 ### Upgrading from a previous PostgreSQL deployment
 
@@ -376,6 +420,9 @@ presented in the below [verification](#verification) section.
 ### Updating a specific environment
 
 To deploy a new version, update the relevant variable in `.env` and restart the service:
+
+When deploying the athlete directory search migration to an existing database, first follow
+[Enabling `pg_trgm` on an existing deployment](#enabling-pg_trgm-on-an-existing-deployment).
 
 **Staging:**
 
