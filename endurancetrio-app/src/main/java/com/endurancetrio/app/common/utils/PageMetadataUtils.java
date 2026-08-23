@@ -23,8 +23,12 @@ package com.endurancetrio.app.common.utils;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * The {@link PageMetadataUtils} class provides utility methods for building
@@ -33,8 +37,6 @@ import java.util.regex.Pattern;
  * elements and other layout fragments (e.g. navigation bar, footer).
  */
 public final class PageMetadataUtils {
-
-  private static final Pattern LANGUAGE_SEGMENT = Pattern.compile("/(en|pt)(?=/|$)");
 
   private PageMetadataUtils() {
     throw new IllegalStateException("Utility Class");
@@ -103,15 +105,25 @@ public final class PageMetadataUtils {
    * @return the alternate-language URL, or {@code null} when no alternate exists
    */
   private static String buildAlternateUrl(String url, String targetLang) {
-    Matcher matcher = LANGUAGE_SEGMENT.matcher(url);
-    if (matcher.find()) {
-      return matcher.replaceFirst("/" + targetLang);
+    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+    UriComponents components = builder.build();
+    List<String> segments = new ArrayList<>(components.getPathSegments());
+
+    for (int index = 0; index < segments.size(); index++) {
+      if ("en".equals(segments.get(index)) || "pt".equals(segments.get(index))) {
+        segments.set(index, targetLang);
+        StringJoiner joiner = new StringJoiner("/", "/",
+            Objects.requireNonNull(components.getPath()).endsWith("/") ? "/" : ""
+        );
+        segments.forEach(joiner::add);
+        return builder.replacePath(joiner.toString()).build().toUriString();
+      }
     }
-    String path = url.substring(url.indexOf("://") + 3);
-    int slashIndex = path.indexOf('/');
-    if (slashIndex < 0 || slashIndex == path.length() - 1) {
-      return url.replaceFirst("/$", "") + "/" + targetLang;
+
+    if (segments.isEmpty()) {
+      return builder.pathSegment(targetLang).build().toUriString();
     }
+
     return null;
   }
 }
