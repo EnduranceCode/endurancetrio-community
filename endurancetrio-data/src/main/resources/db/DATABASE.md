@@ -255,3 +255,6 @@ timestamp-based naming convention.
 41. Adds indexes supporting deterministic athlete directory ordering:
     - [V20260823.001__add-athlete-directory-indexes-h2.sql](migration/ddl/h2/V20260823.001__add-athlete-directory-indexes-h2.sql)
     - [V20260823.001__add-athlete-directory-indexes-postgres.sql](migration/ddl/postgres/V20260823.001__add-athlete-directory-indexes-postgres.sql)
+42. Data housekeeping:
+    - [V20260823.002__data-housekeeping-h2.sql](migration/dml/h2/V20260823.002__data-housekeeping-h2.sql)
+    - [V20260823.002__data-housekeeping-postgres.sql](migration/dml/postgres/V20260823.002__data-housekeeping-postgres.sql)
