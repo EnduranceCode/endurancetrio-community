@@ -29,6 +29,7 @@ import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
+import com.endurancetrio.app.common.utils.PaginationUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
@@ -55,6 +56,7 @@ public class AthleteWebController {
   private static final String ATTRIBUTE_ARTICLES = "articles";
   private static final String ATTRIBUTE_ATHLETE = "athlete";
   private static final String ATTRIBUTE_ATHLETES = "athletes";
+  private static final String ATTRIBUTE_PAGE_WINDOW = "pageWindow";
   private static final String ATTRIBUTE_RACES = "races";
   private static final String VIEW_ATHLETE_PROFILE = "athlete-profile";
   private static final String VIEW_ATHLETES = "athletes";
@@ -104,11 +106,13 @@ public class AthleteWebController {
     int clampedPage = Math.max(0, page);
     Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
     AthletesPageDTO athletesPage = athleteService.getAthletes(pageable);
+    int totalPages = athletesPage.pagination().totalPages();
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, athletesPage.pagination());
     model.addAttribute(ATTRIBUTE_ATHLETES, athletesPage.athletes());
+    model.addAttribute(ATTRIBUTE_PAGE_WINDOW, PaginationUtils.pageWindow(clampedPage, totalPages));
 
     return VIEW_ATHLETES;
   }
