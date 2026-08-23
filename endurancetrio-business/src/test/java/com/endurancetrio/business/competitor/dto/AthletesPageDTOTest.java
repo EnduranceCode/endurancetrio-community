@@ -44,25 +44,30 @@ class AthletesPageDTOTest {
   void dtoShouldRetainValues() {
     assertEquals(AthletesPageDTOFixtures.page0().athletes(), underTest.athletes());
     assertEquals(AthletesPageDTOFixtures.page0().pagination(), underTest.pagination());
+    assertEquals(AthletesPageDTOFixtures.page0().letterRanges(), underTest.letterRanges());
   }
 
   @Test
   void shouldRejectNullAthletes() {
     var pagination = PaginationDTOFixtures.firstPage();
-    assertThrows(IllegalArgumentException.class,
-        () -> new AthletesPageDTO(null, pagination));
+    assertThrows(IllegalArgumentException.class, () -> new AthletesPageDTO(null, pagination, List.of()));
   }
 
   @Test
   void shouldRejectNullPagination() {
     var athletes = List.of(AthleteDTOFixtures.standard());
-    assertThrows(IllegalArgumentException.class,
-        () -> new AthletesPageDTO(athletes, null));
+    assertThrows(IllegalArgumentException.class, () -> new AthletesPageDTO(athletes, null, List.of()));
   }
 
   @Test
   void athletesCanBeEmpty() {
-    AthletesPageDTO page = new AthletesPageDTO(List.of(), PaginationDTOFixtures.firstPage());
+    AthletesPageDTO page = new AthletesPageDTO(List.of(), PaginationDTOFixtures.firstPage(), List.of());
     assertTrue(page.athletes().isEmpty());
+  }
+
+  @Test
+  void shouldRejectNullLetterRanges() {
+    var pagination = PaginationDTOFixtures.firstPage();
+    assertThrows(IllegalArgumentException.class, () -> new AthletesPageDTO(List.of(), pagination, null));
   }
 }

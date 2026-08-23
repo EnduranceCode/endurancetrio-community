@@ -22,6 +22,7 @@ package com.endurancetrio.business.competitor.service;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import org.springframework.data.domain.Pageable;
@@ -32,13 +33,14 @@ import org.springframework.data.domain.Pageable;
 public interface AthleteService {
 
   /**
-   * Returns an {@link AthletesPageDTO} containing the paginated list of athletes.
+   * Returns an {@link AthletesPageDTO} containing the filtered, paginated list of athletes.
    *
    * @param pageable the pagination information (page number, page size, etc.)
+   * @param filter the normalized directory filters
    * @return an {@link AthletesPageDTO} with the athletes for the current page and pagination
    * metadata
    */
-  AthletesPageDTO getAthletes(Pageable pageable);
+  AthletesPageDTO getAthletes(Pageable pageable, AthleteFilterDTO filter);
 
   /**
    * Returns the {@link AthleteDTO} for the athlete with the given ID.

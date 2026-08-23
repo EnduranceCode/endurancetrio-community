@@ -20,6 +20,10 @@
 
 package com.endurancetrio.app.competitor.web;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -36,6 +40,7 @@ import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
@@ -104,7 +109,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenReturn(
+    when(athleteService.getAthletes(any(), any())).thenReturn(
         com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0());
 
     mockMvc.perform(get("/en/athletes"))
@@ -121,7 +126,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Consulte os atletas de desportos de endurance");
-    when(athleteService.getAthletes(any())).thenReturn(
+    when(athleteService.getAthletes(any(), any())).thenReturn(
         com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0());
 
     mockMvc.perform(get("/pt/athletes"))
@@ -138,7 +143,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenReturn(
+    when(athleteService.getAthletes(any(), any())).thenReturn(
         com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0());
 
     mockMvc.perform(get("/en/athletes"))
@@ -155,7 +160,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenAnswer(invocation -> {
+    when(athleteService.getAthletes(any(), any())).thenAnswer(invocation -> {
       Pageable pageable = invocation.getArgument(0);
       return switch (pageable.getPageNumber()) {
         case 0 -> com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0();
@@ -176,7 +181,7 @@ class AthleteWebControllerTest {
         )).andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1, 2), false, false)
         ));
 
-    verify(athleteService).getAthletes(PageRequest.of(0, 30));
+    verify(athleteService).getAthletes(eq(PageRequest.of(0, 30)), any());
   }
 
   @Test
@@ -186,7 +191,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenAnswer(invocation -> {
+    when(athleteService.getAthletes(any(), any())).thenAnswer(invocation -> {
       Pageable pageable = invocation.getArgument(0);
       return switch (pageable.getPageNumber()) {
         case 0 -> com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0();
@@ -206,7 +211,7 @@ class AthleteWebControllerTest {
             com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page1().pagination()
         ));
 
-    verify(athleteService).getAthletes(PageRequest.of(1, 30));
+    verify(athleteService).getAthletes(eq(PageRequest.of(1, 30)), any());
   }
 
   @Test
@@ -216,7 +221,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenAnswer(invocation -> {
+    when(athleteService.getAthletes(any(), any())).thenAnswer(invocation -> {
       Pageable pageable = invocation.getArgument(0);
       return switch (pageable.getPageNumber()) {
         case 0 -> com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0();
@@ -236,7 +241,7 @@ class AthleteWebControllerTest {
             com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page2().pagination()
         ));
 
-    verify(athleteService).getAthletes(PageRequest.of(2, 30));
+    verify(athleteService).getAthletes(eq(PageRequest.of(2, 30)), any());
   }
 
   @Test
@@ -246,7 +251,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenAnswer(invocation -> {
+    when(athleteService.getAthletes(any(), any())).thenAnswer(invocation -> {
       Pageable pageable = invocation.getArgument(0);
       return switch (pageable.getPageNumber()) {
         case 0 -> com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0();
@@ -266,7 +271,7 @@ class AthleteWebControllerTest {
             com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0().pagination()
         ));
 
-    verify(athleteService).getAthletes(PageRequest.of(0, 30));
+    verify(athleteService).getAthletes(eq(PageRequest.of(0, 30)), any());
   }
 
   @Test
@@ -276,7 +281,7 @@ class AthleteWebControllerTest {
     when(messageService.getMessage(eq("page.athletes.metadata.description"), any(),
         any()
     )).thenReturn("Browse endurance sports athletes");
-    when(athleteService.getAthletes(any())).thenReturn(
+    when(athleteService.getAthletes(any(), any())).thenReturn(
         com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.empty());
 
     mockMvc.perform(get("/en/athletes"))
@@ -289,7 +294,70 @@ class AthleteWebControllerTest {
             com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.empty().pagination()
         )).andExpect(model().attribute("pageWindow", new PageWindow(List.of(), false, false)));
 
-    verify(athleteService).getAthletes(PageRequest.of(0, 30));
+    verify(athleteService).getAthletes(eq(PageRequest.of(0, 30)), any());
+  }
+
+  @Test
+  void athletesPageNormalizesFilters() throws Exception {
+    when(messageService.getMessage(eq("page.athletes.metadata.title"), any(), any())).thenReturn(
+        "Athletes - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athletes.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports athletes");
+    when(athleteService.getAthletes(any(), any())).thenReturn(
+        com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0());
+
+    mockMvc.perform(
+            get("/en/athletes").param("letterRange", " a_f ").param("gender", " female ").param("q", "  João  "))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("filter", new AthleteFilterDTO("A_F", AthleteGender.FEMALE, "João")))
+        .andExpect(model().attribute("isFiltered", true))
+        .andExpect(model().attribute("metadata", hasProperty("canonicalUrl", equalTo("http://localhost/en/athletes"))))
+        .andExpect(model().attribute("metadata", hasProperty("hreflangUrlEn", equalTo("http://localhost/en/athletes"))))
+        .andExpect(
+            model().attribute("metadata", hasProperty("hreflangUrlPt", equalTo("http://localhost/pt/athletes"))));
+  }
+
+  @Test
+  void athletesPageBuildsNavigationUrls() throws Exception {
+    when(messageService.getMessage(eq("page.athletes.metadata.title"), any(), any())).thenReturn(
+        "Athletes - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athletes.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports athletes");
+    when(athleteService.getAthletes(any(), any())).thenReturn(
+        com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0());
+
+    mockMvc.perform(get("/en/athletes"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("athletesUrl", "/en/athletes"))
+        .andExpect(model().attribute("paginationUrls", hasEntry(0, "/en/athletes?page=0")))
+        .andExpect(model().attribute("paginationUrls", hasEntry(2, "/en/athletes?page=2")))
+        .andExpect(model().attribute("paginationPreviousUrl", nullValue()))
+        .andExpect(model().attribute("paginationNextUrl", "/en/athletes?page=1"))
+        .andExpect(model().attribute("letterRangeUrls", hasEntry("ALL", "/en/athletes")))
+        .andExpect(model().attribute("letterRangeUrls", hasEntry("A_F", "/en/athletes?letterRange=A_F")))
+        .andExpect(model().attribute("genderUrls", hasEntry("MALE", "/en/athletes?gender=MALE")))
+        .andExpect(model().attribute("metadata", hasProperty("canonicalUrl", equalTo("http://localhost/en/athletes"))))
+        .andExpect(
+            model().attribute("metadata", hasProperty("hreflangUrlPt", equalTo("http://localhost/pt/athletes"))));
+  }
+
+  @Test
+  void athletesPageKeepsSearchTermVerbatim() throws Exception {
+    when(messageService.getMessage(eq("page.athletes.metadata.title"), any(), any())).thenReturn(
+        "Athletes - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athletes.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports athletes");
+    when(athleteService.getAthletes(any(), any())).thenReturn(
+        com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0());
+
+    String searchTerm = "' OR 1=1 -- <script>alert('xss')</script> %_";
+
+    mockMvc.perform(get("/en/athletes").param("q", searchTerm))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("filter", new AthleteFilterDTO(null, null, searchTerm)))
+        .andExpect(model().attribute("isFiltered", true));
+
+    verify(athleteService).getAthletes(PageRequest.of(0, 30), new AthleteFilterDTO(null, null, searchTerm));
   }
 
   @Test

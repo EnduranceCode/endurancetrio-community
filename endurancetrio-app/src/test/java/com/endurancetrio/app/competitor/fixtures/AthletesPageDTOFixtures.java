@@ -41,24 +41,24 @@ public class AthletesPageDTOFixtures {
     return new AthletesPageDTO(
         List.of(AthleteDTOFixtures.standard(), AthleteDTOFixtures.athleteCavaleiro(),
             AthleteDTOFixtures.athleteBello()
-        ), PaginationDTOFixtures.firstPage()
+        ), PaginationDTOFixtures.firstPage(), List.of()
     );
   }
 
   public static AthletesPageDTO page1() {
     return new AthletesPageDTO(
         List.of(AthleteDTOFixtures.athleteCavaleiro(), AthleteDTOFixtures.athleteBello()),
-        PaginationDTOFixtures.secondPage()
+        PaginationDTOFixtures.secondPage(), List.of()
     );
   }
 
   public static AthletesPageDTO page2() {
     return new AthletesPageDTO(List.of(AthleteDTOFixtures.athleteBello()),
-        PaginationDTOFixtures.thirdPage()
+        PaginationDTOFixtures.thirdPage(), List.of()
     );
   }
 
   public static AthletesPageDTO empty() {
-    return new AthletesPageDTO(List.of(), PaginationDTOFixtures.empty());
+    return new AthletesPageDTO(List.of(), PaginationDTOFixtures.empty(), List.of());
   }
 }
