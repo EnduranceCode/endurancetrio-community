@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.endurancetrio.app.common.handler.EnduranceTrioExceptionHandlerWeb;
+import com.endurancetrio.app.common.model.PageWindow;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
@@ -37,7 +38,6 @@ import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
-import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
@@ -173,6 +173,7 @@ class AthleteWebControllerTest {
         ))
         .andExpect(model().attribute("pagination",
             com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.page0().pagination()
+        )).andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1, 2), false, false)
         ));
 
     verify(athleteService).getAthletes(PageRequest.of(0, 30));
@@ -286,7 +287,7 @@ class AthleteWebControllerTest {
         ))
         .andExpect(model().attribute("pagination",
             com.endurancetrio.app.competitor.fixtures.AthletesPageDTOFixtures.empty().pagination()
-        ));
+        )).andExpect(model().attribute("pageWindow", new PageWindow(List.of(), false, false)));
 
     verify(athleteService).getAthletes(PageRequest.of(0, 30));
   }

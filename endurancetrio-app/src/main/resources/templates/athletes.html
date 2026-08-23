@@ -93,12 +93,12 @@
       </div>
     </div>
 
-    <nav class="pagination is-centered is-rounded" role="navigation"
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination"
          data-th-if="${pagination.totalPages() > 1}">
       <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
          data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
          data-th-href="${pagination.hasPrevious()}
-           ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() - 1})}
+           ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() - 1}, letterRange=${filter?.letterRange()}, gender=${filter?.gender()}, q=${filter?.searchTerm()})}
            : null"
          class="pagination-previous"
       >
@@ -110,7 +110,7 @@
       <a data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
          data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
          data-th-href="${pagination.hasNext()}
-           ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() + 1})}
+           ? @{/{lang}/athletes(lang=${language}, page=${pagination.pageNumber() + 1}, letterRange=${filter?.letterRange()}, gender=${filter?.gender()}, q=${filter?.searchTerm()})}
            : null"
          class="pagination-next"
       >
@@ -118,6 +118,23 @@
           <i class="et et-chevron-double-right"></i>
         </span>
       </a>
+
+      <ul class="pagination-list">
+        <li data-th-if="${pageWindow.gapBefore()}">
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+        <li data-th-each="p : ${pageWindow.pages()}">
+          <a data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
+             data-th-attr="aria-label=${'Goto page ' + (p + 1)}"
+             data-th-text="${p + 1}"
+             data-th-href="@{/{lang}/athletes(lang=${language}, page=${p}, letterRange=${filter?.letterRange()}, gender=${filter?.gender()}, q=${filter?.searchTerm()})}"
+             class="pagination-link"
+          >1</a>
+        </li>
+        <li data-th-if="${pageWindow.gapAfter()}">
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+      </ul>
     </nav>
   </section>
 </main>
