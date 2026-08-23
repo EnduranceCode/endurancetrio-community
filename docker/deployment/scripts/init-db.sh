@@ -22,7 +22,7 @@
 # PostgreSQL initialisation script
 # =================================
 # This script is run by the PostgreSQL container on first startup.
-# It creates the databases and users required by the EnduranceTrio application.
+# It creates the databases, users, schemas, and extensions required by the EnduranceTrio application.
 #
 # Environment variables set in docker-compose.yaml:
 #   - POSTGRES_USER / POSTGRES_PASSWORD (superuser)
@@ -55,6 +55,12 @@ psql -v ON_ERROR_STOP=1 \
     GRANT ALL PRIVILEGES ON DATABASE stg_endurancetrio_community TO :"stg_user";
     ALTER DATABASE stg_endurancetrio_community SET timezone TO 'UTC';
 
+    -- PostgreSQL extension required by the athlete directory indexes
+    \connect stg_endurancetrio_community
+    CREATE SCHEMA IF NOT EXISTS endurancetrio_hub;
+    CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA endurancetrio_hub;
+    ALTER SCHEMA endurancetrio_hub OWNER TO :"stg_user";
+
     -- Production database
     SELECT format(
       'CREATE DATABASE %I ENCODING %s LOCALE_PROVIDER icu ICU_LOCALE %L TEMPLATE template0',
@@ -64,4 +70,10 @@ psql -v ON_ERROR_STOP=1 \
     WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = :'prd_user')\gexec
     GRANT ALL PRIVILEGES ON DATABASE prd_endurancetrio_community TO :"prd_user";
     ALTER DATABASE prd_endurancetrio_community SET timezone TO 'UTC';
+
+    -- PostgreSQL extension required by the athlete directory indexes
+    \connect prd_endurancetrio_community
+    CREATE SCHEMA IF NOT EXISTS endurancetrio_hub;
+    CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA endurancetrio_hub;
+    ALTER SCHEMA endurancetrio_hub OWNER TO :"prd_user";
 EOSQL

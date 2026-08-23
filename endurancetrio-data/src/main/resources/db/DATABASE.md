@@ -117,6 +117,13 @@ spring:
       - classpath:db/migration/dml/postgres
 ```
 
+### PostgreSQL Extensions
+
+The PostgreSQL athlete directory migration uses the trusted `pg_trgm` extension for accent-folded
+GIN indexes. Install it in the `endurancetrio_hub` schema as a database administrator before running
+the migration. The development setup and Docker initialization scripts perform this provisioning
+automatically. H2 tests do not require PostgreSQL extensions.
+
 ## Migration Scripts
 
 The migration scripts are duplicated, when necessary for tests, for each supported database
@@ -245,3 +252,6 @@ timestamp-based naming convention.
 40. Processe the event ID 7 race results:
     - [V20260821.003__process-event-8-results-h2.sql](migration/dml/h2/V20260821.003__process-event-8-results-h2.sql)
     - [V20260821.003__process-event-8-results-postgres.sql](migration/dml/postgres/V20260821.003__process-event-8-results-postgres.sql)
+41. Adds indexes supporting deterministic athlete directory ordering:
+    - [V20260823.001__add-athlete-directory-indexes-h2.sql](migration/ddl/h2/V20260823.001__add-athlete-directory-indexes-h2.sql)
+    - [V20260823.001__add-athlete-directory-indexes-postgres.sql](migration/ddl/postgres/V20260823.001__add-athlete-directory-indexes-postgres.sql)

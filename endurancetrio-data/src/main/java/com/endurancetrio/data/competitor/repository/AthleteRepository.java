@@ -21,15 +21,19 @@
 package com.endurancetrio.data.competitor.repository;
 
 import com.endurancetrio.data.competitor.model.entity.Athlete;
+import com.endurancetrio.data.competitor.repository.projection.AthleteFirstLetterCount;
+import java.util.List;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AthleteRepository extends JpaRepository<@NonNull Athlete, @NonNull Long> {
+public interface AthleteRepository extends JpaRepository<@NonNull Athlete, @NonNull Long>,
+    JpaSpecificationExecutor<Athlete> {
 
   /**
    * Returns a {@link Page} of all {@link Athlete athletes} ordered by their
@@ -40,4 +44,23 @@ public interface AthleteRepository extends JpaRepository<@NonNull Athlete, @NonN
    */
   @Query("SELECT a FROM Athlete a ORDER BY a.knownName")
   Page<Athlete> findAllOrderedByKnownName(Pageable pageable);
+
+  /**
+   * Returns the global count of athletes for each accent-folded first letter of their known name.
+   *
+   * @return the first-letter histogram
+   */
+  @Query(
+      value = """
+          SELECT SUBSTRING(TRANSLATE(LOWER(a.known_name),
+            'áàâãäåéèêëíìîïóòôõöøúùûüýÿñçšž',
+            'aaaaaaeeeeiiiiooooouuuuyyyncsz'), 1, 1) AS letter,
+                 COUNT(a.id) AS total
+          FROM {h-schema}athlete a
+          GROUP BY SUBSTRING(TRANSLATE(LOWER(a.known_name),
+            'áàâãäåéèêëíìîïóòôõöøúùûüýÿñçšž',
+            'aaaaaaeeeeiiiiooooouuuuyyyncsz'), 1, 1)
+          """, nativeQuery = true
+  )
+  List<AthleteFirstLetterCount> findGlobalFirstLetterCounts();
 }
