@@ -20,43 +20,34 @@
 
 package com.endurancetrio.business.competitor.fixtures;
 
-import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
-import java.util.List;
+import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
+import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
+import java.util.Locale;
 
 /**
- * Fixture class providing pre-configured {@link AthletesPageDTO} instances for unit tests.
+ * Fixture class providing pre-configured {@link AthleteFilterDTO} instances for unit tests.
  * <p>
  * This class is duplicated in {@code endurancetrio-app} under {@code competitor.fixtures} because
  * the modules do not share a test-jar dependency. Each module keeps its own copy of the fixtures it
  * needs, keeping the build simple and avoiding cross-module test-jar complications. If you add or
  * modify a factory method here, apply the same change to the app module's copy.
  */
-public class AthletesPageDTOFixtures {
+public class AthleteFilterDTOFixtures {
 
-  private AthletesPageDTOFixtures() {
+  public static final String LETTER_RANGE = "A_F";
+  public static final AthleteGender GENDER = AthleteGender.MALE;
+  public static final String SEARCH = "João";
+
+  private AthleteFilterDTOFixtures() {
   }
 
-  public static AthletesPageDTO page0() {
-    return new AthletesPageDTO(
-        List.of(AthleteDTOFixtures.standard(), AthleteDTOFixtures.athleteCavaleiro(),
-            AthleteDTOFixtures.athleteBello()
-        ), PaginationDTOFixtures.firstPage(), List.of()
+  public static AthleteFilterDTO withWhitespace() {
+    return new AthleteFilterDTO(String.format(" %s ", LETTER_RANGE.toLowerCase(Locale.ROOT)), GENDER,
+        String.format(" %s ", SEARCH)
     );
   }
 
-  public static AthletesPageDTO page1() {
-    return new AthletesPageDTO(
-        List.of(AthleteDTOFixtures.athleteCavaleiro(), AthleteDTOFixtures.athleteBello()),
-        PaginationDTOFixtures.secondPage(), List.of()
-    );
-  }
-
-  public static AthletesPageDTO page2() {
-    return new AthletesPageDTO(List.of(AthleteDTOFixtures.athleteBello()), PaginationDTOFixtures.thirdPage(), List.of()
-    );
-  }
-
-  public static AthletesPageDTO empty() {
-    return new AthletesPageDTO(List.of(), PaginationDTOFixtures.empty(), List.of());
+  public static AthleteFilterDTO allBlank() {
+    return new AthleteFilterDTO(" ", null, " ");
   }
 }

@@ -26,14 +26,19 @@ import org.springframework.data.domain.Page;
 
 /**
  * {@link AthletesPageDTO} carries a page of {@link AthleteDTO athlete data} together with
- * {@link PaginationDTO pagination metadata}. It is returned by the service layer so that
+ * {@link PaginationDTO pagination metadata} and letter-range availability. It is returned by the service layer so that
  * controllers can render both the athlete list and pagination controls without depending on Spring
  * Data's {@link Page}.
  *
  * @param athletes   the list of {@link AthleteDTO} for the current page
  * @param pagination the {@link PaginationDTO} with pagination state
+ * @param letterRanges global letter-range availability
  */
-public record AthletesPageDTO(List<AthleteDTO> athletes, PaginationDTO pagination) {
+public record AthletesPageDTO(
+    List<AthleteDTO> athletes,
+    PaginationDTO pagination,
+    List<LetterRangeAvailabilityDTO> letterRanges
+) {
 
   public AthletesPageDTO {
     if (athletes == null) {
@@ -41,6 +46,9 @@ public record AthletesPageDTO(List<AthleteDTO> athletes, PaginationDTO paginatio
     }
     if (pagination == null) {
       throw new IllegalArgumentException("pagination must not be null");
+    }
+    if (letterRanges == null) {
+      throw new IllegalArgumentException("letterRanges must not be null");
     }
   }
 }

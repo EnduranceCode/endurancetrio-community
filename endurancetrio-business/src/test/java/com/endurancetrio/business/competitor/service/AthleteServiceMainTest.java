@@ -24,10 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
 import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
@@ -37,6 +39,7 @@ import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.mapper.RaceMapper;
 import com.endurancetrio.data.competitor.model.entity.Athlete;
 import com.endurancetrio.data.competitor.repository.AthleteRepository;
+import com.endurancetrio.data.competitor.repository.projection.AthleteFirstLetterCount;
 import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
@@ -55,11 +58,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 class AthleteServiceMainTest {
 
   private static final Pageable PAGEABLE = PageRequest.of(0, 30);
+  private static final AthleteFilterDTO FILTER = new AthleteFilterDTO(null, null, null);
   private static final Long ATHLETE_ID = 1L;
 
   @Mock
@@ -90,12 +95,14 @@ class AthleteServiceMainTest {
     Page<Athlete> athletePage = new PageImpl<>(
         List.of(testCarvalhoEntity, testCavaleiroEntity, testBelloEntity), PAGEABLE, 3L);
 
-    when(athleteRepository.findAllOrderedByKnownName(PAGEABLE)).thenReturn(athletePage);
+    when(athleteRepository.findAll(org.mockito.ArgumentMatchers.<Specification<Athlete>>any(),
+        any(Pageable.class)
+    )).thenReturn(athletePage);
     when(athleteMapper.map(testCarvalhoEntity)).thenReturn(testCarvalhoDTO);
     when(athleteMapper.map(testCavaleiroEntity)).thenReturn(testCavaleiroDTO);
     when(athleteMapper.map(testBelloEntity)).thenReturn(testBelloDTO);
 
-    AthletesPageDTO result = underTest.getAthletes(PAGEABLE);
+    AthletesPageDTO result = underTest.getAthletes(PAGEABLE, FILTER);
 
     assertNotNull(result);
     assertEquals(3, result.athletes().size());
@@ -110,13 +117,32 @@ class AthleteServiceMainTest {
   @Test
   void getAthletesShouldReturnEmptyPage() {
     Page<Athlete> emptyPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
-    when(athleteRepository.findAllOrderedByKnownName(PAGEABLE)).thenReturn(emptyPage);
+    when(athleteRepository.findAll(org.mockito.ArgumentMatchers.<Specification<Athlete>>any(),
+        any(Pageable.class)
+    )).thenReturn(emptyPage);
 
-    AthletesPageDTO result = underTest.getAthletes(PAGEABLE);
+    AthletesPageDTO result = underTest.getAthletes(PAGEABLE, FILTER);
 
     assertNotNull(result);
     assertTrue(result.athletes().isEmpty());
     assertEquals(0, result.pagination().totalItems());
+  }
+
+  @Test
+  void getAthletesShouldBuildGlobalLetterAvailability() {
+    Page<Athlete> athletePage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(athleteRepository.findAll(org.mockito.ArgumentMatchers.<Specification<Athlete>>any(),
+        any(Pageable.class)
+    )).thenReturn(athletePage);
+    when(athleteRepository.findGlobalFirstLetterCounts()).thenReturn(
+        List.of(firstLetterCount("a", 2), firstLetterCount("j", 3), firstLetterCount("r", 4), firstLetterCount("s", 5),
+            firstLetterCount("1", 6)
+        ));
+
+    AthletesPageDTO result = underTest.getAthletes(PAGEABLE, FILTER);
+
+    assertEquals(List.of("A_F", "G_L", "M_R", "S_Z"), result.letterRanges().stream().map(range -> range.id()).toList());
+    assertEquals(List.of(2L, 3L, 4L, 5L), result.letterRanges().stream().map(range -> range.athleteCount()).toList());
   }
 
   @Test
@@ -200,5 +226,19 @@ class AthleteServiceMainTest {
     race.setDate(date);
     race.setRaceStatus(RaceStatus.COMPLETED);
     return race;
+  }
+
+  private static AthleteFirstLetterCount firstLetterCount(String letter, long total) {
+    return new AthleteFirstLetterCount() {
+      @Override
+      public String getLetter() {
+        return letter;
+      }
+
+      @Override
+      public long getTotal() {
+        return total;
+      }
+    };
   }
 }

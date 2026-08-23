@@ -27,6 +27,7 @@ import com.endurancetrio.data.competitor.model.entity.Athlete;
 import com.endurancetrio.data.competitor.repository.projection.AthleteFirstLetterCount;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
@@ -84,6 +85,18 @@ class AthleteRepositoryFilterTest {
     assertTrue(counts.stream().anyMatch(count -> "j".equals(count.getLetter())));
   }
 
+  @Test
+  void letterRangeIncludesFirstLetterOfRange() {
+    List<String> knownNames = repository.findAll(firstLetterBetween('A', 'F')).stream()
+        .map(Athlete::getKnownName).toList();
+
+    assertTrue(knownNames.contains("Álvaro Fernandes"));
+    assertTrue(knownNames.contains("Bruna Costa"));
+    assertTrue(knownNames.contains("Éder Sousa"));
+    assertTrue(knownNames.stream().noneMatch(
+        List.of("João Matos", "Mário Silva", "Rita Castro", "Sofia Ramos")::contains));
+  }
+
   private static Specification<Athlete> search(String term) {
     return (root, query, cb) -> {
       Expression<String> foldedTerm = folded(cb.literal(term), cb);
@@ -94,8 +107,19 @@ class AthleteRepositoryFilterTest {
     };
   }
 
+  private static Specification<Athlete> firstLetterBetween(char start, char end) {
+    return (root, query, cb) -> cb.between(foldedInitial(root, cb),
+        String.valueOf(Character.toLowerCase(start)),
+        String.valueOf(Character.toLowerCase(end))
+    );
+  }
+
   private static Expression<String> folded(Expression<String> expression, CriteriaBuilder cb) {
     return cb.function("translate", String.class, cb.lower(expression), cb.literal(FROM), cb.literal(TO));
+  }
+
+  private static Expression<String> foldedInitial(Root<Athlete> root, CriteriaBuilder cb) {
+    return cb.substring(folded(root.get("knownName"), cb), 1, 1);
   }
 
   private static PageRequest sortedPageable() {
