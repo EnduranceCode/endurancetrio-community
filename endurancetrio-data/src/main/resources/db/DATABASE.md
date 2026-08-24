@@ -249,7 +249,7 @@ timestamp-based naming convention.
 39. Processe the event ID 6 race results:
     - [V20260821.002__process-event-6-results-h2.sql](migration/dml/h2/V20260821.002__process-event-6-results-h2.sql)
     - [V20260821.002__process-event-6-results-postgres.sql](migration/dml/postgres/V20260821.002__process-event-6-results-postgres.sql)
-40. Processe the event ID 7 race results:
+40. Processe the event ID 8 race results:
     - [V20260821.003__process-event-8-results-h2.sql](migration/dml/h2/V20260821.003__process-event-8-results-h2.sql)
     - [V20260821.003__process-event-8-results-postgres.sql](migration/dml/postgres/V20260821.003__process-event-8-results-postgres.sql)
 41. Adds indexes supporting deterministic athlete directory ordering:
@@ -258,3 +258,6 @@ timestamp-based naming convention.
 42. Data housekeeping:
     - [V20260823.002__data-housekeeping-h2.sql](migration/dml/h2/V20260823.002__data-housekeeping-h2.sql)
     - [V20260823.002__data-housekeeping-postgres.sql](migration/dml/postgres/V20260823.002__data-housekeeping-postgres.sql)
+43. Processe the event ID 9 race results:
+    - [V20260824.001__process-event-9-results-h2.sql](migration/dml/h2/V20260824.001__process-event-9-results-h2.sql)
+    - [V20260824.001__process-event-9-results-postgres.sql](migration/dml/postgres/V20260824.001__process-event-9-results-postgres.sql)
