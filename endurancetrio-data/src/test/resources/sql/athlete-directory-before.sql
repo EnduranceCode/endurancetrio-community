@@ -28,7 +28,7 @@ VALUES
   (990001, 'Alvaro Fernandes', NULL, 'Álvaro Fernandes', 'MALE', 'POR', 1970, 0, NOW()),
   (990002, 'Eder Sousa', NULL, 'Éder Sousa', 'MALE', 'POR', 1971, 0, NOW()),
   (990003, 'Bruna Costa', NULL, 'Bruna Costa', 'FEMALE', 'POR', 1972, 0, NOW()),
-  (990004, 'Joao Matos', NULL, 'João Matos', 'MALE', 'POR', 1973, 0, NOW()),
+  (990004, 'Desidério Matos', NULL, 'Desidério Matos', 'MALE', 'POR', 1973, 0, NOW()),
   (990005, 'Mario Silva', NULL, 'Mário Silva', 'MALE', 'POR', 1974, 0, NOW()),
   (990006, 'Rita Castro', 'Rita Maria Castro', 'Rita Castro', 'FEMALE', 'POR', 1975, 0, NOW()),
   (990007, 'Sofia Ramos', NULL, 'Sofia Ramos', 'FEMALE', 'POR', 1976, 0, NOW()),
