@@ -58,9 +58,9 @@ class AthleteRepositoryFilterTest {
 
   @Test
   void foldedSearchFindsAccentedName() {
-    var page = repository.findAll(search("joao"), sortedPageable());
+    var page = repository.findAll(search("desiderio"), sortedPageable());
 
-    assertTrue(page.getContent().stream().map(Athlete::getKnownName).anyMatch("João Matos"::equals));
+    assertTrue(page.getContent().stream().map(Athlete::getKnownName).anyMatch("Desidério Matos"::equals));
   }
 
   @Test
