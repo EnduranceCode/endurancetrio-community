@@ -267,3 +267,6 @@ timestamp-based naming convention.
 45. Processe the event ID 11 race results:
     - [V20260825.001__process-event-11-results-h2.sql](migration/dml/h2/V20260825.001__process-event-11-results-h2.sql)
     - [V20260825.001__process-event-11-results-postgres.sql](migration/dml/postgres/V20260825.001__process-event-11-results-postgres.sql)
+46. Processe the event ID 13 race results:
+    - [V20260825.002__process-event-13-results-h2.sql](migration/dml/h2/V20260825.002__process-event-13-results-h2.sql)
+    - [V20260825.002__process-event-13-results-postgres.sql](migration/dml/postgres/V20260825.002__process-event-13-results-postgres.sql)
