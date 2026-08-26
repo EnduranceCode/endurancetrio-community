@@ -39,6 +39,7 @@ public enum AgeGroup {
   CAT_F2("F2", "Category F2", "Escalão F2"),
   CAT_F3("F3", "Category F3", "Escalão F3"),
   CAT_F4("F4", "Category F4", "Escalão F4"),
+  CAT_G("G", "Category G", "Escalão G"),
   CAT_M1("M1", "Category M1", "Escalão M1"),
   CAT_M2("M2", "Category M2", "Escalão M2"),
   CAT_M3("M3", "Category M3", "Escalão M3"),
