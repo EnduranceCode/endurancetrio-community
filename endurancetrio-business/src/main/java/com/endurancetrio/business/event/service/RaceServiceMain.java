@@ -191,7 +191,7 @@ public class RaceServiceMain implements RaceService {
       );
     });
 
-    return new RaceResultsDTO(race, individualResults);
+    return new RaceResultsDTO(race, orderByAgeGroupOrdinal(individualResults));
   }
 
   /**
@@ -235,5 +235,30 @@ public class RaceServiceMain implements RaceService {
       return result.getTotal();
     }
     return result.getSourceResult().getTotal();
+  }
+
+  /**
+   * Reorders the given map so that the {@link AgeGroup#OPEN} key, if present, comes first, followed
+   * by the remaining keys sorted by their {@link AgeGroup} declaration order (ordinal).
+   * <p>
+   * Returns a new {@link LinkedHashMap}; the input map is not modified.
+   *
+   * @param map the map keyed by {@link AgeGroup} to reorder
+   * @param <T> the type of the map values
+   * @return a new {@link LinkedHashMap} with the keys reordered as described
+   */
+  private <T> Map<AgeGroup, T> orderByAgeGroupOrdinal(Map<AgeGroup, T> map) {
+    Map<AgeGroup, T> ordered = new LinkedHashMap<>();
+    if (map.containsKey(AgeGroup.OPEN)) {
+      ordered.put(AgeGroup.OPEN, map.get(AgeGroup.OPEN));
+    }
+
+    map.entrySet()
+        .stream()
+        .filter(entry -> entry.getKey() != AgeGroup.OPEN)
+        .sorted(Comparator.comparingInt(entry -> entry.getKey().ordinal()))
+        .forEach(entry -> ordered.put(entry.getKey(), entry.getValue()));
+
+    return ordered;
   }
 }
