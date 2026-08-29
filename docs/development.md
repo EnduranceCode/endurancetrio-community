@@ -1635,7 +1635,7 @@ git tag -a community-vX.Y.Z -m "vX.Y.Z"
 Push the tag to the remote repository:
 
 ```shell
-git push community-vX.Y.Z
+git push origin community-vX.Y.Z
 ```
 
 ### Tag Rules
