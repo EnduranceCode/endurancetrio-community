@@ -33,9 +33,14 @@ When merging **EnduranceTrio Tracker** into **EnduranceTrio Community**:
 
 ### Table-Domain Ownership
 
-Database tables are strictly owned by the domain that created them:
+The Tracker domain is the Java packages under
+`endurancetrio-*/src/main/java/com/endurancetrio/data/tracker/**` in ANY module (app, business, data;
+main and test sources), merged from the tracker repository. Database tables are strictly owned by
+the domain that created them:
 
-- **Tracker** migrations target only Tracker-domain tables
+- **Tracker** migrations target only Tracker-domain tables, and may be shipped by the tracker
+  upstream as Flyway scripts under `db/migration/{ddl,dml}/{h2,postgres}/` when Tracker entities
+  need to be targeted
 - **Community** migrations must never create, alter, or reference Tracker-domain tables
 
 This isolation prevents migration interference between the two domains and is enforced
@@ -157,3 +162,9 @@ git branch -d integration/tracker-vX.Y.Z
 
 Issues discovered in Tracker-domain code during integration should be filed in the
 [`endurancetrio-tracker`](https://github.com/EnduranceCode/endurancetrio-tracker) issue tracker.
+
+The tracker domain is the Java packages under
+`endurancetrio-*/src/main/java/com/endurancetrio/data/tracker/**` in ANY module (app, business, data;
+main and test sources), plus any Flyway scripts targeting tracker-domain tables/entities
+(e.g. route, telemetry-management). Issues in community-owned code, migrations, or staging data
+are fixed directly in this repo and are NOT filed upstream.
