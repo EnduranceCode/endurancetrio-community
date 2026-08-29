@@ -121,7 +121,7 @@ public class TeamResult extends BaseEntity<Long> {
   @JoinColumn(name = "race_id", referencedColumnName = "id", nullable = false)
   private Race race;
 
-  @Column(name = "rank", nullable = false)
+  @Column(name = "rank")
   private Integer rank;
 
   @ManyToOne(fetch = FetchType.LAZY)

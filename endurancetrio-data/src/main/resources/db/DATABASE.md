@@ -279,3 +279,6 @@ timestamp-based naming convention.
 49. Processe the event ID 16 race results:
     - [V20260828.001__process-event-16-results-h2.sql](migration/dml/h2/V20260828.001__process-event-16-results-h2.sql)
     - [V20260828.001__process-event-16-results-postgres.sql](migration/dml/postgres/V20260828.001__process-event-16-results-postgres.sql)
+50. Allow null rank on team_result table:
+    - [V20260829.001__allow-null-rank-on-team-result-h2.sql](migration/ddl/h2/V20260829.001__allow-null-rank-on-team-result-h2.sql)
+    - [V20260829.001__allow-null-rank-on-team-result-postgres.sql](migration/ddl/postgres/V20260829.001__allow-null-rank-on-team-result-postgres.sql)
