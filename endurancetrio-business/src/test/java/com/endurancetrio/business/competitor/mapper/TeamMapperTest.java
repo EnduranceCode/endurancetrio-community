@@ -25,7 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.endurancetrio.business.competitor.dto.TeamDTO;
+import com.endurancetrio.business.competitor.fixtures.RelayEntryFixture;
 import com.endurancetrio.business.competitor.fixtures.TeamFixture;
+import com.endurancetrio.data.competitor.model.entity.RelayEntry;
 import com.endurancetrio.data.competitor.model.entity.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,5 +58,16 @@ class TeamMapperTest {
     assertEquals(TeamFixture.STANDARD_CITY, result.city());
     assertEquals(TeamFixture.STANDARD_COUNTY, result.county());
     assertEquals(TeamFixture.STANDARD_DISTRICT, result.district());
+  }
+
+  @Test
+  void mapRelayEntryPolymorphically() {
+    RelayEntry relayEntry = RelayEntryFixture.standard();
+
+    TeamDTO result = underTest.map(relayEntry);
+
+    assertNotNull(result);
+    assertEquals(RelayEntryFixture.STANDARD_ID, result.id());
+    assertEquals(RelayEntryFixture.STANDARD_FULL_NAME, result.fullName());
   }
 }

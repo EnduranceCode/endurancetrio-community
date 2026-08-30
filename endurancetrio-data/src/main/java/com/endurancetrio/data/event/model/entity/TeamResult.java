@@ -23,6 +23,7 @@ package com.endurancetrio.data.event.model.entity;
 import com.endurancetrio.data.common.model.entity.BaseEntity;
 import com.endurancetrio.data.competitor.model.converter.AgeGroupConverter;
 import com.endurancetrio.data.competitor.model.converter.ParaClassConverter;
+import com.endurancetrio.data.competitor.model.entity.RelayEntry;
 import com.endurancetrio.data.competitor.model.entity.Team;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
@@ -74,7 +75,8 @@ import java.util.StringJoiner;
  *     {@link Race}.
  *   </li>
  *   <li>
- *     {@link #getTeam() team} : the {@link Team} that this result belongs to.
+ *     {@link #getTeam() team} : the {@link Team} that this result belongs to. For a relay
+ *     {@link Race}, this is a {@link RelayEntry}.
  *   </li>
  *   <li>
  *     {@link #getTeamName() teamName} : the display name of the {@link Team} as it appears
@@ -85,8 +87,9 @@ import java.util.StringJoiner;
  *     to this team result.
  *   </li>
  *   <li>
- *     {@link #getIndividualResults() individualResults} : the individual
- *     {@link IndividualResult race results} that contribute to this team result.
+ *     {@link #getIndividualResults() individualResults} : the individual {@link IndividualResult race results}
+ *     that contribute to this team result. This may be empty when the {@link Team} is a {@link RelayEntry}
+ *     whose relay members have no individual results; in that case the relay itself is the competitor.
  *   </li>
  *   <li>
  *     {@link #getAgeGroup() ageGroup} : the {@link AgeGroup} of the team for this

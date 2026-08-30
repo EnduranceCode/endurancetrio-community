@@ -282,3 +282,6 @@ timestamp-based naming convention.
 50. Allow null rank on team_result table:
     - [V20260829.001__allow-null-rank-on-team-result-h2.sql](migration/ddl/h2/V20260829.001__allow-null-rank-on-team-result-h2.sql)
     - [V20260829.001__allow-null-rank-on-team-result-postgres.sql](migration/ddl/postgres/V20260829.001__allow-null-rank-on-team-result-postgres.sql)
+51. Add support for one-off relay competitors and their member athletes:
+    - [V20260830.001__create-relay-entry-table-h2.sql](migration/ddl/h2/V20260830.001__create-relay-entry-table-h2.sql)
+    - [V20260830.001__create-relay-entry-table-postgres.sql](migration/ddl/postgres/V20260830.001__create-relay-entry-table-postgres.sql)

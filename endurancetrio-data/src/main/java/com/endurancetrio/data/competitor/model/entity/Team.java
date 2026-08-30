@@ -23,6 +23,8 @@ package com.endurancetrio.data.competitor.model.entity;
 import com.endurancetrio.data.common.model.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.io.Serial;
@@ -37,18 +39,22 @@ import java.util.StringJoiner;
  *     {@link #getId() id} : the unique identifier of the {@link Team} that
  *     is automatically generated and is the primary key.
  *   </li>
-   *   <li>{@link #getFullName() name} : the canonical name of the {@link Team}.</li>
-   *   <li>
-   *     {@link #getShortName() shortName} : the abbreviated or short name for the {@link Team}
-   *     (e.g., initials like "SC" for a sports club).
-   *   </li>
-   *   <li>{@link #getCity() city} : the city where the {@link Team} is based.</li>
+ *   <li>{@link #getFullName() name} : the canonical name of the {@link Team}.</li>
+ *   <li>
+ *     {@link #getShortName() shortName} : the abbreviated or short name for the {@link Team}
+ *     (e.g., initials like "SC" for a sports club).
+ *   </li>
+ *   <li>{@link #getCity() city} : the city where the {@link Team} is based.</li>
  *   <li>{@link #getCounty() county} : the county where the {@link Team} is based.</li>
  *   <li>{@link #getDistrict() district} : the district where the {@link Team} is based.</li>
  * </ul>
+ * <p>
+ * The {@link Team} hierarchy uses joined inheritance. A {@link Team} is either a club or team
+ * (this entity) or a one-off race relay entry modeled by the {@link RelayEntry} subclass.
  */
 @Entity(name = "Team")
 @Table(name = "team")
+@Inheritance(strategy = InheritanceType.JOINED)
 @SequenceGenerator(
     name = "seq_endurancetrio_generator", sequenceName = "seq_team_id", allocationSize = 1
 )
