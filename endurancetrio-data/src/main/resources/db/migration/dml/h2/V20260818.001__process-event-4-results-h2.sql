@@ -46,7 +46,7 @@ INSERT INTO athlete (id, long_name, birth_name, known_name, gender, country, yea
 INSERT INTO athlete (id, long_name, birth_name, known_name, gender, country, year_of_birth, version, created_at, updated_at) VALUES (224, 'Luis Ascenso', NULL, 'Luis Ascenso', 'MALE', NULL, NULL, 0, NOW(), NULL);
 INSERT INTO athlete (id, long_name, birth_name, known_name, gender, country, year_of_birth, version, created_at, updated_at) VALUES (225, 'Maria João Ribeiro', NULL, 'Maria João Ribeiro', 'FEMALE', NULL, NULL, 0, NOW(), NULL);
 
-ALTER SEQUENCE endurancetrio_hub.seq_athlete_id RESTART WITH 226;
+ALTER SEQUENCE endurancetrio_hub.seq_athlete_id RESTART WITH 228;
 
 -- Update existing race's result_status
 UPDATE race SET result_status = 'INCOMPLETE' WHERE id IN (10, 11, 12);
