@@ -74,7 +74,7 @@ VALUES
   (2, 'STANDARD'),
   (3, 'SPRINT');
 
-ALTER SEQUENCE endurancetrio_hub.seq_distance_id RESTART WITH 5;
+ALTER SEQUENCE endurancetrio_hub.seq_distance_id RESTART WITH 4;
 
 
 -- endurancetrio_hub.triathlon_distance table
