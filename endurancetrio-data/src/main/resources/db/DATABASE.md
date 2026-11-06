@@ -293,3 +293,6 @@ timestamp-based naming convention.
 54. Correct team result data and merge athlete IDs 455 into 314:
     - [V20261101.001__correct-results-data-and-merge-athletes-314-455-h2.sql](migration/dml/h2/V20261101.001__correct-results-data-and-merge-athletes-314-455-h2.sql)
     - [V20261101.001__correct-results-data-and-merge-athletes-314-455-postgres.sql](migration/dml/postgres/V20261101.001__correct-results-data-and-merge-athletes-314-455-postgres.sql)
+55. Process the event ID 17 race results:
+    - [V20261101.002__process-event-17-results-h2.sql](migration/dml/h2/V20261101.002__process-event-17-results-h2.sql)
+    - [V20261101.002__process-event-17-results-postgres.sql](migration/dml/postgres/V20261101.002__process-event-17-results-postgres.sql)
