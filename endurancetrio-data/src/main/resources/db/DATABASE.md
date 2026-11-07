@@ -314,3 +314,12 @@ timestamp-based naming convention.
 61. Process the event ID 23 race results:
     - [V20261107.006__process-event-23-results-h2.sql](migration/dml/h2/V20261107.006__process-event-23-results-h2.sql)
     - [V20261107.006__process-event-23-results-postgres.sql](migration/dml/postgres/V20261107.006__process-event-23-results-postgres.sql)
+62. Merge athlete IDs 552 into 230 and 711 into 629:
+    - [V20261107.007__merge-athletes-629-711-and-230-552-h2.sql](migration/dml/h2/V20261107.007__merge-athletes-629-711-and-230-552-h2.sql)
+    - [V20261107.007__merge-athletes-629-711-and-230-552-postgres.sql](migration/dml/postgres/V20261107.007__merge-athletes-629-711-and-230-552-postgres.sql)
+63. Insert the DNF results of athlete 629 for races 19 and 21:
+    - [V20261107.008__insert-dnf-results-athlete-629-h2.sql](migration/dml/h2/V20261107.008__insert-dnf-results-athlete-629-h2.sql)
+    - [V20261107.008__insert-dnf-results-athlete-629-postgres.sql](migration/dml/postgres/V20261107.008__insert-dnf-results-athlete-629-postgres.sql)
+64. Merge team IDs 59, 66 and 94 into team ID 10 and rename team 10 to NAC:
+    - [V20261107.009__merge-teams-10-59-66-94-h2.sql](migration/dml/h2/V20261107.009__merge-teams-10-59-66-94-h2.sql)
+    - [V20261107.009__merge-teams-10-59-66-94-postgres.sql](migration/dml/postgres/V20261107.009__merge-teams-10-59-66-94-postgres.sql)
