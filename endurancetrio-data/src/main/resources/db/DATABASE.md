@@ -308,3 +308,6 @@ timestamp-based naming convention.
 59. Process the event ID 21 race results:
     - [V20261107.004__process-event-21-results-h2.sql](migration/dml/h2/V20261107.004__process-event-21-results-h2.sql)
     - [V20261107.004__process-event-21-results-postgres.sql](migration/dml/postgres/V20261107.004__process-event-21-results-postgres.sql)
+60. Process the event ID 22 race results:
+    - [V20261107.005__process-event-22-results-h2.sql](migration/dml/h2/V20261107.005__process-event-22-results-h2.sql)
+    - [V20261107.005__process-event-22-results-postgres.sql](migration/dml/postgres/V20261107.005__process-event-22-results-postgres.sql)
