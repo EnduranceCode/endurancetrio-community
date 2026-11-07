@@ -63,20 +63,22 @@ def statements(path: Path) -> list[str]:
             sql = f"RESEQUENCE {match.group(1)} {match.group(2)}"
         # H2 has no ON CONFLICT; the clause carries no data for these idempotent seeds.
         sql = re.sub(r"\s+ON CONFLICT \([^)]*\) DO NOTHING$", "", sql)
-        # H2 has no PostgreSQL DELETE ... USING. The H2 twin expresses the same
-        # self-match as a relay_entry_id IN subquery.
+        # H2 has no PostgreSQL DELETE ... USING. PostgreSQL removes the old athlete's relay
+        # entry links that the kept athlete already has; the H2 twin expresses the same rows
+        # with a relay_entry_id IN subquery. Both sides normalize to one token holding the
+        # old and kept athlete IDs.
         sql = re.sub(
             r"DELETE FROM relay_entry_athlete old_link USING relay_entry_athlete kept_link "
             r"WHERE old_link\.athlete_id = (\d+) AND kept_link\.relay_entry_id = "
-            r"old_link\.relay_entry_id AND kept_link\.athlete_id = \1",
-            r"DELETE_DUPLICATE_RELAY_ATHLETE \1",
+            r"old_link\.relay_entry_id AND kept_link\.athlete_id = (\d+)",
+            r"DELETE_DUPLICATE_RELAY_ATHLETE \1 \2",
             sql,
         )
         sql = re.sub(
             r"DELETE FROM relay_entry_athlete WHERE athlete_id = (\d+) AND "
-            r"relay_entry_id IN \( SELECT relay_entry_id FROM relay_entry_athlete "
-            r"WHERE athlete_id = \1 \)",
-            r"DELETE_DUPLICATE_RELAY_ATHLETE \1",
+            r"relay_entry_id IN \(\s*SELECT relay_entry_id FROM relay_entry_athlete "
+            r"WHERE athlete_id = (\d+)\s*\)",
+            r"DELETE_DUPLICATE_RELAY_ATHLETE \1 \2",
             sql,
         )
         result.append(sql)
