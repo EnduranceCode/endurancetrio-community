@@ -61,6 +61,30 @@ public class AppSecurityConfig {
   private static final String API_DOCS_PATTERN = "/v3/api-docs/**";
   private static final String SWAGGER_UI_PATTERN = "/swagger-ui/**";
 
+  private static final String[] PUBLIC_PAGE_PATHS = {
+      "/",
+      "/index.html",
+      "/en",
+      "/pt",
+      "/en/**",
+      "/pt/**",
+      "/apple-touch-icon.png",
+      "/favicon.ico",
+      "/favicon.svg",
+      "/robots.txt",
+      "/sitemap.xml",
+      "/swagger-ui.html",
+      SWAGGER_UI_PATTERN,
+      API_DOCS_PATTERN,
+      "/swagger-resources/**",
+      "/webjars/**",
+      "/css/**",
+      "/js/**",
+      "/img/**",
+      "/static/**",
+      "/error"
+  };
+
   private final String allowedOrigins;
   private final EnduranceTrioAuthProvider authProvider;
   private final EnduranceTrioAuthEntryPoint entryPoint;
@@ -183,29 +207,10 @@ public class AppSecurityConfig {
                     SWAGGER_UI_PATTERN
                 )
                 .permitAll()
-                .requestMatchers(HttpMethod.GET,
-                    "/",
-                    "/index.html",
-                    "/en",
-                    "/pt",
-                    "/en/**",
-                    "/pt/**",
-                    "/apple-touch-icon.png",
-                    "/favicon.ico",
-                    "/favicon.svg",
-                    "/robots.txt",
-                    "/sitemap.xml",
-                    "/swagger-ui.html",
-                    SWAGGER_UI_PATTERN,
-                    API_DOCS_PATTERN,
-                    "/swagger-resources/**",
-                    "/webjars/**",
-                    "/css/**",
-                    "/js/**",
-                    "/img/**",
-                    "/static/**",
-                    "/error"
-                ).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_PAGE_PATHS)
+                .permitAll()
+                .requestMatchers(HttpMethod.HEAD, PUBLIC_PAGE_PATHS)
+                .permitAll()
                 .requestMatchers(HttpMethod.POST,
                     "/en/newsletter/subscribe",
                     "/pt/newsletter/subscribe"
