@@ -21,6 +21,7 @@
 package com.endurancetrio.app.config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -30,12 +31,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.endurancetrio.app.common.security.entrypoint.EnduranceTrioAuthEntryPoint;
+import com.endurancetrio.app.common.security.filter.EnduranceTrioAuthFilter;
 import com.endurancetrio.app.common.security.provider.EnduranceTrioAuthProvider;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -130,6 +133,17 @@ class AppSecurityConfigTest {
     AppSecurityConfig config = new AppSecurityConfig("*", authProvider, entryPoint);
 
     assertNotNull(config.authenticationFilter());
+  }
+
+  @Test
+  void authenticationFilterRegistrationShouldDisableContainerRegistration() {
+    AppSecurityConfig config = new AppSecurityConfig("*", authProvider, entryPoint);
+    EnduranceTrioAuthFilter filter = config.authenticationFilter();
+
+    FilterRegistrationBean<EnduranceTrioAuthFilter> registration = config.authenticationFilterRegistration(filter);
+
+    assertFalse(registration.isEnabled());
+    assertSame(filter, registration.getFilter());
   }
 
   @Test
