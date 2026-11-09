@@ -124,7 +124,8 @@ is committed.
 **Handoff convention:** *"Read `tasks/foo.md` and implement it."* The agent parses the document
 and executes against its acceptance criteria.
 
-Once implemented, delete the task file (the PR description captures the change).
+Once implemented, move the task file to `tasks/done/` (the PR description captures the change).
+Do not delete it: `tasks/done/` keeps the implementation rationale for later review.
 
 ## Commit messages
 
