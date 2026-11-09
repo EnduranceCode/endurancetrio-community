@@ -42,7 +42,18 @@ public class LocaleRedirectFilter implements Filter {
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    String uri = httpRequest.getRequestURI();
+    String requestUri = httpRequest.getRequestURI();
+    String uri = stripPathParameters(requestUri);
+
+    // Container-managed session tracking (e.g. ";jsessionid=...") must not reach Spring
+    // Security, whose StrictHttpFirewall rejects semicolons with a 400. Redirect to the clean
+    // path instead of looping through the locale redirect below.
+    if (!uri.equals(requestUri)) {
+      String queryString = httpRequest.getQueryString();
+      httpResponse.sendRedirect(uri + (queryString == null ? "" : "?" + queryString));
+      return;
+    }
+
     if (uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")
         || uri.startsWith("/webjars/") || STATIC_ROOT_FILES.contains(uri) || uri.startsWith("/api/")
         || uri.equals("/v3/api-docs") || uri.startsWith("/v3/api-docs/") || uri.startsWith(
@@ -59,5 +70,16 @@ public class LocaleRedirectFilter implements Filter {
     }
 
     chain.doFilter(request, response);
+  }
+
+  /**
+   * Removes path parameters (matrix parameters such as {@code ;jsessionid=...}) from every segment
+   * of the given request URI.
+   *
+   * @param uri the raw request URI
+   * @return the URI without path parameters
+   */
+  private static String stripPathParameters(String uri) {
+    return uri.indexOf(';') < 0 ? uri : uri.replaceAll(";[^/]*", "");
   }
 }
