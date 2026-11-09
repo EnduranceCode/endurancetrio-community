@@ -225,6 +225,15 @@ class NewsletterWebControllerTest {
   }
 
   @Test
+  void subscribeWithMissingParametersShouldRedirectToError() throws Exception {
+    mockMvc.perform(post("/en/newsletter/subscribe"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name("redirect:/en/newsletter/error"));
+
+    verifyNoInteractions(newsletterService);
+  }
+
+  @Test
   void subscribeWithInvalidEmailNoAtSign() throws Exception {
     mockMvc.perform(post("/en/newsletter/subscribe")
             .param("firstName", FIRST_NAME)

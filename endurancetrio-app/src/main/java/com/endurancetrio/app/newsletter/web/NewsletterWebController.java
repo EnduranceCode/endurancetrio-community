@@ -21,8 +21,8 @@
 package com.endurancetrio.app.newsletter.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
@@ -87,8 +87,8 @@ public class NewsletterWebController {
 
   @PostMapping("/{language:en|pt}/newsletter/subscribe")
   public String subscribe(
-      @PathVariable String language, @RequestParam String firstName,
-      @RequestParam String email
+      @PathVariable String language, @RequestParam(required = false) String firstName,
+      @RequestParam(required = false) String email
   ) {
 
     firstName = sanitize(firstName);
