@@ -84,7 +84,7 @@ public class EnduranceTrioAuthFilter extends OncePerRequestFilter {
     if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX) || ownerHeader == null
         || ownerHeader.isBlank()) {
 
-      LOG.warn("Authentication request for owner {} failed pre-check", ownerHeader);
+      LOG.debug("Authentication request for owner {} failed pre-check", ownerHeader);
 
       filterChain.doFilter(request, response);
       return;
