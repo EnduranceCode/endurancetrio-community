@@ -490,7 +490,7 @@ sudo a2enmod headers
 sudo a2enmod rewrite
 sudo a2enmod alias
 
-# Optional: only if using ModSecurity/OWASP CRS with the JavaDocs subdomain
+# Optional: only if using ModSecurity/OWASP CRS (JavaDocs exception and FCCDCF exception)
 sudo a2enmod security2
 
 sudo systemctl reload apache2
@@ -620,6 +620,51 @@ takes too long to respond). To bring it back:
 ```shell
 docker compose -p endurancetrio-community up -d stg-endurancetrio-community
 ```
+
+#### ModSecurity false positive: `FCCDCF` consent cookie
+
+When ModSecurity and the OWASP Core Rule Set (CRS) are enabled, the Google Funding Choices consent
+cookie `FCCDCF` (written by AdSense consent management) can be blocked with `403 Forbidden` by
+Apache before the request reaches the application. Its JSON-shaped value matches CRS rule `942550`
+(JSON-based SQL injection, CRITICAL, 5 points), which reaches the default inbound anomaly threshold
+and triggers rule `949110`.
+
+The [provided template](../apache/vhost-template.conf) contains the exception in two HTTP
+VirtualHost blocks: the main domain and the staging subdomain. Each block excludes only the `FCCDCF`
+cookie from rule `942550`; every other cookie, query parameter, header and body field remains
+inspected, and no rule is removed:
+
+| Host                                                             | VirtualHost          | Rule ID   |
+|------------------------------------------------------------------|----------------------|-----------|
+| `{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}` (main domain) | `<VirtualHost *:80>` | `1000001` |
+| `stg.{SECOND_LEVEL_DOMAIN_SLD}.{TOP_LEVEL_DOMAIN_TLD}` (staging) | `<VirtualHost *:80>` | `1000002` |
+
+```apache
+<IfModule mod_security2.c>
+    SecRule REQUEST_COOKIES:FCCDCF "@rx ." \
+        "id:1000001,phase:1,pass,nolog,\
+        ctl:ruleRemoveTargetById=942550;REQUEST_COOKIES:FCCDCF"
+</IfModule>
+```
+
+The staging block is the same except for the rule ID (`1000002`). Each ID must be unique across the
+whole Apache configuration; a duplicate ID makes `apachectl configtest` fail.
+
+The exception uses a runtime `ctl` action instead of `SecRuleUpdateTargetById` because ModSecurity 2
+applies `SecRuleUpdateTargetById` before the virtual host contexts are merged, which can make
+`apachectl configtest` fail when the rule is not loaded in the same context. The `ctl` form is
+evaluated per request, so it works inside a virtual host and does not depend on CRS being loaded at
+configuration time. Both IDs are in the local range (`1000000`–`1999999`).
+
+Certbot copies each HTTP VirtualHost block into `{SECOND_LEVEL_DOMAIN_SLD}-le-ssl.conf`, so both
+exceptions are active on HTTPS. Verify them as described in
+[Post-Certbot verification](#post-certbot-verification).
+
+Staging is protected by Basic Authentication. Verify the staging exception with valid credentials;
+without them Apache returns a `401` challenge and the result says nothing about the WAF.
+
+Servers deployed before this exception was added to the template must add both blocks manually to
+their HTTPS VirtualHosts, as described in [Post-Certbot verification](#post-certbot-verification).
 
 #### JavaDoc document root
 
@@ -801,6 +846,21 @@ In addition to the items above, verify that the following configuration is prese
 - Offline fallback (`ProxyErrorOverride On`, `ErrorDocument`, `Alias /index.html`)
 - The `ProxyPass /index.html !` exclusion rule
 
+##### ModSecurity exception (main domain and staging)
+
+If ModSecurity is enabled, the main domain and staging SSL VirtualHosts must each contain the
+`FCCDCF` exception described in
+[ModSecurity false positive:
+`FCCDCF` consent cookie](#modsecurity-false-positive-fccdcf-consent-cookie).
+Check that both rule IDs are present, exactly once each:
+
+```shell
+sudo grep -n "id:1000001\|id:1000002" /etc/apache2/sites-available/{SECOND_LEVEL_DOMAIN_SLD}-le-ssl.conf
+```
+
+The output should show one line for `1000001` (main domain) and one for `1000002` (staging). Two
+lines with the same ID mean the block was added twice, which makes `apachectl configtest` fail.
+
 ##### VirtualHost structure
 
 A correctly configured SSL VirtualHost block for the `stg` subdomain looks like this:
@@ -854,6 +914,13 @@ A correctly configured SSL VirtualHost block for the `stg` subdomain looks like 
 
     RequestHeader set X-Forwarded-Proto "https"
     RequestHeader set X-Forwarded-Port "443"
+
+    # Optional: only if using ModSecurity/OWASP CRS
+    <IfModule mod_security2.c>
+        SecRule REQUEST_COOKIES:FCCDCF "@rx ." \
+            "id:1000002,phase:1,pass,nolog,\
+            ctl:ruleRemoveTargetById=942550;REQUEST_COOKIES:FCCDCF"
+    </IfModule>
 
     ErrorLog ${APACHE_LOG_DIR}/stg_<SECOND_LEVEL_DOMAIN_SLD>_error.log
     CustomLog ${APACHE_LOG_DIR}/stg_<SECOND_LEVEL_DOMAIN_SLD>_access.log combined
@@ -943,6 +1010,11 @@ RequestHeader set X-Forwarded-Port "80"
 
 CustomLog ${APACHE_LOG_DIR}/<EVENTUAL_PREFIX>._access.log combined
 ```
+
+The `<IfModule mod_security2.c>` block with the `FCCDCF` exception
+(`SecRule REQUEST_COOKIES:FCCDCF`) is not part of the lists above. Keep it in the main domain block:
+it only affects requests that carry the `FCCDCF` cookie, and it is harmless in the HTTP block after
+the HTTPS redirect is in place.
 
 Example of a **clean** redirect:
 
@@ -1059,6 +1131,36 @@ If missing, Certbot may have stripped it during the expand process.
 
 **Fix:** Add the missing `ProxyPass` and `ProxyPassReverse` directives to the staging
 `<VirtualHost *:443>` block in the SSL config file.
+
+#### Main domain returns a plain Apache 403 for one browser only
+
+**Symptom:** One browser profile gets an Apache `403 Forbidden` page on every page of the main
+domain, while other browsers, incognito windows, or other devices work. The application logs show no
+entry for the blocked requests.
+
+**Diagnosis:** The block comes from ModSecurity, not the application. Check the ModSecurity audit
+log
+while reproducing the request:
+
+```shell
+sudo tail -f /var/log/apache2/modsec_audit.log
+```
+
+If the audit log shows rule `942550` matching `REQUEST_COOKIES:FCCDCF` followed by rule `949110`,
+the consent cookie is the cause. Clearing cookies is only a temporary workaround because the consent
+platform can issue a matching value again.
+
+**Fix:** Confirm the exception from
+the [ModSecurity false positive section](#modsecurity-false-positive-fccdcf-consent-cookie)
+is present in the main domain SSL VirtualHost, then validate and reload:
+
+```shell
+sudo apachectl configtest
+sudo systemctl reload apache2
+```
+
+Do not remove rule `942550`, disable ModSecurity, or set `SecRuleEngine DetectionOnly` in production
+to fix this symptom.
 
 ## JavaDoc Deployment
 
