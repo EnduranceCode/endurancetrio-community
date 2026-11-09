@@ -32,6 +32,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,77 +53,27 @@ class LocaleRedirectFilterTest {
     filterChain = mock(FilterChain.class);
   }
 
-  @Test
-  void shouldPassStaticCssRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/css/styles.css");
+  @ParameterizedTest
+  @ValueSource(strings = {
+      "/css/styles.css",
+      "/js/app.js",
+      "/img/logo.png",
+      "/webjars/bootstrap/5.3.0/js/bootstrap.min.js",
+      "/favicon.ico",
+      "/apple-touch-icon.png",
+      "/robots.txt",
+      "/sitemap.xml",
+      "/api/tracker/v1/devices",
+      "/swagger-ui/index.html",
+      "/v3/api-docs"
+  })
+  void shouldPassStaticAndApiRequestsThroughWithoutRedirect(String uri) throws Exception {
+    when(request.getRequestURI()).thenReturn(uri);
 
     underTest.doFilter(request, response, filterChain);
 
     verify(filterChain).doFilter(request, response);
     verify(response, never()).sendRedirect(any());
-  }
-
-  @Test
-  void shouldPassStaticJsRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/js/app.js");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
-  }
-
-  @Test
-  void shouldPassStaticImgRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/img/logo.png");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
-  }
-
-  @Test
-  void shouldPassWebjarsRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/webjars/bootstrap/5.3.0/js/bootstrap.min.js");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
-  }
-
-  @Test
-  void shouldPassFaviconRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/favicon.ico");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
-  }
-
-  @Test
-  void shouldPassApiRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/api/tracker/v1/devices");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
-  }
-
-  @Test
-  void shouldPassSwaggerUiRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/swagger-ui/index.html");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
-  }
-
-  @Test
-  void shouldPassApiDocsRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/v3/api-docs");
-
-    underTest.doFilter(request, response, filterChain);
-
-    verify(filterChain).doFilter(request, response);
   }
 
   @Test
@@ -167,31 +119,44 @@ class LocaleRedirectFilterTest {
   }
 
   @Test
-  void shouldPassAppleTouchIconRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/apple-touch-icon.png");
+  void shouldRedirectToCleanPathWhenLocaleHasSessionId() throws Exception {
+    when(request.getRequestURI()).thenReturn("/en;jsessionid=ABC123");
 
     underTest.doFilter(request, response, filterChain);
 
-    verify(filterChain).doFilter(request, response);
+    verify(response).sendRedirect("/en");
+    verify(filterChain, never()).doFilter(any(), any());
   }
 
   @Test
-  void shouldPassRobotsTxtRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/robots.txt");
+  void shouldRedirectToCleanPathWhenLocalePathHasSessionId() throws Exception {
+    when(request.getRequestURI()).thenReturn("/en/;jsessionid=ABC123");
 
     underTest.doFilter(request, response, filterChain);
 
-    verify(filterChain).doFilter(request, response);
-    verify(response, never()).sendRedirect(any());
+    verify(response).sendRedirect("/en/");
+    verify(filterChain, never()).doFilter(any(), any());
   }
 
   @Test
-  void shouldPassSitemapXmlRequests() throws Exception {
-    when(request.getRequestURI()).thenReturn("/sitemap.xml");
+  void shouldRedirectToCleanPathPreservingQueryString() throws Exception {
+    when(request.getRequestURI()).thenReturn("/pt/eventos;jsessionid=ABC123");
+    when(request.getQueryString()).thenReturn("page=2");
 
     underTest.doFilter(request, response, filterChain);
 
-    verify(filterChain).doFilter(request, response);
-    verify(response, never()).sendRedirect(any());
+    verify(response).sendRedirect("/pt/eventos?page=2");
+    verify(filterChain, never()).doFilter(any(), any());
+  }
+
+  @Test
+  void shouldStripSessionIdBeforeApplyingLocaleRedirect() throws Exception {
+    when(request.getRequestURI()).thenReturn("/events;jsessionid=ABC123");
+    when(request.getQueryString()).thenReturn(null);
+
+    underTest.doFilter(request, response, filterChain);
+
+    verify(response).sendRedirect("/events");
+    verify(filterChain, never()).doFilter(any(), any());
   }
 }
