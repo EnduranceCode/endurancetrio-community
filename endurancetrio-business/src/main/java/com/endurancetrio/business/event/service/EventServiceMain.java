@@ -67,10 +67,7 @@ public class EventServiceMain implements EventService {
   @Override
   @Transactional(readOnly = true)
   public EventsPageDTO getEventsByYear(int year, Pageable pageable) {
-    Page<EventDTO> eventPage = eventRepository.findByEventYear(year, pageable)
-        .map(eventMapper::mapToEventDTO);
-
-    return new EventsPageDTO(eventPage.getContent(), PaginationDTO.from(eventPage));
+    return toEventsPage(eventRepository.findEventIdsByYear(year, pageable));
   }
 
   @Override
@@ -105,8 +102,17 @@ public class EventServiceMain implements EventService {
   )
   @Transactional(readOnly = true)
   public EventsPageDTO getMostRecentAddedEvents(Pageable pageable) {
-    Page<Long> eventIds = eventRepository.findMostRecentAddedEventIds(pageable);
+    return toEventsPage(eventRepository.findMostRecentAddedEventIds(pageable));
+  }
 
+  /**
+   * Maps a page of event IDs to an {@link EventsPageDTO}, preserving the order of the IDs and
+   * eagerly fetching the courses needed to derive the sport codes.
+   *
+   * @param eventIds the page of event IDs to map
+   * @return an {@link EventsPageDTO} with the mapped events and pagination metadata
+   */
+  private EventsPageDTO toEventsPage(Page<Long> eventIds) {
     if (eventIds.isEmpty()) {
       return new EventsPageDTO(List.of(), PaginationDTO.from(eventIds));
     }

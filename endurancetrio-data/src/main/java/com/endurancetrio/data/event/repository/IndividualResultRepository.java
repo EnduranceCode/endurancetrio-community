@@ -63,30 +63,34 @@ public interface IndividualResultRepository
   List<IndividualResult> findByRaceIdWithGraph(@Param("raceId") Long raceId);
 
   /**
-   * Returns a {@link Page} of {@link Race races} that have at least one {@link IndividualResult}
-   * recorded for the athlete with the given {@code athleteId}, ordered by their
-   * {@link Race#getDate() date} descending and, as a tiebreaker, by their {@link Race#getId() id}
-   * descending.
+   * Returns a {@link Page} of IDs of {@link Race races} that have at least one
+   * {@link IndividualResult} recorded for the athlete with the given {@code athleteId}, ordered by
+   * their {@link Race#getDate() date} descending and, as a tiebreaker, by their
+   * {@link Race#getId() id} descending.
+   * <p>
+   * This query selects only IDs to avoid the PostgreSQL restriction that ORDER BY expressions
+   * must appear in the SELECT list when DISTINCT is used, which occurs when fetching collections
+   * with JOIN FETCH. It also avoids Hibernate's in-memory pagination warning
+   * ({@code HHH90003004}). Use
+   * {@link RaceRepository#findRacesByIdInWithCoursesAndEvent}
+   * to load the full entity graph for the returned IDs.
    *
    * @param athleteId the ID of the athlete to filter races by
    * @param pageable  the pagination information
-   * @return a {@link Page} of {@link Race races} for the given athlete, ordered by date and, as a
-   * tiebreaker, by id descending
+   * @return a {@link Page} of race IDs for the given athlete, ordered by date and, as a tiebreaker,
+   * by id descending
    */
   @Query(
-      value = "SELECT DISTINCT r FROM Race r "
-          + "LEFT JOIN FETCH r.courses c "
-          + "LEFT JOIN FETCH c.event e "
-          + "WHERE EXISTS ("
+      value = "SELECT r.id FROM Race r WHERE EXISTS ("
           + "  SELECT 1 FROM IndividualResult ir "
           + "  WHERE ir.race = r AND ir.athlete.id = :athleteId"
           + ") "
           + "ORDER BY r.date DESC, r.id DESC",
-      countQuery = "SELECT COUNT(DISTINCT r) FROM Race r "
+      countQuery = "SELECT COUNT(r.id) FROM Race r "
           + "WHERE EXISTS ("
           + "  SELECT 1 FROM IndividualResult ir "
           + "  WHERE ir.race = r AND ir.athlete.id = :athleteId"
           + ")"
   )
-  Page<Race> findRacesByAthleteId(@Param("athleteId") Long athleteId, Pageable pageable);
+  Page<Long> findRaceIdsByAthleteId(@Param("athleteId") Long athleteId, Pageable pageable);
 }
