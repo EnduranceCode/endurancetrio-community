@@ -1233,18 +1233,19 @@ must comply with these rules.
 
 ### Testing Approach
 
-All tests are **pure unit tests** — fast, isolated, and requiring no Spring context. There are three
-categories:
+Most tests are **pure unit tests** — fast, isolated, and requiring no Spring context. There are
+three categories, plus one exception for behaviour that only a Spring context can verify:
 
-| Category                  | Description                                                            | Framework                    |
-|---------------------------|------------------------------------------------------------------------|------------------------------|
-| **Plain POJO tests**      | Entities, DTOs, responses — verify constructors, accessors, `toString` | JUnit 5 only                 |
-| **Mockito-based tests**   | Services, mappers — mock dependencies to isolate the class under test  | JUnit 5 + Mockito            |
-| **Bean Validation tests** | Custom validation annotations — programmatic `Validator` setup         | JUnit 5 + Jakarta Validation |
+| Category                  | Description                                                                 | Framework                                |
+|---------------------------|-----------------------------------------------------------------------------|------------------------------------------|
+| **Plain POJO tests**      | Entities, DTOs, responses — verify constructors, accessors, `toString`      | JUnit 5 only                             |
+| **Mockito-based tests**   | Services, mappers — mock dependencies to isolate the class under test       | JUnit 5 + Mockito                        |
+| **Bean Validation tests** | Custom validation annotations — programmatic `Validator` setup              | JUnit 5 + Jakarta Validation             |
+| **Spring slice tests**    | Behaviour that depends on the real Spring wiring (e.g., the security chain) | Spring Test slices (`@WebMvcTest`, etc.) |
 
-No test currently loads a Spring application context (`@SpringBootTest`, `@DataJpaTest`,
-`@WebMvcTest`, etc.). If integration tests are added in the future, they must use the existing
-[test configuration](#test-configuration).
+Spring slice tests are the only tests that load an application context. They are limited to
+slices, never full `@SpringBootTest` (apart from the existing application smoke test), and they
+must follow the rules in [Spring Context Slice Tests](#spring-context-slice-tests).
 
 ### Test Frameworks & Dependencies
 
@@ -1280,6 +1281,23 @@ All test classes must follow the pattern:
 
 Service implementations use the `Main` suffix (not `Impl`), so their tests follow the same naming
 (e.g., `RouteServiceMain` → `RouteServiceMainTest`).
+
+Spring slice tests add the slice annotation name between the class name and `Test`:
+
+```
+{ClassUnderTest}{Slice}Test.java
+```
+
+Examples of the pattern (the second one is illustrative):
+
+| Test Class                    | Tests Class         | Slice          |
+|-------------------------------|---------------------|----------------|
+| `AppSecurityConfigWebMvcTest` | `AppSecurityConfig` | `@WebMvcTest`  |
+| `RouteRepositoryDataJpaTest`  | `RouteRepository`   | `@DataJpaTest` |
+
+Pure unit tests never carry a slice suffix, so the suffix alone tells a reader whether a test starts
+a Spring context. The existing `EnduranceTrioApplicationTest` (a full `@SpringBootTest` smoke test)
+keeps its name.
 
 ### Test Class Declaration
 
@@ -1488,6 +1506,10 @@ class RouteSegmentsValidatorTest {
 The `endurancetrio-app` module tests controllers, security filters, security configuration,
 and exception handlers using pure Mockito — no Spring context is loaded.
 
+Pure Mockito cannot show which requests the real `SecurityFilterChain` permits, because that
+depends on the Spring Security wiring. Such behaviour is tested with a Spring slice test instead;
+see [Spring Context Slice Tests](#spring-context-slice-tests).
+
 #### Controller Tests
 
 Controller tests use `@ExtendWith(MockitoExtension.class)` with `@Mock` on the service interface
@@ -1559,7 +1581,9 @@ class EnduranceTrioAuthFilterTest {
 #### Security Configuration Tests
 
 Configuration tests directly instantiate the config class and use 
-`mock(HttpSecurity.class, RETURNS_SELF)` for the fluent `HttpSecurity` API.
+`mock(HttpSecurity.class, RETURNS_SELF)` for the fluent `HttpSecurity` API. These tests cover
+construction and bean wiring only. Request-matching rules (for example, which paths and HTTP
+methods are public) are covered by `AppSecurityConfigWebMvcTest`, a Spring slice test.
 
 ```java
 
@@ -1622,9 +1646,9 @@ class EnduranceTrioExceptionHandlerAPITest {
 ### Test Configuration
 
 The file `endurancetrio-app/src/test/resources/application-test.yaml` exists and configures H2
-(PostgreSQL compatibility mode) with Flyway pointing to `h2` migration scripts. This configuration
-is intended for future integration tests (`@DataJpaTest`, `@SpringBootTest`, etc.) but is **not
-currently activated** by any test.
+(PostgreSQL compatibility mode) with Flyway pointing to `h2` migration scripts. Spring-context tests
+activate it with `@ActiveProfiles("test")`: `EnduranceTrioApplicationTest` and
+`AppSecurityConfigWebMvcTest`. Pure unit tests do not use it.
 
 ```yaml
 spring:
@@ -1653,24 +1677,73 @@ Flyway migration scripts are **duplicated** for H2 alongside PostgreSQL:
 When adding a new migration, the H2 variant must be added in the same version as the PostgreSQL
 variant. The `application-test.yaml` configures Flyway to use these H2 scripts.
 
-### Future: Spring Context Integration Tests
+### Spring Context Slice Tests
 
-The sections above document the **current** pure-Mockito test patterns for the `endurancetrio-app`
-module (controllers, security, exception handlers). The following starters are also declared in
-`endurancetrio-app/pom.xml` and ready for use when Spring-context integration tests are added:
+Spring slice tests load only the part of the context needed for the behaviour under test. The
+following starters are declared in `endurancetrio-app/pom.xml`:
 
-- `spring-boot-starter-webmvc-test` — `@WebMvcTest` + `MockMvc` for controller-layer tests
+- `spring-boot-starter-webmvc-test` — `@WebMvcTest` + `MockMvc` (used by
+  `AppSecurityConfigWebMvcTest`)
 - `spring-boot-starter-security-test` — Security-aware test utilities (e.g., `@WithMockUser`,
   `RequestPostProcessor`)
 - `spring-boot-starter-actuator-test` — Actuator endpoint testing
 
-When writing integration tests that require a Spring context:
+Use a slice test only when pure Mockito cannot verify the behaviour, such as request-matching rules
+of a `SecurityFilterChain`. When writing one:
 
-1. Use `@ActiveProfiles("test")` to activate the H2/Flyway configuration.
-2. Prefer slice tests (`@WebMvcTest`, `@DataJpaTest`) over full `@SpringBootTest`.
-3. Do **not** use `@MockBean` — keep Mockito-based service tests pure (no Spring context).
-4. Add a `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` + `@Order(N)` only when test
+1. Name it `{ClassUnderTest}{Slice}Test` (see [Test Class Naming](#test-class-naming)).
+2. Use `@ActiveProfiles("test")` to activate the H2/Flyway configuration.
+3. Prefer a slice (`@WebMvcTest`, `@DataJpaTest`) over full `@SpringBootTest`.
+4. Do **not** use `@MockBean`. Declare collaborators as `@Bean` methods that return Mockito mocks,
+   in a nested `@SpringBootConfiguration` class (see the example below).
+5. Declare a nested `@SpringBootConfiguration` class inside the test. Without it, the slice searches
+   upward and loads `EnduranceTrioApplication`, whose `@EnableJpaRepositories` and `@EntityScan`
+   require a JPA context that a web slice does not provide.
+6. Use `@WebMvcTest(useDefaultFilters = false)` and `@Import` the classes under test. The default
+   filters also load every `@ControllerAdvice` and `@Controller`, which pull in unrelated services
+   such as `MessageService` and `AppProperties`.
+7. Add a `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` + `@Order(N)` only when test
    ordering is explicitly required.
+
+```java
+@WebMvcTest(useDefaultFilters = false)
+@ActiveProfiles("test")
+class AppSecurityConfigWebMvcTest {
+
+  @Autowired
+  private MockMvc mockMvc;
+
+  @Test
+  void headOnPublicPageShouldBeAllowed() throws Exception {
+    mockMvc.perform(head("/en/"))
+        .andExpect(status().isOk());
+  }
+
+  @RestController
+  static class PublicPageTestController {
+
+    @GetMapping("/{language:en|pt}/")
+    String home() {
+      return "home";
+    }
+  }
+
+  @SpringBootConfiguration
+  @Import({AppSecurityConfig.class, PublicPageTestController.class})
+  static class TestApplication {
+
+    @Bean
+    EnduranceTrioAuthProvider enduranceTrioAuthProvider() {
+      return mock(EnduranceTrioAuthProvider.class);
+    }
+
+    @Bean
+    EnduranceTrioAuthEntryPoint enduranceTrioAuthEntryPoint() {
+      return mock(EnduranceTrioAuthEntryPoint.class);
+    }
+  }
+}
+```
 
 ## Programmatic Version Management
 

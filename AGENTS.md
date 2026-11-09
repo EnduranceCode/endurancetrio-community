@@ -45,7 +45,13 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 - Business tests use `@ExtendWith(MockitoExtension.class)` (pure Mockito, no Spring context)
 - Flyway migrations for H2 are in `db/migration/ddl/h2` and `db/migration/dml/h2`
 - Tests do NOT require PostgreSQL — H2 is fully self-contained
-- Full testing conventions documented in [docs/development.md#testing](docs/development.md#testing)
+- App-module tests are pure Mockito unless a behaviour can only be verified with the real Spring
+  wiring (e.g., `SecurityFilterChain` request rules). Those are Spring slice tests named
+  `{ClassUnderTest}{Slice}Test` (e.g., `AppSecurityConfigWebMvcTest`), use
+  `@ActiveProfiles("test")`, and declare collaborators with `@Bean` mocks, never `@MockBean`
+- Full testing conventions documented in [docs/development.md#testing](docs/development.md#testing);
+  slice test rules
+  in [docs/development.md#spring-context-slice-tests](docs/development.md#spring-context-slice-tests)
 
 ## Tracker integration (dual-repo)
 
