@@ -71,20 +71,6 @@ const languageSelector = {
       const currentLanguage = getCurrentLanguage();
       const pathWithoutPrefix = globalThis.location.pathname.slice(('/' + currentLanguage).length);
 
-      if (document.documentElement.dataset.pageType === 'error') {
-        if (storedLanguage && storedLanguage !== currentLanguage) {
-          let form = document.createElement('form');
-          form.method = 'POST';
-          form.action = '/' + storedLanguage + pathWithoutPrefix;
-          form.style.display = 'none';
-          document.body.appendChild(form);
-          form.submit();
-        } else {
-          languageOption.checked = currentLanguage === 'pt';
-        }
-        return;
-      }
-
       if (storedLanguage && storedLanguage !== currentLanguage) {
         globalThis.location.href = `/${storedLanguage}${pathWithoutPrefix}`;
       } else {
