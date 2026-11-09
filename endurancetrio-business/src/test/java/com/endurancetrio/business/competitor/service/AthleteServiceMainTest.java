@@ -45,6 +45,7 @@ import com.endurancetrio.data.event.model.enumerator.GenderCategory;
 import com.endurancetrio.data.event.model.enumerator.RaceStatus;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
+import com.endurancetrio.data.event.repository.RaceRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -78,6 +79,9 @@ class AthleteServiceMainTest {
 
   @Mock
   private RaceMapper raceMapper;
+
+  @Mock
+  private RaceRepository raceRepository;
 
   @InjectMocks
   private AthleteServiceMain underTest;
@@ -184,10 +188,10 @@ class AthleteServiceMainTest {
         null, "UNKNOWN"
     );
 
-    Page<Race> racePage = new PageImpl<>(List.of(race1, race2), PAGEABLE, 2L);
+    Page<Long> raceIdPage = new PageImpl<>(List.of(1L, 3L), PAGEABLE, 2L);
 
-    when(individualResultRepository.findRacesByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(
-        racePage);
+    when(individualResultRepository.findRaceIdsByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(raceIdPage);
+    when(raceRepository.findRacesByIdInWithCoursesAndEvent(List.of(1L, 3L))).thenReturn(List.of(race1, race2));
     when(raceMapper.mapWithoutDistanceWithEvent(race1)).thenReturn(race1DTO);
     when(raceMapper.mapWithoutDistanceWithEvent(race2)).thenReturn(race2DTO);
 
@@ -204,8 +208,8 @@ class AthleteServiceMainTest {
 
   @Test
   void getAthleteRacesShouldReturnEmptyPage() {
-    Page<Race> emptyPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
-    when(individualResultRepository.findRacesByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(
+    Page<Long> emptyPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(individualResultRepository.findRaceIdsByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(
         emptyPage);
 
     AthleteRacesPageDTO result = underTest.getAthleteRaces(ATHLETE_ID, PAGEABLE);

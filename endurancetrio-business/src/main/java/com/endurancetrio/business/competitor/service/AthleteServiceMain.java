@@ -36,16 +36,20 @@ import com.endurancetrio.business.event.mapper.RaceMapper;
 import com.endurancetrio.data.competitor.model.entity.Athlete;
 import com.endurancetrio.data.competitor.repository.AthleteRepository;
 import com.endurancetrio.data.competitor.repository.projection.AthleteFirstLetterCount;
+import com.endurancetrio.data.event.model.entity.Race;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
+import com.endurancetrio.data.event.repository.RaceRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,16 +77,18 @@ public class AthleteServiceMain implements AthleteService {
   private final IndividualResultRepository individualResultRepository;
   private final AthleteMapper athleteMapper;
   private final RaceMapper raceMapper;
+  private final RaceRepository raceRepository;
 
   @Autowired
   public AthleteServiceMain(
       AthleteRepository athleteRepository, IndividualResultRepository individualResultRepository,
-      AthleteMapper athleteMapper, RaceMapper raceMapper
+      AthleteMapper athleteMapper, RaceMapper raceMapper, RaceRepository raceRepository
   ) {
     this.athleteRepository = athleteRepository;
     this.individualResultRepository = individualResultRepository;
     this.athleteMapper = athleteMapper;
     this.raceMapper = raceMapper;
+    this.raceRepository = raceRepository;
   }
 
   @Override
@@ -131,10 +137,27 @@ public class AthleteServiceMain implements AthleteService {
   @Override
   @Transactional(readOnly = true)
   public AthleteRacesPageDTO getAthleteRaces(Long athleteId, Pageable pageable) {
-    Page<RaceDTO> racePage = individualResultRepository.findRacesByAthleteId(athleteId, pageable)
-        .map(raceMapper::mapWithoutDistanceWithEvent);
+    Page<Long> raceIds = individualResultRepository.findRaceIdsByAthleteId(athleteId, pageable);
 
-    return new AthleteRacesPageDTO(racePage.getContent(), PaginationDTO.from(racePage));
+    if (raceIds.isEmpty()) {
+      return new AthleteRacesPageDTO(List.of(), PaginationDTO.from(raceIds));
+    }
+
+    List<Long> orderedRaceIds = raceIds.getContent();
+    List<Race> raceEntities = raceRepository.findRacesByIdInWithCoursesAndEvent(orderedRaceIds);
+
+    Map<Long, Race> raceEntitiesMap = HashMap.newHashMap(raceEntities.size());
+    for (Race race : raceEntities) {
+      raceEntitiesMap.put(race.getId(), race);
+    }
+
+    List<RaceDTO> races = orderedRaceIds.stream()
+        .map(raceEntitiesMap::get)
+        .filter(Objects::nonNull)
+        .map(raceMapper::mapWithoutDistanceWithEvent)
+        .toList();
+
+    return new AthleteRacesPageDTO(races, PaginationDTO.from(raceIds));
   }
 
   private Specification<Athlete> buildSpecification(AthleteFilterDTO filter) {

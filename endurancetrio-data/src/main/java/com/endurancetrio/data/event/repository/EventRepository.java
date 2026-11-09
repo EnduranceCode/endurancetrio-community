@@ -41,20 +41,26 @@ import org.springframework.stereotype.Repository;
 public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull Long> {
 
   /**
-   * Returns a {@link Page} of {@link Event events} whose {@link Event#getStartDate() startDate}
-   * falls within the given {@code year}, ordered by their start date descending.
+   * Returns a {@link Page} of IDs of {@link Event events} whose {@link Event#getStartDate() startDate}
+   * falls within the given {@code year}, ordered by their start date descending and, as a tiebreaker,
+   * by {@link Event#getId() id} descending.
+   * <p>
+   * This query selects only IDs to avoid the PostgreSQL restriction that ORDER BY expressions
+   * must appear in the SELECT list when DISTINCT is used, which occurs when fetching collections
+   * with JOIN FETCH. It also avoids Hibernate's in-memory pagination warning
+   * ({@code HHH90003004}). Use {@link #findEventsByIdInWithCourses(Collection)} to load the full
+   * entity graph for the returned IDs.
    *
    * @param year     the year to filter events by
    * @param pageable the pagination information
-   * @return a {@link Page} of {@link Event events} for the given year, ordered by start date
-   * descending
+   * @return a {@link Page} of event IDs for the given year, ordered by start date descending
    */
   @Query(
-      value = "SELECT DISTINCT e FROM Event e LEFT JOIN FETCH e.courses "
-          + "WHERE YEAR(e.startDate) = :year ORDER BY e.startDate DESC",
-      countQuery = "SELECT COUNT(DISTINCT e) FROM Event e WHERE YEAR(e.startDate) = :year"
+      value = "SELECT e.id FROM Event e WHERE YEAR(e.startDate) = :year "
+          + "ORDER BY e.startDate DESC, e.id DESC",
+      countQuery = "SELECT COUNT(e.id) FROM Event e WHERE YEAR(e.startDate) = :year"
   )
-  Page<Event> findByEventYear(@Param("year") int year, Pageable pageable);
+  Page<Long> findEventIdsByYear(@Param("year") int year, Pageable pageable);
 
   /**
    * Finds an {@link Event} by its ID and year with the full object graph eagerly fetched (courses,

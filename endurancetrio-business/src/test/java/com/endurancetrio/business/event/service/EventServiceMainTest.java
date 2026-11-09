@@ -109,8 +109,9 @@ class EventServiceMainTest {
         List.of("DUATHLON")
     );
 
-    Page<Event> eventPage = new PageImpl<>(List.of(event1, event2), PAGEABLE, 2L);
-    when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    Page<Long> eventIdPage = new PageImpl<>(List.of(1L, 2L), PAGEABLE, 2L);
+    when(eventRepository.findEventIdsByYear(YEAR, PAGEABLE)).thenReturn(eventIdPage);
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L, 2L))).thenReturn(List.of(event1, event2));
     when(eventMapper.mapToEventDTO(event1)).thenReturn(expectedDTO1);
     when(eventMapper.mapToEventDTO(event2)).thenReturn(expectedDTO2);
 
@@ -140,8 +141,9 @@ class EventServiceMainTest {
         List.of("ROAD_RUNNING", "TRIATHLON")
     );
 
-    Page<Event> eventPage = new PageImpl<>(List.of(event), PAGEABLE, 1L);
-    when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    Page<Long> eventIdPage = new PageImpl<>(List.of(1L), PAGEABLE, 1L);
+    when(eventRepository.findEventIdsByYear(YEAR, PAGEABLE)).thenReturn(eventIdPage);
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L))).thenReturn(List.of(event));
     when(eventMapper.mapToEventDTO(event)).thenReturn(expectedDTO);
 
     EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
@@ -153,8 +155,8 @@ class EventServiceMainTest {
 
   @Test
   void getEventsByYearShouldReturnEmptyPage() {
-    Page<Event> eventPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
-    when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    Page<Long> eventIdPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(eventRepository.findEventIdsByYear(YEAR, PAGEABLE)).thenReturn(eventIdPage);
 
     EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
 
@@ -175,8 +177,9 @@ class EventServiceMainTest {
         List.of()
     );
 
-    Page<Event> eventPage = new PageImpl<>(List.of(event), PAGEABLE, 1L);
-    when(eventRepository.findByEventYear(YEAR, PAGEABLE)).thenReturn(eventPage);
+    Page<Long> eventIdPage = new PageImpl<>(List.of(1L), PAGEABLE, 1L);
+    when(eventRepository.findEventIdsByYear(YEAR, PAGEABLE)).thenReturn(eventIdPage);
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L))).thenReturn(List.of(event));
     when(eventMapper.mapToEventDTO(event)).thenReturn(expectedDTO);
 
     EventsPageDTO result = underTest.getEventsByYear(YEAR, PAGEABLE);
