@@ -30,7 +30,7 @@ The styling is built on [Bulma 1.0](https://bulma.io) and compiled with Webpack 
 | Bulma customizing | `src/scss/utilities/endurance-bulma-utilities.scss`      | Maps palette tokens onto Bulma's semantic variables                  |
 | Theme             | `src/scss/themes/endurance-light-theme.scss`             | Light theme setup and table hover overrides                          |
 | Components        | `src/scss/{elements,components,form,layout,grid,klaro}/` | `endurance-*` partials, one per component                            |
-| Behaviours        | `src/js/bulma-*.js`, `src/js/language-selector.js`       | Progressive-enhancement modules, initialised from `src/js/script.js` |
+| Behaviours        | `src/js/`                                                | Progressive-enhancement modules, initialised from `src/js/script.js` |
 | Icons             | `icons.config.json` and `scripts/generate-icons.js`      | Generates `.et-{name}` mask icon classes                             |
 
 The compiled output is written to `endurancetrio-app/src/main/resources/static/` and served by
@@ -69,7 +69,8 @@ review checklist are on the [Naming](./naming.md) page.
 - **Progressive enhancement.** Markup should read sensibly without JavaScript. Behaviours add
   state (`is-active`, `aria-expanded`, `is-hidden`) on top of it.
 - **Accessibility.** Toggles are real `<button>` elements with `aria-expanded`, and interactive
-  controls keep their native keyboard behaviour.
+  controls keep their native keyboard behaviour. Scrollable rows are focusable and carry a
+  translated accessible name; see [Scrollable Rows](./scroll.md#accessibility).
 - **Naming.** Follow the [Naming](./naming.md) rules: blocks are `endurance-{block}`, elements are
   `endurance-{block}-{element}`, and modifiers/states are the global `is-*`/`has-*` classes written
   next to the block. Partial names match the component (`endurance-table-sort.scss` and
@@ -79,23 +80,24 @@ review checklist are on the [Naming](./naming.md) page.
 
 ### Active components
 
-| Component                                                    | Kind              | Source                                                                            | Documentation                                                      |
-|--------------------------------------------------------------|-------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| Palette, grey scale and grey background helpers              | Tokens/Utility    | `utilities/endurancetrio-variables.scss`, `utilities/endurance-grey-helpers.scss` | [Colors](./colors.md)                                              |
-| Icons (`.et-*`)                                              | Utility           | `utilities/endurance-icons.scss` (generated)                                      | [Icons](./icons.md)                                                |
-| `.endurance-box`                                             | Element           | `elements/endurance-box.scss`                                                     | [Boxes and Cards](./boxes-and-cards.md)                            |
-| `.endurance-card`                                            | Component         | `components/endurance-card.scss`                                                  | [Boxes and Cards](./boxes-and-cards.md)                            |
-| `.tag` variants (`is-swim`, `is-bike`, `is-run`)             | Element           | `elements/endurance-tags.scss`                                                    | [Tags](./tags.md)                                                  |
-| `.endurance-media` (media object)                            | Layout            | `layout/endurance-media.scss`                                                     | [Media](./media.md)                                                |
-| `.endurance-navbar`                                          | Component         | `components/endurance-navbar.scss`                                                | [Navbar](./navbar.md)                                              |
-| Tabs (`data-tabs`, `data-tab-content`)                       | Component         | `components/endurance-tabs.scss`, `js/bulma-tab.js`                               | [Tabs](./tabs.md)                                                  |
-| Sortable tables (`data-sortable`, `data-sort`)               | Element           | `elements/endurance-table-sort.scss`, `js/bulma-table-sort.js`                    | [Tables](./tables.md)                                              |
-| Expandable boxes/rows (`data-expand`, `data-expand-content`) | Element/Behaviour | `elements/endurance-expand.scss`, `js/endurance-expand.js`                        | [Boxes](./boxes-and-cards.md#expand-button), [Tables](./tables.md) |
-| `.switch` with inner labels (adapted, MIT)                   | Form              | `form/endurance-switch-control*.scss`                                             | [Switch Control](./switch-control.md)                              |
-| Modals (`data-modal`)                                        | Component         | `js/bulma-modal.js` (Bulma markup)                                                | [Behaviours](./behaviours.md)                                      |
-| Navbar burger and language selector                          | Behaviour         | `js/bulma-navbar.js`, `js/language-selector.js`                                   | [Behaviours](./behaviours.md)                                      |
-| Cookie consent theme (Klaro)                                 | Theme             | `klaro/endurance-klaro*.scss`                                                     | Styles only; see the file headers                                  |
-| Light theme and Bulma variable overrides                     | Theme             | `themes/endurance-light-theme.scss`, `utilities/endurance-bulma-utilities.scss`   | [Colors](./colors.md#bulma-color-system-customization)             |
+| Component                                                    | Kind              | Source                                                                                     | Documentation                                                      |
+|--------------------------------------------------------------|-------------------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| Palette, grey scale and grey background helpers              | Tokens/Utility    | `utilities/endurancetrio-variables.scss`, `utilities/endurance-grey-helpers.scss`          | [Colors](./colors.md)                                              |
+| Icons (`.et-*`)                                              | Utility           | `utilities/endurance-icons.scss` (generated)                                               | [Icons](./icons.md)                                                |
+| `.endurance-box`                                             | Element           | `elements/endurance-box.scss`                                                              | [Boxes and Cards](./boxes-and-cards.md)                            |
+| `.endurance-card`                                            | Component         | `components/endurance-card.scss`                                                           | [Boxes and Cards](./boxes-and-cards.md)                            |
+| `.tag` variants (`is-swim`, `is-bike`, `is-run`)             | Element           | `elements/endurance-tags.scss`                                                             | [Tags](./tags.md)                                                  |
+| `.endurance-media` (media object)                            | Layout            | `layout/endurance-media.scss`                                                              | [Media](./media.md)                                                |
+| `.endurance-navbar`                                          | Component         | `components/endurance-navbar.scss`                                                         | [Navbar](./navbar.md)                                              |
+| Tabs (`data-tabs`, `data-tab-content`)                       | Component         | `components/endurance-tabs.scss`, `js/bulma-tab.js`                                        | [Tabs](./tabs.md)                                                  |
+| Sortable tables (`data-sortable`, `data-sort`)               | Element           | `elements/endurance-table-sort.scss`, `js/bulma-table-sort.js`                             | [Tables](./tables.md)                                              |
+| Expandable boxes/rows (`data-expand`, `data-expand-content`) | Element/Behaviour | `elements/endurance-expand.scss`, `js/endurance-expand.js`                                 | [Boxes](./boxes-and-cards.md#expand-button), [Tables](./tables.md) |
+| Scrollable rows (`is-scrollable-x`, `data-scroll-to-end`)    | Helper/Behaviour  | `utilities/endurance-scroll.scss`, `layout/endurance-level.scss`, `js/endurance-scroll.js` | [Scrollable Rows](./scroll.md)                                     |
+| `.switch` with inner labels (adapted, MIT)                   | Form              | `form/endurance-switch-control*.scss`                                                      | [Switch Control](./switch-control.md)                              |
+| Modals (`data-modal`)                                        | Component         | `js/bulma-modal.js` (Bulma markup)                                                         | [Behaviours](./behaviours.md)                                      |
+| Navbar burger and language selector                          | Behaviour         | `js/bulma-navbar.js`, `js/language-selector.js`                                            | [Behaviours](./behaviours.md)                                      |
+| Cookie consent theme (Klaro)                                 | Theme             | `klaro/endurance-klaro*.scss`                                                              | Styles only; see the file headers                                  |
+| Light theme and Bulma variable overrides                     | Theme             | `themes/endurance-light-theme.scss`, `utilities/endurance-bulma-utilities.scss`            | [Colors](./colors.md#bulma-color-system-customization)             |
 
 ### Not currently enabled
 

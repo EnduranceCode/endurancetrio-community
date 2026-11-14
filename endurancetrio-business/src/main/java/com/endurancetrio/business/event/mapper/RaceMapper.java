@@ -227,21 +227,11 @@ public class RaceMapper {
    * @return the race type group code, or {@code null} if the race type is not recognized
    */
   private String getRaceTypeGroup(Race race) {
-    switch (race.getRaceType()) {
-      case INDIVIDUAL_PARENT, INDIVIDUAL_DERIVED -> {
-        return RaceTypeGroup.INDIVIDUAL.getCode();
-      }
-      case TEAM_BY_RANK, TEAM_BY_TIME, TEAM_BY_POINTS -> {
-        return RaceTypeGroup.COLLECTIVE.getCode();
-      }
-      case TEAM_RELAY_PARENT, TEAM_RELAY_DERIVED, MIXED_RELAY_PARENT, MIXED_RELAY_DERIVED -> {
-        return RaceTypeGroup.RELAY.getCode();
-      }
-      default -> {
-        LOG.warn("Unrecognized race type '{}' for race ID {}", race.getRaceType(), race.getId());
-        return null;
-      }
+    if (race == null || race.getRaceType() == null) {
+      LOG.warn("Race or race type is null for race ID {}", race == null ? null : race.getId());
+      return null;
     }
+    return RaceTypeGroup.from(race.getRaceType()).getCode();
   }
 
   /**
@@ -266,20 +256,25 @@ public class RaceMapper {
   /**
    * Extracts the parent {@link Event} from the given {@link Race} and builds an {@link EventDTO}.
    * <p>
-   * Uses the first course's event since all courses for a race belong to the same event. Returns
-   * {@code null} if the race has no courses or the event is null.
+   * Uses the first course's event since all courses for a race belong to the same event. By the
+   * data contract a race always has at least one course and a course always has an event, so a
+   * {@code null} return means the stored data violates that contract; the violation is logged so it
+   * can be traced back to the offending race.
    *
    * @param race the race whose event is to be extracted
-   * @return an {@link EventDTO} with the event data, or {@code null} if not available
+   * @return an {@link EventDTO} with the event data, or {@code null} if the data violates the
+   * contract
    */
   private EventDTO getEvent(Race race) {
     Set<Course> courses = race.getCourses();
     if (courses == null || courses.isEmpty()) {
+      LOG.warn("Race {} has no courses; a race must always have at least one course", race.getId());
       return null;
     }
 
     Event event = courses.iterator().next().getEvent();
     if (event == null) {
+      LOG.warn("A course of race {} has no event; a course must always have an event", race.getId());
       return null;
     }
 

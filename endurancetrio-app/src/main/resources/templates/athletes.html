@@ -190,8 +190,9 @@
       </div>
     </div>
 
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination"
-         data-th-if="${pagination.totalPages() > 1}">
+    <nav data-th-if="${pagination.totalPages() > 1}"
+         data-th-attr="aria-label=#{pagination.a11y.label}"
+         class="pagination is-centered" role="navigation">
       <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
          data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
          data-th-href="${paginationPreviousUrl}"
@@ -217,10 +218,10 @@
           <span class="pagination-ellipsis">&hellip;</span>
         </li>
         <li data-th-each="p : ${pageWindow.pages()}">
-          <a data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
-             data-th-attr="aria-label=${'Goto page ' + (p + 1)}"
+          <a data-th-href="${paginationUrls.get(p)}"
              data-th-text="${p + 1}"
-             data-th-href="${paginationUrls.get(p)}"
+             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', p + 1)}"
+             data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
              class="pagination-link"
           >1</a>
         </li>

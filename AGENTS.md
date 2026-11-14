@@ -31,6 +31,8 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 - Exception handlers are scoped by annotation: `EnduranceTrioExceptionHandlerAuth` and `EnduranceTrioExceptionHandlerAPI` handle `@EnduranceTrioRestController`; `EnduranceTrioExceptionHandlerWeb` handles `@EnduranceTrioWebController`
 - Service pattern: `interface ThingService` → `class ThingServiceMain` (not `Impl`)
 - Method order in services: CRUD (CREATE → READ → UPDATE → DELETE → UTILITY), then alphabetical
+- Private methods in classes: placed after all public methods, ordered alphabetically by name
+- Private inner types (classes, records, enums, interfaces): placed after all methods, ordered alphabetically by name
 - Entity base classes: `BaseEntity<T>` (id, equals, hashCode), `AuditableEntity` (version, createdAt, updatedAt)
 - Flyway: `V<yyyymmdd>.<seq>__description.sql` in `endurancetrio-data/src/main/resources/db/migration/{ddl,dml}/{h2,postgres}/`
 - DB naming: snake_case, plural tables, constraint prefixes (`pk_`, `fk_`, `uk_`, `chk_`, `idx_`, `seq_`)
@@ -88,7 +90,7 @@ migrations, or historical data are fixed directly here and are NOT staged upstre
 - Style guide: [`docs/style-guide/index.md`](docs/style-guide/index.md) documents the palette, the `endurance-*` components, the JS behaviours and the icons. Update the matching page when you add or change one of them.
 - Naming: follow [`docs/style-guide/naming.md`](docs/style-guide/naming.md). Blocks are `endurance-{block}`, elements `endurance-{block}-{element}`, and modifiers/states are the global `is-*`/`has-*` classes written next to the block. Never prefix a modifier with `endurance-`.
 - New SCSS partials must be `@forward`ed in `src/scss/style.scss` to be compiled. Some partials are currently commented out and not compiled (see the style guide's "Not currently enabled" list).
-- Behaviours are `src/js/bulma-*.js` modules (plus `language-selector.js`): each exports an object with `init()`, called from `src/js/script.js`. Hooks are `data-*` attributes, not styling classes.
+- Behaviours are `src/js/bulma-*.js` and `src/js/endurance-*.js` modules (plus `language-selector.js`): each exports an object with `init()`, called from `src/js/script.js`. Hooks are `data-*` attributes, not styling classes.
 - Code adapted from third-party projects keeps the original licence notice in its file header and is listed in the style guide's "Third-Party Code" section.
 
 ## Authentication (API)

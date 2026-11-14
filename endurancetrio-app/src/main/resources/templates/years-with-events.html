@@ -47,14 +47,16 @@
         </div>
       </div>
 
-      <nav class="pagination is-centered is-rounded" role="navigation"
-           aria-label="pagination" data-th-if="${yearsWithEvents.totalBatches > 1}">
-        <a class="pagination-previous"
-           data-th-classappend="${yearsWithEvents.currentPage == 0} ? 'is-disabled'"
-           data-th-attr="disabled=${yearsWithEvents.currentPage == 0} ? 'disabled' : null"
-           data-th-href="${yearsWithEvents.currentPage > 0}
+      <nav role="navigation"
+           data-th-if="${yearsWithEvents.totalBatches > 1}"
+           data-th-attr="aria-label=#{pagination.a11y.label}"
+           class="pagination is-centered is-rounded">
+        <a data-th-href="${yearsWithEvents.currentPage > 0}
            ? @{/{lang}/events(lang=${language}, page=${yearsWithEvents.currentPage - 1})}
-           : null">
+           : null"
+           data-th-attr="disabled=${yearsWithEvents.currentPage == 0} ? 'disabled' : null"
+           data-th-classappend="${yearsWithEvents.currentPage == 0} ? 'is-disabled'"
+           class="pagination-previous">
           <span class="icon">
             <i class="et et-chevron-double-left"></i>
           </span>
@@ -111,8 +113,9 @@
         </div>
       </div>
 
-      <nav class="pagination is-centered is-rounded" role="navigation"
-           aria-label="pagination" data-th-if="${yearsWithEvents.totalBatches > 2}">
+      <nav data-th-if="${yearsWithEvents.totalBatches > 2}"
+           data-th-attr="aria-label=#{pagination.a11y.label}"
+           class="pagination is-centered is-rounded" role="navigation">
         <a class="pagination-previous"
            data-th-classappend="${yearsWithEvents.batchGroupPreviousPage < 0} ? 'is-disabled'"
            data-th-attr="disabled=${yearsWithEvents.batchGroupPreviousPage < 0} ? 'disabled' : null"
