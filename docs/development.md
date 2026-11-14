@@ -694,6 +694,39 @@ WEBPACK_OUTPUT_DIR=$(pwd)/endurancetrio-app/target/classes/static \
   `cv.register-vars`) and project Sass variables `$endurance-{block}-{property}`. Keep third-party
   namespaces (Klaro, bulma-switch-control) intact.
 
+### Messages and Accessibility Text
+
+User-facing text lives in two message bundles, and both must always change together:
+
+| File                                                          | Locale            |
+|---------------------------------------------------------------|-------------------|
+| `endurancetrio-app/src/main/resources/messages.properties`    | default (English) |
+| `endurancetrio-app/src/main/resources/messages_pt.properties` | Portuguese        |
+
+- **Keys are namespaced by owner.** Text specific to a page lives under `page.{page}.*`
+  (`page.athlete.profile.*`, `page.event.results.*`). Text shared by several pages lives under a
+  component or domain namespace (`navbar.*`, `pagination.*`, `sport.*`, `distance.type.*`).
+- **Visible and accessible text use different sub-namespaces.** `<namespace>.label.*` is rendered
+  on screen; `<namespace>.a11y.*` never is. The `a11y` namespace holds the text used for
+  `aria-label`, `alt` and `title`, so it is obvious that changing one of those keys cannot change
+  the visible layout.
+- **Never hard-code an English accessible name.** `aria-label="close"` renders untranslated on
+  the Portuguese site. Add an `a11y` key and bind it instead.
+- **Order keys alphabetically inside their namespace group**, and keep the `#` group comments, so
+  a diff shows where a new key belongs.
+- **Both bundles always change together.** There is no fallback that surfaces a missing
+  translation: the raw key is rendered instead. `MessagesBundleTest` fails when the key sets
+  diverge or a value is blank.
+- **Read the bundle from Thymeleaf**, never from a literal:
+  `data-th-text="#{page.athlete.profile.results.title}"`, or the message expression inside
+  `data-th-attr`, for example
+  `data-th-attr="aria-label=#{page.athlete.profile.results.a11y.splits}"`. Use
+  `#messages.msg('key', arg)` when the text takes arguments.
+- **Fragments that render inline SVG accept the accessible name as a parameter**, for example
+  `~{fragments/svg :: mdi-face-man(label=${#messages.msg('page.athlete.profile.a11y.male-icon')})}`.
+  `data-th-replace` discards the attributes of the replaced element, so an `alt` written on the
+  `<img>` never reaches the browser and the SVG needs its own `role="img"` and `aria-label`.
+
 ### Controllers, Services and Repositories
 
 This section establishes naming guidelines for controllers, services and repositories, based on clarity,
@@ -822,9 +855,19 @@ by the CRUD operation they perform:
 Private methods, which support the public contract, must follow a consistent placement
 and ordering standard to improve internal code readability.
 
-1.  **Placement**: All private methods must be placed **after** all public methods of the class.
-2.  **Ordering**: Private methods must be ordered **alphabetically by their method name**. This
-provides the simplest and most predictable structure for implementation details.
+1. **Placement**: All private methods must be placed **after** all public methods of the class.
+2. **Ordering**: Private methods must be ordered **alphabetically by their method name**. This
+   provides the simplest and most predictable structure for implementation details.
+
+##### Private Inner Types
+
+Private inner types (classes, records, enums and interfaces) that support the enclosing class
+must follow a consistent placement and ordering standard:
+
+1. **Placement**: All private inner types must be placed **after** all methods of the enclosing
+   class (public and private).
+2. **Ordering**: Private inner types must be ordered **alphabetically by their type name**.
+3. **Javadoc**: Each private inner type must carry a Javadoc block describing its purpose.
 
 #### Repository Layer
 

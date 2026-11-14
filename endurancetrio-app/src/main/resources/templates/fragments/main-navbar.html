@@ -27,9 +27,9 @@
 
 <body>
 <nav data-th-fragment="main-navbar(metadata)"
-     class="endurance-navbar is-fixed-top has-shadow"
      role="navigation"
-     aria-label="main navigation"
+     data-th-attr="aria-label=#{navbar.a11y.main-navigation}"
+     class="endurance-navbar is-fixed-top has-shadow"
 >
   <div class="container is-fluid">
     <div class="navbar-brand">
@@ -37,7 +37,8 @@
         <svg data-th-replace="~{fragments/svg :: endurancetrio-logo-fixed-black}"></svg>
       </a>
 
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+      <a role="button" class="navbar-burger" aria-expanded="false"
+         data-th-attr="aria-label=#{navbar.a11y.menu}"
          data-target="main-navbar">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>

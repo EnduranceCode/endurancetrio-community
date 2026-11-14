@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2011-2026 Ricardo do Canto
+ *
+ * This file is part of the EnduranceTrio project.
+ *
+ * Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+ * (the "License");
+ *
+ * You may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at https://fsl.software/
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+ * PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+ *
+ * IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+ * SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+ * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+ */
+
+@charset "utf-8";
+
+@use 'bulma/sass/utilities/initial-variables' as iv;
+
+/// Inline padding kept inside the scrollport so snapped content does not sit flush against
+/// the container edge.
+/// @group endurance-scroll
+/// @type {Length}
+/// @access public
+$endurance-scroll-padding-inline: 0.5rem !default;
+
+/// Horizontal scroll container.
+///
+/// Generic helper for rows that are wider than the viewport: the content keeps its natural
+/// width and scrolls sideways instead of being clipped or stacked. `overscroll-behavior-x`
+/// keeps the gesture inside the row (no page bounce, and no browser back-navigation on iOS),
+/// and the snap points make the content land on a clean boundary.
+///
+/// The helper is styling only. When applied to an element that the user is expected to
+/// scroll, also add `tabindex="0"` and an accessible name (`role="group"` plus `aria-label`)
+/// so keyboard and screen reader users can reach and identify the scrollport.
+///
+/// @example html - Scrollable level on small screens
+///   <div class="level is-mobile is-scrollable-x" role="group" tabindex="0"
+///        aria-label="Splits">
+///
+/// @group endurance-scroll
+.#{iv.$class-prefix}is-scrollable-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: $endurance-scroll-padding-inline;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+
+  > * {
+    scroll-snap-align: start;
+  }
+}

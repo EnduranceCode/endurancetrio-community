@@ -16,6 +16,7 @@ the navbar, see [Tabs](./tabs.md), [Tables](./tables.md), and [Navbar](./navbar.
 | `bulma-tab.js`          | Yes                        | [Tabs](./tabs.md)                       |
 | `bulma-table-sort.js`   | Yes                        | [Tables](./tables.md#sortable-columns)  |
 | `endurance-expand.js`   | Yes                        | [Boxes](./boxes-and-cards.md#expand-button) and [Tables](./tables.md#expandable-rows) |
+| `endurance-scroll.js`   | Yes                        | [Scrollable Rows](./scroll.md#opening-at-the-end) |
 | `language-selector.js`  | Yes                        | [Language selector](#language-selector) |
 | `bulma-panel.js`        | **No**                     | Not active; see the note at the end     |
 
@@ -80,6 +81,24 @@ the site's bilingual routing, and it behaves as follows:
 
 Do not reuse the `language-selector` id for another control. The script looks it up by id when
 the page loads.
+
+## Scroll to end
+
+An element carrying `data-scroll-to-end` is scrolled to its right end as soon as it has a layout
+width, which shows the last item of a wide row (a total, for example) without pinning it:
+
+```html
+<div class="level is-mobile is-scrollable-x" data-scroll-to-end>…</div>
+```
+
+- The scroll is applied once per element. A row inside a collapsed region starts with no width,
+  so the behaviour waits for the first reveal; re-opening the region later keeps the position the
+  reader left.
+- The jump is instant even when the row opts into smooth scrolling, so later scrolling keeps the
+  animation and the first reveal does not.
+- A row that does not overflow is left alone, and without JavaScript it opens at its start edge.
+
+See [Scrollable Rows](./scroll.md#opening-at-the-end) for the styling side.
 
 ## Not active: `bulmaPanel`
 

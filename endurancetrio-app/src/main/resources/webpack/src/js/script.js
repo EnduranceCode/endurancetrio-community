@@ -28,6 +28,7 @@ import bulmaNavbar from './bulma-navbar.js';
 import bulmaTab from './bulma-tab.js';
 import bulmaTableSort from './bulma-table-sort.js';
 import enduranceExpand from './endurance-expand.js';
+import enduranceScroll from './endurance-scroll.js';
 import languageSelector from './language-selector.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -48,5 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
   bulmaTab.init();
   bulmaTableSort.init();
   enduranceExpand.init();
+  enduranceScroll.init();
   languageSelector.init();
 });
