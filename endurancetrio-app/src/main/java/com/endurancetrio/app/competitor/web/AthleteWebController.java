@@ -236,18 +236,46 @@ public class AthleteWebController {
 
     InsightPageDTO athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
 
+    int totalPages = athleteResults.pagination().totalPages();
+
+    String athletePath = UriComponentsBuilder.fromPath("/")
+        .pathSegment(locale.getLanguage(), ATTRIBUTE_ATHLETES, String.valueOf(id))
+        .build()
+        .toUriString();
+
+    Map<Integer, String> paginationUrls = new LinkedHashMap<>();
+    for (Integer pageIndex : PaginationUtils.pageWindow(clampedPage, totalPages).pages()) {
+      paginationUrls.put(pageIndex, buildAthleteUrl(athletePath, pageIndex));
+    }
+
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, athleteResults.pagination());
     model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles.articles());
     model.addAttribute(ATTRIBUTE_ATHLETE, athlete);
     model.addAttribute(ATTRIBUTE_RESULTS, athleteResults.results());
+    model.addAttribute(ATTRIBUTE_PAGE_WINDOW, PaginationUtils.pageWindow(clampedPage, totalPages));
+    model.addAttribute(ATTRIBUTE_PAGINATION_URLS, paginationUrls);
+    model.addAttribute(ATTRIBUTE_PAGINATION_PREVIOUS_URL,
+        athleteResults.pagination().hasPrevious() ? buildAthleteUrl(athletePath, clampedPage - 1) : null
+    );
+    model.addAttribute(ATTRIBUTE_PAGINATION_NEXT_URL,
+        athleteResults.pagination().hasNext() ? buildAthleteUrl(athletePath, clampedPage + 1) : null
+    );
 
     return VIEW_ATHLETE_PROFILE;
   }
 
   private static String buildAbsoluteAthletesUrl(String baseUrl, String language) {
     return UriComponentsBuilder.fromUriString(baseUrl).pathSegment(language, VIEW_ATHLETES).build().toUriString();
+  }
+
+  private static String buildAthleteUrl(String path, Integer page) {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
+    if (page != null) {
+      builder.queryParam("page", page);
+    }
+    return builder.build().encode().toUriString();
   }
 
   private static String buildAthletesUrl(String path, Integer page, AthleteFilterDTO filter) {
