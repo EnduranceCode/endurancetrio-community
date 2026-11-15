@@ -1,17 +1,19 @@
 ---
 name: create-release-notes
-description: Create release notes for a new EnduranceTrio Community release under tasks/release-notes, following .github/RELEASE_NOTES_TEMPLATE.md and the established release-note pattern, and validate them. Creating the GitHub release or tag is out of scope.
+description: Create release notes for a new EnduranceTrio Community release under docs/release-notes, following .github/RELEASE_NOTES_TEMPLATE.md and the established release-note pattern, and validate them. Creating the GitHub release or tag is out of scope.
 ---
 
 # Create release notes
 
 Use this skill when a new EnduranceTrio Community release is being prepared. The output is a
-single Markdown file in `tasks/release-notes/` whose full contents are copied and pasted,
+single Markdown file in `docs/release-notes/` whose full contents are copied and pasted,
 verbatim, into the GitHub release body on
 [`endurancetrio/endurancetrio-community`](https://github.com/endurancetrio/endurancetrio-community).
+The file is committed, so `docs/release-notes/` is the public archive of every published release.
 
 The release itself is created manually. **Do not** create the GitHub release, create or push
-a tag, bump the version, commit, or push anything. Those actions are out of scope.
+a tag, or bump the version. Those actions are out of scope. Commits follow the repository rule
+in `AGENTS.md`: only create one when explicitly instructed.
 
 `.github/RELEASE_NOTES_TEMPLATE.md` is the single source of truth for the section structure.
 Read it every time; never draft from memory. The bundled checker reads the same file, so a
@@ -19,8 +21,9 @@ future template edit is picked up automatically.
 
 ## Hard rules
 
-- Write the file at `tasks/release-notes/release-notes-vX.Y.Z.md`. The folder is gitignored;
-  never commit the file.
+- Write the file at `docs/release-notes/vX.Y.Z.md`. The folder is committed, so the file must be
+  publishable as-is. A file for an already published release is never edited: replace it with the
+  published body if the two diverge.
 - The file is the exact release body: no YAML frontmatter, no wrapping code fence, no
   instructions, no local paths and no HTML comments. Delete every template comment.
 - The first line is exactly `# EnduranceTrio Community - Release vX.Y.Z` (space, hyphen,
@@ -170,8 +173,8 @@ None.
    If a change could fit two sections, choose the one a release reader cares about most and
    do not duplicate it.
 
-5. **Write the file.** Create `tasks/release-notes/release-notes-vX.Y.Z.md` using the
-   canonical shape. Match the level of detail of `release-notes-v0.3.5.md`: complete enough
+5. **Write the file.** Create `docs/release-notes/vX.Y.Z.md` using the
+   canonical shape. Match the level of detail of `docs/release-notes/v0.3.5.md`: complete enough
    to understand the release, without turning into a changelog of every commit.
 
 6. **Validate before reporting.** Run the checker with the exact version:
@@ -179,7 +182,7 @@ None.
    ```shell
    python3 .agents/skills/create-release-notes/scripts/check-release-notes.py \
      --version 0.4.0 \
-     --file tasks/release-notes/release-notes-v0.4.0.md
+     --file docs/release-notes/v0.4.0.md
    ```
 
    Every `ERROR` must be fixed. Review every `WARNING`, especially bullets that do not follow
@@ -190,4 +193,4 @@ None.
 Report the file path, the release version, the previous tag used as the range start, the
 sections that received content, and the checker result. Also state the values needed for the
 manual GitHub release: title `vX.Y.Z`, tag `community-vX.Y.Z`. Do not create the release or
-tag, and do not commit the file.
+tag.
