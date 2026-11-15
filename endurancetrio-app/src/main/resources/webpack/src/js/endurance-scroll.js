@@ -19,7 +19,7 @@
  */
 
 /**
- * Opens a scroll container at its end edge.
+ * Opens a scroll container at its end edge and makes the scroll discoverable.
  *
  * An element carrying the `data-scroll-to-end` attribute is scrolled to its right end once it
  * has a layout width, so the last item (a total, for example) is visible without pinning it.
@@ -31,6 +31,12 @@
  * pull the row back.
  *
  * Without JavaScript the row opens at its start edge; nothing is hidden or unreachable.
+ *
+ * In addition, when the row is wrapped in an element carrying `data-scroll-region`, the wrapper
+ * receives the `is-overflow-start` / `is-overflow-end` state classes (removed entirely when the
+ * row fits the viewport), which the stylesheet uses to reveal the edge shadow. Once per element,
+ * and only when motion is allowed, the row also nudges a few pixels
+ * toward its hidden content on first reveal, so the clipped edge is noticed.
  *
  * @namespace enduranceScroll
  */
@@ -49,6 +55,8 @@ const enduranceScroll = {
   _scrollWhenVisible(element) {
     if (!('ResizeObserver' in window)) {
       this._scrollToEnd(element);
+      this._manageOverflow(element);
+      this._nudge(element);
       return;
     }
 
@@ -58,6 +66,8 @@ const enduranceScroll = {
       }
       observer.disconnect();
       this._scrollToEnd(element);
+      this._manageOverflow(element);
+      this._nudge(element);
     });
 
     observer.observe(element);
@@ -81,6 +91,134 @@ const enduranceScroll = {
     element.style.scrollBehavior = 'auto';
     element.scrollLeft = element.scrollWidth - element.clientWidth;
     element.style.scrollBehavior = scrollBehavior;
+  },
+
+  /**
+   * Resolves the element that hosts the overflow state classes for `element`.
+   *
+   * @param {Element} element
+   * @returns {Element}
+   */
+  _region(element) {
+    return element.closest('[data-scroll-region]') || element;
+  },
+
+  /**
+   * Keeps the `is-overflow-start` / `is-overflow-end` state classes on the host region in sync
+   * with the scroll position. Both classes are removed when the row fits the viewport, so no
+   * affordance chrome is rendered for a non-scrolling row.
+   *
+   * @param {Element} element
+   */
+  _manageOverflow(element) {
+    const region = this._region(element);
+
+    const update = () => {
+      if (element.scrollWidth <= element.clientWidth + 1) {
+        region.classList.remove('is-overflow-start', 'is-overflow-end');
+        return;
+      }
+
+      const atStart = element.scrollLeft <= 1;
+      const atEnd = element.scrollLeft >= element.scrollWidth - element.clientWidth - 1;
+      region.classList.toggle('is-overflow-start', !atStart);
+      region.classList.toggle('is-overflow-end', !atEnd);
+    };
+
+    update();
+    element.addEventListener('scroll', update, { passive: true });
+
+    if ('ResizeObserver' in window) {
+      const observer = new window.ResizeObserver(update);
+      observer.observe(element);
+    }
+  },
+
+  /**
+   * Nudges the row a few pixels toward its hidden content once, on first reveal, to draw
+   * attention to the clipped edge. Skipped under reduced motion, when the row fits, or when the
+   * reader has already interacted.
+   *
+   * @param {Element} element
+   */
+  _nudge(element) {
+    if (element.dataset.scrollNudged === 'true') {
+      return;
+    }
+    element.dataset.scrollNudged = 'true';
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+    if (element.scrollWidth <= element.clientWidth + 1) {
+      return;
+    }
+    // Only nudge when the resting position still hides content on the opposite side.
+    if (element.scrollLeft < element.scrollWidth - element.clientWidth - 1) {
+      return;
+    }
+
+    let cancelled = false;
+    const cleanup = () => {
+      element.removeEventListener('pointerdown', cancel);
+      element.removeEventListener('keydown', cancel);
+      element.removeEventListener('wheel', cancel);
+      element.removeEventListener('touchstart', cancel);
+    };
+    const cancel = () => {
+      cancelled = true;
+      cleanup();
+    };
+
+    element.addEventListener('pointerdown', cancel, { passive: true });
+    element.addEventListener('keydown', cancel);
+    element.addEventListener('wheel', cancel, { passive: true });
+    element.addEventListener('touchstart', cancel, { passive: true });
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (cancelled) {
+          cleanup();
+          return;
+        }
+
+        const distance = Math.min(32, Math.round(element.clientWidth * 0.12));
+        const start = element.scrollLeft;
+        const duration = 350;
+        const previousBehavior = element.style.scrollBehavior;
+        const previousSnap = element.style.scrollSnapType;
+
+        element.style.scrollBehavior = 'auto';
+        element.style.scrollSnapType = 'none';
+
+        const begin = window.performance.now();
+        const step = (now) => {
+          if (cancelled) {
+            element.scrollLeft = start;
+            element.style.scrollBehavior = previousBehavior;
+            element.style.scrollSnapType = previousSnap;
+            cleanup();
+            return;
+          }
+
+          const progress = Math.min(1, (now - begin) / duration);
+          // Triangle: out to the hidden edge, then back to the resting position.
+          const phase = progress < 0.5 ? progress * 2 : (1 - progress) * 2;
+          element.scrollLeft = start - distance * phase;
+
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          } else {
+            element.scrollLeft = start;
+            element.style.scrollBehavior = previousBehavior;
+            element.style.scrollSnapType = previousSnap;
+            cleanup();
+          }
+        };
+
+        window.requestAnimationFrame(step);
+      });
+    });
   },
 };
 

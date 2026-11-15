@@ -109,7 +109,7 @@ An element carrying `data-scroll-to-end` is scrolled to its right end as soon as
 width, which shows the last item of a wide row (a total, for example) without pinning it:
 
 ```html
-<div class="level is-mobile is-scrollable-x" data-scroll-to-end>…</div>
+<div class="level is-mobile is-scrollable-x" data-scroll-to-end data-scroll-cue>…</div>
 ```
 
 - The scroll is applied once per element. A row inside a collapsed region starts with no width,
@@ -118,8 +118,15 @@ width, which shows the last item of a wide row (a total, for example) without pi
 - The jump is instant even when the row opts into smooth scrolling, so later scrolling keeps the
   animation and the first reveal does not.
 - A row that does not overflow is left alone, and without JavaScript it opens at its start edge.
+- When the row is also wrapped in an element carrying `data-scroll-region`, the wrapper receives
+  the `is-overflow-start` / `is-overflow-end` state classes, kept in sync with the scroll
+  position and removed when the row fits. The same wrapper hosts the edge shadow (a hard 4 px
+  line in `var(--bulma-background)`, matching Bulma's navbar bottom shadow) and a visually
+  hidden description.
+- Once per element, and only when motion is allowed, the row nudges a few pixels toward its
+  hidden content on first reveal; any pointer, keyboard, wheel or touch input cancels it.
 
-See [Scrollable Rows](./scroll.md#opening-at-the-end) for the styling side.
+See [Scrollable Rows](./scroll.md#affordance) for the markup and styling side.
 
 ## Not active: `bulmaPanel`
 
