@@ -9,16 +9,17 @@ once the DOM has loaded, so a page only needs the markup, not any script of its 
 This page covers the modules that are not documented in a component page. For tabs, tables, and
 the navbar, see [Tabs](./tabs.md), [Tables](./tables.md), and [Navbar](./navbar.md).
 
-| Module                  | Initialised by `script.js` | Documented here                         |
-|-------------------------|----------------------------|-----------------------------------------|
-| `bulma-modal.js`        | Yes                        | [Modal](#modal)                         |
-| `bulma-navbar.js`       | Yes                        | [Navbar burger](#navbar-burger)         |
-| `bulma-tab.js`          | Yes                        | [Tabs](./tabs.md)                       |
-| `bulma-table-sort.js`   | Yes                        | [Tables](./tables.md#sortable-columns)  |
-| `endurance-expand.js`   | Yes                        | [Boxes](./boxes-and-cards.md#expand-button) and [Tables](./tables.md#expandable-rows) |
-| `endurance-scroll.js`   | Yes                        | [Scrollable Rows](./scroll.md#opening-at-the-end) |
-| `language-selector.js`  | Yes                        | [Language selector](#language-selector) |
-| `bulma-panel.js`        | **No**                     | Not active; see the note at the end     |
+| Module                 | Initialised by `script.js` | Documented here                                                                       |
+|------------------------|----------------------------|---------------------------------------------------------------------------------------|
+| `bulma-loading.js`     | Yes                        | [Loading buttons](#loading-buttons)                                                   |
+| `bulma-modal.js`       | Yes                        | [Modal](#modal)                                                                       |
+| `bulma-navbar.js`      | Yes                        | [Navbar burger](#navbar-burger)                                                       |
+| `bulma-tab.js`         | Yes                        | [Tabs](./tabs.md)                                                                     |
+| `bulma-table-sort.js`  | Yes                        | [Tables](./tables.md#sortable-columns)                                                |
+| `endurance-expand.js`  | Yes                        | [Boxes](./boxes-and-cards.md#expand-button) and [Tables](./tables.md#expandable-rows) |
+| `endurance-scroll.js`  | Yes                        | [Scrollable Rows](./scroll.md#opening-at-the-end)                                     |
+| `language-selector.js` | Yes                        | [Language selector](#language-selector)                                               |
+| `bulma-panel.js`       | **No**                     | Not active; see the note at the end                                                   |
 
 ## Modal
 
@@ -45,6 +46,26 @@ The modal is closed by:
 - the **Escape** key.
 
 Opening sets `is-active` on the modal. Keep the modal `id` unique on the page.
+
+## Loading buttons
+
+A button carrying `data-loading` gets Bulma's `is-loading` modifier when it is clicked,
+showing a spinner while the action it triggers (typically a form submission or navigation)
+completes:
+
+```html
+<button type="submit" class="button is-primary" data-loading>
+  <span class="icon"><i class="et et-magnify"></i></span>
+  <span>Search</span>
+</button>
+```
+
+- The `is-loading` class is added on click. No other state is managed, and the button is
+  not disabled, so the surrounding form still submits normally.
+- Use it on submit buttons whose action navigates or reloads the page. Without JavaScript
+  the button behaves as an ordinary button.
+- The hook is the `data-loading` attribute; never select loading buttons through a styling
+  class.
 
 ## Navbar burger
 
