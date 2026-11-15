@@ -39,7 +39,7 @@ const enduranceExpand = {
       // Target resolution uses the containing row when the trigger lives in a table,
       // so the detail row (the row's next sibling) is found even without data-expand-row.
       const scope = row || trigger;
-      const wholeRow = !!(row && row.hasAttribute('data-expand-row'));
+      const wholeRow = row?.dataset.expandRow !== undefined;
 
       const target = this._findTarget(scope);
       if (!target) {
@@ -85,7 +85,7 @@ const enduranceExpand = {
    */
   _findTarget(scope) {
     for (let el = scope.nextElementSibling; el; el = el.nextElementSibling) {
-      if (el.hasAttribute('data-expand-content')) {
+      if (el.dataset.expandContent !== undefined) {
         return el;
       }
     }
