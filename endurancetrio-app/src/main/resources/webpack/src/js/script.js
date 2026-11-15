@@ -23,6 +23,7 @@ import '../scss/style.scss';
 import * as klaro from 'klaro/dist/klaro-no-css.js';
 import klaroConfig from './klaro-config.js';
 
+import bulmaLoading from './bulma-loading.js';
 import bulmaModal from './bulma-modal.js';
 import bulmaNavbar from './bulma-navbar.js';
 import bulmaTab from './bulma-tab.js';
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     klaro.show(klaroConfig, true);
   });
 
+  bulmaLoading.init();
   bulmaModal.init();
   bulmaNavbar.init();
   bulmaTab.init();
