@@ -24,7 +24,7 @@
 
 /// Scrollable level.
 ///
-/// Pairs `is-scrollable-x` (see `utilities/endurance-scroll.scss`) with Bulma's `.level`.
+/// Pairs `is-scrollable-x` (see `helpers/endurance-scroll.scss`) with Bulma's `.level`.
 /// `.level` distributes its items with `justify-content: space-between`, which is ambiguous
 /// once the content overflows, so the row is pinned to the start edge instead. Smooth
 /// scrolling is opt-in and respects the reduced-motion preference.

@@ -8,11 +8,12 @@ attribute implement it.
 
 Sources:
 
-| Feature            | Source                                     |
-|--------------------|--------------------------------------------|
-| Horizontal scroll  | `src/scss/utilities/endurance-scroll.scss` |
-| Level tweaks       | `src/scss/layout/endurance-level.scss`     |
-| Opening at the end | `src/js/endurance-scroll.js`               |
+| Feature            | Source                                             |
+|--------------------|----------------------------------------------------|
+| Horizontal scroll  | `src/scss/helpers/endurance-scroll.scss`           |
+| Level tweaks       | `src/scss/layout/endurance-level.scss`             |
+| Affordance shadow  | `src/scss/components/endurance-scroll-region.scss` |
+| Opening at the end | `src/js/endurance-scroll.js`                       |
 
 ## Usage
 
@@ -60,6 +61,49 @@ instead:
 Do not use this behaviour to hide the beginning of a row. It changes where the reader starts
 looking, not what is available.
 
+## Affordance
+
+On touch screens the overlay scrollbar is invisible until the gesture starts, and a hard clip on
+plain text reads as a truncated value rather than as "there is more". Wrapping the row in
+`.endurance-scroll-region` adds two cues, both driven by the row's scroll position:
+
+```html
+<div class="endurance-scroll-region" data-scroll-region>
+  <div class="level is-mobile is-scrollable-x"
+       role="group" tabindex="0"
+       data-scroll-to-end data-scroll-cue
+       data-th-attr="aria-label=#{…}, aria-describedby=${'splits-hint-' + result.race().id}">
+    …
+  </div>
+  <p data-th-id="${'splits-hint-' + result.race().id}"
+     data-th-text="#{page.athlete.profile.results.hint.splits}"
+     class="is-sr-only"></p>
+</div>
+```
+
+| Hook                 | Kind      | Applies to     | Effect                                                          |
+|----------------------|-----------|----------------|-----------------------------------------------------------------|
+| `data-scroll-region` | Behaviour | The wrapper    | Hosts the `is-overflow-start` / `is-overflow-end` state classes |
+| `data-scroll-cue`    | Behaviour | The scrollport | Opts the row into state tracking (and the one-shot nudge)       |
+
+- **Edge shadow.** `::before` / `::after` on the wrapper paint a hard 4 px line in
+  `var(--bulma-background)` (0.25 em, no blur) on the side that still hides content — the same
+  shadow Bulma draws under its top fixed navbar. The shadow is the primary cue on first reveal,
+  because the row opens at its end edge, so the clipped side is the left one.
+- The native scrollbar is hidden for these rows (`scrollbar-width: none` plus
+  `::-webkit-scrollbar { display: none }`) so it does not compete with the shadow.
+- The state classes are set by `js/endurance-scroll.js` from `scrollLeft`, `scrollWidth` and
+  `clientWidth`, with a 1 px tolerance, and are re-evaluated on scroll and on resize. Both are
+  removed when the row fits the viewport, so a non-scrolling row renders no shadow at all — on
+  desktop and for short races there is no chrome.
+- A visually hidden description (`is-sr-only`) doubles as the group's `aria-describedby`
+  target, so its wording must read sensibly to keyboard and screen-reader users; it is the
+  only use of `page.athlete.profile.results.hint.splits`.
+- Once per element, and only when `prefers-reduced-motion` is not `reduce`, the row nudges a
+  few pixels toward its hidden content on first reveal. The nudge is cancelled by any pointer,
+  keyboard, wheel or touch input, and is skipped when the row fits or is not resting at its
+  end edge.
+
 ## Behaviour notes
 
 - **Snap points.** `scroll-snap-type: x proximity` with `scroll-snap-align: start` on the direct
@@ -67,8 +111,9 @@ looking, not what is available.
 - **Contained overscroll.** `overscroll-behavior-x: contain` keeps a horizontal swipe inside the
   row: the page does not bounce and iOS Safari does not read the gesture as back-navigation.
 - **Thin scrollbar.** `scrollbar-width: thin` applies to Firefox and Chromium. Mobile Safari and
-  Chrome use overlay scrollbars that cannot be styled, so rely on the cut-off content as the
-  affordance for swiping.
+  Chrome use overlay scrollbars that cannot be styled, so the cut-off content alone is not a
+  reliable affordance: wrap the row in `.endurance-scroll-region` (see
+  [Affordance](#affordance)), which hides the native bar and supplies an edge shadow instead.
 - **Reduced motion.** Smooth scrolling in `.level.is-scrollable-x` is wrapped in
   `prefers-reduced-motion: no-preference`, and the initial jump ignores smooth scrolling
   regardless.

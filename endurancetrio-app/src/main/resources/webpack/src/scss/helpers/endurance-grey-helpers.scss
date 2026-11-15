@@ -22,7 +22,7 @@
 
 @use 'sass:color';
 @use 'bulma/sass/utilities/initial-variables' as iv;
-@use './endurancetrio-variables' as et;
+@use '../utilities/endurancetrio-variables' as et;
 
 $et-greys: (
   '050': et.$et-grey-050,
