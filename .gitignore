@@ -3,7 +3,7 @@
 application-secrets.yaml
 endurancetrio-app/src/main/resources/static
 
-# Task briefs
+# Local task briefs (the backlog lives in the planning repo)
 tasks/*
 !tasks/info.md
 

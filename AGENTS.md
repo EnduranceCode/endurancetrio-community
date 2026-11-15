@@ -122,17 +122,47 @@ Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activa
 - CI: `.github/workflows/publish-image.yml` — triggers on release publish or `workflow_dispatch`
 - Deployment Postgres port mapping is loopback-only (`127.0.0.1:${POSTGRES_EXT_PORT:-5432}:5432`), intended for local access on server or SSH tunnel clients
 
-## Task briefs
+## Planning and backlog (private repo)
 
-Local task briefs for AI agent implementation live in `tasks/`. Each file follows the format
-in `.github/ISSUE_TEMPLATE/feature-or-bugfix.md`. The folder is gitignored — only `info.md`
-is committed.
+The backlog lives in GitHub Issues on the private repository
+[`endurancetrio/endurancetrio-planning`](https://github.com/endurancetrio/endurancetrio-planning),
+organised on the private "EnduranceTrio Planning" Project board:
 
-**Handoff convention:** *"Read `tasks/foo.md` and implement it."* The agent parses the document
-and executes against its acceptance criteria.
+- **Issue type** (organization-level): Feature, Bug, Improvement, Analysis, Task
+- **Effort** (organization-level): High, Medium, Low
+- **Status** (board only): Inbox → Backlog → Ready → In Progress → Done
 
-Once implemented, move the task file to `tasks/done/` (the PR description captures the change).
-Do not delete it: `tasks/done/` keeps the implementation rationale for later review.
+Labels are not used for planning. This repository is public, so unfinished ideas, plans, and
+analyses belong in the planning repo, never in a commit, an issue, or a PR here.
+
+Two issue templates live in that repository's `.github/ISSUE_TEMPLATE/`: **Quick capture** for fast
+idea capture and **Backlog item** for triaged items. An item reaches Backlog only once its body
+follows the Backlog item template. That body is identical to this repository's
+`.github/ISSUE_TEMPLATE/backlog-item.md`; only the template `about` differs, so when one body
+changes, change both.
+
+## Task drafts
+
+`tasks/` is a gitignored staging area for drafts: ideas, options being weighed, analyses. Only
+`tasks/info.md` is committed.
+
+A draft is never a second copy of an issue:
+
+- A draft exists only until its planning issue exists.
+- Once the issue is created, delete the draft. Nothing is archived and no brief is kept.
+- The planning issue is the only specification. Change the issue, not a file.
+
+**Handoff convention:** *"Implement planning issue #N"*. The agent reads the issue itself, for
+example `gh issue view N -R endurancetrio/endurancetrio-planning --json title,body`.
+
+Nothing else under `tasks/` is part of this workflow.
+
+## Release notes
+
+Published release notes are archived in [`docs/release-notes/`](docs/release-notes) as `vX.Y.Z.md`,
+one file per release. Each file is the verbatim body of the GitHub release published from
+`endurancetrio/endurancetrio-community`, so a published file is never edited; if the two diverge,
+the published body wins.
 
 ## Commit messages
 

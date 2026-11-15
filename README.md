@@ -28,7 +28,8 @@
    2. [Server Setup](./docs/deployment.md#server-setup)
    3. [Reverse Proxy Setup](./docs/deployment.md#reverse-proxy-setup)
    4. [SSL Certificate](./docs/deployment.md#ssl-certificate)
-5. [License](#license)
+5. [Release Notes](#release-notes)
+6. [License](#license)
 
 ## Introduction
 
@@ -206,6 +207,13 @@ SSL certificate configuration, etc.), please refer to the [Deployment Guide](./d
 Docker release artifacts (GitHub releases and GHCR images) are published from the
 **EnduranceTrio** [organization repository](https://github.com/endurancetrio/endurancetrio-community),
 while source development happens in [this repository](https://github.com/EnduranceCode/endurancetrio-community).
+
+## Release Notes
+
+Release notes for every published version are archived in
+[`docs/release-notes/`](./docs/release-notes). Each file is the exact body published with the
+corresponding GitHub release in the
+[organization repository](https://github.com/endurancetrio/endurancetrio-community/releases).
 
 ## License
 
