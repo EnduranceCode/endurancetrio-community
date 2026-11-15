@@ -83,7 +83,7 @@ const bulmaTableSort = {
     rows.forEach((row) => {
       const detail = row.nextElementSibling;
       tbody.appendChild(row);
-      if (detail?.hasAttribute('data-expand-content')) {
+      if (detail?.dataset.expandContent !== undefined) {
         tbody.appendChild(detail);
       }
     });
