@@ -141,6 +141,10 @@ follows the Backlog item template. That body is identical to this repository's
 `.github/ISSUE_TEMPLATE/backlog-item.md`; only the template `about` differs, so when one body
 changes, change both.
 
+Turning an Inbox issue into a backlog-item draft is done with the `draft-backlog-item` skill
+(`.agents/skills/draft-backlog-item/`). The workflow is documented in
+[`docs/development.md`](docs/development.md#planning-and-backlog-workflow).
+
 ## Task drafts
 
 `tasks/` is a gitignored staging area for drafts: ideas, options being weighed, analyses. Only

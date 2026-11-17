@@ -7,16 +7,17 @@ an overview of the project, see the [main README.md](../README.md).
 
 1. [Technology Stack](#technology-stack)
 2. [Repository and Release Topology](#repository-and-release-topology)
-3. [API Key Management](#api-key-management)
-4. [Database](#database)
-5. [Tracker Domain Development](#tracker-domain-development)
-6. [Installation](#installation)
-7. [Run the application](#run-the-application)
-8. [Code & Naming Conventions](#code--naming-conventions)
-9. [Testing](#testing)
-10. [Programmatic Version Management](#programmatic-version-management)
-11. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
-12. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
+3. [Planning and Backlog Workflow](#planning-and-backlog-workflow)
+4. [API Key Management](#api-key-management)
+5. [Database](#database)
+6. [Tracker Domain Development](#tracker-domain-development)
+7. [Installation](#installation)
+8. [Run the application](#run-the-application)
+9. [Code & Naming Conventions](#code--naming-conventions)
+10. [Testing](#testing)
+11. [Programmatic Version Management](#programmatic-version-management)
+12. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
+13. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
 
 ## Technology Stack
 
@@ -48,6 +49,78 @@ Docker images are published to:
 `ghcr.io/endurancetrio/endurancetrio-community`
 
 > **Note:** Deployment should use image tags published from the organization repository.
+
+## Planning and Backlog Workflow
+
+The backlog is managed in the private repository
+[`endurancetrio/endurancetrio-planning`](https://github.com/endurancetrio/endurancetrio-planning)
+and tracked on the private
+[**EnduranceTrio Planning**](https://github.com/orgs/endurancetrio/projects/1) project.
+This public repository contains no unfinished ideas, plans or analyses.
+
+### Repositories and project board
+
+- **Issue types** (organization-level): Feature, Bug, Improvement, Analysis, Task.
+- **Effort** (organization-level): High, Medium, Low.
+- **Status** (board only): Inbox → Backlog → Ready → In Progress → Done.
+- Labels are not used for planning; type and effort carry that information.
+- Issues in community-owned code are tracked in the planning repository. Issues in tracker-domain
+  code are filed upstream (see [Tracker Domain Development](#tracker-domain-development)).
+
+### Issue templates
+
+Two templates live in the planning repository's `.github/ISSUE_TEMPLATE/`:
+
+- **Quick capture** — fast idea capture; one or two lines in `## Idea` are enough.
+- **Backlog item** — the full specification an implementer needs.
+
+Both this repository's `.github/ISSUE_TEMPLATE/backlog-item.md` and the planning repository's copy
+are kept in sync; only the template `about` line differs. When one changes, change the other.
+
+The Quick capture is deliberately incomplete. Turning it into a Backlog item is a refinement step,
+not a copy.
+
+### From capture to implementation
+
+1. An idea is captured as a Quick capture and lands in **Inbox**.
+2. Refinement turns the capture into a Backlog item body: verified current state, scope, approach,
+   implementation notes, testing and acceptance criteria.
+3. The issue moves to **Backlog** once its body follows the Backlog item template, then to **Ready**
+   when it is available to implement.
+4. The issue body is the only specification. Change the issue, not a local file.
+5. Handoff to implementation is the phrase *"Implement planning issue #N"*; the agent reads the
+   issue itself, for example
+   `gh issue view N -R endurancetrio/endurancetrio-planning --json title,body`.
+
+Nothing unfinished belongs in this public repository: no ideas, plans or analyses in commits, issues
+or pull requests here.
+
+### Task drafts
+
+`tasks/` is a gitignored staging area for drafts. Only `tasks/info.md` is committed.
+
+- A draft exists only until its planning issue exists.
+- Once the issue is created or updated, delete the draft. Nothing is archived and no brief is kept.
+- The planning issue is the only specification.
+
+### Drafting a backlog item with the `draft-backlog-item` skill
+
+Invoke the skill with the issue reference, either `#N` or
+`https://github.com/endurancetrio/endurancetrio-planning/issues/N`. For example:
+*"Draft planning issue #11 with draft-backlog-item"*.
+
+The skill fetches the issue, confirms that it is in Inbox on the board, runs a refinement interview
+with the product owner, writes `tasks/draft-<N>-<slug>.md` following the backlog item template, and
+validates it with the bundled checker. The full procedure and rules are in
+[`.agents/skills/draft-backlog-item/SKILL.md`](../.agents/skills/draft-backlog-item/SKILL.md).
+
+- **Success**: a validated draft with no open questions.
+- **Blocked**: the issue is closed, is not in Inbox, or a question is left unanswered. The skill
+  reports the blockers and writes no draft.
+- **Never**: edits the planning issue, changes the board status, creates a commit, or writes outside
+  `tasks/`. Scratch files go under `/tmp/opencode/`.
+
+The draft is temporary: delete it once its content is moved into the issue body.
 
 ## API Key Management
 

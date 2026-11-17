@@ -153,6 +153,10 @@ out
 .springBeans
 .sts4-cache
 
+# Python bytecode
+**/__pycache__/
+*.pyc
+
 # IntelliJ IDEA
 # -------------
 .idea
