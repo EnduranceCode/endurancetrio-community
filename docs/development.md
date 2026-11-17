@@ -122,6 +122,30 @@ validates it with the bundled checker. The full procedure and rules are in
 
 The draft is temporary: delete it once its content is moved into the issue body.
 
+### Publishing a backlog draft with the `publish-backlog-draft` skill
+
+Invoke the skill with the local draft path, for example:
+*"Publish `tasks/draft-11-events-directory-search.md` with publish-backlog-draft"*.
+
+The script `publish-backlog-draft.py` runs a dry run by default: it validates the draft, checks the
+`project` token scope, verifies the issue is open and in Inbox, and prints the plan and body diff.
+With `--apply`, after the product owner's green light, it re-checks the state, backs up the
+original issue, updates title and body, sets a missing Issue type or Effort, moves Status to
+**Backlog** last, and verifies the result. `--delete-draft` removes the draft only after
+verification passes.
+
+Missing Issue type or Effort is passed with `--issue-type` and `--effort`. Effort is the
+organization-level issue field, so if it has no options, the publication is blocked until the
+options exist. The full procedure is in
+[`.agents/skills/publish-backlog-draft/SKILL.md`](../.agents/skills/publish-backlog-draft/SKILL.md).
+
+Blocked conditions: a closed or missing issue, a status other than Inbox, validation errors,
+missing metadata that cannot be set, or a state change between the dry run and the write.
+
+The skill never commits, pushes, or writes outside `tasks/` except scratch files under
+`/tmp/opencode/publish-<N>/`. If a write fails after a partial update, it prints the restore
+command and keeps the draft.
+
 ## API Key Management
 
 ### Overview

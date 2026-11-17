@@ -145,6 +145,10 @@ Turning an Inbox issue into a backlog-item draft is done with the `draft-backlog
 (`.agents/skills/draft-backlog-item/`). The workflow is documented in
 [`docs/development.md`](docs/development.md#planning-and-backlog-workflow).
 
+Publishing an approved draft to its planning issue is done with the `publish-backlog-draft` skill
+(`.agents/skills/publish-backlog-draft/`). It updates the issue title/body, sets Issue type and
+Effort when needed, and moves the issue to **Backlog**.
+
 ## Task drafts
 
 `tasks/` is a gitignored staging area for drafts: ideas, options being weighed, analyses. Only
@@ -153,7 +157,7 @@ Turning an Inbox issue into a backlog-item draft is done with the `draft-backlog
 A draft is never a second copy of an issue:
 
 - A draft exists only until its planning issue exists.
-- Once the issue is created, delete the draft. Nothing is archived and no brief is kept.
+- Once the issue is created or updated, delete the draft. Nothing is archived and no brief is kept.
 - The planning issue is the only specification. Change the issue, not a file.
 
 **Handoff convention:** *"Implement planning issue #N"*. The agent reads the issue itself, for

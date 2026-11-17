@@ -201,7 +201,8 @@ Once the draft validates, delete `/tmp/opencode/refine-N.md`. Then report:
 - the checker result;
 - an explicit statement that nothing was written to GitHub and no commit was created;
 - a reminder that the draft is temporary and must be deleted once its content is moved into the
-  issue body.
+  issue body;
+- a pointer that the next step is `publish-backlog-draft` once the draft is approved.
 
 If the refinement is blocked, do not write the draft. Report the open questions and stop.
 

@@ -81,6 +81,14 @@ def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip().lower()
 
 
+def unquote(value: str) -> str:
+    if len(value) >= 2 and value[0] == value[-1] == "'":
+        return value[1:-1].replace("''", "'")
+    if len(value) >= 2 and value[0] == value[-1] == '"':
+        return value[1:-1]
+    return value
+
+
 def parse_frontmatter(text: str) -> tuple[dict[str, str], str, list[str]]:
     if not text.startswith("---\n"):
         return {}, text, ["missing YAML frontmatter (file must start with '---')"]
@@ -97,7 +105,7 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str], str, list[str]]:
             errors.append(f"invalid frontmatter line: {line!r}")
             continue
         key, _, value = line.partition(":")
-        data[key.strip()] = value.strip().strip("'\"")
+        data[key.strip()] = unquote(value.strip())
     return data, text[end + 5:], errors
 
 

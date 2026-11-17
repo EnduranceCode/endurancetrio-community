@@ -1,0 +1,21 @@
+query($after: String) {
+  organization(login: "endurancetrio") {
+    projectV2(number: 1) {
+      items(first: 100, after: $after) {
+        pageInfo { endCursor hasNextPage }
+        nodes {
+          id
+          content { ... on Issue { number url state title } }
+          fieldValues(first: 20) {
+            nodes {
+              ... on ProjectV2ItemFieldSingleSelectValue {
+                name
+                field { ... on ProjectV2SingleSelectField { name } }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
