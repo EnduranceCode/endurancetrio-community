@@ -132,7 +132,10 @@ The script `publish-backlog-draft.py` runs a dry run by default: it validates th
 With `--apply`, after the product owner's green light, it re-checks the state, backs up the
 original issue, updates title and body, sets a missing Issue type or Effort, moves Status to
 **Backlog** last, and verifies the result. `--delete-draft` removes the draft only after
-verification passes.
+verification passes. The dry run also warns when the draft's `### Implementation notes` has neither
+an ordered, independently committable sub-task breakdown with a green build at every step nor an
+explicit `No independently committable split is feasible:` statement. The agent analyses the draft,
+records one of the two, and reruns the dry run before publication.
 
 Missing Issue type or Effort is passed with `--issue-type` and `--effort`. Effort is the
 organization-level issue field, so if it has no options, the publication is blocked until the

@@ -11,6 +11,10 @@ changed since the dry run, backs up the original issue, performs the writes in t
 title/body, Issue type, Effort, Status last), then verifies the result. The draft is deleted only
 when ``--delete-draft`` is given and every verification passes.
 
+A non-fatal warning is printed when the draft's Implementation notes have neither an ordered
+sub-task list nor an explicit `No independently committable split is feasible:` statement. The
+caller must analyse the draft and record one of the two before publishing.
+
 Usage:
     publish-backlog-draft.py --draft tasks/draft-11-events-directory-search.md
     publish-backlog-draft.py --draft tasks/draft-11-events-directory-search.md \\
@@ -48,6 +52,8 @@ PLANNING_REPO = "endurancetrio/endurancetrio-planning"
 PROJECT_NUMBER = "1"
 
 DRAFT_RE = re.compile(r"^draft-(\d+)-[a-z0-9][a-z0-9-]*\.md$")
+SUBTASK_LINE_RE = re.compile(r"^\s*\d+\.\s+\S", re.MULTILINE)
+NO_SPLIT_RE = re.compile(r"No independently committable split is feasible:", re.IGNORECASE)
 
 ISSUE_QUERY = """
 query($owner: String!, $name: String!, $number: Int!) {
@@ -121,6 +127,15 @@ def normalize_body(text: str) -> str:
     return "\n".join(lines).strip("\n") + "\n"
 
 
+def has_subtask_decision(body: str, checker: ModuleType) -> bool:
+    """True when Implementation notes record a breakdown or why none is feasible."""
+    _, sections = checker.parse_structure(body)
+    notes = "\n".join(
+        sections.get("Description", checker.Section()).h3_body.get("Implementation notes", [])
+    )
+    return SUBTASK_LINE_RE.search(notes) is not None or NO_SPLIT_RE.search(notes) is not None
+
+
 def check_auth() -> None:
     result = subprocess.run(["gh", "auth", "status"], capture_output=True, text=True, check=False)
     output = result.stdout + result.stderr
@@ -154,7 +169,14 @@ def read_draft(path: Path, checker: ModuleType) -> tuple[int, str, str, list[str
         raise PublishError("draft fails validation: " + "; ".join(errors))
 
     frontmatter, body, _ = checker.parse_frontmatter(text)
-    return int(match.group(1)), frontmatter["title"], normalize_body(body), warnings
+    normalized = normalize_body(body)
+    if not has_subtask_decision(normalized, checker):
+        warnings.append(
+            "'### Implementation notes' has no ordered sub-task list and no "
+            "'No independently committable split is feasible:' statement; analyse the draft "
+            "and record one of the two before publishing"
+        )
+    return int(match.group(1)), frontmatter["title"], normalized, warnings
 
 
 def fetch_board_item(number: int) -> dict[str, object]:
@@ -445,6 +467,21 @@ def run_self_test(checker: ModuleType) -> int:
     check("filename pattern accepts draft-<N>-<slug>.md",
           DRAFT_RE.fullmatch("draft-11-events-directory-search.md") is not None)
     check("filename pattern rejects other names", DRAFT_RE.fullmatch("notes.md") is None)
+    check("ordered sub-task list is detected in Implementation notes",
+          has_subtask_decision(
+              "## Description\n\n### Implementation notes\n\n1. First step\n2. Second step\n",
+              checker,
+          ))
+    check("explicit infeasibility statement is detected",
+          has_subtask_decision(
+              "## Description\n\n### Implementation notes\n\n"
+              "No independently committable split is feasible: single atomic migration.\n",
+              checker,
+          ))
+    check("missing sub-task decision is reported",
+          not has_subtask_decision(
+              "## Description\n\n### Implementation notes\n\nNo breakdown.\n", checker
+          ))
 
     print(f"\nSelf-test {'failed' if failures else 'passed'} ({failures} failure(s)).")
     return 1 if failures else 0

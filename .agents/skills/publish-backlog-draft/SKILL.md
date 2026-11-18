@@ -26,11 +26,19 @@ All logic lives in `scripts/publish-backlog-draft.py`. Do not reimplement its st
   `--issue-type` and `--effort`. If the script reports a blocker, ask; do not guess.
 - **The draft is the source of truth.** The issue title and body are replaced by the draft's
   frontmatter title and body. Nothing is merged or appended.
+- **Sub-task breakdown must be analysed before publishing.** The dry run warns when
+  `### Implementation notes` records neither a breakdown nor the reason none is feasible. Analyse
+  whether the work can be split into small, independently committable steps that each leave the build
+  green. If it can, write the breakdown into the draft; if it cannot, add an explicit one-sentence
+  reason using the exact phrase
+  `No independently committable split is feasible:`. Do not publish while the warning is open.
 - **Never move an issue that is not in Inbox.** The only exception is a rerun after a completed
   publication, which the script reports as "nothing to write".
 - **Delete the draft only with approval, and only after verification.** Pass `--delete-draft` only
   when the user approved deletion, and never when verification failed.
 - **No commits, no pushes, no other file edits.** Scratch files live only in `/tmp/opencode/publish-<N>/`.
+  The one exception is editing the draft under `tasks/` to add the sub-task breakdown or its
+  infeasibility reason before the publish dry run is rerun.
 - **One draft per invocation.**
 
 ## Input
@@ -61,7 +69,10 @@ The script:
 5. resolves the Status, Effort (organization issue field) and Issue type options from GitHub;
 6. stops with a list of blockers if Issue type or Effort is missing and cannot be set;
 7. prints the plan: title change, body diff summary (full diff in `/tmp/opencode/publish-<N>/body.diff`),
-   Issue type, Effort and the Status transition.
+   Issue type, Effort and the Status transition;
+8. warns when `### Implementation notes` has neither an ordered, independently committable sub-task
+   list with a green build at every step nor a `No independently committable split is feasible:`
+   statement.
 
 ### 2. Resolve blockers
 
@@ -73,7 +84,23 @@ When the dry run reports a blocker, ask the product owner for the value and reru
   that High, Medium and Low must be added to it, then stop.
 - **Status not Inbox:** stop and ask how to proceed.
 
-### 3. Ask for the green light
+### 3. Resolve the sub-task warning
+
+When the dry run reports a missing breakdown, analyse the draft itself against the current code and
+decide whether a step-by-step split is feasible and makes sense:
+
+- **Feasible:** write an ordered list into the draft's `### Implementation notes`. Derive each step
+  from the draft's Scope, Approach and file list, and make it a small, independently committable
+  change that leaves the build green. Name any temporary compatibility shim and the later step that
+  removes it. Do not change what the issue will deliver. Validate the edited draft with the
+  `draft-backlog-item` checker, then rerun the publish dry run.
+- **Not feasible or not sensible:** write one sentence into `### Implementation notes` starting with
+  the exact phrase `No independently committable split is feasible:` and the reason (for example,
+  a single atomic migration with no safe intermediate state). Validate and rerun the dry run.
+
+Do not publish while the warning is open.
+
+### 4. Ask for the green light
 
 Present the dry-run plan and ask for approval, stating explicitly:
 
@@ -82,7 +109,7 @@ Present the dry-run plan and ask for approval, stating explicitly:
 - the Status change `Inbox → Backlog`;
 - whether the draft will be deleted afterwards.
 
-### 4. Apply
+### 5. Apply
 
 After approval, run the same command with the chosen flags:
 
@@ -105,7 +132,7 @@ When applying, the script:
 5. moves Status to **Backlog**, last, so the item only reaches Backlog once its content is in place;
 6. verifies title, body, Issue type, Effort and Status by reading GitHub again.
 
-### 5. Handle failures
+### 6. Handle failures
 
 - **Exit 1:** nothing was written, or the input was invalid. Report the message.
 - **Exit 2:** a write or the verification failed. The script prints the restore command with the
@@ -113,7 +140,7 @@ When applying, the script:
 - **Rerun after success:** the script reports "nothing to write". This makes an interrupted run
   safe to repeat.
 
-### 6. Report
+### 7. Report
 
 Report:
 
@@ -125,6 +152,7 @@ Report:
 
 ## Deliverables
 
+- The sub-task breakdown was analysed and recorded in the draft before publication.
 - The planning issue's title and body match the validated draft.
 - Issue type and Effort are set.
 - The issue is in **Backlog** on the board.
