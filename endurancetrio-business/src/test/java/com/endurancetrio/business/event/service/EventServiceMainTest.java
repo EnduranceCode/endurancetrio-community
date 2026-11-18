@@ -24,11 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventDTO;
+import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.mapper.EventMapper;
@@ -36,9 +38,12 @@ import com.endurancetrio.data.event.model.entity.Course;
 import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.model.enumerator.Sport;
 import com.endurancetrio.data.event.repository.EventRepository;
+import com.endurancetrio.data.event.repository.projection.EventDistrictCountyPair;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -86,6 +91,98 @@ class EventServiceMainTest {
 
     assertNotNull(result);
     assertEquals(List.of(), result);
+  }
+
+  @Test
+  void getEventCountiesByDistrictShouldGroupCountiesByDistrict() {
+    EventDistrictCountyPair lisboaCascais = createPair("Lisboa", "Cascais");
+    EventDistrictCountyPair aveiroAveiro = createPair("Aveiro", "Aveiro");
+    EventDistrictCountyPair aveiroOvar = createPair("Aveiro", "Ovar");
+    when(eventRepository.findDistinctDistrictCountyPairs()).thenReturn(
+        List.of(lisboaCascais, aveiroAveiro, aveiroOvar));
+
+    Map<String, List<String>> result = underTest.getEventCountiesByDistrict();
+
+    assertNotNull(result);
+    assertEquals(List.of("Aveiro", "Lisboa"), new ArrayList<>(result.keySet()));
+    assertEquals(List.of("Aveiro", "Ovar"), result.get("Aveiro"));
+    assertEquals(List.of("Cascais"), result.get("Lisboa"));
+  }
+
+  @Test
+  void getEventCountiesByDistrictShouldReturnEmptyMapWhenNoEvents() {
+    when(eventRepository.findDistinctDistrictCountyPairs()).thenReturn(List.of());
+
+    Map<String, List<String>> result = underTest.getEventCountiesByDistrict();
+
+    assertNotNull(result);
+    assertEquals(Map.of(), result);
+  }
+
+  @Test
+  void getEventsShouldReturnMappedEventsAndPagination() {
+    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15), "City1", "County1", "District1",
+        Set.of(createCourse(Sport.TRIATHLON), createCourse(Sport.ROAD_RUNNING))
+    );
+    Event event2 = createEvent(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 1), LocalDate.of(1984, Month.AUGUST, 1),
+        "City2", "County2", "District2", Set.of(createCourse(Sport.DUATHLON))
+    );
+
+    EventDTO expectedDTO1 = new EventDTO(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15), "City1", "County1", "District1", List.of("ROAD_RUNNING", "TRIATHLON")
+    );
+    EventDTO expectedDTO2 = new EventDTO(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 1),
+        LocalDate.of(1984, Month.AUGUST, 1), "City2", "County2", "District2", List.of("DUATHLON")
+    );
+
+    Page<Long> eventIdPage = new PageImpl<>(List.of(1L, 2L), PAGEABLE, 2L);
+    when(eventRepository.findEventIdsByFilter(null, null, null, null, PAGEABLE)).thenReturn(eventIdPage);
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L, 2L))).thenReturn(List.of(event1, event2));
+    when(eventMapper.mapToEventDTO(event1)).thenReturn(expectedDTO1);
+    when(eventMapper.mapToEventDTO(event2)).thenReturn(expectedDTO2);
+
+    EventsPageDTO result = underTest.getEvents(PAGEABLE, new EventFilterDTO(null, null, null, null));
+
+    assertNotNull(result);
+    assertEquals(List.of(expectedDTO1, expectedDTO2), result.events());
+    assertEquals(0, result.pagination().pageNumber());
+    assertEquals(1, result.pagination().totalPages());
+    assertEquals(2L, result.pagination().totalItems());
+  }
+
+  @Test
+  void getEventsShouldReturnEmptyPage() {
+    Page<Long> eventIdPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(eventRepository.findEventIdsByFilter(null, null, null, null, PAGEABLE)).thenReturn(eventIdPage);
+
+    EventsPageDTO result = underTest.getEvents(PAGEABLE, new EventFilterDTO(null, null, null, null));
+
+    assertNotNull(result);
+    assertEquals(List.of(), result.events());
+    assertEquals(0, result.pagination().totalItems());
+  }
+
+  @Test
+  void getEventsShouldForwardEscapedCombinedFilters() {
+    Page<Long> eventIdPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(eventRepository.findEventIdsByFilter("São\\_João\\%", 1984, "Lisboa", "Cascais", PAGEABLE)).thenReturn(
+        eventIdPage);
+
+    EventFilterDTO filter = new EventFilterDTO(" São_João% ", 1984, " Lisboa ", " Cascais ");
+    underTest.getEvents(PAGEABLE, filter);
+
+    verify(eventRepository).findEventIdsByFilter("São\\_João\\%", 1984, "Lisboa", "Cascais", PAGEABLE);
+  }
+
+  @Test
+  void getEventsShouldNormalizeBlankFiltersToNull() {
+    Page<Long> eventIdPage = new PageImpl<>(List.of(), PAGEABLE, 0L);
+    when(eventRepository.findEventIdsByFilter(null, 1984, null, null, PAGEABLE)).thenReturn(eventIdPage);
+
+    underTest.getEvents(PAGEABLE, new EventFilterDTO("   ", 1984, "   ", "   "));
+
+    verify(eventRepository).findEventIdsByFilter(null, 1984, null, null, PAGEABLE);
   }
 
   @Test
@@ -375,5 +472,12 @@ class EventServiceMainTest {
     Course course = new Course();
     course.setSport(sport);
     return course;
+  }
+
+  private EventDistrictCountyPair createPair(String district, String county) {
+    EventDistrictCountyPair pair = mock(EventDistrictCountyPair.class);
+    when(pair.getDistrict()).thenReturn(district);
+    when(pair.getCounty()).thenReturn(county);
+    return pair;
   }
 }

@@ -25,16 +25,20 @@ import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventDTO;
+import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.mapper.EventMapper;
 import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.repository.EventRepository;
+import com.endurancetrio.data.event.repository.projection.EventDistrictCountyPair;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +64,33 @@ public class EventServiceMain implements EventService {
 
   @Override
   @Transactional(readOnly = true)
+  public Map<String, List<String>> getEventCountiesByDistrict() {
+    Map<String, List<String>> countiesByDistrict = new TreeMap<>();
+    for (EventDistrictCountyPair pair : eventRepository.findDistinctDistrictCountyPairs()) {
+      if (pair.getDistrict() != null && pair.getCounty() != null) {
+        countiesByDistrict.computeIfAbsent(pair.getDistrict(), key -> new ArrayList<>())
+            .add(pair.getCounty());
+      }
+    }
+
+    return countiesByDistrict;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public List<Integer> getEventYears() {
     return eventRepository.findDistinctYears();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public EventsPageDTO getEvents(Pageable pageable, EventFilterDTO filter) {
+    String searchTerm = filter.q() == null ? null : escapeSearchTerm(filter.q());
+    Page<Long> eventIds = eventRepository.findEventIdsByFilter(
+        searchTerm, filter.year(), filter.district(), filter.county(), pageable
+    );
+
+    return toEventsPage(eventIds);
   }
 
   @Override
@@ -103,6 +132,17 @@ public class EventServiceMain implements EventService {
   @Transactional(readOnly = true)
   public EventsPageDTO getMostRecentAddedEvents(Pageable pageable) {
     return toEventsPage(eventRepository.findMostRecentAddedEventIds(pageable));
+  }
+
+  /**
+   * Escapes LIKE wildcard characters so the search term is matched literally. Accent and case
+   * folding is applied by the repository query.
+   *
+   * @param searchTerm the raw search term
+   * @return the escaped search term
+   */
+  private static String escapeSearchTerm(String searchTerm) {
+    return searchTerm.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
   }
 
   /**

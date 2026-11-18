@@ -21,16 +21,26 @@
 package com.endurancetrio.business.event.service;
 
 import com.endurancetrio.business.event.dto.EventDTO;
+import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Pageable;
 
 /**
  * The {@link EventService} defines the business operations for managing event data.
  */
 public interface EventService {
+
+  /**
+   * Returns the counties present in the archive, grouped by district and ordered by district and
+   * then county. These values populate the event directory filter dropdowns.
+   *
+   * @return an ordered map of district names to their counties
+   */
+  Map<String, List<String>> getEventCountiesByDistrict();
 
   /**
    * Returns a list of all distinct years extracted from the events' start dates, ordered
@@ -40,6 +50,18 @@ public interface EventService {
    * @return a list of distinct event years in descending order
    */
   List<Integer> getEventYears();
+
+  /**
+   * Returns an {@link EventsPageDTO} containing the filtered, paginated list of events, ordered by
+   * start date descending and, as a tiebreaker, by ID descending. A {@code null} filter value is
+   * ignored. The search term is escaped as a literal LIKE pattern before it reaches the repository,
+   * which applies accent- and case-insensitive folding to the title.
+   *
+   * @param pageable the pagination information (page number, page size, etc.)
+   * @param filter the normalized directory filters
+   * @return an {@link EventsPageDTO} with the matching events and pagination metadata
+   */
+  EventsPageDTO getEvents(Pageable pageable, EventFilterDTO filter);
 
   /**
    * Returns an {@link EventsPageDTO} containing the
