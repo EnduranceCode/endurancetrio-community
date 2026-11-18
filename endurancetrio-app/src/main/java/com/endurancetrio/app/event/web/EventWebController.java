@@ -27,14 +27,17 @@ import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
+import com.endurancetrio.app.common.model.PageWindow;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
+import com.endurancetrio.app.common.utils.PaginationUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
@@ -48,8 +51,10 @@ import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -62,6 +67,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * The {@link EventWebController} handles Thymeleaf views for the events section.
@@ -73,23 +79,30 @@ public class EventWebController {
 
   private static final String VIEW_EVENT_INSIGHTS = "event-insights";
   private static final String VIEW_EVENT_OVERVIEW = "event-overview";
-  private static final String VIEW_EVENTS_BY_YEAR = "events-by-year";
+  private static final String VIEW_EVENTS = "events";
   private static final String VIEW_RACE_RESULTS = "race-results";
-  private static final String VIEW_YEARS_WITH_EVENTS = "years-with-events";
 
   private static final String ATTRIBUTE_ACTIVE_COLUMNS = "activeColumns";
   private static final String ATTRIBUTE_ARTICLES = "articles";
   private static final String ATTRIBUTE_ARTICLES_COUNT = "articlesCount";
+  private static final String ATTRIBUTE_COUNTIES_BY_DISTRICT = "countiesByDistrict";
   private static final String ATTRIBUTE_EVENT = "event";
   private static final String ATTRIBUTE_EVENTS = "events";
+  private static final String ATTRIBUTE_EVENTS_URL = "eventsUrl";
+  private static final String ATTRIBUTE_FILTER = "filter";
+  private static final String ATTRIBUTE_FILTERED = "isFiltered";
+  private static final String ATTRIBUTE_PAGE_WINDOW = "pageWindow";
+  private static final String ATTRIBUTE_PAGINATION_NEXT_URL = "paginationNextUrl";
+  private static final String ATTRIBUTE_PAGINATION_PREVIOUS_URL = "paginationPreviousUrl";
+  private static final String ATTRIBUTE_PAGINATION_URLS = "paginationUrls";
   private static final String ATTRIBUTE_RACE_ID = "raceId";
   private static final String ATTRIBUTE_RACE_ID_NEXT = "raceIdNext";
   private static final String ATTRIBUTE_RACE_ID_PREV = "raceIdPrev";
   private static final String ATTRIBUTE_RACE_RESULTS = "raceResults";
-  private static final String ATTRIBUTE_YEARS_WITH_EVENTS = "yearsWithEvents";
-  private static final String ATTRIBUTE_YEAR = "year";
+  private static final String ATTRIBUTE_YEARS = "years";
 
   private static final int BATCH_SIZE = 3;
+  private static final int MAX_SEARCH_TERM_LENGTH = 100;
   private static final int PAGE_SIZE = 10;
 
   private final MessageService messageService;
@@ -111,74 +124,102 @@ public class EventWebController {
   }
 
   /**
-   * Returns the years-with-events listing page with batched year groups.
+   * Returns the searchable events directory with paginated events filtered by year, district,
+   * county and a free-text title search. All filters are optional and invalid values are ignored.
+   * Also builds the pagination URLs used by the view and sets canonical metadata for filtered or
+   * paged listings.
    *
    * @param language the language path variable ({@code en} or {@code pt})
-   * @param page     the page number from the query string (default {@code 0})
+   * @param page     the page number from the query string (default {@code 0}, clamped to
+   *                 non-negative)
+   * @param q        the optional free-text search term
+   * @param year     the optional year filter
+   * @param district the optional district filter
+   * @param county   the optional county filter
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
-   * @return the years-with-events view name
+   * @return the events view name
    */
   @GetMapping("/{language:en|pt}/events")
-  public String getYearsWithEvents(
+  public String getEvents(
       @PathVariable String language, @RequestParam(defaultValue = "0") int page,
-      HttpServletRequest request, Model model
+      @RequestParam(required = false) String q, @RequestParam(required = false) String year,
+      @RequestParam(required = false) String district,
+      @RequestParam(required = false) String county, HttpServletRequest request, Model model
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_YEARS_WITH_EVENTS,
+    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS,
         messageService.getMessage("page.events.metadata.title", null, locale),
         messageService.getMessage("page.events.metadata.description", null, locale), request,
         appProperties
     );
 
-    YearsWithEventsDTO eventYears = buildYearsWithEvents(page);
+    int clampedPage = Math.max(0, page);
+    Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
+    List<Integer> years = eventService.getEventYears();
+    Map<String, List<String>> countiesByDistrict = eventService.getEventCountiesByDistrict();
+    EventFilterDTO filter = normalizeFilter(q, year, district, county, years, countiesByDistrict);
+    EventsPageDTO eventsPage = eventService.getEvents(pageable, filter);
+    boolean isFiltered = filter.q() != null || filter.year() != null || filter.district() != null
+        || filter.county() != null;
+
+    if (isFiltered || clampedPage > 0) {
+      String baseUrl = PageMetadataUtils.getBaseUrl(request);
+      metadata.setCanonicalUrl(buildAbsoluteEventsUrl(baseUrl, locale.getLanguage()));
+      metadata.setHreflangUrlEn(buildAbsoluteEventsUrl(baseUrl, "en"));
+      metadata.setHreflangUrlPt(buildAbsoluteEventsUrl(baseUrl, "pt"));
+    }
+
+    String eventsPath = UriComponentsBuilder.fromPath("/")
+        .pathSegment(locale.getLanguage(), VIEW_EVENTS)
+        .build()
+        .toUriString();
+
+    int totalPages = eventsPage.pagination().totalPages();
+    PageWindow pageWindow = PaginationUtils.pageWindow(clampedPage, totalPages);
+    Map<Integer, String> paginationUrls = new LinkedHashMap<>();
+    for (Integer pageIndex : pageWindow.pages()) {
+      paginationUrls.put(pageIndex, buildEventsUrl(eventsPath, pageIndex, filter));
+    }
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
-    model.addAttribute(ATTRIBUTE_YEARS_WITH_EVENTS, eventYears);
+    model.addAttribute(PAGINATION, eventsPage.pagination());
+    model.addAttribute(ATTRIBUTE_EVENTS, eventsPage.events());
+    model.addAttribute(ATTRIBUTE_PAGE_WINDOW, pageWindow);
+    model.addAttribute(ATTRIBUTE_FILTER, filter);
+    model.addAttribute(ATTRIBUTE_YEARS, years);
+    model.addAttribute(ATTRIBUTE_COUNTIES_BY_DISTRICT, countiesByDistrict);
+    model.addAttribute(ATTRIBUTE_FILTERED, isFiltered);
+    model.addAttribute(ATTRIBUTE_PAGINATION_URLS, paginationUrls);
+    model.addAttribute(ATTRIBUTE_PAGINATION_PREVIOUS_URL,
+        eventsPage.pagination().hasPrevious() ? buildEventsUrl(eventsPath, clampedPage - 1, filter) : null
+    );
+    model.addAttribute(ATTRIBUTE_PAGINATION_NEXT_URL,
+        eventsPage.pagination().hasNext() ? buildEventsUrl(eventsPath, clampedPage + 1, filter) : null
+    );
+    model.addAttribute(ATTRIBUTE_EVENTS_URL, eventsPath);
 
-    return VIEW_YEARS_WITH_EVENTS;
+    return VIEW_EVENTS;
   }
 
   /**
-   * Returns the events-by-year listing page with paginated events for the given year.
+   * Redirects an old events-by-year URL to the searchable events directory with the year filter
+   * applied.
    *
    * @param language the language path variable ({@code en} or {@code pt})
    * @param year     the year to filter events by
-   * @param page     the page number from the query string (default {@code 0}, clamped to
-   *                 non-negative)
-   * @param request  the current HTTP request for building page metadata
-   * @param model    the model to populate with view attributes
-   * @return the events-by-year view name
+   * @return the redirect view name
    */
   @GetMapping("/{language:en|pt}/events/{year}")
-  public String getEventsByYear(
-      @PathVariable String language, @PathVariable int year,
-      @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
-  ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
-    PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS_BY_YEAR,
-        messageService.getMessage("page.events.year.metadata.title",
-            new Object[]{String.valueOf(year)}, locale
-        ),
-        messageService.getMessage("page.events.year.metadata.description",
-            new Object[]{String.valueOf(year)}, locale
-        ), request, appProperties
-    );
-
-    int clampedPage = Math.max(0, page);
-    Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
-    EventsPageDTO eventPage = eventService.getEventsByYear(year, pageable);
-
-    model.addAttribute(LANGUAGE, locale.getLanguage());
-    model.addAttribute(METADATA, metadata);
-    model.addAttribute(PAGINATION, eventPage.pagination());
-    model.addAttribute(ATTRIBUTE_YEAR, year);
-    model.addAttribute(ATTRIBUTE_EVENTS, eventPage.events());
-
-    return VIEW_EVENTS_BY_YEAR;
+  public String redirectEventsByYear(@PathVariable String language, @PathVariable int year) {
+    return "redirect:" + UriComponentsBuilder.fromPath("/")
+        .pathSegment(language, VIEW_EVENTS)
+        .queryParam("year", year)
+        .build()
+        .encode()
+        .toUriString();
   }
 
   /**
@@ -328,6 +369,47 @@ public class EventWebController {
   }
 
   /**
+   * Builds an absolute URL for the events directory in the given language.
+   *
+   * @param baseUrl  the scheme, host and port of the current request
+   * @param language the language path segment
+   * @return the absolute events-directory URL
+   */
+  private static String buildAbsoluteEventsUrl(String baseUrl, String language) {
+    return UriComponentsBuilder.fromUriString(baseUrl).pathSegment(language, VIEW_EVENTS).build()
+        .toUriString();
+  }
+
+  /**
+   * Builds a relative events-directory URL that preserves the active filters.
+   *
+   * @param path   the localized events-directory path
+   * @param page   the page index, or {@code null} to omit the page parameter
+   * @param filter the active filters
+   * @return the encoded events-directory URL
+   */
+  private static String buildEventsUrl(String path, Integer page, EventFilterDTO filter) {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
+    if (page != null) {
+      builder.queryParam("page", page);
+    }
+    if (filter.q() != null) {
+      builder.queryParam("q", filter.q());
+    }
+    if (filter.year() != null) {
+      builder.queryParam("year", filter.year());
+    }
+    if (filter.district() != null) {
+      builder.queryParam("district", filter.district());
+    }
+    if (filter.county() != null) {
+      builder.queryParam("county", filter.county());
+    }
+
+    return builder.build().encode().toUriString();
+  }
+
+  /**
    * Builds a {@link YearsWithEventsDTO} for the given page.
    * <p>
    * The raw {@code page} parameter (from the URL query string) is clamped to the valid range
@@ -454,5 +536,112 @@ public class EventWebController {
    */
   private static @Nullable Long getPreviousRaceId(int currentIndex, List<RaceDTO> races) {
     return currentIndex > 0 ? races.get(currentIndex - 1).id() : null;
+  }
+
+  /**
+   * Normalizes a county against the available district/county pairs. A county that does not belong
+   * to the selected district is ignored.
+   *
+   * @param county            the raw county request parameter
+   * @param district          the normalized district, or {@code null} when no district is selected
+   * @param countiesByDistrict the available counties grouped by district
+   * @return the normalized county, or {@code null} when it is blank or not available
+   */
+  private static @Nullable String normalizeCounty(
+      String county, @Nullable String district, Map<String, List<String>> countiesByDistrict
+  ) {
+    if (county == null || county.isBlank()) {
+      return null;
+    }
+
+    String normalized = county.trim();
+    List<String> allowedCounties = district == null
+        ? countiesByDistrict.values().stream().flatMap(List::stream).distinct().toList()
+        : countiesByDistrict.get(district);
+
+    return allowedCounties != null && allowedCounties.contains(normalized) ? normalized : null;
+  }
+
+  /**
+   * Normalizes a district against the districts present in the archive.
+   *
+   * @param district           the raw district request parameter
+   * @param countiesByDistrict the available counties grouped by district
+   * @return the normalized district, or {@code null} when it is blank or not available
+   */
+  private static @Nullable String normalizeDistrict(
+      String district, Map<String, List<String>> countiesByDistrict
+  ) {
+    if (district == null || district.isBlank()) {
+      return null;
+    }
+
+    String normalized = district.trim();
+    return countiesByDistrict.containsKey(normalized) ? normalized : null;
+  }
+
+  /**
+   * Normalizes the raw request parameters into an {@link EventFilterDTO}. Free-text input is
+   * trimmed and capped in length, while year, district and county values are validated against the
+   * filter values present in the archive.
+   *
+   * @param q                  the raw search-term request parameter
+   * @param year               the raw year request parameter
+   * @param district           the raw district request parameter
+   * @param county             the raw county request parameter
+   * @param years              the years present in the archive
+   * @param countiesByDistrict the counties present in the archive, grouped by district
+   * @return the normalized filter
+   */
+  private static @NonNull EventFilterDTO normalizeFilter(
+      String q, String year, String district, String county, List<Integer> years,
+      Map<String, List<String>> countiesByDistrict
+  ) {
+    String normalizedDistrict = normalizeDistrict(district, countiesByDistrict);
+
+    return new EventFilterDTO(
+        normalizeSearchTerm(q), normalizeYear(year, years), normalizedDistrict,
+        normalizeCounty(county, normalizedDistrict, countiesByDistrict)
+    );
+  }
+
+  /**
+   * Trims a free-text search term and caps its length.
+   *
+   * @param searchTerm the raw search-term request parameter
+   * @return the normalized search term, or {@code null} when it is blank
+   */
+  private static @Nullable String normalizeSearchTerm(String searchTerm) {
+    if (searchTerm == null) {
+      return null;
+    }
+
+    String normalized = searchTerm.trim();
+    if (normalized.isEmpty()) {
+      return null;
+    }
+
+    return normalized.length() > MAX_SEARCH_TERM_LENGTH
+        ? normalized.substring(0, MAX_SEARCH_TERM_LENGTH) : normalized;
+  }
+
+  /**
+   * Normalizes a year against the years present in the archive.
+   *
+   * @param year  the raw year request parameter
+   * @param years the years present in the archive
+   * @return the normalized year, or {@code null} when it is blank, not numeric or not available
+   */
+  private static @Nullable Integer normalizeYear(String year, List<Integer> years) {
+    if (year == null || year.isBlank()) {
+      return null;
+    }
+
+    try {
+      Integer normalized = Integer.valueOf(year.trim());
+      return years.contains(normalized) ? normalized : null;
+    } catch (NumberFormatException exception) {
+      return null;
+    }
   }
 }
