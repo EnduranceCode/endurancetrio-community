@@ -20,15 +20,22 @@
 
 package com.endurancetrio.app.event.web;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.endurancetrio.app.common.model.PageWindow;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.competitor.fixtures.AthleteDTOFixtures;
 import com.endurancetrio.app.competitor.fixtures.TeamDTOFixtures;
@@ -38,12 +45,12 @@ import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.TeamDTO;
 import com.endurancetrio.business.event.dto.EventDTO;
+import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
-import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
@@ -63,9 +70,9 @@ import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -77,27 +84,18 @@ class EventWebControllerTest {
   private static final List<Integer> ALL_YEARS = List.of(1989, 1988, 1987, 1986, 1985, 1984, 1983,
       1982
   );
-  private static final YearsWithEventsDTO PAGE_0 = new YearsWithEventsDTO(List.of(1989, 1988, 1987),
-      List.of(1986, 1985, 1984), List.of(), 0, 3, 8, 3, -1, 2
-  );
-  private static final YearsWithEventsDTO PAGE_1 = new YearsWithEventsDTO(List.of(1986, 1985, 1984),
-      List.of(1983, 1982), List.of(1989, 1988, 1987), 1, 3, 8, 3, 0, 2
-  );
-  private static final YearsWithEventsDTO PAGE_2 = new YearsWithEventsDTO(List.of(1983, 1982),
-      List.of(), List.of(1986, 1985, 1984), 2, 3, 8, 3, 0, -1
+  private static final Map<String, List<String>> COUNTIES_BY_DISTRICT = Map.of("Lisboa", List.of("Cascais", "Lisboa"),
+      "Leiria", List.of("Peniche", "Caldas da Rainha")
   );
   private static final LocalDate EVENT_DATE = LocalDate.of(1984, Month.AUGUST, 15);
   private static final EventDTO EVENT_DTO = new EventDTO(1L, "Triatlo de Peniche", EVENT_DATE,
       EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of("TRIATHLON")
   );
   private static final EventsPageDTO PAGE_WITH_EVENTS = new EventsPageDTO(List.of(EVENT_DTO),
-      new PaginationDTO(0, 10, 1, true, false)
+      new PaginationDTO(0, 1, 1, false, false)
   );
-  private static final EventsPageDTO PAGE_WITH_EVENTS_PT = new EventsPageDTO(List.of(EVENT_DTO),
-      new PaginationDTO(0, 10, 1, true, false)
-  );
-  private static final EventsPageDTO PAGE_WITH_EVENTS_TITLE_TEST = new EventsPageDTO(
-      List.of(EVENT_DTO), new PaginationDTO(0, 10, 55, true, false)
+  private static final EventsPageDTO PAGE_WITH_EVENTS_PAGINATED = new EventsPageDTO(List.of(EVENT_DTO),
+      new PaginationDTO(2, 5, 50, true, true)
   );
   private static final EventsPageDTO PAGE_EMPTY = new EventsPageDTO(List.of(),
       new PaginationDTO(0, 0, 0, false, false)
@@ -174,177 +172,184 @@ class EventWebControllerTest {
   }
 
   @Test
-  void eventYearsPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
-        "Events - EnduranceTrio");
-    when(
-        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
-        "Browse endurance sports events by year");
-    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+  void eventsPageWithEnglishLocale() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
 
     mockMvc.perform(get("/en/events"))
         .andExpect(status().isOk())
-        .andExpect(view().name("years-with-events"))
+        .andExpect(view().name("events"))
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("yearsWithEvents", PAGE_0));
+        .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
+        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()))
+        .andExpect(model().attribute("filter", new EventFilterDTO(null, null, null, null)))
+        .andExpect(model().attribute("years", ALL_YEARS))
+        .andExpect(model().attribute("countiesByDistrict", COUNTIES_BY_DISTRICT))
+        .andExpect(model().attribute("isFiltered", false))
+        .andExpect(model().attribute("eventsUrl", "/en/events"))
+        .andExpect(model().attribute("paginationPreviousUrl", nullValue()))
+        .andExpect(model().attribute("paginationNextUrl", nullValue()));
   }
 
   @Test
-  void eventYearsPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
-        "Eventos - EnduranceTrio");
-    when(
-        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
-        "Explore eventos de desportos de endurance por ano");
-    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+  void eventsPageWithPortugueseLocale() throws Exception {
+    stubEventMessages("Eventos - EnduranceTrio", "Explore eventos de desportos de endurance");
+    stubEventDirectory(PAGE_WITH_EVENTS);
 
     mockMvc.perform(get("/pt/events"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("years-with-events"))
+        .andExpect(status().isOk()).andExpect(view().name("events"))
         .andExpect(model().attribute("language", "pt"))
-        .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("yearsWithEvents", PAGE_0));
+        .andExpect(model().attributeExists("metadata")).andExpect(model().attribute("eventsUrl", "/pt/events"));
   }
 
   @Test
-  void eventYearsPageMetadataHasCorrectTitle() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
-        "Events - EnduranceTrio");
-    when(
-        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
-        "Browse endurance sports events by year");
-    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+  void eventsPageMetadataHasCorrectTitle() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
 
     mockMvc.perform(get("/en/events"))
-        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is("Events - EnduranceTrio")
+        .andExpect(model().attribute("metadata", hasProperty("title", equalTo("Events - EnduranceTrio")
             )
         ));
   }
 
   @Test
-  void eventYearsPageSecondPage() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
-        "Events - EnduranceTrio");
-    when(
-        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
-        "Browse endurance sports events by year");
-    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+  void eventsPageWithEmptyList() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_EMPTY);
+
+    mockMvc.perform(get("/en/events"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events"))
+        .andExpect(model().attribute("events", PAGE_EMPTY.events()))
+        .andExpect(model().attribute("pagination", PAGE_EMPTY.pagination()))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(), false, false)));
+  }
+
+  @Test
+  void eventsPageSecondPage() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
 
     mockMvc.perform(get("/en/events").param("page", "1"))
         .andExpect(status().isOk())
-        .andExpect(view().name("years-with-events"))
-        .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attribute("yearsWithEvents", PAGE_1));
-  }
-
-  @Test
-  void eventYearsPageThirdPage() throws Exception {
-    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(
-        "Events - EnduranceTrio");
-    when(
-        messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(
-        "Browse endurance sports events by year");
-    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
-
-    mockMvc.perform(get("/en/events").param("page", "2"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("years-with-events"))
-        .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attribute("yearsWithEvents", PAGE_2));
-  }
-
-  @Test
-  void eventsYearPageWithEnglishLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
-        "Events by year - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
-        any()
-    )).thenReturn("Browse the endurance sports events by year");
-    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
-        PAGE_WITH_EVENTS);
-
-    mockMvc.perform(get("/en/events/1984"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("events-by-year"))
-        .andExpect(model().attribute("language", "en"))
-        .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("year", 1984))
-        .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
+        .andExpect(view().name("events"))
         .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));
+
+    verify(eventService).getEvents(PageRequest.of(1, 10), new EventFilterDTO(null, null, null, null));
   }
 
   @Test
-  void eventsYearPageWithPortugueseLocale() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
-        "Eventos por ano - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
-        any()
-    )).thenReturn("Explore eventos de desportos de endurance por ano");
-    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
-        PAGE_WITH_EVENTS_PT);
+  void eventsPageNegativePageShouldBeClamped() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
 
-    mockMvc.perform(get("/pt/events/1984"))
+    mockMvc.perform(get("/en/events").param("page", "-1")).andExpect(status().isOk()).andExpect(view().name("events"));
+
+    verify(eventService).getEvents(PageRequest.of(0, 10), new EventFilterDTO(null, null, null, null));
+  }
+
+  @Test
+  void eventsPageNormalizesFilters() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
+    EventFilterDTO expected = new EventFilterDTO("São João", 1984, "Lisboa", "Cascais");
+
+    mockMvc.perform(get("/en/events").param("q", "  São João  ")
+            .param("year", " 1984 ")
+            .param("district", " Lisboa ")
+            .param("county", " Cascais "))
         .andExpect(status().isOk())
-        .andExpect(view().name("events-by-year"))
-        .andExpect(model().attribute("language", "pt"))
-        .andExpect(model().attributeExists("metadata"))
-        .andExpect(model().attribute("year", 1984))
-        .andExpect(model().attribute("events", PAGE_WITH_EVENTS_PT.events()))
-        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS_PT.pagination()));
+        .andExpect(model().attribute("filter", expected))
+        .andExpect(model().attribute("isFiltered", true))
+        .andExpect(model().attribute("metadata", hasProperty("canonicalUrl", equalTo("http://localhost/en/events"))))
+        .andExpect(model().attribute("metadata", hasProperty("hreflangUrlEn", equalTo("http://localhost/en/events"))))
+        .andExpect(model().attribute("metadata", hasProperty("hreflangUrlPt", equalTo("http://localhost/pt/events"))));
+
+    verify(eventService).getEvents(PageRequest.of(0, 10), expected);
   }
 
   @Test
-  void eventsYearPageMetadataHasCorrectTitle() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
-        "Events by year - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
-        any()
-    )).thenReturn("Browse the endurance sports events by year");
-    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
-        PAGE_WITH_EVENTS_TITLE_TEST);
+  void eventsPageIgnoresInvalidFilters() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
 
+    mockMvc.perform(get("/en/events").param("q", "   ")
+            .param("year", "unknown")
+            .param("district", "Porto")
+            .param("county", "Porto"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("filter", new EventFilterDTO(null, null, null, null)))
+        .andExpect(model().attribute("isFiltered", false));
+
+    verify(eventService).getEvents(PageRequest.of(0, 10), new EventFilterDTO(null, null, null, null));
+  }
+
+  @Test
+  void eventsPageCapsSearchTerm() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
+    String capped = "a".repeat(100);
+
+    mockMvc.perform(get("/en/events").param("q", "a".repeat(101)))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("filter", new EventFilterDTO(capped, null, null, null)));
+
+    verify(eventService).getEvents(PageRequest.of(0, 10), new EventFilterDTO(capped, null, null, null));
+  }
+
+  @Test
+  void eventsPageDropsCountyMismatchedWithDistrict() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
+    EventFilterDTO expected = new EventFilterDTO(null, null, "Leiria", null);
+
+    mockMvc.perform(get("/en/events").param("district", "Leiria").param("county", "Cascais"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("filter", expected))
+        .andExpect(model().attribute("isFiltered", true));
+
+    verify(eventService).getEvents(PageRequest.of(0, 10), expected);
+  }
+
+  @Test
+  void eventsPageBuildsNavigationUrls() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS_PAGINATED);
+    String query = "q=Peniche&year=1984&district=Leiria&county=Peniche";
+
+    mockMvc.perform(get("/en/events").param("page", "2")
+            .param("q", "Peniche")
+            .param("year", "1984")
+            .param("district", "Leiria")
+            .param("county", "Peniche"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("eventsUrl", "/en/events"))
+        .andExpect(model().attribute("paginationUrls", hasEntry(0, "/en/events?page=0&" + query)))
+        .andExpect(model().attribute("paginationUrls", hasEntry(4, "/en/events?page=4&" + query)))
+        .andExpect(model().attribute("paginationPreviousUrl", equalTo("/en/events?page=1&" + query)))
+        .andExpect(model().attribute("paginationNextUrl", equalTo("/en/events?page=3&" + query)))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1, 2, 3, 4), false, false)));
+  }
+
+  @Test
+  void eventsPageSetsMetadataWhenPagedWithoutFilters() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS);
+
+    mockMvc.perform(get("/en/events").param("page", "1"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("isFiltered", false))
+        .andExpect(model().attribute("metadata", hasProperty("canonicalUrl", equalTo("http://localhost/en/events"))))
+        .andExpect(model().attribute("metadata", hasProperty("hreflangUrlPt", equalTo("http://localhost/pt/events"))));
+  }
+
+  @Test
+  void eventsYearPageShouldRedirectToFilteredDirectory() throws Exception {
     mockMvc.perform(get("/en/events/1984"))
-        .andExpect(model().attribute("metadata", org.hamcrest.Matchers.hasProperty("title",
-                org.hamcrest.Matchers.is("Events by year - EnduranceTrio")
-            )
-        ));
-  }
-
-  @Test
-  void eventsYearPageEmptyYear() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
-        "Events by year - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
-        any()
-    )).thenReturn("Browse the endurance sports events by year");
-    when(eventService.getEventsByYear(eq(1985), ArgumentMatchers.any())).thenReturn(PAGE_EMPTY);
-
-    mockMvc.perform(get("/en/events/1985"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("events-by-year"))
-        .andExpect(model().attribute("year", 1985))
-        .andExpect(model().attribute("events", PAGE_EMPTY.events()))
-        .andExpect(model().attribute("pagination", PAGE_EMPTY.pagination()));
-  }
-
-  @Test
-  void eventsYearPageNegativePageShouldBeClamped() throws Exception {
-    when(messageService.getMessage(eq("page.events.year.metadata.title"), any(), any())).thenReturn(
-        "Events by year - EnduranceTrio");
-    when(messageService.getMessage(eq("page.events.year.metadata.description"), any(),
-        any()
-    )).thenReturn("Browse the endurance sports events by year");
-    when(eventService.getEventsByYear(eq(1984), ArgumentMatchers.any())).thenReturn(
-        PAGE_WITH_EVENTS);
-
-    mockMvc.perform(get("/en/events/1984").param("page", "-1"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("events-by-year"))
-        .andExpect(model().attribute("year", 1984))
-        .andExpect(model().attribute("events", PAGE_WITH_EVENTS.events()))
-        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/en/events?year=1984"));
   }
 
   @Test
@@ -579,5 +584,16 @@ class EventWebControllerTest {
         Duration.ofMinutes(5), Duration.ofSeconds(10), Duration.ofMinutes(50), Duration.ofHours(1),
         Duration.ofMinutes(2), 100
     );
+  }
+
+  private void stubEventDirectory(EventsPageDTO eventsPage) {
+    when(eventService.getEventYears()).thenReturn(ALL_YEARS);
+    when(eventService.getEventCountiesByDistrict()).thenReturn(COUNTIES_BY_DISTRICT);
+    when(eventService.getEvents(any(Pageable.class), any(EventFilterDTO.class))).thenReturn(eventsPage);
+  }
+
+  private void stubEventMessages(String title, String description) {
+    when(messageService.getMessage(eq("page.events.metadata.title"), any(), any())).thenReturn(title);
+    when(messageService.getMessage(eq("page.events.metadata.description"), any(), any())).thenReturn(description);
   }
 }
