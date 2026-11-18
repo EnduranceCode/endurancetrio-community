@@ -22,6 +22,7 @@ package com.endurancetrio.data.event.repository;
 
 import com.endurancetrio.data.event.model.entity.Distance;
 import com.endurancetrio.data.event.model.entity.Event;
+import com.endurancetrio.data.event.repository.projection.EventDistrictCountyPair;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,76 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull Long> {
+
+  /**
+   * Returns the distinct {@link Event#getDistrict() district} and {@link Event#getCounty() county}
+   * pairs present in the archive, ordered by district and then county. These values populate the
+   * event directory filter dropdowns.
+   *
+   * @return the distinct district and county pairs in ascending order
+   */
+  @Query(
+      "SELECT DISTINCT e.district AS district, e.county AS county FROM Event e "
+          + "ORDER BY e.district, e.county"
+  )
+  List<EventDistrictCountyPair> findDistinctDistrictCountyPairs();
+
+  /**
+   * Returns a {@link Page} of IDs of {@link Event events} matching the given filters, ordered by
+   * their {@link Event#getStartDate() startDate} descending and, as a tiebreaker, by
+   * {@link Event#getId() id} descending.
+   * <p>
+   * A {@code null} filter value is ignored. The {@code q} value must have its backslash, percent and
+   * underscore characters escaped by the caller; the query applies accent- and case-insensitive
+   * folding to both the stored title and the search term, then wraps the term in wildcards.
+   * <p>
+   * This query selects only IDs to avoid the PostgreSQL restriction that ORDER BY expressions must
+   * appear in the SELECT list when DISTINCT is used, which occurs when fetching collections with
+   * JOIN FETCH. It also avoids Hibernate's in-memory pagination warning ({@code HHH90003004}). Use
+   * {@link #findEventsByIdInWithCourses(Collection)} to load the full entity graph for the returned
+   * IDs.
+   *
+   * @param q the escaped free-text search term, or {@code null}
+   * @param year the year to filter events by, or {@code null}
+   * @param district the district to filter events by, or {@code null}
+   * @param county the county to filter events by, or {@code null}
+   * @param pageable the pagination information
+   * @return a {@link Page} of matching event IDs, ordered by start date descending
+   */
+  @Query(
+      value = """
+          SELECT e.id
+          FROM {h-schema}event e
+          WHERE (:year IS NULL OR EXTRACT(YEAR FROM e.start_date) = :year)
+            AND (:district IS NULL OR e.district = :district)
+            AND (:county IS NULL OR e.county = :county)
+            AND (:q IS NULL OR TRANSLATE(LOWER(e.title),
+                  'áàâãäåéèêëíìîïóòôõöøúùûüýÿñçšž',
+                  'aaaaaaeeeeiiiiooooouuuuyyyncsz')
+                LIKE CONCAT('%', TRANSLATE(LOWER(:q),
+                  'áàâãäåéèêëíìîïóòôõöøúùûüýÿñçšž',
+                  'aaaaaaeeeeiiiiooooouuuuyyyncsz'), '%') ESCAPE '\\')
+          ORDER BY e.start_date DESC, e.id DESC
+          """,
+      countQuery = """
+          SELECT COUNT(e.id)
+          FROM {h-schema}event e
+          WHERE (:year IS NULL OR EXTRACT(YEAR FROM e.start_date) = :year)
+            AND (:district IS NULL OR e.district = :district)
+            AND (:county IS NULL OR e.county = :county)
+            AND (:q IS NULL OR TRANSLATE(LOWER(e.title),
+                  'áàâãäåéèêëíìîïóòôõöøúùûüýÿñçšž',
+                  'aaaaaaeeeeiiiiooooouuuuyyyncsz')
+                LIKE CONCAT('%', TRANSLATE(LOWER(:q),
+                  'áàâãäåéèêëíìîïóòôõöøúùûüýÿñçšž',
+                  'aaaaaaeeeeiiiiooooouuuuyyyncsz'), '%') ESCAPE '\\')
+          """,
+      nativeQuery = true
+  )
+  Page<Long> findEventIdsByFilter(
+      @Param("q") String q, @Param("year") Integer year, @Param("district") String district,
+      @Param("county") String county, Pageable pageable
+  );
 
   /**
    * Returns a {@link Page} of IDs of {@link Event events} whose {@link Event#getStartDate() startDate}
