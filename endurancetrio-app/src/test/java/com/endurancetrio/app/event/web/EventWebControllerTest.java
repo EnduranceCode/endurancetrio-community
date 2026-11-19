@@ -70,6 +70,8 @@ import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
@@ -240,12 +242,13 @@ class EventWebControllerTest {
     verify(eventService).getEvents(PageRequest.of(1, 10), new EventFilterDTO(null, null, null, null));
   }
 
-  @Test
-  void eventsPageNegativePageShouldBeClamped() throws Exception {
+  @ParameterizedTest
+  @ValueSource(strings = {"-1", "unknown", "  "})
+  void eventsPageNegativePageShouldBeClamped(String page) throws Exception {
     stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
     stubEventDirectory(PAGE_WITH_EVENTS);
 
-    mockMvc.perform(get("/en/events").param("page", "-1")).andExpect(status().isOk()).andExpect(view().name("events"));
+    mockMvc.perform(get("/en/events").param("page", page)).andExpect(status().isOk()).andExpect(view().name("events"));
 
     verify(eventService).getEvents(PageRequest.of(0, 10), new EventFilterDTO(null, null, null, null));
   }

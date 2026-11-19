@@ -175,7 +175,7 @@ of detail expected:
 
 ```markdown
 - `endurancetrio-app/src/main/java/com/endurancetrio/app/event/web/EventWebController.java`: the
-  `getYearsWithEvents(...)` method serves the year list at `/{language:en|pt}/events`.
+  `getEvents(...)` method serves the searchable directory at `/{language:en|pt}/events`.
 
 - [ ] A free-text search field filters events by title (accent- and case-insensitive partial match).
 ```
