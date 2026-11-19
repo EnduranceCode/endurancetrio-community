@@ -43,96 +43,101 @@
 
   <section class="section">
     <div class="endurance-box is-branded-thin is-branded-faded has-background-grey-200">
-      <form method="get" data-th-action="${eventsUrl}" role="search">
-        <div class="columns is-multiline">
-          <div class="column is-half-tablet is-one-third-desktop">
-            <div class="field">
-              <label for="events-year" class="label is-sr-only"
-                     data-th-text="#{page.events.filter.year}">Year</label>
-              <div class="control">
-                <div class="select is-fullwidth is-small">
-                  <select id="events-year" name="year">
-                    <option value="" data-th-value="''"
-                            data-th-text="#{page.events.filter.all}"
-                            data-th-selected="${filter.year() == null}">All years</option>
-                    <option data-th-each="year : ${years}"
-                            data-th-value="${year}"
-                            data-th-text="${year}"
-                            data-th-selected="${filter.year() == year}">1984</option>
-                  </select>
-                </div>
+      <form method="get" data-th-action="${eventsUrl}" role="search" class="columns is-multiline">
+        <div class="column is-two-fifths">
+          <div class="field">
+            <label for="events-district" class="label is-sr-only"
+                   data-th-text="#{page.events.filter.district}">District</label>
+            <div class="control">
+              <div class="select is-fullwidth is-small">
+                <select id="events-district" name="district"
+                        data-event-filter-district="events-county">
+                  <option value="" data-th-value="''"
+                          data-th-text="#{page.events.filter.anyDistrict}"
+                          data-th-selected="${filter.district() == null}">Any district
+                  </option>
+                  <option data-th-each="district : ${countiesByDistrict.keySet()}"
+                          data-th-value="${district}"
+                          data-th-text="${district}"
+                          data-th-selected="${filter.district() == district}">Aveiro
+                  </option>
+                </select>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="column is-half-tablet is-one-third-desktop">
-            <div class="field">
-              <label for="events-district" class="label is-sr-only"
-                     data-th-text="#{page.events.filter.district}">District</label>
-              <div class="control">
-                <div class="select is-fullwidth is-small">
-                  <select id="events-district" name="district"
-                          data-event-filter-district="events-county">
-                    <option value="" data-th-value="''"
-                            data-th-text="#{page.events.filter.all}"
-                            data-th-selected="${filter.district() == null}">All districts</option>
-                    <option data-th-each="district : ${countiesByDistrict.keySet()}"
-                            data-th-value="${district}"
-                            data-th-text="${district}"
-                            data-th-selected="${filter.district() == district}">Aveiro</option>
-                  </select>
-                </div>
+        <div class="column is-two-fifths">
+          <div class="field">
+            <label for="events-county" class="label is-sr-only"
+                   data-th-text="#{page.events.filter.county}">County</label>
+            <div class="control">
+              <div class="select is-fullwidth is-small">
+                <select id="events-county" name="county">
+                  <option value="" data-th-value="''"
+                          data-th-text="#{page.events.filter.anyCounty}"
+                          data-th-selected="${filter.county() == null}">Any county
+                  </option>
+                  <optgroup data-th-each="districtCounties : ${countiesByDistrict}"
+                            label="Aveiro"
+                            data-th-label="${districtCounties.key}"
+                            data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null">
+                    <option data-th-each="county : ${districtCounties.value}"
+                            data-th-value="${county}"
+                            data-th-text="${county}"
+                            data-th-selected="${filter.county() == county}"
+                            data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null, disabled=${filter.district() != null and filter.district() != districtCounties.key} ? 'disabled' : null">
+                      Aveiro
+                    </option>
+                  </optgroup>
+                </select>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="column is-half-tablet is-one-third-desktop">
-            <div class="field">
-              <label for="events-county" class="label is-sr-only"
-                     data-th-text="#{page.events.filter.county}">County</label>
-              <div class="control">
-                <div class="select is-fullwidth is-small">
-                  <select id="events-county" name="county">
-                    <option value="" data-th-value="''"
-                            data-th-text="#{page.events.filter.all}"
-                            data-th-selected="${filter.county() == null}">All counties</option>
-                    <optgroup data-th-each="districtCounties : ${countiesByDistrict}"
-                              label="Aveiro"
-                              data-th-label="${districtCounties.key}"
-                              data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null">
-                      <option data-th-each="county : ${districtCounties.value}"
-                              data-th-value="${county}"
-                              data-th-text="${county}"
-                              data-th-selected="${filter.county() == county}"
-                              data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null, disabled=${filter.district() != null and filter.district() != districtCounties.key} ? 'disabled' : null">Aveiro</option>
-                    </optgroup>
-                  </select>
-                </div>
+        <div class="column is-one-fifth">
+          <div class="field">
+            <label for="events-year" class="label is-sr-only"
+                   data-th-text="#{page.events.filter.year}">Year</label>
+            <div class="control">
+              <div class="select is-fullwidth is-small">
+                <select id="events-year" name="year">
+                  <option value="" data-th-value="''"
+                          data-th-text="#{page.events.filter.anyYear}"
+                          data-th-selected="${filter.year() == null}">Any year
+                  </option>
+                  <option data-th-each="year : ${years}"
+                          data-th-value="${year}"
+                          data-th-text="${year}"
+                          data-th-selected="${filter.year() == year}">1984
+                  </option>
+                </select>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="column">
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                <label for="event-search" class="label is-sr-only"
-                       data-th-text="#{page.events.search.placeholder}">Search events</label>
-                <input id="event-search"
-                       data-th-value="${filter.q()}"
-                       data-th-placeholder="#{page.events.search.placeholder}"
-                       type="search"
-                       name="q"
-                       class="input is-small">
-              </div>
-              <div class="control">
-                <button data-th-attr="aria-label=#{page.events.search.submit}"
-                        type="submit"
-                        data-loading
-                        class="button is-small is-primary">
-                  <span class="icon"><i class="et et-magnify"></i></span>
-                  <span data-th-text="#{page.events.search.submit}">Search</span>
-                </button>
-              </div>
+        <div class="column">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <label for="event-search" class="label is-sr-only"
+                     data-th-text="#{page.events.search.placeholder}">Search events</label>
+              <input id="event-search"
+                     data-th-value="${filter.q()}"
+                     data-th-placeholder="#{page.events.search.placeholder}"
+                     type="search"
+                     name="q"
+                     class="input is-small">
+            </div>
+            <div class="control">
+              <button data-th-attr="aria-label=#{page.events.search.submit}"
+                      type="submit"
+                      data-loading
+                      class="button is-small is-primary">
+                <span class="icon"><i class="et et-magnify"></i></span>
+                <span data-th-text="#{page.events.search.submit}">Search</span>
+              </button>
             </div>
           </div>
         </div>
@@ -160,56 +165,54 @@
       </div>
     </div>
 
-    <a data-th-each="event : ${events}"
-       data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
-    >
-      <div class="endurance-box is-branded-thin mb-3">
-        <article class="media">
-          <div class="media-left">
-            <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}">
-            </div>
-          </div>
-
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <span data-th-text="${event.title}" class="title is-4"></span>
-                <br>
-                <span class="has-text-grey"
-                      data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
-                >
-                </span>
-              </p>
-              <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}">
-                <span class="tag is-link is-light" data-th-each="sportCode : ${event.sportCodes}"
-                      data-th-text="#{sport.__${sportCode}__}"
-                >
-                </span>
+    <div class="columns is-multiline">
+      <div data-th-each="event : ${events}" class="column is-full">
+        <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}">
+          <article class="endurance-box is-branded-thin mb-3">
+            <div class="media">
+              <div class="media-left">
+                <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}"></div>
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <span data-th-text="${event.title}" class="title is-4"></span>
+                    <br>
+                    <span data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
+                          class="has-text-grey">
+                    </span>
+                  </p>
+                  <div data-th-if="${!#lists.isEmpty(event.sportCodes)}" class="tags mt-2">
+                    <span data-th-each="sportCode : ${event.sportCodes}"
+                          data-th-text="#{sport.__${sportCode}__}"
+                          class="tag is-link is-light">
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </article>
+          </article>
+        </a>
       </div>
-    </a>
+    </div>
 
     <nav data-th-if="${pagination.totalPages() > 1}"
          data-th-attr="aria-label=#{pagination.a11y.label}"
-         class="pagination is-centered is-rounded" role="navigation">
+         role="navigation"
+         class="pagination is-centered">
       <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
          data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
          data-th-href="${paginationPreviousUrl}"
-         class="pagination-previous"
-      >
+         class="pagination-previous">
         <span class="icon">
           <i class="et et-chevron-double-left"></i>
         </span>
       </a>
 
-      <a data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
-         data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+      <a data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
          data-th-href="${paginationNextUrl}"
-         class="pagination-next"
-      >
+         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+         class="pagination-next">
         <span class="icon">
           <i class="et et-chevron-double-right"></i>
         </span>
@@ -222,8 +225,9 @@
              data-th-text="${firstPage + 1}"
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', firstPage + 1)}"
              data-th-classappend="${firstPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link"
-          >1</a>
+             class="pagination-link">
+            1
+          </a>
         </li>
         <li data-th-if="${pageWindow.gapBefore()}">
           <span class="pagination-ellipsis pagination-link">&hellip;</span>
@@ -234,8 +238,9 @@
              data-th-text="${p + 1}"
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', p + 1)}"
              data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link"
-          >1</a>
+             class="pagination-link">
+            1
+          </a>
         </li>
         <li data-th-if="${pageWindow.gapAfter()}">
           <span class="pagination-ellipsis pagination-link">&hellip;</span>
@@ -245,8 +250,9 @@
              data-th-text="${lastPage + 1}"
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
              data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link"
-          >1</a>
+             class="pagination-link">
+            1
+          </a>
         </li>
       </ul>
     </nav>
