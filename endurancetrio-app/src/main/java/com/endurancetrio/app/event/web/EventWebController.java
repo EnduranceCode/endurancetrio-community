@@ -37,6 +37,7 @@ import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventFilterDTO;
+import com.endurancetrio.business.event.dto.EventFilterOptionsDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
@@ -154,9 +155,10 @@ public class EventWebController {
 
     int clampedPage = Math.max(0, page);
     Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
-    List<Integer> years = eventService.getEventYears();
-    Map<String, List<String>> countiesByDistrict = eventService.getEventCountiesByDistrict();
-    EventFilterDTO filter = normalizeFilter(q, year, district, county, years, countiesByDistrict);
+    EventFilterOptionsDTO filterOptions = EventFilterOptionsDTO.of(eventService.getEventYears(),
+        eventService.getEventCountiesByDistrict()
+    );
+    EventFilterDTO filter = normalizeFilter(q, year, district, county, filterOptions);
     EventsPageDTO eventsPage = eventService.getEvents(pageable, filter);
     boolean isFiltered = filter.q() != null || filter.year() != null || filter.district() != null
         || filter.county() != null;
@@ -186,8 +188,8 @@ public class EventWebController {
     model.addAttribute(ATTRIBUTE_EVENTS, eventsPage.events());
     model.addAttribute(ATTRIBUTE_PAGE_WINDOW, pageWindow);
     model.addAttribute(ATTRIBUTE_FILTER, filter);
-    model.addAttribute(ATTRIBUTE_YEARS, years);
-    model.addAttribute(ATTRIBUTE_COUNTIES_BY_DISTRICT, countiesByDistrict);
+    model.addAttribute(ATTRIBUTE_YEARS, filterOptions.years());
+    model.addAttribute(ATTRIBUTE_COUNTIES_BY_DISTRICT, filterOptions.countiesByDistrict());
     model.addAttribute(ATTRIBUTE_FILTERED, isFiltered);
     model.addAttribute(ATTRIBUTE_PAGINATION_URLS, paginationUrls);
     model.addAttribute(ATTRIBUTE_PAGINATION_PREVIOUS_URL,
@@ -481,22 +483,21 @@ public class EventWebController {
    * Normalizes a county against the available district/county pairs. A county that does not belong
    * to the selected district is ignored.
    *
-   * @param county            the raw county request parameter
-   * @param district          the normalized district, or {@code null} when no district is selected
-   * @param countiesByDistrict the available counties grouped by district
+   * @param county        the raw county request parameter
+   * @param district      the normalized district, or {@code null} when no district is selected
+   * @param filterOptions the filter options with precomputed lookup sets
    * @return the normalized county, or {@code null} when it is blank or not available
    */
   private static @Nullable String normalizeCounty(
-      String county, @Nullable String district, Map<String, List<String>> countiesByDistrict
+      String county, @Nullable String district, EventFilterOptionsDTO filterOptions
   ) {
     if (county == null || county.isBlank()) {
       return null;
     }
 
     String normalized = county.trim();
-    List<String> allowedCounties = district == null
-        ? countiesByDistrict.values().stream().flatMap(List::stream).distinct().toList()
-        : countiesByDistrict.get(district);
+    Set<String> allowedCounties =
+        district == null ? filterOptions.countyLookup() : filterOptions.countyLookupByDistrict().get(district);
 
     return allowedCounties != null && allowedCounties.contains(normalized) ? normalized : null;
   }
@@ -504,19 +505,18 @@ public class EventWebController {
   /**
    * Normalizes a district against the districts present in the archive.
    *
-   * @param district           the raw district request parameter
-   * @param countiesByDistrict the available counties grouped by district
+   * @param district      the raw district request parameter
+   * @param filterOptions the filter options with precomputed lookup sets
    * @return the normalized district, or {@code null} when it is blank or not available
    */
-  private static @Nullable String normalizeDistrict(
-      String district, Map<String, List<String>> countiesByDistrict
+  private static @Nullable String normalizeDistrict(String district, EventFilterOptionsDTO filterOptions
   ) {
     if (district == null || district.isBlank()) {
       return null;
     }
 
     String normalized = district.trim();
-    return countiesByDistrict.containsKey(normalized) ? normalized : null;
+    return filterOptions.countyLookupByDistrict().containsKey(normalized) ? normalized : null;
   }
 
   /**
@@ -524,23 +524,21 @@ public class EventWebController {
    * trimmed and capped in length, while year, district and county values are validated against the
    * filter values present in the archive.
    *
-   * @param q                  the raw search-term request parameter
-   * @param year               the raw year request parameter
-   * @param district           the raw district request parameter
-   * @param county             the raw county request parameter
-   * @param years              the years present in the archive
-   * @param countiesByDistrict the counties present in the archive, grouped by district
+   * @param q             the raw search-term request parameter
+   * @param year          the raw year request parameter
+   * @param district      the raw district request parameter
+   * @param county        the raw county request parameter
+   * @param filterOptions the filter options with precomputed lookup sets
    * @return the normalized filter
    */
   private static @NonNull EventFilterDTO normalizeFilter(
-      String q, String year, String district, String county, List<Integer> years,
-      Map<String, List<String>> countiesByDistrict
+      String q, String year, String district, String county,
+      EventFilterOptionsDTO filterOptions
   ) {
-    String normalizedDistrict = normalizeDistrict(district, countiesByDistrict);
+    String normalizedDistrict = normalizeDistrict(district, filterOptions);
 
-    return new EventFilterDTO(
-        normalizeSearchTerm(q), normalizeYear(year, years), normalizedDistrict,
-        normalizeCounty(county, normalizedDistrict, countiesByDistrict)
+    return new EventFilterDTO(normalizeSearchTerm(q), normalizeYear(year, filterOptions), normalizedDistrict,
+        normalizeCounty(county, normalizedDistrict, filterOptions)
     );
   }
 
@@ -567,18 +565,18 @@ public class EventWebController {
   /**
    * Normalizes a year against the years present in the archive.
    *
-   * @param year  the raw year request parameter
-   * @param years the years present in the archive
+   * @param year          the raw year request parameter
+   * @param filterOptions the filter options with precomputed lookup sets
    * @return the normalized year, or {@code null} when it is blank, not numeric or not available
    */
-  private static @Nullable Integer normalizeYear(String year, List<Integer> years) {
+  private static @Nullable Integer normalizeYear(String year, EventFilterOptionsDTO filterOptions) {
     if (year == null || year.isBlank()) {
       return null;
     }
 
     try {
       Integer normalized = Integer.valueOf(year.trim());
-      return years.contains(normalized) ? normalized : null;
+      return filterOptions.yearLookup().contains(normalized) ? normalized : null;
     } catch (NumberFormatException exception) {
       return null;
     }
