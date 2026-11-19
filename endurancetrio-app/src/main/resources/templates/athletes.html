@@ -193,29 +193,28 @@
 
     <nav data-th-if="${pagination.totalPages() > 1}"
          data-th-attr="aria-label=#{pagination.a11y.label}"
-         class="pagination is-centered" role="navigation">
-      <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
-         data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+         role="navigation"
+         class="pagination is-centered">
+      <a data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
          data-th-href="${paginationPreviousUrl}"
-         class="pagination-previous"
-      >
+         data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+         class="pagination-previous">
         <span class="icon">
           <i class="et et-chevron-double-left"></i>
         </span>
       </a>
 
-      <a data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
-         data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+      <a data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
          data-th-href="${paginationNextUrl}"
-         class="pagination-next"
-      >
+         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+         class="pagination-next">
         <span class="icon">
           <i class="et et-chevron-double-right"></i>
         </span>
       </a>
 
-      <ul class="pagination-list"
-          data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}">
+      <ul data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}"
+          class="pagination-list">
         <li data-th-if="${firstPage != null}">
           <a data-th-href="${paginationUrls.get(firstPage)}"
              data-th-text="${firstPage + 1}"
@@ -233,8 +232,9 @@
              data-th-text="${p + 1}"
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', p + 1)}"
              data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link"
-          >1</a>
+             class="pagination-link">
+            1
+          </a>
         </li>
         <li data-th-if="${pageWindow.gapAfter()}">
           <span class="pagination-ellipsis pagination-link">&hellip;</span>
@@ -244,8 +244,9 @@
              data-th-text="${lastPage + 1}"
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
              data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link"
-          >1</a>
+             class="pagination-link">
+            1
+          </a>
         </li>
       </ul>
     </nav>
