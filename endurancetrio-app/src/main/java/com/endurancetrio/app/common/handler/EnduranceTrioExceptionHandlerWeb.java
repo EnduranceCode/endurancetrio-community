@@ -38,6 +38,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -111,6 +112,24 @@ public class EnduranceTrioExceptionHandlerWeb {
     LOG.warn("Database integrity violation: {}", ex.getMostSpecificCause().getMessage());
     return ErrorPageUtils.buildErrorModelAndView(HttpStatus.CONFLICT, EnduranceTrioError.CONFLICT.getMessage(),
         null, request, messageService, appProperties
+    );
+  }
+
+  /**
+   * Handles request parameters or path variables that cannot be converted to their declared type,
+   * such as a non-numeric year in the path. Only the parameter name is logged, never the submitted
+   * value, to avoid forging log entries.
+   *
+   * @param ex      the type mismatch exception
+   * @param request the current HTTP request
+   * @return a {@link ModelAndView} with a bad request error page
+   */
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ModelAndView handleTypeMismatch(
+      @NonNull MethodArgumentTypeMismatchException ex, @NonNull HttpServletRequest request) {
+    LOG.warn("Invalid value for request parameter '{}'", ex.getName());
+    return ErrorPageUtils.buildErrorModelAndView(HttpStatus.BAD_REQUEST,
+        EnduranceTrioError.BAD_REQUEST.getMessage(), null, request, messageService, appProperties
     );
   }
 
