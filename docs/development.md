@@ -721,10 +721,12 @@ and behavior of error pages during development.
 
 | URL                                 | HTTP Code | Error Page  |
 |-------------------------------------|-----------|-------------|
+| `/{language:en\|pt}/test/error-400` | 400       | `error/400` |
 | `/{language:en\|pt}/test/error-403` | 403       | `error/403` |
 | `/{language:en\|pt}/test/error-404` | 404       | `error/404` |
 | `/{language:en\|pt}/test/error-500` | 500       | `error/500` |
 
+- **400** — throws an `EnduranceTrioException` with code 400, caught by the exception handler.
 - **403** — throws an `EnduranceTrioException` with code 403, caught by the exception handler.
 - **404** — throws an `EnduranceTrioException` with code 404, caught by the exception handler.
 - **500** — throws an unhandled `RuntimeException`, caught by the catch-all handler.

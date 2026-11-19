@@ -37,6 +37,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Profile("local")
 public class TestErrorWebController {
 
+  @GetMapping("/{language:en|pt}/test/error-400")
+  public String trigger400(@PathVariable String language) {
+    throw new EnduranceTrioException(
+        new ErrorDTO(EnduranceTrioError.BAD_REQUEST, "This is a test 400 error for the " + language + " locale"));
+  }
+
   @GetMapping("/{language:en|pt}/test/error-403")
   public String trigger403(@PathVariable String language) {
     throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.FORBIDDEN,

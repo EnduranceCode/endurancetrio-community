@@ -21,8 +21,8 @@
 package com.endurancetrio.app.common.utils;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
@@ -53,11 +53,12 @@ public final class ErrorPageUtils {
   /**
    * Resolves an HTTP status code to the corresponding error view name.
    *
-   * @param statusCode the HTTP status code (e.g. 403, 404, 500)
+   * @param statusCode the HTTP status code (e.g. 400, 403, 404, 500)
    * @return the Thymeleaf view name for the error page (e.g. {@code error/403})
    */
   public static String errorView(int statusCode) {
     return switch (statusCode) {
+      case 400 -> ERROR_VIEW_PREFIX + "400";
       case 403 -> ERROR_VIEW_PREFIX + "403";
       case 404 -> ERROR_VIEW_PREFIX + "404";
       default -> ERROR_VIEW_PREFIX + "500";
@@ -68,7 +69,7 @@ public final class ErrorPageUtils {
    * Creates a {@link PageMetadata} object for an error page using the appropriate i18n message keys
    * based on the HTTP status code.
    *
-   * @param statusCode     the HTTP status code (e.g. 403, 404, 500)
+   * @param statusCode     the HTTP status code (e.g. 400, 403, 404, 500)
    * @param request        the current HTTP request, used for URL construction
    * @param locale         the resolved locale for i18n messages
    * @param messageService the service used to retrieve i18n messages
@@ -82,6 +83,10 @@ public final class ErrorPageUtils {
     String title;
     String description;
     switch (statusCode) {
+      case 400 -> {
+        title = messageService.getMessage("page.error.400.metadata.title", null, locale);
+        description = messageService.getMessage("page.error.400.metadata.description", null, locale);
+      }
       case 403 -> {
         title = messageService.getMessage("page.error.403.metadata.title", null, locale);
         description = messageService.getMessage("page.error.403.metadata.description", null,
@@ -101,6 +106,7 @@ public final class ErrorPageUtils {
         );
       }
     }
+
     return PageMetadataUtils.create("error", title, description, request, appProperties);
   }
 
@@ -150,7 +156,7 @@ public final class ErrorPageUtils {
    * @param request the current HTTP request
    * @return the resolved {@link Locale} (Portuguese or English)
    */
-  private static Locale resolveLocale(@NonNull HttpServletRequest request) {
+  public static Locale resolveLocale(@NonNull HttpServletRequest request) {
     String requestUri = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
     if (requestUri == null) {
       requestUri = request.getRequestURI();

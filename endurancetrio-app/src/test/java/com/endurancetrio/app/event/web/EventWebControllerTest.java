@@ -537,7 +537,7 @@ class EventWebControllerTest {
 
     advisedMockMvc.perform(get("/en/events/abc/1/overview"))
         .andExpect(status().isBadRequest())
-        .andExpect(view().name("error/500"));
+        .andExpect(view().name("error/400"));
   }
 
   @Test
