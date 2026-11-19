@@ -136,7 +136,7 @@ public class AthleteWebController {
     boolean isFiltered = filter.letterRange() != null || filter.gender() != null || filter.searchTerm() != null;
 
     if (isFiltered || clampedPage > 0) {
-      String baseUrl = PageMetadataUtils.getBaseUrl(request);
+      String baseUrl = PageMetadataUtils.getBaseUrl(appProperties);
       metadata.setCanonicalUrl(buildAbsoluteAthletesUrl(baseUrl, locale.getLanguage()));
       metadata.setHreflangUrlEn(buildAbsoluteAthletesUrl(baseUrl, "en"));
       metadata.setHreflangUrlPt(buildAbsoluteAthletesUrl(baseUrl, "pt"));

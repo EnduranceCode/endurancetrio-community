@@ -164,7 +164,7 @@ public class EventWebController {
         || filter.county() != null;
 
     if (isFiltered || clampedPage > 0) {
-      String baseUrl = PageMetadataUtils.getBaseUrl(request);
+      String baseUrl = PageMetadataUtils.getBaseUrl(appProperties);
       metadata.setCanonicalUrl(buildAbsoluteEventsUrl(baseUrl, locale.getLanguage()));
       metadata.setHreflangUrlEn(buildAbsoluteEventsUrl(baseUrl, "en"));
       metadata.setHreflangUrlPt(buildAbsoluteEventsUrl(baseUrl, "pt"));

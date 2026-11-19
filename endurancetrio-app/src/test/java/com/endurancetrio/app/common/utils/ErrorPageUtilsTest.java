@@ -228,8 +228,6 @@ class ErrorPageUtilsTest {
     when(request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI)).thenReturn("/pt/events/404");
     when(request.getRequestURI()).thenReturn("/error");
     when(request.getContextPath()).thenReturn("");
-    when(request.getRequestURL()).thenReturn(
-        new StringBuffer("http://localhost:8080/error"));
 
     when(messageService.getMessage("page.error.500.metadata.title", null, LOCALE_PORTUGUESE)).thenReturn(
         "Erro do Servidor - EnduranceTrio");
@@ -253,8 +251,6 @@ class ErrorPageUtilsTest {
     when(request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI)).thenReturn("/myapp/en/events");
     when(request.getContextPath()).thenReturn("/myapp");
     when(request.getRequestURI()).thenReturn("/error");
-    when(request.getRequestURL()).thenReturn(
-        new StringBuffer("http://localhost:8080/error"));
 
     when(messageService.getMessage("page.error.500.metadata.title", null, Locale.ENGLISH)).thenReturn(
         "Server Error - EnduranceTrio");
@@ -288,6 +284,7 @@ class ErrorPageUtilsTest {
     appProperties.getGoogle().setAdsenseId("ca-pub-test");
     appProperties.getKoFi().setUserId("test-kofi");
     appProperties.setCopyrightYear("2026");
+    appProperties.setSiteUrl("http://localhost:8080");
     appProperties.setVersion("0.4.0");
     return appProperties;
   }

@@ -81,7 +81,7 @@ class EnduranceTrioExceptionHandlerWebTest {
     when(openGraph.getDefaultImg()).thenReturn("/img/endurancetrio-open-graph.png");
     when(openGraph.getDefaultImgWidth()).thenReturn(1200);
     when(openGraph.getDefaultImgHeight()).thenReturn(628);
-    when(request.getRequestURL()).thenReturn(new StringBuffer("http://localhost:8080/en/events"));
+    when(appProperties.getSiteUrl()).thenReturn("http://localhost:8080");
     when(request.getRequestURI()).thenReturn("/en/events");
   }
 

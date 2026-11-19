@@ -49,7 +49,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -85,6 +84,7 @@ class InsightsWebControllerTest {
     appProperties.getOpenGraph().setDefaultImg("/img/endurancetrio-open-graph.png");
     appProperties.getOpenGraph().setDefaultImgWidth(1200);
     appProperties.getOpenGraph().setDefaultImgHeight(628);
+    appProperties.setSiteUrl("http://localhost");
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 

@@ -88,6 +88,7 @@ class AthleteWebControllerTest {
     appProperties.getOpenGraph().setDefaultImg("/img/endurancetrio-open-graph.png");
     appProperties.getOpenGraph().setDefaultImgWidth(1200);
     appProperties.getOpenGraph().setDefaultImgHeight(628);
+    appProperties.setSiteUrl("http://localhost");
     appProperties.getSocial().setFacebookPageId("1692877750958091");
     appProperties.getSocial().setTwitterSite("@EnduranceTrio");
 
