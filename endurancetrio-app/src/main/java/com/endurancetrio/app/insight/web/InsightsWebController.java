@@ -135,7 +135,7 @@ public class InsightsWebController {
     PageMetadata metadata = PageMetadataUtils.create(VIEW_INSIGHT_ARTICLE, metaTitle,
         metaDescription, request, appProperties
     );
-    metadata.setJsonLd(JsonLdUtils.buildArticleJsonLd(article, metadata, PageMetadataUtils.getBaseUrl(request)));
+    metadata.setJsonLd(JsonLdUtils.buildArticleJsonLd(article, metadata, PageMetadataUtils.getBaseUrl(appProperties)));
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);

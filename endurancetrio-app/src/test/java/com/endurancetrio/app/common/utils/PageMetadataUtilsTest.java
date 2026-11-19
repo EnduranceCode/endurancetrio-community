@@ -122,6 +122,29 @@ class PageMetadataUtilsTest {
   }
 
   @Test
+  void createShouldIgnoreForgedHostHeaderAndUseConfiguredSiteUrl() {
+    AppProperties appProperties = createAppProperties();
+    appProperties.setSiteUrl("https://endurancetrio.com/");
+    HttpServletRequest request = createRequest("http://attacker.example/en/events", "/en/events");
+
+    PageMetadata result = PageMetadataUtils.create("events", "Title", "Description", request, appProperties);
+
+    assertNotNull(result);
+    assertEquals("https://endurancetrio.com/en/events", result.getCanonicalUrl());
+    assertEquals("https://endurancetrio.com/en/events", result.getHreflangUrlEn());
+    assertEquals("https://endurancetrio.com/pt/events", result.getHreflangUrlPt());
+    assertEquals("https://endurancetrio.com/img/endurancetrio-open-graph.png", result.getOgImage());
+  }
+
+  @Test
+  void getBaseUrlShouldStripTrailingSlashFromSiteUrl() {
+    AppProperties appProperties = createAppProperties();
+    appProperties.setSiteUrl("https://endurancetrio.com/");
+
+    assertEquals("https://endurancetrio.com", PageMetadataUtils.getBaseUrl(appProperties));
+  }
+
+  @Test
   void constructorShouldThrow() {
     assertThrows(InvocationTargetException.class, () -> {
       var constructor = PageMetadataUtils.class.getDeclaredConstructor();
@@ -140,6 +163,7 @@ class PageMetadataUtilsTest {
     appProperties.getGoogle().setAdsenseId("ca-pub-test");
     appProperties.getKoFi().setUserId("test-kofi");
     appProperties.setCopyrightYear("2026");
+    appProperties.setSiteUrl("http://localhost:8080");
     appProperties.setVersion("0.4.0");
     return appProperties;
   }

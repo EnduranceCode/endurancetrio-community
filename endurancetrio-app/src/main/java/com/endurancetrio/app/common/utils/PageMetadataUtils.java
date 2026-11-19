@@ -43,14 +43,16 @@ public final class PageMetadataUtils {
   }
 
   /**
-   * Extracts the base URL (scheme, host, and port) from the given request.
+   * Returns the configured public base URL (scheme, host, and port) without a trailing slash. The
+   * value comes from {@code app.site-url} rather than the request, so a client-supplied
+   * {@code Host} header cannot alter canonical, alternate or image URLs.
    *
-   * @param request the current HTTP request
-   * @return the base URL, e.g. {@code http://localhost:8080}
+   * @param properties the application configuration properties
+   * @return the base URL, e.g. {@code https://endurancetrio.com}
    */
-  public static String getBaseUrl(HttpServletRequest request) {
-    String canonicalUrl = request.getRequestURL().toString();
-    return canonicalUrl.substring(0, canonicalUrl.indexOf(request.getRequestURI()));
+  public static String getBaseUrl(AppProperties properties) {
+    String siteUrl = properties.getSiteUrl();
+    return siteUrl == null ? "" : siteUrl.replaceFirst("/$", "");
   }
 
   /**
@@ -69,8 +71,8 @@ public final class PageMetadataUtils {
       AppProperties properties
   ) {
     String appVersion = properties.getVersion();
-    String baseUrl = getBaseUrl(request);
-    String requestUrl = request.getRequestURL().toString();
+    String baseUrl = getBaseUrl(properties);
+    String requestUrl = baseUrl + request.getRequestURI();
 
     PageMetadata metadata = new PageMetadata();
     metadata.setAppVersion(appVersion == null || appVersion.isBlank() ? "" : appVersion);
