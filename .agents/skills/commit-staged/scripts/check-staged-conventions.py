@@ -92,6 +92,15 @@ def all_repo_files(repo: str) -> set[str]:
     return tracked | head
 
 
+def migration_counterpart(path: str, db: str) -> str:
+    """Return the other database's twin for a -h2.sql or -postgres.sql migration."""
+    other_db = "postgres" if db == "h2" else "h2"
+    file_path = Path(path)
+    suffix = f"-{db}.sql"
+    stem = file_path.name[: -len(suffix)] if file_path.name.endswith(suffix) else file_path.name
+    return str(file_path.parent.parent / other_db / f"{stem}-{other_db}.sql")
+
+
 def staged_name_status(repo: str) -> list[tuple[str, str]]:
     output = git(repo, "diff", "--cached", "--name-status")
     result: list[tuple[str, str]] = []
@@ -219,7 +228,9 @@ def check_migration(repo: str, path: str, status: str, staged_paths: set[str]) -
     if not (MIGRATION_NAME_RE.match(name) or LEGACY_MIGRATION_NAME_RE.match(name)):
         err(path, None, "invalid migration file name (expected V<yyyymmdd>.<seq>__description-{h2,postgres}.sql)")
 
-    # Version uniqueness across all migration directories.
+    counterpart = migration_counterpart(path, db)
+
+    # Version uniqueness across all migration directories, excluding the database twin.
     version_match = re.match(r"^(V[^_]+)__", name)
     if version_match:
         version = version_match.group(1)
@@ -228,7 +239,12 @@ def check_migration(repo: str, path: str, status: str, staged_paths: set[str]) -
             if MIGRATION_DIR_RE.match(other):
                 other_name = Path(other).name
                 other_version_match = re.match(r"^(V[^_]+)__", other_name)
-                if other_version_match and other_version_match.group(1) == version and other != path:
+                if (
+                    other_version_match
+                    and other_version_match.group(1) == version
+                    and other != path
+                    and other != counterpart
+                ):
                     duplicates.append(other)
         # Also count staged duplicates not yet in all_repo_files.
         if duplicates:
@@ -236,13 +252,11 @@ def check_migration(repo: str, path: str, status: str, staged_paths: set[str]) -
 
     # DDL requires a twin.
     if kind == "ddl":
-        counterpart = path.replace(f"/{db}/", f"/{'h2' if db == 'postgres' else 'postgres'}/")
         if counterpart not in all_repo_files(repo) and counterpart not in staged_paths:
             err(path, None, f"missing DDL twin: {counterpart}")
 
     # DML postgres without H2 twin is a warning (porting is event-date dependent).
     if kind == "dml" and db == "postgres":
-        counterpart = path.replace("/postgres/", "/h2/")
         if counterpart not in all_repo_files(repo) and counterpart not in staged_paths:
             warn(path, None, "no H2 twin; if the event is dated 1989 or earlier, port it with the port-postgres-dml-to-h2 skill")
 
