@@ -33,6 +33,7 @@ import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.repository.EventRepository;
 import com.endurancetrio.data.event.repository.projection.EventDistrictCountyPair;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,7 @@ public class EventServiceMain implements EventService {
   }
 
   @Override
+  @Cacheable(value = "eventCountiesByDistrict", key = "'all'")
   @Transactional(readOnly = true)
   public Map<String, List<String>> getEventCountiesByDistrict() {
     Map<String, List<String>> countiesByDistrict = new TreeMap<>();
@@ -73,13 +75,18 @@ public class EventServiceMain implements EventService {
       }
     }
 
-    return countiesByDistrict;
+    Map<String, List<String>> immutableCountiesByDistrict = new TreeMap<>();
+    countiesByDistrict.forEach(
+        (district, counties) -> immutableCountiesByDistrict.put(district, Collections.unmodifiableList(counties)));
+
+    return Collections.unmodifiableMap(immutableCountiesByDistrict);
   }
 
   @Override
+  @Cacheable(value = "eventYears", key = "'all'")
   @Transactional(readOnly = true)
   public List<Integer> getEventYears() {
-    return eventRepository.findDistinctYears();
+    return List.copyOf(eventRepository.findDistinctYears());
   }
 
   @Override
