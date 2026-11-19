@@ -94,12 +94,6 @@ public class EventServiceMain implements EventService {
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public EventsPageDTO getEventsByYear(int year, Pageable pageable) {
-    return toEventsPage(eventRepository.findEventIdsByYear(year, pageable));
-  }
-
-  @Override
   @Cacheable(value = "eventOverview", key = "#id + '-' + #year")
   @Transactional(readOnly = true)
   public EventOverviewDTO getEventOverview(Long id, int year) {

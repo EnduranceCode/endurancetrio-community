@@ -24,7 +24,6 @@ import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
-import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Pageable;
@@ -44,8 +43,7 @@ public interface EventService {
 
   /**
    * Returns a list of all distinct years extracted from the events' start dates, ordered
-   * descending. This is used by {@link YearsWithEventsDTO} to drive the year-browser pagination on the
-   * events landing page.
+   * descending. These values populate the year dropdown in the events directory.
    *
    * @return a list of distinct event years in descending order
    */
@@ -62,18 +60,6 @@ public interface EventService {
    * @return an {@link EventsPageDTO} with the matching events and pagination metadata
    */
   EventsPageDTO getEvents(Pageable pageable, EventFilterDTO filter);
-
-  /**
-   * Returns an {@link EventsPageDTO} containing the
-   * {@link EventDTO events} whose start date falls within the
-   * given {@code year}, ordered by start date descending and paginated according to the given
-   * {@link Pageable}.
-   *
-   * @param year     the year to filter events by
-   * @param pageable the pagination information (page number, page size, etc.)
-   * @return an {@link EventsPageDTO} with the events for the given year and pagination metadata
-   */
-  EventsPageDTO getEventsByYear(int year, Pageable pageable);
 
   /**
    * Returns an {@link EventOverviewDTO} containing the summary details of the event identified by

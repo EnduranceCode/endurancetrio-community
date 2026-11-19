@@ -54,7 +54,7 @@
            data-th-text="#{navbar.option.athletes}"
            data-th-classappend="${isAthlete} ? 'is-active'"
            class="navbar-item"></a>
-        <a data-th-with="isEvents=(${metadata.view == 'event-insights' || metadata.view == 'event-overview' || metadata.view == 'events' || metadata.view == 'events-by-year' || metadata.view == 'years-with-events'})"
+        <a data-th-with="isEvents=(${metadata.view == 'event-insights' || metadata.view == 'event-overview' || metadata.view == 'events'})"
            data-th-href="@{/{language}/events(language=${language})}"
            data-th-text="#{navbar.option.events}"
            data-th-classappend="${isEvents} ? 'is-active'"
