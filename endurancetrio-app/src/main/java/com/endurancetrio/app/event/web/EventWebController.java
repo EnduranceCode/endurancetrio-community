@@ -34,7 +34,6 @@ import com.endurancetrio.app.common.utils.PaginationUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
-
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.EventFilterDTO;
@@ -43,7 +42,6 @@ import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
-import com.endurancetrio.business.event.dto.YearsWithEventsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
@@ -101,7 +99,6 @@ public class EventWebController {
   private static final String ATTRIBUTE_RACE_RESULTS = "raceResults";
   private static final String ATTRIBUTE_YEARS = "years";
 
-  private static final int BATCH_SIZE = 3;
   private static final int MAX_SEARCH_TERM_LENGTH = 100;
   private static final int PAGE_SIZE = 10;
 
@@ -205,7 +202,7 @@ public class EventWebController {
   }
 
   /**
-   * Redirects an old events-by-year URL to the searchable events directory with the year filter
+   * Redirects an old year-based events URL to the searchable events directory with the year filter
    * applied.
    *
    * @param language the language path variable ({@code en} or {@code pt})
@@ -410,48 +407,6 @@ public class EventWebController {
   }
 
   /**
-   * Builds a {@link YearsWithEventsDTO} for the given page.
-   * <p>
-   * The raw {@code page} parameter (from the URL query string) is clamped to the valid range
-   * {@code [0, totalBatches - 1]} to produce the batch index. This index is used to slice the full
-   * year list into the current batch ({@link YearsWithEventsDTO#years()}), the next batch
-   * ({@link YearsWithEventsDTO#nextYears()}), and the previous batch
-   * ({@link YearsWithEventsDTO#previousYears()}). Two-batch (desktop) navigation pages are also
-   * computed via {@link YearsWithEventsDTO#batchGroupPreviousPage()} and
-   * {@link YearsWithEventsDTO#batchGroupNextPage()}.
-   *
-   * @param page the requested page from the URL query {@code page} parameter (may be out of
-   *             bounds)
-   * @return a fully populated {@link YearsWithEventsDTO}
-   */
-  private @NonNull YearsWithEventsDTO buildYearsWithEvents(int page) {
-    List<Integer> allYears = eventService.getEventYears();
-    int totalYears = allYears.size();
-
-    int totalBatches = totalYears == 0 ? 0 : (totalYears + BATCH_SIZE - 1) / BATCH_SIZE;
-    int batchIndex = Math.clamp(page, 0, Math.max(0, totalBatches - 1));
-
-    int from = batchIndex * BATCH_SIZE;
-    int to = Math.min(from + BATCH_SIZE, totalYears);
-    List<Integer> years = allYears.subList(from, to);
-
-    int nextFrom = from + BATCH_SIZE;
-    int nextTo = Math.min(nextFrom + BATCH_SIZE, totalYears);
-    List<Integer> nextYears =
-        nextFrom < totalYears ? allYears.subList(nextFrom, nextTo) : List.of();
-
-    int previousFrom = Math.max(0, from - BATCH_SIZE);
-    List<Integer> previousYears = batchIndex > 0 ? allYears.subList(previousFrom, from) : List.of();
-
-    int batchGroupPreviousPage = getBatchGroupPreviousPage(batchIndex);
-    int batchGroupNextPage = getBatchGroupNextPage(batchIndex, totalBatches);
-
-    return new YearsWithEventsDTO(years, nextYears, previousYears, batchIndex, totalBatches, totalYears,
-        BATCH_SIZE, batchGroupPreviousPage, batchGroupNextPage
-    );
-  }
-
-  /**
    * Computes the set of column names that have at least one non-null value across all OPEN results.
    * <p>
    * Only the OPEN group is scanned so that column visibility is consistent across all age-group
@@ -477,22 +432,6 @@ public class EventWebController {
     }
 
     return active;
-  }
-
-  private static int getBatchGroupNextPage(int batchIndex, int totalBatches) {
-    return switch (totalBatches - batchIndex) {
-      case 0, 1 -> -1;
-      case 2 -> batchIndex + 1;
-      default -> batchIndex + 2;
-    };
-  }
-
-  private static int getBatchGroupPreviousPage(int batchIndex) {
-    return switch (batchIndex) {
-      case 0 -> -1;
-      case 1 -> 0;
-      default -> batchIndex - 2;
-    };
   }
 
   /**
