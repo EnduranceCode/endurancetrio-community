@@ -15,11 +15,11 @@ published. This fixture is used by the validator self-test and is not a real bac
 ### Context
 
 - `endurancetrio-app/src/main/java/com/endurancetrio/app/event/web/EventWebController.java` — the
-  `getYearsWithEvents(...)` method builds the year list served at `/{language:en|pt}/events`.
+  `getEvents(...)` method serves the searchable directory at `/{language:en|pt}/events`.
 
 ### Scope
 
-- Add a `status` request parameter to `EventWebController.getYearsWithEvents(...)`.
+- Add a `status` request parameter to `EventWebController.getEvents(...)`.
 
 ### Out of scope
 

@@ -78,7 +78,7 @@ optgroup:
 <select id="events-district" name="district" data-event-filter-district="events-county">…</select>
 
 <select id="events-county" name="county">
-  <option value="">All</option>
+  <option value="">Any county</option>
   <optgroup label="Aveiro" data-district="Aveiro">
     <option value="Aveiro" data-district="Aveiro">Aveiro</option>
   </optgroup>
@@ -87,7 +87,7 @@ optgroup:
 
 On load and on every district change, the behaviour hides and disables county options (and their
 optgroups) from other districts. An empty district shows them all. If the selected county no longer
-belongs to the chosen district, the county select resets to its empty "All" option.
+belongs to the chosen district, the county select resets to its empty "Any county" option.
 
 The server still renders and selects the correct options for the current URL, so the behaviour is
 progressive enhancement. No navigation happens, which means a typed search term and focus are

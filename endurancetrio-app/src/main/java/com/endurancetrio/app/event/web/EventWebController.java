@@ -128,8 +128,8 @@ public class EventWebController {
    * paged listings.
    *
    * @param language the language path variable ({@code en} or {@code pt})
-   * @param page     the page number from the query string (default {@code 0}, clamped to
-   *                 non-negative)
+   * @param page     the page number from the query string (default {@code 0}; blank, non-numeric
+   *                 and negative values are ignored)
    * @param q        the optional free-text search term
    * @param year     the optional year filter
    * @param district the optional district filter
@@ -140,10 +140,10 @@ public class EventWebController {
    */
   @GetMapping("/{language:en|pt}/events")
   public String getEvents(
-      @PathVariable String language, @RequestParam(defaultValue = "0") int page,
+      @PathVariable String language, @RequestParam(defaultValue = "0") String page,
       @RequestParam(required = false) String q, @RequestParam(required = false) String year,
-      @RequestParam(required = false) String district,
-      @RequestParam(required = false) String county, HttpServletRequest request, Model model
+      @RequestParam(required = false) String district, @RequestParam(required = false) String county,
+      HttpServletRequest request, Model model
   ) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
 
@@ -153,7 +153,7 @@ public class EventWebController {
         appProperties
     );
 
-    int clampedPage = Math.max(0, page);
+    int clampedPage = normalizePage(page);
     Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
     EventFilterOptionsDTO filterOptions = EventFilterOptionsDTO.of(eventService.getEventYears(),
         eventService.getEventCountiesByDistrict()
@@ -543,6 +543,24 @@ public class EventWebController {
   }
 
   /**
+   * Parses the raw page request parameter, ignoring blank and invalid values.
+   *
+   * @param page the raw page request parameter
+   * @return the non-negative page index, or {@code 0} when the value is invalid
+   */
+  private static int normalizePage(String page) {
+    if (page == null || page.isBlank()) {
+      return 0;
+    }
+
+    try {
+      return Math.max(0, Integer.parseInt(page.trim()));
+    } catch (NumberFormatException exception) {
+      return 0;
+    }
+  }
+
+  /**
    * Trims a free-text search term and caps its length.
    *
    * @param searchTerm the raw search-term request parameter
@@ -558,8 +576,7 @@ public class EventWebController {
       return null;
     }
 
-    return normalized.length() > MAX_SEARCH_TERM_LENGTH
-        ? normalized.substring(0, MAX_SEARCH_TERM_LENGTH) : normalized;
+    return normalized.length() > MAX_SEARCH_TERM_LENGTH ? normalized.substring(0, MAX_SEARCH_TERM_LENGTH) : normalized;
   }
 
   /**
