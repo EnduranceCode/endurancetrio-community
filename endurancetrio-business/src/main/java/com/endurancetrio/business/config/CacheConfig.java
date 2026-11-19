@@ -36,9 +36,23 @@ public class CacheConfig {
   public CacheManager cacheManager() {
     CaffeineCacheManager manager = new CaffeineCacheManager();
 
+    manager.registerCustomCache("eventCountiesByDistrict", Caffeine.newBuilder()
+        .maximumSize(1)
+        .expireAfterWrite(24, TimeUnit.HOURS)
+        .recordStats()
+        .build()
+    );
+
     manager.registerCustomCache("eventOverview", Caffeine.newBuilder()
         .maximumSize(200)
         .expireAfterWrite(1, TimeUnit.HOURS)
+        .recordStats()
+        .build()
+    );
+
+    manager.registerCustomCache("eventYears", Caffeine.newBuilder()
+        .maximumSize(1)
+        .expireAfterWrite(24, TimeUnit.HOURS)
         .recordStats()
         .build()
     );

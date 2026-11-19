@@ -120,6 +120,28 @@ class EventServiceMainTest {
   }
 
   @Test
+  void getEventCountiesByDistrictShouldReturnImmutableMap() {
+    EventDistrictCountyPair pair = createPair("Aveiro", "Ovar");
+    when(eventRepository.findDistinctDistrictCountyPairs()).thenReturn(List.of(pair));
+
+    Map<String, List<String>> result = underTest.getEventCountiesByDistrict();
+
+    List<String> newCountyList = List.of("Cascais");
+    assertThrows(UnsupportedOperationException.class, () -> result.put("Lisboa", newCountyList));
+    List<String> aveiroCounties = result.get("Aveiro");
+    assertThrows(UnsupportedOperationException.class, () -> aveiroCounties.add("Espinho"));
+  }
+
+  @Test
+  void getEventYearsShouldReturnImmutableList() {
+    when(eventRepository.findDistinctYears()).thenReturn(ALL_YEARS);
+
+    List<Integer> result = underTest.getEventYears();
+
+    assertThrows(UnsupportedOperationException.class, () -> result.add(1990));
+  }
+
+  @Test
   void getEventsShouldReturnMappedEventsAndPagination() {
     Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
         LocalDate.of(1984, Month.AUGUST, 15), "City1", "County1", "District1",
