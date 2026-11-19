@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.endurancetrio.app.common.handler.EnduranceTrioExceptionHandlerWeb;
 import com.endurancetrio.app.common.model.PageWindow;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.competitor.fixtures.AthleteDTOFixtures;
@@ -526,6 +527,17 @@ class EventWebControllerTest {
         .andExpect(model().attribute("raceIdPrev", 1L))
         .andExpect(model().attribute("raceIdNext", 3L))
         .andExpect(model().attribute("activeColumns", org.hamcrest.Matchers.empty()));
+  }
+
+  @Test
+  void getEventOverviewShouldReturnBadRequestForNonNumericYear() throws Exception {
+    MockMvc advisedMockMvc = MockMvcBuilders.standaloneSetup(eventWebController)
+        .setControllerAdvice(new EnduranceTrioExceptionHandlerWeb(messageService, appProperties))
+        .build();
+
+    advisedMockMvc.perform(get("/en/events/abc/1/overview"))
+        .andExpect(status().isBadRequest())
+        .andExpect(view().name("error/500"));
   }
 
   @Test

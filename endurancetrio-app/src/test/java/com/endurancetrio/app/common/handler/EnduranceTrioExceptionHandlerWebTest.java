@@ -40,6 +40,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
 @ExtendWith(MockitoExtension.class)
@@ -157,6 +158,24 @@ class EnduranceTrioExceptionHandlerWebTest {
     assertNotNull(result);
     assertEquals("error/500", result.getViewName());
     assertNotNull(result.getModel().get("errors"));
+  }
+
+  @Test
+  void handleTypeMismatchShouldReturnBadRequest() {
+    MethodArgumentTypeMismatchException ex = new MethodArgumentTypeMismatchException("abc", Integer.class, "year", null,
+        null
+    );
+
+    when(messageService.getMessage(eq("page.error.500.metadata.title"), any(), any())).thenReturn("Server Error");
+    when(messageService.getMessage(eq("page.error.500.metadata.description"), any(), any())).thenReturn(
+        "Error occurred");
+
+    ModelAndView result = underTest.handleTypeMismatch(ex, request);
+
+    assertNotNull(result);
+    assertEquals("error/500", result.getViewName());
+    assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
+    assertEquals(EnduranceTrioError.BAD_REQUEST.getMessage(), result.getModel().get("message"));
   }
 
   @Test
