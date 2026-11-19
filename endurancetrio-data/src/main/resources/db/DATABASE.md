@@ -323,3 +323,6 @@ timestamp-based naming convention.
 64. Merge team IDs 59, 66 and 94 into team ID 10 and rename team 10 to NAC:
     - [V20261107.009__merge-teams-10-59-66-94-h2.sql](migration/dml/h2/V20261107.009__merge-teams-10-59-66-94-h2.sql)
     - [V20261107.009__merge-teams-10-59-66-94-postgres.sql](migration/dml/postgres/V20261107.009__merge-teams-10-59-66-94-postgres.sql)
+65. Adds indexes supporting event directory filters and ordering:
+    - [V20261119.001__add-event-directory-indexes-h2.sql](migration/ddl/h2/V20261119.001__add-event-directory-indexes-h2.sql)
+    - [V20261119.001__add-event-directory-indexes-postgres.sql](migration/ddl/postgres/V20261119.001__add-event-directory-indexes-postgres.sql)

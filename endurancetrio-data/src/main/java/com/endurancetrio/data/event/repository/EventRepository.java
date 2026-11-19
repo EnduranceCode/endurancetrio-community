@@ -65,9 +65,10 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
    * <p>
    * This query selects only IDs to avoid the PostgreSQL restriction that ORDER BY expressions must
    * appear in the SELECT list when DISTINCT is used, which occurs when fetching collections with
-   * JOIN FETCH. It also avoids Hibernate's in-memory pagination warning ({@code HHH90003004}). Use
-   * {@link #findEventsByIdInWithCourses(Collection)} to load the full entity graph for the returned
-   * IDs.
+   * JOIN FETCH. It also avoids Hibernate's in-memory pagination warning ({@code HHH90003004}). The
+   * year filter uses the generated {@code start_year} column so the index on that expression-backed
+   * column can be used. Use {@link #findEventsByIdInWithCourses(Collection)} to load the full entity
+   * graph for the returned IDs.
    *
    * @param q the escaped free-text search term, or {@code null}
    * @param year the year to filter events by, or {@code null}
@@ -80,7 +81,7 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
       value = """
           SELECT e.id
           FROM {h-schema}event e
-          WHERE (:year IS NULL OR EXTRACT(YEAR FROM e.start_date) = :year)
+          WHERE (:year IS NULL OR e.start_year = :year)
             AND (:district IS NULL OR e.district = :district)
             AND (:county IS NULL OR e.county = :county)
             AND (:q IS NULL OR TRANSLATE(LOWER(e.title),
@@ -94,7 +95,7 @@ public interface EventRepository extends JpaRepository<@NonNull Event, @NonNull 
       countQuery = """
           SELECT COUNT(e.id)
           FROM {h-schema}event e
-          WHERE (:year IS NULL OR EXTRACT(YEAR FROM e.start_date) = :year)
+          WHERE (:year IS NULL OR e.start_year = :year)
             AND (:district IS NULL OR e.district = :district)
             AND (:county IS NULL OR e.county = :county)
             AND (:q IS NULL OR TRANSLATE(LOWER(e.title),
