@@ -118,7 +118,8 @@ public class EnduranceTrioExceptionHandlerWeb {
   /**
    * Handles request parameters or path variables that cannot be converted to their declared type,
    * such as a non-numeric year in the path. Only the parameter name is logged, never the submitted
-   * value, to avoid forging log entries.
+   * value, to avoid forging log entries. The debug message is resolved from the message bundle,
+   * following the same localized pattern as the error-page titles and metadata.
    *
    * @param ex      the type mismatch exception
    * @param request the current HTTP request
@@ -128,8 +129,10 @@ public class EnduranceTrioExceptionHandlerWeb {
   public ModelAndView handleTypeMismatch(
       @NonNull MethodArgumentTypeMismatchException ex, @NonNull HttpServletRequest request) {
     LOG.warn("Invalid value for request parameter '{}'", ex.getName());
-    return ErrorPageUtils.buildErrorModelAndView(HttpStatus.BAD_REQUEST,
-        EnduranceTrioError.BAD_REQUEST.getMessage(), null, request, messageService, appProperties
+    String message = messageService.getMessage("page.error.400.message", null, ErrorPageUtils.resolveLocale(request));
+
+    return ErrorPageUtils.buildErrorModelAndView(HttpStatus.BAD_REQUEST, message, null, request, messageService,
+        appProperties
     );
   }
 

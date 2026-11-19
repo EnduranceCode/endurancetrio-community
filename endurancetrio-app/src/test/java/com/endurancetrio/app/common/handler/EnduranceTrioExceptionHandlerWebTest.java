@@ -146,9 +146,8 @@ class EnduranceTrioExceptionHandlerWebTest {
     ErrorDTO error = new ErrorDTO(EnduranceTrioError.BAD_REQUEST, "invalid field");
     EnduranceTrioException exception = new EnduranceTrioException(error);
 
-    when(messageService.getMessage(eq("page.error.500.metadata.title"), any(), any())).thenReturn(
-        "Server Error");
-    when(messageService.getMessage(eq("page.error.500.metadata.description"), any(),
+    when(messageService.getMessage(eq("page.error.400.metadata.title"), any(), any())).thenReturn("Bad Request");
+    when(messageService.getMessage(eq("page.error.400.metadata.description"), any(),
         any()
     )).thenReturn(
         "Error");
@@ -156,26 +155,28 @@ class EnduranceTrioExceptionHandlerWebTest {
     ModelAndView result = underTest.handleEnduranceTrioException(exception, request);
 
     assertNotNull(result);
-    assertEquals("error/500", result.getViewName());
+    assertEquals("error/400", result.getViewName());
     assertNotNull(result.getModel().get("errors"));
   }
 
+  @SuppressWarnings("ConstantConditions")
   @Test
   void handleTypeMismatchShouldReturnBadRequest() {
     MethodArgumentTypeMismatchException ex = new MethodArgumentTypeMismatchException("abc", Integer.class, "year", null,
         null
     );
 
-    when(messageService.getMessage(eq("page.error.500.metadata.title"), any(), any())).thenReturn("Server Error");
-    when(messageService.getMessage(eq("page.error.500.metadata.description"), any(), any())).thenReturn(
+    when(messageService.getMessage(eq("page.error.400.message"), any(), any())).thenReturn("Bad request parameters");
+    when(messageService.getMessage(eq("page.error.400.metadata.title"), any(), any())).thenReturn("Bad Request");
+    when(messageService.getMessage(eq("page.error.400.metadata.description"), any(), any())).thenReturn(
         "Error occurred");
 
     ModelAndView result = underTest.handleTypeMismatch(ex, request);
 
     assertNotNull(result);
-    assertEquals("error/500", result.getViewName());
+    assertEquals("error/400", result.getViewName());
     assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
-    assertEquals(EnduranceTrioError.BAD_REQUEST.getMessage(), result.getModel().get("message"));
+    assertEquals("Bad request parameters", result.getModel().get("message"));
   }
 
   @Test

@@ -45,6 +45,11 @@ class ErrorPageUtilsTest {
   private static final Locale LOCALE_PORTUGUESE = Locale.of("pt", "PT");
 
   @Test
+  void errorViewShouldReturn400() {
+    assertEquals(ERROR_VIEW_PREFIX + "400", ErrorPageUtils.errorView(400));
+  }
+
+  @Test
   void errorViewShouldReturn403() {
     assertEquals(ERROR_VIEW_PREFIX + "403", ErrorPageUtils.errorView(403));
   }
@@ -62,6 +67,26 @@ class ErrorPageUtilsTest {
   @Test
   void errorViewShouldReturn500ForUnknownStatus() {
     assertEquals(ERROR_VIEW_PREFIX + "500", ErrorPageUtils.errorView(999));
+  }
+
+  @Test
+  void createErrorPageMetadataShouldReturnMetadataFor400() {
+    MessageService messageService = mock(MessageService.class);
+    AppProperties appProperties = createAppProperties();
+    HttpServletRequest request = createRequest("http://localhost:8080/en/events", "/en/events");
+
+    when(messageService.getMessage("page.error.400.metadata.title", null, Locale.ENGLISH)).thenReturn(
+        "400 Bad Request - EnduranceTrio");
+    when(messageService.getMessage("page.error.400.metadata.description", null, Locale.ENGLISH)).thenReturn(
+        "The request was invalid or could not be understood");
+
+    PageMetadata result = ErrorPageUtils.createErrorPageMetadata(400, request, Locale.ENGLISH, messageService,
+        appProperties
+    );
+
+    assertNotNull(result);
+    assertEquals("400 Bad Request - EnduranceTrio", result.getTitle());
+    assertEquals("The request was invalid or could not be understood", result.getDescription());
   }
 
   @Test
@@ -289,6 +314,7 @@ class ErrorPageUtilsTest {
     return appProperties;
   }
 
+  @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
   private static HttpServletRequest createRequest(String url, String uri) {
     HttpServletRequest request = mock(HttpServletRequest.class);
     when(request.getRequestURL()).thenReturn(new StringBuffer(url));
