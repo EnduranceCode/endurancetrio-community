@@ -40,26 +40,28 @@ public class TestErrorWebController {
   @GetMapping("/{language:en|pt}/test/error-400")
   public String trigger400(@PathVariable String language) {
     throw new EnduranceTrioException(
-        new ErrorDTO(EnduranceTrioError.BAD_REQUEST, "This is a test 400 error for the " + language + " locale"));
+        new ErrorDTO(
+            EnduranceTrioError.BAD_REQUEST, String.format("This is a test 400 error for the %s locale", language))
+    );
   }
 
   @GetMapping("/{language:en|pt}/test/error-403")
   public String trigger403(@PathVariable String language) {
-    throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.FORBIDDEN,
-        "This is a test 403 error for the " + language + " locale"
-    ));
+    throw new EnduranceTrioException(
+        new ErrorDTO(EnduranceTrioError.FORBIDDEN, String.format("This is a test 403 error for the %s locale", language))
+    );
   }
 
   @GetMapping("/{language:en|pt}/test/error-404")
   public String trigger404(@PathVariable String language) {
-    throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND,
-        "This is a test 404 error for the " + language + " locale"
-    ));
+    throw new EnduranceTrioException(
+        new ErrorDTO(EnduranceTrioError.NOT_FOUND, String.format("This is a test 404 error for the %s locale", language))
+    );
   }
 
   @GetMapping("/{language:en|pt}/test/error-500")
   public String trigger500(@PathVariable String language) {
-    throw new TestServerErrorException("This is a test 500 error for the " + language + " locale");
+    throw new TestServerErrorException(String.format("This is a test 500 error for the %s locale", language));
   }
 
   private static class TestServerErrorException extends RuntimeException {
