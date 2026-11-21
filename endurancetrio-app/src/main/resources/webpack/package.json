@@ -39,13 +39,16 @@
     "postcss-preset-env": "^11.3.0",
     "prettier": "^3.8.3",
     "sass": "^1.99.0",
-    "sass-loader": "^16.0.8",
-    "sharp": "^0.34.4",
+    "sass-loader": "^17.1.1",
+    "sharp": "^0.35.5",
     "webpack": "^5.106.2",
     "webpack-cli": "^7.0.2"
   },
   "dependencies": {
     "bulma": "^1.0.4",
     "klaro": "^0.7.21"
+  },
+  "allowScripts": {
+    "@parcel/watcher": false
   }
 }
