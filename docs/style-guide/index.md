@@ -43,13 +43,13 @@ Bulma's class prefix is empty in this project (`$class-prefix: ""`), so Bulma cl
 standard names (`button`, `is-primary`, `table`). The project adds namespaces inside the class
 name instead of changing that prefix:
 
-| Namespace                       | Used for                              | Example                          |
-|---------------------------------|---------------------------------------|----------------------------------|
-| `endurance-{block}`             | Project blocks and their elements     | `.endurance-box`, `.endurance-media-left` |
-| `is-*` / `has-*`                | Modifiers, states and helpers         | `.is-branded-thin`, `.has-shadow` |
-| `et-*`                          | Icons                                 | `.et-sort`                       |
-| `--bulma-endurance-*`           | Project CSS custom properties         | `--bulma-endurance-media-gap`    |
-| `$endurance-{block}-{property}` | Project Sass variables                | `$endurance-media-gap`           |
+| Namespace                       | Used for                          | Example                                     |
+|---------------------------------|-----------------------------------|---------------------------------------------|
+| `endurance-{block}`             | Project blocks and their elements | `.endurance-box`, `.endurance-media-footer` |
+| `is-*` / `has-*`                | Modifiers, states and helpers     | `.is-branded-thin`, `.has-shadow`           |
+| `et-*`                          | Icons                             | `.et-sort`                                  |
+| `--bulma-endurance-*`           | Project CSS custom properties     | `--bulma-endurance-media-gap`               |
+| `$endurance-{block}-{property}` | Project Sass variables            | `$endurance-media-gap`                      |
 
 Third-party namespaces (Klaro's `klaro`/`cm-*`/`cn-*` and bulma-switch-control's
 `switch`/`check`/`control-label`) are kept intact. The full rules, the decision table and the
@@ -60,7 +60,10 @@ review checklist are on the [Naming](./naming.md) page.
 - **Prefer Bulma first.** Use a Bulma class when one exists. Add an `endurance-*` class only when
   the design or behaviour is specific to EnduranceTrio.
 - **Extend, do not fork.** Custom components `@extend` the Bulma class they build on (for example
-  `.endurance-card` extends `.card`), so Bulma's markup and states keep working.
+  `.endurance-box` extends `.box`), so Bulma's markup and states keep working.
+- **Keep Bulma when only a variant is needed.** A block gets the `endurance-` prefix only when the
+  project changes its default look or adds a custom element. Otherwise use the Bulma class with a
+  modifier, such as `.card.is-stretched`.
 - **Colour through tokens.** Use Bulma's semantic classes (`is-primary`, `is-danger`, and so on)
   or the grey helpers. Do not hard-code hex values in templates. See [Colors](./colors.md) for
   the selection rules.
@@ -71,10 +74,10 @@ review checklist are on the [Naming](./naming.md) page.
 - **Accessibility.** Toggles are real `<button>` elements with `aria-expanded`, and interactive
   controls keep their native keyboard behaviour. Scrollable rows are focusable and carry a
   translated accessible name; see [Scrollable Rows](./scroll.md#accessibility).
-- **Naming.** Follow the [Naming](./naming.md) rules: blocks are `endurance-{block}`, elements are
-  `endurance-{block}-{element}`, and modifiers/states are the global `is-*`/`has-*` classes written
-  next to the block. Partial names match the component (`endurance-table-sort.scss` and
-  `bulma-table-sort.js`).
+- **Naming.** Follow the [Naming](./naming.md) rules: prefixed blocks are `endurance-{block}`, their
+  custom elements are `endurance-{block}-{element}`, and modifiers/states are the global
+  `is-*`/`has-*` classes written next to the block. Partial names match what they define
+  (`endurance-table-sort.scss` and `bulma-table-sort.js`).
 
 ## Component Catalogue
 
@@ -85,9 +88,11 @@ review checklist are on the [Naming](./naming.md) page.
 | Palette, grey scale and grey background helpers              | Tokens/Utility    | `utilities/endurancetrio-variables.scss`, `helpers/endurance-grey-helpers.scss`                                                     | [Colors](./colors.md)                                              |
 | Icons (`.et-*`)                                              | Utility           | `utilities/endurance-icons.scss` (generated)                                                                                        | [Icons](./icons.md)                                                |
 | `.endurance-box`                                             | Element           | `elements/endurance-box.scss`                                                                                                       | [Boxes and Cards](./boxes-and-cards.md)                            |
-| `.endurance-card`                                            | Component         | `components/endurance-card.scss`                                                                                                    | [Boxes and Cards](./boxes-and-cards.md)                            |
+| `.image.is-og-*` (Open Graph sizes)                          | Element           | `elements/endurance-image.scss`                                                                                                     | [Media](./media.md#open-graph-image-sizes)                         |
+| `.is-stretched` (equal height)                               | Helper            | `helpers/endurance-stretched.scss`                                                                                                  | [Boxes and Cards](./boxes-and-cards.md#stretched-blocks)           |
+| `.has-text-wrapped`                                          | Helper            | `helpers/endurance-text-wrapped.scss`                                                                                               | [Media](./media.md#wrapping-long-text)                             |
 | `.tag` variants (`is-swim`, `is-bike`, `is-run`)             | Element           | `elements/endurance-tags.scss`                                                                                                      | [Tags](./tags.md)                                                  |
-| `.endurance-media` (media object)                            | Layout            | `layout/endurance-media.scss`                                                                                                       | [Media](./media.md)                                                |
+| `.endurance-media`                                           | Layout            | `layout/endurance-media.scss`                                                                                                       | [Media](./media.md)                                                |
 | `.endurance-navbar`                                          | Component         | `components/endurance-navbar.scss`                                                                                                  | [Navbar](./navbar.md)                                              |
 | Tabs (`data-tabs`, `data-tab-content`)                       | Component         | `components/endurance-tabs.scss`, `js/bulma-tab.js`                                                                                 | [Tabs](./tabs.md)                                                  |
 | Sortable tables (`data-sortable`, `data-sort`)               | Element           | `elements/endurance-table-sort.scss`, `js/bulma-table-sort.js`                                                                      | [Tables](./tables.md)                                              |

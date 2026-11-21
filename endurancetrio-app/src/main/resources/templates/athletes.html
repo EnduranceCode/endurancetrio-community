@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-300">
+  <section class="hero has-background-grey-700">
     <div class="hero-body">
       <div class="container is-fullhd">
         <h1 data-th-text="#{page.athletes.title}" class="title is-1">Athletes</h1>
@@ -147,46 +147,42 @@
     <div class="fixed-grid has-1-cols-mobile has-3-cols-desktop">
       <div class="grid">
         <div data-th-each="athlete : ${athletes}" class="cell">
-          <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}">
-            <div class="box mb-2">
-              <article class="media">
+          <div class="box is-stretched mb-2">
+            <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}">
+              <article class="endurance-media">
                 <div class="media-left">
                   <div class="endurance-box has-text-centered p-3">
-                  <span class="icon is-large">
-                    <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
-                  </span>
+                    <span class="icon is-large">
+                      <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
+                    </span>
                   </div>
                 </div>
 
-                <div class="media-content">
+                <div class="media-content has-text-wrapped">
                   <div class="content">
                     <span data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}"
-                       class="title is-4"
-                    >
+                          class="title is-4">
                     </span>
                     <br>
                     <span data-th-if="${athlete.country != null}"
                           data-th-text="${athlete.country().getCode()}"
-                          class="subtitle is-6"
-                    >
+                          class="subtitle is-6">
                     </span>
                     <span class="icon-text">
                       <span data-th-if="${athlete.country != null && athlete.yearOfBirth() !=null}"
-                            class="icon"
-                      >
+                            class="icon">
                         <i class="et et-tally-mark-1"></i>
                       </span>
                     </span>
                     <span data-th-if="${athlete.yearOfBirth() != null}"
                           data-th-text="${athlete.yearOfBirth()}"
-                          class="subtitle is-6"
-                    >
+                          class="subtitle is-6">
                     </span>
                   </div>
                 </div>
               </article>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
     </div>

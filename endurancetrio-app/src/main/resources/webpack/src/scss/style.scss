@@ -40,6 +40,7 @@
 // @forward 'bulma/sass/elements/delete';
 @forward 'bulma/sass/elements/icon';
 @forward 'bulma/sass/elements/image';
+@forward 'elements/endurance-image';
 // @forward 'bulma/sass/elements/loader';
 // @forward 'bulma/sass/elements/notification';
 // @forward 'bulma/sass/elements/progress';
@@ -66,7 +67,6 @@
 // -------------------------------------------------------------------------------------------------
 // @forward 'bulma/sass/components/breadcrumb';
 @forward 'bulma/sass/components/card';
-@forward 'components/endurance-card';
 // @forward 'bulma/sass/components/dropdown';
 // @forward 'bulma/sass/components/menu';
 @forward 'bulma/sass/components/message';
@@ -114,6 +114,8 @@
 // @forward 'bulma/sass/helpers/overflow';
 // @forward 'bulma/sass/helpers/position';
 @forward 'helpers/endurance-scroll';
+@forward 'helpers/endurance-stretched';
+@forward 'helpers/endurance-text-wrapped';
 @forward 'bulma/sass/helpers/spacing';
 @forward 'bulma/sass/helpers/typography';
 @forward 'bulma/sass/helpers/visibility';
