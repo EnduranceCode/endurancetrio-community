@@ -34,7 +34,7 @@ file, so a future template edit is picked up automatically.
 - The title is imperative, sentence case, without a Conventional Commits prefix and
   without a trailing period. Target 72 characters or fewer; 100 is the hard limit.
 - The pull request targets `master` on `EnduranceCode/endurancetrio-community` (the
-  `origin` remote). Never target the `org` remote, which is release-only.
+  `origin` remote). Never target the `community` remote, which is release-only.
 - Never create a commit, push, merge or close a pull request unless the user asked for
   that action. This skill publishes the pull request; it does not change the code.
 - Never claim a build or test result that was not actually observed in this session.
