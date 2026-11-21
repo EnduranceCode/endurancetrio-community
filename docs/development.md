@@ -16,8 +16,9 @@ an overview of the project, see the [main README.md](../README.md).
 9. [Code & Naming Conventions](#code--naming-conventions)
 10. [Testing](#testing)
 11. [Programmatic Version Management](#programmatic-version-management)
-12. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
-13. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
+12. [Updating Webpack Dependencies](#updating-webpack-dependencies)
+13. [Building Custom Images with Workflow Dispatch](#building-custom-images-with-workflow-dispatch)
+14. [SonarQube Cloud Configuration](#sonarqube-cloud-configuration)
 
 ## Technology Stack
 
@@ -1988,6 +1989,131 @@ git push origin community-vX.Y.Z
 - Tags are the ONLY safe merge anchors for integration merges
 - Namespacing avoids tag collisions between integrated repositories (e.g., `tracker-vX.Y.Z`
   tags in the Tracker repo)
+
+## Updating Webpack Dependencies
+
+The frontend's npm packages are declared in `package.json` and resolved versions are pinned in
+`package-lock.json`, both under `endurancetrio-app/src/main/resources/webpack/`. Runtime libraries
+live in `dependencies`; build, linting and bundling tooling lives in `devDependencies`. Versions
+use caret ranges (`^`).
+
+The Maven build installs the toolchain and runs `npm ci` against `package-lock.json`, so the lock
+file must always match `package.json`. Keep the two files in sync and commit them together; never
+hand-edit `package-lock.json`.
+
+### Checking for outdated packages
+
+From the webpack project directory:
+
+```shell
+cd endurancetrio-app/src/main/resources/webpack
+npm outdated
+```
+
+The output lists, for each package, the *current* version, the *wanted* version (newest allowed by
+the range declared in `package.json`) and the *latest* version (newest published). If `latest` is
+beyond `wanted`, the declared range must change to pick it up.
+
+### Updating within the declared ranges
+
+```shell
+npm update
+```
+
+Upgrades installed packages to the newest versions allowed by the existing caret ranges and rewrites
+`package-lock.json`. `package.json` is left unchanged. Use this for routine patch and minor
+upkeep.
+
+### Bumping a major version
+
+When `npm outdated` shows `latest` beyond `wanted`, install the target version explicitly. Use
+`--save-dev` for tooling (everything under `devDependencies`) and `--save` for runtime libraries
+(`bulma`, `klaro`):
+
+```shell
+npm install --save-dev {PACKAGE}@latest
+npm install {PACKAGE}@latest
+```
+
+> **Placeholder Definition**
+>
+> + **{PACKAGE}** : The name of the npm package to update (optionally pinned to a target version,
+>   e.g. `webpack@5.106.2`)
+
+This rewrites both `package.json` (new range) and `package-lock.json`. Review the resulting diff
+and group related upgrades into focused commits.
+
+### Verifying the update
+
+From the webpack project directory:
+
+```shell
+npm run format
+npm run build:prod
+```
+
+- `npm run format` runs Prettier and ESLint; fix any reported errors before proceeding.
+- `npm run build:prod` (or `build:dev` to keep source maps) confirms webpack and its loaders
+  still compile.
+
+Then, from the repository root, run the full build:
+
+```shell
+./mvnw clean install
+```
+
+The Maven build executes `npm ci` from the committed lock file. A failure here means the lock file
+was not regenerated after the `package.json` change and must be rebuilt.
+
+### Reviewing dependency install scripts
+
+Starting with npm 11.16, npm tracks which dependencies are allowed to run install-time lifecycle
+scripts (`install`, `postinstall`, ...) and records the decision in an `allowScripts` map in
+`package.json`. Any dependency whose script is not yet covered by this map is reported during
+install:
+
+```shell
+npm install-scripts ls
+```
+
+On npm 11 (the version pinned in the root `pom.xml`) this is advisory and the install still
+succeeds; npm 12 will block unreviewed scripts by default. Review the pending packages and record
+an explicit decision so future installs do not depend on that default:
+
+```shell
+npm install-scripts approve {PACKAGE}
+npm install-scripts deny {PACKAGE}
+```
+
+> **Placeholder Definition**
+>
+> + **{PACKAGE}** : The name of the npm package whose install script is being reviewed (e.g.
+>   `@parcel/watcher`)
+
+`approve` records `"true"` (the script is allowed to run); `deny` records `"false"` (the script is
+skipped). Denying is appropriate for packages whose script is never needed by this project, such as
+`@parcel/watcher` (an optional dependency of `sass` used only by the Sass CLI watch mode). Use
+`npm install-scripts prune` to remove entries that no longer match an installed package with an
+install script.
+
+The Maven build uses the pinned npm version, so the same policy applies to `npm ci` in CI. Commit
+the `package.json` change together with any other dependency update.
+
+### Committing
+
+Commit both files in a single commit:
+
+- `endurancetrio-app/src/main/resources/webpack/package.json`
+- `endurancetrio-app/src/main/resources/webpack/package-lock.json`
+
+Follow the commit message conventions in [`AGENTS.md`](../AGENTS.md): capitalized, imperative
+subject of at most 50 characters with no period, e.g. `Update frontend dependencies`.
+
+> **Note:**
+>
+> The Node and npm versions used by the build are pinned by `node.version` and `npm.version` in the
+> root `pom.xml` and installed by `frontend-maven-plugin`. Upgrading that toolchain is a separate
+> task from updating npm dependencies and is not part of a routine dependency update.
 
 ## Building Custom Images with Workflow Dispatch
 
