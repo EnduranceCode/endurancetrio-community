@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,161 +17,161 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head>
-  <title>List Items</title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head>
+    <title>List Items</title>
+  </head>
 
-<body>
-<article data-th-fragment="simple-event(event)" class="endurance-box is-branded-thin is-stretched">
-  <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
-     class="is-clickable">
-    <div class="media">
-      <div class="media-left">
-        <div data-th-replace="~{fragments/utilities :: box-date(date=${event.startDate}, pattern='dd-MM-yyyy')}"></div>
-      </div>
-      <div class="media-content has-text-wrapped">
-        <p data-th-text="${event.title}" class="title is-4"></p>
-        <p class="subtitle is-6">
-          <span data-th-replace="~{fragments/utilities :: location(${event.city}, ${event.county}, ${event.district})}">
-          </span>
-        </p>
-      </div>
-    </div>
-  </a>
-</article>
-
-<article data-th-fragment="simple-race(race)" class="endurance-box is-branded-thin is-stretched">
-  <a data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}">
-    <div class="media">
-      <div class="media-left">
-        <div data-th-replace="~{fragments/utilities :: box-date(date=${race.date}, pattern='dd-MM-yyyy')}"></div>
-      </div>
-      <div class="media-content has-text-wrapped">
-        <div data-th-replace="~{this :: race-titles(race=${race})}"></div>
-      </div>
-    </div>
-  </a>
-</article>
-
-<article data-th-fragment="full-race(race)" class="endurance-box is-branded-thin is-stretched">
-  <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}">
-    <div class="media mb-5">
-      <div class="media-left">
-        <div data-th-replace="~{fragments/utilities :: box-date(date=${race.date}, pattern='dd-MMM')}"></div>
-      </div>
-      <div class="media-content has-text-wrapped">
-        <div data-th-replace="~{this :: race-titles(race=${race})}"></div>
-      </div>
-    </div>
-  </a>
-
-  <div class="level is-mobile">
-    <div data-th-if="${!#lists.isEmpty(race.sports)}" class="level-item">
-      <div class="tags has-addons">
-        <span data-th-each="sport : ${race.sports}" data-th-text="#{sport.__${sport}__}" class="tag is-outlined"></span>
-      </div>
-    </div>
-
-    <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
-      <div class="tags has-addons">
-        <span data-th-each="distanceType : ${race.distanceTypes}"
-              data-th-text="#{distance.type.__${distanceType}__}"
-              class="tag is-outlined">
-        </span>
-      </div>
-    </div>
-
-    <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
-      <div class="tags has-addons">
-        <span data-th-text="#{race.type.__${race.raceTypeGroup}__}" class="tag is-outlined"></span>
-      </div>
-    </div>
-  </div>
-
-  <div data-th-if="${race.distanceMetadata != null}" class="level is-mobile mt-auto">
-    <div data-th-each="leg : ${race.distanceMetadata.legs}" class="level-item">
-      <div class="level-item has-text-centered">
-        <div>
-          <p data-th-if="${leg.coreSport != null}" data-th-text="#{core.sport.__${leg.coreSport}__}" class="heading">
-          </p>
-          <p data-th-text="${#numbers.formatInteger(leg.length, 0, 'DEFAULT')}" class="title is-4"></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-
-<div data-th-fragment="race-titles(race)" data-th-remove="tag">
-  <p data-th-if="${race.event != null && race.event.title != race.title}"
-     data-th-text="${race.event.title}"
-     class="subtitle is-7">
-  </p>
-  <p data-th-text="${race.title}" class="title is-5"></p>
-  <p data-th-text="${race.subtitle}" class="subtitle is-6"></p>
-</div>
-
-<div data-th-fragment="insight-card(article)" data-th-remove="tag">
-  <article class="card is-stretched">
-    <div data-th-if="${article.featuredImage != null}" class="card-image">
-      <figure class="image">
-        <img data-th-src="${article.featuredImage}"
-             data-th-alt="${article.title}"
-             alt="Article Title"/>
-      </figure>
-    </div>
-    <div data-th-unless="${article.featuredImage != null}" class="card-image">
-      <figure class="image">
-        <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-             data-th-alt="${article.title}"
-             alt="Article Title"/>
-      </figure>
-    </div>
-    <div class="card-content">
-      <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
-        <div class="mb-3">
-          <p data-th-text="${article.title}" class="title is-3"></p>
-          <p data-th-text="${article.authorName}" class="subtitle is-5"></p>
+  <body>
+    <article class="endurance-box is-branded-thin is-stretched" data-th-fragment="simple-event(event)">
+      <a class="is-clickable"
+        data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}">
+        <div class="media">
+          <div class="media-left">
+            <div data-th-replace="~{fragments/utilities :: box-date(date=${event.startDate}, pattern='dd-MM-yyyy')}"></div>
+          </div>
+          <div class="media-content has-text-wrapped">
+            <p class="title is-4" data-th-text="${event.title}"></p>
+            <p class="subtitle is-6">
+              <span data-th-replace="~{fragments/utilities :: location(${event.city}, ${event.county}, ${event.district})}">
+              </span>
+            </p>
+          </div>
         </div>
       </a>
-      <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
-    </div>
-    <footer class="card-footer">
-      <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
-         data-th-text="#{page.insights.detail.read.more}"
-         class="card-footer-item">
-      </a>
-    </footer>
-  </article>
-</div>
+    </article>
 
-<div data-th-fragment="insight-media(article)" data-th-remove="tag">
-  <div class="endurance-box is-branded-thin is-stretched">
-    <div class="endurance-media is-stacked">
-      <div class="media-left">
-        <figure class="image is-og-320x167">
-          <img data-th-src="${article.featuredImage != null} ? ${article.featuredImage} : @{/img/endurancetrio-open-graph.png}"
-               data-th-alt="${article.title}"
-               alt="Article Title"/>
-        </figure>
+    <article class="endurance-box is-branded-thin is-stretched" data-th-fragment="simple-race(race)">
+      <a data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}">
+        <div class="media">
+          <div class="media-left">
+            <div data-th-replace="~{fragments/utilities :: box-date(date=${race.date}, pattern='dd-MM-yyyy')}"></div>
+          </div>
+          <div class="media-content has-text-wrapped">
+            <div data-th-replace="~{this :: race-titles(race=${race})}"></div>
+          </div>
+        </div>
+      </a>
+    </article>
+
+    <article class="endurance-box is-branded-thin is-stretched" data-th-fragment="full-race(race)">
+      <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}">
+        <div class="media mb-5">
+          <div class="media-left">
+            <div data-th-replace="~{fragments/utilities :: box-date(date=${race.date}, pattern='dd-MMM')}"></div>
+          </div>
+          <div class="media-content has-text-wrapped">
+            <div data-th-replace="~{this :: race-titles(race=${race})}"></div>
+          </div>
+        </div>
+      </a>
+
+      <div class="level is-mobile">
+        <div class="level-item" data-th-if="${!#lists.isEmpty(race.sports)}">
+          <div class="tags has-addons">
+            <span class="tag is-outlined" data-th-each="sport : ${race.sports}" data-th-text="#{sport.__${sport}__}"></span>
+          </div>
+        </div>
+
+        <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
+          <div class="tags has-addons">
+            <span class="tag is-outlined"
+              data-th-each="distanceType : ${race.distanceTypes}"
+              data-th-text="#{distance.type.__${distanceType}__}">
+            </span>
+          </div>
+        </div>
+
+        <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
+          <div class="tags has-addons">
+            <span class="tag is-outlined" data-th-text="#{race.type.__${race.raceTypeGroup}__}"></span>
+          </div>
+        </div>
       </div>
-      <div class="media-content has-text-wrapped">
-        <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
-          <div class="title is-3 mb-2">
-            <p data-th-text="${article.title}"></p>
+
+      <div class="level is-mobile mt-auto" data-th-if="${race.distanceMetadata != null}">
+        <div class="level-item" data-th-each="leg : ${race.distanceMetadata.legs}">
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading" data-th-if="${leg.coreSport != null}" data-th-text="#{core.sport.__${leg.coreSport}__}">
+              </p>
+              <p class="title is-4" data-th-text="${#numbers.formatInteger(leg.length, 0, 'DEFAULT')}"></p>
+            </div>
           </div>
-          <div class="subtitle is-4 mb-4">
-            <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+        </div>
+      </div>
+    </article>
+
+    <div data-th-fragment="race-titles(race)" data-th-remove="tag">
+      <p class="subtitle is-7"
+        data-th-if="${race.event != null && race.event.title != race.title}"
+        data-th-text="${race.event.title}">
+      </p>
+      <p class="title is-5" data-th-text="${race.title}"></p>
+      <p class="subtitle is-6" data-th-text="${race.subtitle}"></p>
+    </div>
+
+    <div data-th-fragment="insight-card(article)" data-th-remove="tag">
+      <article class="card is-stretched">
+        <div class="card-image" data-th-if="${article.featuredImage != null}">
+          <figure class="image">
+            <img data-th-src="${article.featuredImage}"
+              data-th-alt="${article.title}"
+              alt="Article Title">
+          </figure>
+        </div>
+        <div class="card-image" data-th-unless="${article.featuredImage != null}">
+          <figure class="image">
+            <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+              data-th-alt="${article.title}"
+              alt="Article Title">
+          </figure>
+        </div>
+        <div class="card-content">
+          <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
+            <div class="mb-3">
+              <p class="title is-3" data-th-text="${article.title}"></p>
+              <p class="subtitle is-5" data-th-text="${article.authorName}"></p>
+            </div>
+          </a>
+          <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item"
+            data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
+            data-th-text="#{page.insights.detail.read.more}">
+          </a>
+        </footer>
+      </article>
+    </div>
+
+    <div data-th-fragment="insight-media(article)" data-th-remove="tag">
+      <div class="endurance-box is-branded-thin is-stretched">
+        <div class="endurance-media is-stacked">
+          <div class="media-left">
+            <figure class="image is-og-320x167">
+              <img data-th-src="${article.featuredImage != null} ? ${article.featuredImage} : @{/img/endurancetrio-open-graph.png}"
+                data-th-alt="${article.title}"
+                alt="Article Title">
+            </figure>
           </div>
-        </a>
-        <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
-          <p data-th-text="${#temporals.format(article.publishedDate.toLocalDate(), 'LONG')}"></p>
+          <div class="media-content has-text-wrapped">
+            <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
+              <div class="title is-3 mb-2">
+                <p data-th-text="${article.title}"></p>
+              </div>
+              <div class="subtitle is-4 mb-4">
+                <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+              </div>
+            </a>
+            <div class="endurance-media-footer" data-th-if="${article.publishedDate != null}">
+              <p data-th-text="${#temporals.format(article.publishedDate.toLocalDate(), 'LONG')}"></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-</body>
+  </body>
 </html>

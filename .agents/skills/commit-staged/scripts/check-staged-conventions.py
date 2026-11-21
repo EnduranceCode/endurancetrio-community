@@ -411,12 +411,16 @@ def main() -> int:
     all_files = all_repo_files(repo)
 
     # Style guide warning (central).
-    webpack_changed = any(p.startswith("endurancetrio-app/src/main/resources/webpack/") for p in staged_paths)
+    frontend_root = "endurancetrio-app/src/main/resources/"
+    frontend_changed = any(
+        p.startswith(frontend_root + "webpack/") or p.startswith(frontend_root + "templates/")
+        for p in staged_paths
+    )
     style_guide_changed = any(p.startswith("docs/style-guide/") for p in staged_paths)
-    if webpack_changed and not style_guide_changed:
+    if frontend_changed and not style_guide_changed:
         warnings.append(
-            "WARNING: (repo): webpack changes staged without a docs/style-guide update "
-            "(required when adding components, behaviours or icons)"
+            "WARNING: (repo): frontend changes staged without a docs/style-guide update "
+            "(required when adding components, behaviours, icons or non-standard HTML)"
         )
 
     for status, path in name_status:

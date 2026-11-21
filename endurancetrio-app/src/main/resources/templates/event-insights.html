@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,58 +17,58 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-replace="~{fragments/head :: head(${metadata})}">
-  <title></title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-replace="~{fragments/head :: head(${metadata})}">
+    <title></title>
+  </head>
 
-<body>
-<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+  <body>
+    <template data-th-replace="~{fragments/head :: googleTagManager}"></template>
 
-<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+    <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main>
-  <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'insights')}"></section>
+    <main>
+      <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'insights')}"></section>
 
-  <section class="section">
-    <h2 data-th-text="#{page.event.insights.title(${event.title()})}" class="title is-2"></h2>
+      <section class="section">
+        <h2 class="title is-2" data-th-text="#{page.event.insights.title(${event.title()})}"></h2>
 
-    <div class="columns is-multiline">
-      <div data-th-each="article : ${articles}" class="column is-full">
-        <div data-th-replace="~{fragments/list-items :: insight-media(${article})}"></div>
-      </div>
-    </div>
+        <div class="columns is-multiline">
+          <div class="column is-full" data-th-each="article : ${articles}">
+            <div data-th-replace="~{fragments/list-items :: insight-media(${article})}"></div>
+          </div>
+        </div>
 
-    <nav class="pagination is-centered" role="navigation"
-         data-th-if="${pagination.totalPages() > 1}"
-         data-th-attr="aria-label=#{pagination.a11y.label}">
-      <a class="pagination-previous"
-         data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
-         data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
-         data-th-href="${pagination.hasPrevious()}
+        <nav class="pagination is-centered" data-th-if="${pagination.totalPages() > 1}"
+          data-th-attr="aria-label=#{pagination.a11y.label}"
+          role="navigation">
+          <a class="pagination-previous"
+            data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+            data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+            data-th-href="${pagination.hasPrevious()}
               ? @{/{lang}/events/{year}/{id}/insights(lang=${language}, year=${year}, id=${event.id()}, page=${pagination.pageNumber() - 1})}
               : null">
-        <span class="icon">
-          <i class="et et-chevron-double-left"></i>
-        </span>
-      </a>
+            <span class="icon">
+              <i class="et et-chevron-double-left"></i>
+            </span>
+          </a>
 
-      <a class="pagination-next"
-         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
-         data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
-         data-th-href="${pagination.hasNext()}
+          <a class="pagination-next"
+            data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+            data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+            data-th-href="${pagination.hasNext()}
               ? @{/{lang}/events/{year}/{id}/insights(lang=${language}, year=${year}, id=${event.id()}, page=${pagination.pageNumber() + 1})}
               : null">
-        <span class="icon">
-          <i class="et et-chevron-double-right"></i>
-        </span>
-      </a>
-    </nav>
-  </section>
-</main>
+            <span class="icon">
+              <i class="et et-chevron-double-right"></i>
+            </span>
+          </a>
+        </nav>
+      </section>
+    </main>
 
-<footer data-th-replace="~{fragments/footer :: footer}"></footer>
-</body>
+    <footer data-th-replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>

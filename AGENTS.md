@@ -88,6 +88,7 @@ migrations, or historical data are fixed directly here and are NOT staged upstre
 - `WEBPACK_OUTPUT_DIR` env var overrides output path (watch mode writes to `target/classes/static/`)
 - Formatting: `npm run format` (ESLint + Prettier)
 - Style guide: [`docs/style-guide/index.md`](docs/style-guide/index.md) documents the palette, the `endurance-*` components, the JS behaviours and the icons. Update the matching page when you add or change one of them.
+- HTML: templates follow [`docs/style-guide/html.md`](docs/style-guide/html.md) (Code Guide rules adapted to Thymeleaf's `data-th-*` dialect). Run `npm run format:check` from `endurancetrio-app/src/main/resources/webpack/` before committing template changes.
 - Naming: follow [`docs/style-guide/naming.md`](docs/style-guide/naming.md). Blocks are `endurance-{block}`, elements `endurance-{block}-{element}`, and modifiers/states are the global `is-*`/`has-*` classes written next to the block. Never prefix a modifier with `endurance-`.
 - New SCSS partials must be `@forward`ed in `src/scss/style.scss` to be compiled. Some partials are currently commented out and not compiled (see the style guide's "Not currently enabled" list).
 - Behaviours are `src/js/bulma-*.js` and `src/js/endurance-*.js` modules (plus `language-selector.js`): each exports an object with `init()`, called from `src/js/script.js`. Hooks are `data-*` attributes, not styling classes.

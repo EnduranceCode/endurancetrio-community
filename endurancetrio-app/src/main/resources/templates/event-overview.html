@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,68 +17,67 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-replace="~{fragments/head :: head(${metadata})}">
-  <title></title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-replace="~{fragments/head :: head(${metadata})}">
+    <title></title>
+  </head>
 
-<body>
-<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+  <body>
+    <template data-th-replace="~{fragments/head :: googleTagManager}"></template>
 
-<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+    <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main>
-  <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'overview')}"></section>
+    <main>
+      <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'overview')}"></section>
 
-  <section id="overview" class="section">
-    <div data-th-if="${!#lists.isEmpty(event.organizers)}" class="endurance-box is-branded-thin">
-      <h2 class="title is-4" data-th-text="#{page.event.overview.label.organizers}">Organizers</h2>
-      <div class="columns is-multiline">
-        <div data-th-each="organizer : ${event.organizers}" class="column is-half">
-          <p class="has-text-weight-bold" data-th-text="${organizer.name}"></p>
-          <p class="has-text-grey">
-            <span data-th-replace="~{fragments/utilities :: location(${organizer.city}, ${organizer.county}, ${organizer.district})}">
-          </span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="columns is-multiline">
-      <div data-th-each="race : ${event.races}" class="column is-half-tablet is-one-third-desktop">
-        <div data-th-replace="~{fragments/list-items :: full-race(${race})}"></div>
-      </div>
-
-      <div class="column">
-        <div class="endurance-box is-branded-thin is-stretched">
-          <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}">Help us
-            complete the archive</h2>
-          <div data-th-if="${language == 'pt'}">
-            <p>
-              Se tem documentos, imagens, resultados, fotografias ou qualquer outra informação
-              relacionada com este evento, e se encontrar lacunas ou imprecisões nos dados
-              disponíveis, agradecemos o seu contributo. Por favor, contacte-nos através do email
-              <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
-              com a documentação ou informações que possa partilhar.
-            </p>
-          </div>
-          <div data-th-unless="${language == 'pt'}">
-            <p>
-              If you have documents, images, results, photos, or any other information related to
-              this event, and if you notice any gaps or inaccuracies in the available data, we
-              would appreciate your contribution. Please contact us at
-              <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
-              with any documentation or information you can share.
-            </p>
+      <section class="section" id="overview">
+        <div class="endurance-box is-branded-thin" data-th-if="${!#lists.isEmpty(event.organizers)}">
+          <h2 class="title is-4" data-th-text="#{page.event.overview.label.organizers}"></h2>
+          <div class="columns is-multiline">
+            <div class="column is-half" data-th-each="organizer : ${event.organizers}">
+              <p class="has-text-weight-bold" data-th-text="${organizer.name}"></p>
+              <p class="has-text-grey">
+                <span data-th-replace="~{fragments/utilities :: location(${organizer.city}, ${organizer.county}, ${organizer.district})}">
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-</main>
 
-<footer data-th-replace="~{fragments/footer :: footer}"></footer>
-</body>
+        <div class="columns is-multiline">
+          <div class="column is-half-tablet is-one-third-desktop" data-th-each="race : ${event.races}">
+            <div data-th-replace="~{fragments/list-items :: full-race(${race})}"></div>
+          </div>
+
+          <div class="column">
+            <div class="endurance-box is-branded-thin is-stretched">
+              <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}"></h2>
+              <div data-th-if="${language == 'pt'}">
+                <p>
+                  Se tem documentos, imagens, resultados, fotografias ou qualquer outra informação
+                  relacionada com este evento, e se encontrar lacunas ou imprecisões nos dados
+                  disponíveis, agradecemos o seu contributo. Por favor, contacte-nos através do email
+                  <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+                  com a documentação ou informações que possa partilhar.
+                </p>
+              </div>
+              <div data-th-unless="${language == 'pt'}">
+                <p>
+                  If you have documents, images, results, photos, or any other information related to
+                  this event, and if you notice any gaps or inaccuracies in the available data, we
+                  would appreciate your contribution. Please contact us at
+                  <a href="mailto:endurancetrio@endurancetrio.com">endurancetrio@endurancetrio.com</a>
+                  with any documentation or information you can share.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer data-th-replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>

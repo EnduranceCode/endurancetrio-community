@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,80 +17,79 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-fragment="head(metadata)">
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-fragment="head(metadata)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title data-th-text="${metadata.title}"></title>
+    <title data-th-text="${metadata.title}"></title>
 
-  <meta name="color-scheme" content="light">
-  <meta name="description" data-th-content="${metadata.description}">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="google-adsense-account" data-th-content="${metadata.googleAdsenseId}">
-  <meta name="robots" content="index,follow">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" data-th-content="${metadata.twitterSite}">
+    <meta name="color-scheme" content="light">
+    <meta name="description" data-th-content="${metadata.description}">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="google-adsense-account" data-th-content="${metadata.googleAdsenseId}">
+    <meta name="robots" content="index,follow">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" data-th-content="${metadata.twitterSite}">
 
-  <meta property="og:title" data-th-content="${metadata.title}">
-  <meta property="og:description" data-th-content="${metadata.description}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" data-th-content="${metadata.canonicalUrl}">
-  <meta property="og:site_name" content="EnduranceTrio">
-  <meta property="og:locale" data-th-content="${#locale}">
-  <meta property="og:image" data-th-content="${metadata.ogImage}">
-  <meta property="og:image:width" data-th-content="${metadata.ogImageWidth}">
-  <meta property="og:image:height" data-th-content="${metadata.ogImageHeight}">
-  <meta property="fb:pages" data-th-content="${metadata.facebookPageId}">
+    <meta data-th-content="${metadata.title}" property="og:title">
+    <meta data-th-content="${metadata.description}" property="og:description">
+    <meta property="og:type" content="website">
+    <meta data-th-content="${metadata.canonicalUrl}" property="og:url">
+    <meta property="og:site_name" content="EnduranceTrio">
+    <meta data-th-content="${#locale}" property="og:locale">
+    <meta data-th-content="${metadata.ogImage}" property="og:image">
+    <meta data-th-content="${metadata.ogImageWidth}" property="og:image:width">
+    <meta data-th-content="${metadata.ogImageHeight}" property="og:image:height">
+    <meta data-th-content="${metadata.facebookPageId}" property="fb:pages">
 
-  <!-- Google Tag Manager -->
-  <script data-type="application/javascript" type="text/plain" data-name="google-tag-manager">
+    <!-- Google Tag Manager -->
+    <script data-type="application/javascript" data-name="google-tag-manager" type="text/plain">
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-KK23WCG6');
-  </script>
-  <!-- End Google Tag Manager -->
+    </script>
+    <!-- End Google Tag Manager -->
 
-  <link rel="canonical" data-th-href="${metadata.canonicalUrl}">
-  <link rel="alternate" hreflang="en" data-th-href="${metadata.hreflangUrlEn}"
-        data-th-if="${metadata.hreflangUrlEn != null}">
-  <link rel="alternate" hreflang="pt" data-th-href="${metadata.hreflangUrlPt}"
-        data-th-if="${metadata.hreflangUrlPt != null}">
-  <link rel="alternate" hreflang="x-default" data-th-href="${metadata.hreflangUrlEn}"
-        data-th-if="${metadata.hreflangUrlEn != null}">
-  <link rel="icon" data-th-href="@{/favicon.ico}" sizes="32x32">
-  <link rel="icon" data-th-href="@{/favicon.svg}" type="image/svg+xml">
-  <link rel="apple-touch-icon" data-th-href="@{/apple-touch-icon.png}">
+    <link data-th-href="${metadata.canonicalUrl}" rel="canonical">
+    <link data-th-if="${metadata.hreflangUrlEn != null}" data-th-href="${metadata.hreflangUrlEn}" rel="alternate"
+      hreflang="en">
+    <link data-th-if="${metadata.hreflangUrlPt != null}" data-th-href="${metadata.hreflangUrlPt}" rel="alternate"
+      hreflang="pt">
+    <link data-th-if="${metadata.hreflangUrlEn != null}" data-th-href="${metadata.hreflangUrlEn}" rel="alternate"
+      hreflang="x-default">
+    <link data-th-href="@{/favicon.ico}" rel="icon" sizes="32x32">
+    <link data-th-href="@{/favicon.svg}" type="image/svg+xml" rel="icon">
+    <link data-th-href="@{/apple-touch-icon.png}" rel="apple-touch-icon">
 
-  <!-- JSON-LD structured data, serialized server-side (see JsonLdUtils) -->
-  <script type="application/ld+json" data-th-if="${metadata.jsonLd != null}"
-          data-th-utext="${metadata.jsonLd}">
-  </script>
+    <!-- JSON-LD structured data, serialized server-side (see JsonLdUtils) -->
+    <script data-th-if="${metadata.jsonLd != null}" data-th-utext="${metadata.jsonLd}"
+      type="application/ld+json">
+    </script>
 
-  <link rel="stylesheet" data-th-href="@{/css/style.css}">
-  <script defer="defer" data-th-src="@{/js/script.js}"></script>
-</head>
+    <link data-th-href="@{/css/style.css}" rel="stylesheet">
+    <script data-th-src="@{/js/script.js}" defer></script>
+  </head>
 
-<body>
-<template data-th-fragment="googleTagManager">
-  <!-- Google Tag Manager (noscript) -->
-  <noscript>
-    <iframe
-        title="Google Tag Manager"
-        data-name="google-tag-manager"
-        data-src="https://www.googletagmanager.com/ns.html?id=GTM-KK23WCG6"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"
-    >
-    </iframe>
-  </noscript>
-  <!-- End Google Tag Manager (noscript) -->
-</template>
-</body>
+  <body>
+    <template data-th-fragment="googleTagManager">
+      <!-- Google Tag Manager (noscript) -->
+      <noscript>
+        <iframe
+          data-name="google-tag-manager"
+          data-src="https://www.googletagmanager.com/ns.html?id=GTM-KK23WCG6"
+          title="Google Tag Manager"
+          style="display:none;visibility:hidden"
+          height="0"
+          width="0">
+        </iframe>
+      </noscript>
+      <!-- End Google Tag Manager (noscript) -->
+    </template>
+  </body>
 </html>
