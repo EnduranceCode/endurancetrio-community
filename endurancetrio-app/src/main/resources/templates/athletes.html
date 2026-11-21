@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,238 +17,237 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-replace="~{fragments/head :: head(${metadata})}">
-  <title></title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-replace="~{fragments/head :: head(${metadata})}">
+    <title></title>
+  </head>
 
-<body>
-<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+  <body>
+    <template data-th-replace="~{fragments/head :: googleTagManager}"></template>
 
-<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+    <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main>
-  <section class="hero has-background-grey-700">
-    <div class="hero-body">
-      <div class="container is-fullhd">
-        <h1 data-th-text="#{page.athletes.title}" class="title is-1">Athletes</h1>
-        <p data-th-text="#{page.athletes.subtitle}" class="subtitle is-3">
-          Profiles, races, and results
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="endurance-box is-branded-thin is-branded-faded has-background-grey-200">
-      <div class="columns is-multiline">
-        <div class="column is-half-tablet is-narrow-desktop">
-          <div class="buttons has-addons is-centered">
-            <a data-th-href="${genderUrls['ALL']}"
-               data-th-text="#{page.athletes.filter.all}"
-               data-th-classappend="${filter.gender() == null} ? 'is-selected is-primary'"
-               class="button is-small">
-            </a>
-            <a data-th-href="${genderUrls['MALE']}"
-               data-th-text="#{page.athletes.filter.male}"
-               data-th-classappend="${filter.gender()?.getCode() == 'MALE'} ? 'is-selected is-primary'"
-               class="button is-small">
-            </a>
-            <a data-th-href="${genderUrls['FEMALE']}"
-               data-th-classappend="${filter.gender()?.getCode() == 'FEMALE'} ? 'is-selected is-primary'"
-               data-th-text="#{page.athletes.filter.female}"
-               class="button is-small">
-            </a>
+    <main>
+      <section class="hero has-background-grey-700">
+        <div class="hero-body">
+          <div class="container is-fullhd">
+            <h1 class="title is-1" data-th-text="#{page.athletes.title}"></h1>
+            <p class="subtitle is-3" data-th-text="#{page.athletes.subtitle}"></p>
           </div>
         </div>
+      </section>
 
-        <div class="column is-half-tablet is-narrow-desktop">
-          <div class="buttons has-addons is-centered">
-            <a data-th-href="${letterRangeUrls['ALL']}"
-               data-th-text="#{page.athletes.filter.all}"
-               data-th-classappend="${filter.letterRange() == null} ? 'is-selected is-primary'"
-               class="button is-small">
-            </a>
-            <span data-th-if="${range.athleteCount() == 0}"
-                  data-th-each="range : ${letterRanges}"
-                  data-th-text="${#strings.replace(range.id(), '_', '-')}"
-                  aria-disabled="true"
-                  class="button is-small is-disabled">
-            </span>
-            <a data-th-unless="${range.athleteCount() == 0}"
-               data-th-each="range : ${letterRanges}"
-               data-th-href="${letterRangeUrls[range.id()]}"
-               data-th-text="${#strings.replace(range.id(), '_', '-')}"
-               data-th-classappend="${filter.letterRange() == range.id()} ? 'is-selected is-primary'"
-               class="button is-small">
-            </a>
-          </div>
-        </div>
-
-        <div class="column">
-          <form method="get" data-th-action="@{/{lang}/athletes(lang=${language})}" role="search">
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                <label for="athlete-search" class="label is-sr-only"
-                       data-th-text="#{page.athletes.search.placeholder}">Search athletes</label>
-                <input id="athlete-search"
-                       data-th-value="${filter.searchTerm()}"
-                       data-th-placeholder="#{page.athletes.search.placeholder}"
-                       type="search"
-                       name="q"
-                       class="input is-small">
-              </div>
-              <div class="control">
-                <button data-th-attr="aria-label=${#messages.msg('page.athletes.search.submit')}"
-                        type="submit"
-                        data-loading
-                        class="button is-small is-primary">
-                  <span class="icon"><i class="et et-magnify"></i></span>
-                  <span data-th-text="#{page.athletes.search.submit}">Search</span>
-                </button>
+      <section class="section">
+        <div class="endurance-box is-branded-thin is-branded-faded has-background-grey-200">
+          <div class="columns is-multiline">
+            <div class="column is-half-tablet is-narrow-desktop">
+              <div class="buttons has-addons is-centered">
+                <a class="button is-small"
+                  data-th-href="${genderUrls['ALL']}"
+                  data-th-classappend="${filter.gender() == null} ? 'is-selected is-primary'"
+                  data-th-text="#{page.athletes.filter.all}">
+                </a>
+                <a class="button is-small"
+                  data-th-href="${genderUrls['MALE']}"
+                  data-th-classappend="${filter.gender()?.getCode() == 'MALE'} ? 'is-selected is-primary'"
+                  data-th-text="#{page.athletes.filter.male}">
+                </a>
+                <a class="button is-small"
+                  data-th-href="${genderUrls['FEMALE']}"
+                  data-th-classappend="${filter.gender()?.getCode() == 'FEMALE'} ? 'is-selected is-primary'"
+                  data-th-text="#{page.athletes.filter.female}">
+                </a>
               </div>
             </div>
-            <input data-th-if="${filter.letterRange() != null}"
-                   data-th-value="${filter.letterRange()}"
-                   type="hidden"
-                   name="letterRange">
-            <input data-th-if="${filter.gender() != null}"
-                   data-th-value="${filter.gender().getCode()}"
-                   type="hidden"
-                   name="gender">
-          </form>
-        </div>
-      </div>
 
-      <div class="level">
-        <div class="level-left">
-          <div data-th-if="${pagination.totalItems() > 0}" class="level-item">
-            <span data-th-text="#{page.athletes.results(${pagination.totalItems()})}">
-            </span>
-          </div>
-          <div data-th-unless="${pagination.totalItems() > 0}" class="level-item has-text-centered-mobile">
-            <span data-th-text="${isFiltered ? #messages.msg('page.athletes.empty.filtered') : #messages.msg('page.athletes.empty')}">
-            </span>
-          </div>
-        </div>
-        <div  data-th-if="${isFiltered}" class="level-right">
-          <div class="level-item">
-            <a data-th-href="${athletesUrl}"
-               data-th-text="#{page.athletes.filter.clear}"
-               class="button is-small is-dark">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+            <div class="column is-half-tablet is-narrow-desktop">
+              <div class="buttons has-addons is-centered">
+                <a class="button is-small"
+                  data-th-href="${letterRangeUrls['ALL']}"
+                  data-th-classappend="${filter.letterRange() == null} ? 'is-selected is-primary'"
+                  data-th-text="#{page.athletes.filter.all}">
+                </a>
+                <span class="button is-small is-disabled"
+                  data-th-each="range : ${letterRanges}"
+                  data-th-if="${range.athleteCount() == 0}"
+                  data-th-text="${#strings.replace(range.id(), '_', '-')}"
+                  aria-disabled="true">
+                </span>
+                <a class="button is-small"
+                  data-th-each="range : ${letterRanges}"
+                  data-th-unless="${range.athleteCount() == 0}"
+                  data-th-href="${letterRangeUrls[range.id()]}"
+                  data-th-classappend="${filter.letterRange() == range.id()} ? 'is-selected is-primary'"
+                  data-th-text="${#strings.replace(range.id(), '_', '-')}">
+                </a>
+              </div>
+            </div>
 
-    <div class="fixed-grid has-1-cols-mobile has-3-cols-desktop">
-      <div class="grid">
-        <div data-th-each="athlete : ${athletes}" class="cell">
-          <div class="box is-stretched mb-2">
-            <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}">
-              <article class="endurance-media">
-                <div class="media-left">
-                  <div class="endurance-box has-text-centered p-3">
-                    <span class="icon is-large">
-                      <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
-                    </span>
+            <div class="column">
+              <form data-th-action="@{/{lang}/athletes(lang=${language})}" role="search" method="get">
+                <div class="field has-addons">
+                  <div class="control is-expanded">
+                    <label class="label is-sr-only" data-th-text="#{page.athletes.search.placeholder}"
+                      for="athlete-search">
+                    </label>
+                    <input class="input is-small"
+                      id="athlete-search"
+                      name="q"
+                      data-th-value="${filter.searchTerm()}"
+                      data-th-placeholder="#{page.athletes.search.placeholder}"
+                      type="search">
+                  </div>
+                  <div class="control">
+                    <button class="button is-small is-primary"
+                      data-th-attr="aria-label=${#messages.msg('page.athletes.search.submit')}"
+                      data-loading
+                      type="submit">
+                      <span class="icon"><i class="et et-magnify"></i></span>
+                      <span data-th-text="#{page.athletes.search.submit}"></span>
+                    </button>
                   </div>
                 </div>
+                <input name="letterRange"
+                  data-th-if="${filter.letterRange() != null}"
+                  data-th-value="${filter.letterRange()}"
+                  type="hidden">
+                <input name="gender"
+                  data-th-if="${filter.gender() != null}"
+                  data-th-value="${filter.gender().getCode()}"
+                  type="hidden">
+              </form>
+            </div>
+          </div>
 
-                <div class="media-content has-text-wrapped">
-                  <div class="content">
-                    <span data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}"
-                          class="title is-4">
-                    </span>
-                    <br>
-                    <span data-th-if="${athlete.country != null}"
-                          data-th-text="${athlete.country().getCode()}"
-                          class="subtitle is-6">
-                    </span>
-                    <span class="icon-text">
-                      <span data-th-if="${athlete.country != null && athlete.yearOfBirth() !=null}"
-                            class="icon">
-                        <i class="et et-tally-mark-1"></i>
-                      </span>
-                    </span>
-                    <span data-th-if="${athlete.yearOfBirth() != null}"
-                          data-th-text="${athlete.yearOfBirth()}"
-                          class="subtitle is-6">
-                    </span>
-                  </div>
-                </div>
-              </article>
-            </a>
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item" data-th-if="${pagination.totalItems() > 0}">
+                <span data-th-text="#{page.athletes.results(${pagination.totalItems()})}">
+                </span>
+              </div>
+              <div class="level-item has-text-centered-mobile" data-th-unless="${pagination.totalItems() > 0}">
+                <span data-th-text="${isFiltered ? #messages.msg('page.athletes.empty.filtered') : #messages.msg('page.athletes.empty')}">
+                </span>
+              </div>
+            </div>
+            <div  class="level-right" data-th-if="${isFiltered}">
+              <div class="level-item">
+                <a class="button is-small is-dark"
+                  data-th-href="${athletesUrl}"
+                  data-th-text="#{page.athletes.filter.clear}">
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <nav data-th-if="${pagination.totalPages() > 1}"
-         data-th-attr="aria-label=#{pagination.a11y.label}"
-         role="navigation"
-         class="pagination is-centered">
-      <a data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
-         data-th-href="${paginationPreviousUrl}"
-         data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
-         class="pagination-previous">
-        <span class="icon">
-          <i class="et et-chevron-double-left"></i>
-        </span>
-      </a>
+        <div class="fixed-grid has-1-cols-mobile has-3-cols-desktop">
+          <div class="grid">
+            <div class="cell" data-th-each="athlete : ${athletes}">
+              <div class="box is-stretched mb-2">
+                <a data-th-href="@{/{lang}/athletes/{id}(lang=${language}, id=${athlete.id()})}">
+                  <article class="endurance-media">
+                    <div class="media-left">
+                      <div class="endurance-box has-text-centered p-3">
+                        <span class="icon is-large">
+                          <i data-th-class="|et ${athlete.gender() != null ? (athlete.gender().name() == 'MALE' ? 'et-face-man' : 'et-face-woman') : 'et-head-cog-outline'}|"></i>
+                        </span>
+                      </div>
+                    </div>
 
-      <a data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
-         data-th-href="${paginationNextUrl}"
-         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
-         class="pagination-next">
-        <span class="icon">
-          <i class="et et-chevron-double-right"></i>
-        </span>
-      </a>
+                    <div class="media-content has-text-wrapped">
+                      <div class="content">
+                        <span class="title is-4"
+                          data-th-text="${athlete.knownName() != null && !athlete.knownName().isEmpty() ? athlete.knownName() : athlete.longName()}">
+                        </span>
+                        <br>
+                        <span class="subtitle is-6"
+                          data-th-if="${athlete.country != null}"
+                          data-th-text="${athlete.country().getCode()}">
+                        </span>
+                        <span class="icon-text">
+                          <span class="icon"
+                            data-th-if="${athlete.country != null && athlete.yearOfBirth() !=null}">
+                            <i class="et et-tally-mark-1"></i>
+                          </span>
+                        </span>
+                        <span class="subtitle is-6"
+                          data-th-if="${athlete.yearOfBirth() != null}"
+                          data-th-text="${athlete.yearOfBirth()}">
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <ul data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}"
-          class="pagination-list">
-        <li data-th-if="${firstPage != null}">
-          <a data-th-href="${paginationUrls.get(firstPage)}"
-             data-th-text="${firstPage + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', firstPage + 1)}"
-             data-th-classappend="${firstPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link"
-          >1</a>
-        </li>
-        <li data-th-if="${pageWindow.gapBefore()}">
-          <span class="pagination-ellipsis pagination-link">&hellip;</span>
-        </li>
-        <li data-th-each="p : ${pageWindow.pages()}"
-            data-th-if="${p != firstPage and p != lastPage}">
-          <a data-th-href="${paginationUrls.get(p)}"
-             data-th-text="${p + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', p + 1)}"
-             data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link">
-            1
+        <nav class="pagination is-centered"
+          data-th-if="${pagination.totalPages() > 1}"
+          data-th-attr="aria-label=#{pagination.a11y.label}"
+          role="navigation">
+          <a class="pagination-previous"
+            data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+            data-th-href="${paginationPreviousUrl}"
+            data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'">
+            <span class="icon">
+              <i class="et et-chevron-double-left"></i>
+            </span>
           </a>
-        </li>
-        <li data-th-if="${pageWindow.gapAfter()}">
-          <span class="pagination-ellipsis pagination-link">&hellip;</span>
-        </li>
-        <li data-th-if="${lastPage != null and lastPage != firstPage}">
-          <a data-th-href="${paginationUrls.get(lastPage)}"
-             data-th-text="${lastPage + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
-             data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link">
-            1
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </section>
-</main>
 
-<footer data-th-replace="~{fragments/footer :: footer}"></footer>
-</body>
+          <a class="pagination-next"
+            data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+            data-th-href="${paginationNextUrl}"
+            data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'">
+            <span class="icon">
+              <i class="et et-chevron-double-right"></i>
+            </span>
+          </a>
+
+          <ul class="pagination-list"
+            data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}">
+            <li data-th-if="${firstPage != null}">
+              <a class="pagination-link"
+                data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', firstPage + 1)}"
+                data-th-href="${paginationUrls.get(firstPage)}"
+                data-th-classappend="${firstPage == pagination.pageNumber()} ? 'is-current'"
+                data-th-text="${firstPage + 1}"
+              >1</a>
+            </li>
+            <li data-th-if="${pageWindow.gapBefore()}">
+              <span class="pagination-ellipsis pagination-link">&hellip;</span>
+            </li>
+            <li data-th-each="p : ${pageWindow.pages()}"
+              data-th-if="${p != firstPage and p != lastPage}">
+              <a class="pagination-link"
+                data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', p + 1)}"
+                data-th-href="${paginationUrls.get(p)}"
+                data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
+                data-th-text="${p + 1}">
+                1
+              </a>
+            </li>
+            <li data-th-if="${pageWindow.gapAfter()}">
+              <span class="pagination-ellipsis pagination-link">&hellip;</span>
+            </li>
+            <li data-th-if="${lastPage != null and lastPage != firstPage}">
+              <a class="pagination-link"
+                data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
+                data-th-href="${paginationUrls.get(lastPage)}"
+                data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
+                data-th-text="${lastPage + 1}">
+                1
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+
+    <footer data-th-replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>

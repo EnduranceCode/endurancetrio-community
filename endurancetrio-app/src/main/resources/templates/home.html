@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,208 +17,207 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-replace="~{fragments/head :: head(${metadata})}">
+    <title></title>
+  </head>
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-replace="~{fragments/head :: head(${metadata})}">
-  <title></title>
-</head>
+  <body>
+    <template data-th-replace="~{fragments/head :: googleTagManager}"></template>
 
-<body>
-<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+    <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
-
-<main>
-  <section class="hero is-medium">
-    <div class="hero-body">
-      <div class="columns is-desktop is-8 is-vcentered">
-        <div class="column">
-          <div data-th-if="${language == 'pt'}" data-th-remove="tag">
-            <p class="subtitle has-text-centered">
-              A <strong>EnduranceTrio</strong> está a construir o arquivo definitivo do triatlo
-              português! O primeiro grande passo é registar todos os eventos e resultados desde
-              o primeiro triatlo.
-            </p>
-            <p class="subtitle has-text-centered">
-              Explore as nossas origens, reviva grandes conquistas e junte-se a nós para completar
-              a base de dados do nosso desporto!
-            </p>
-          </div>
-          <div data-th-unless="${language == 'pt'}" data-th-remove="tag">
-            <p class="subtitle has-text-centered">
-              <strong>EnduranceTrio</strong> is building the ultimate archive of Portuguese
-              triathlon! Our first major step is to map every event and result since the first
-              triathlon.
-            </p>
-            <p class="subtitle has-text-centered">
-              Explore our roots, relive historic achievements, and join us in completing the
-              definitive database of our sport!
-            </p>
-          </div>
-
-          <div class="buttons is-centered">
-            <a data-th-href="@{/{language}/mission(language=${language})}"
-               data-th-text="#{page.home.button.mission}"
-               class="button is-dark">
-            </a>
-            <a data-th-href="@{/{language}/events(language=${language})}"
-               data-th-text="#{page.home.button.explore}"
-               class="button is-link">
-            </a>
-          </div>
-        </div>
-        <div class="column">
-          <figure class="image">
-            <svg data-th-replace="~{fragments/svg :: database-schema}"></svg>
-          </figure>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="hero is-medium has-background-grey-100">
-    <div class="hero-body">
-      <h2 data-th-text="#{page.home.featured-events.title}" class="title is-2 mb-6"></h2>
-
-      <div data-th-if="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
-        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
-      </div>
-
-      <div data-th-unless="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
-        <div class="columns is-desktop is-6 is-vcentered">
-          <div class="column">
-            <div data-th-if="${featuredEventArticle != null}" class="card is-stretched">
-              <div data-th-if="${featuredEventArticle.featuredImage != null}" class="card-image">
-                <figure class="image">
-                  <img data-th-src="${featuredEventArticle.featuredImage}"
-                       data-th-alt="${featuredEventArticle.title}"
-                       alt="Article Title"/>
-                </figure>
+    <main>
+      <section class="hero is-medium">
+        <div class="hero-body">
+          <div class="columns is-desktop is-8 is-vcentered">
+            <div class="column">
+              <div data-th-if="${language == 'pt'}" data-th-remove="tag">
+                <p class="subtitle has-text-centered">
+                  A <strong>EnduranceTrio</strong> está a construir o arquivo definitivo do triatlo
+                  português! O primeiro grande passo é registar todos os eventos e resultados desde
+                  o primeiro triatlo.
+                </p>
+                <p class="subtitle has-text-centered">
+                  Explore as nossas origens, reviva grandes conquistas e junte-se a nós para completar
+                  a base de dados do nosso desporto!
+                </p>
               </div>
-              <div data-th-unless="${featuredEventArticle.featuredImage != null}" class="card-image">
-                <figure class="image">
-                  <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-                       data-th-alt="${featuredEventArticle.title}"
-                       alt="Article Title"/>
-                </figure>
+              <div data-th-unless="${language == 'pt'}" data-th-remove="tag">
+                <p class="subtitle has-text-centered">
+                  <strong>EnduranceTrio</strong> is building the ultimate archive of Portuguese
+                  triathlon! Our first major step is to map every event and result since the first
+                  triathlon.
+                </p>
+                <p class="subtitle has-text-centered">
+                  Explore our roots, relive historic achievements, and join us in completing the
+                  definitive database of our sport!
+                </p>
               </div>
-              <div class="card-content">
-                <div class="mb-3">
-                  <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${featuredEventArticle.slug})}">
-                    <p data-th-text="${featuredEventArticle.title}" class="title is-3"></p>
-                    <p data-th-text="${featuredEventArticle.authorName}" class="subtitle is-5"></p>
-                  </a>
-                </div>
-                <p data-th-utext="${featuredEventArticle.introText}" data-th-remove="tag"></p>
+
+              <div class="buttons is-centered">
+                <a class="button is-dark"
+                  data-th-href="@{/{language}/mission(language=${language})}"
+                  data-th-text="#{page.home.button.mission}">
+                </a>
+                <a class="button is-link"
+                  data-th-href="@{/{language}/events(language=${language})}"
+                  data-th-text="#{page.home.button.explore}">
+                </a>
               </div>
             </div>
-          </div>
-          <div class="column">
-            <div data-th-each="event : ${featuredEvents}" data-th-remove="tag">
-              <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
+            <div class="column">
+              <figure class="image">
+                <svg data-th-replace="~{fragments/svg :: database-schema}"></svg>
+              </figure>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </section>
 
-  <div class="hero is-medium">
-    <div class="hero-body">
-      <h2 data-th-text="#{page.home.featured-articles.title}" class="title is-2 mb-6"></h2>
+      <div class="hero is-medium has-background-grey-100">
+        <div class="hero-body">
+          <h2 class="title is-2 mb-6" data-th-text="#{page.home.featured-events.title}"></h2>
 
-      <div data-th-if="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
-        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
-      </div>
+          <div data-th-if="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
+            <p class="subtitle" data-th-text="#{page.insights.empty}"></p>
+          </div>
 
-      <div data-th-unless="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
-        <div class="columns is-multiline is-8">
-          <div data-th-each="article : ${featuredArticles}" class="column is-half">
-            <div class="card is-stretched">
-                <div data-th-if="${article.featuredImage != null}" class="card-image">
-                  <figure class="image">
-                    <img data-th-src="${article.featuredImage}"
-                         data-th-alt="${article.title}"
-                         alt="Article Title"/>
-                  </figure>
-                </div>
-                <div data-th-unless="${article.featuredImage != null}" class="card-image">
-                  <figure class="image">
-                    <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-                         data-th-alt="${article.title}"
-                         alt="Article Title"/>
-                  </figure>
-                </div>
-                <div class="card-content">
-                  <div class="mb-3">
-                    <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
-                      <p data-th-text="${article.title}" class="title is-3"></p>
-                      <p data-th-text="${article.authorName}" class="subtitle is-5"></p>
-                    </a>
+          <div data-th-unless="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
+            <div class="columns is-desktop is-6 is-vcentered">
+              <div class="column">
+                <div class="card is-stretched" data-th-if="${featuredEventArticle != null}">
+                  <div class="card-image" data-th-if="${featuredEventArticle.featuredImage != null}">
+                    <figure class="image">
+                      <img data-th-src="${featuredEventArticle.featuredImage}"
+                        data-th-alt="${featuredEventArticle.title}"
+                        alt="Article Title">
+                    </figure>
                   </div>
-                  <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+                  <div class="card-image" data-th-unless="${featuredEventArticle.featuredImage != null}">
+                    <figure class="image">
+                      <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+                        data-th-alt="${featuredEventArticle.title}"
+                        alt="Article Title">
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <div class="mb-3">
+                      <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${featuredEventArticle.slug})}">
+                        <p class="title is-3" data-th-text="${featuredEventArticle.title}"></p>
+                        <p class="subtitle is-5" data-th-text="${featuredEventArticle.authorName}"></p>
+                      </a>
+                    </div>
+                    <p data-th-utext="${featuredEventArticle.introText}" data-th-remove="tag"></p>
+                  </div>
                 </div>
+              </div>
+              <div class="column">
+                <div data-th-each="event : ${featuredEvents}" data-th-remove="tag">
+                  <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="hero is-medium has-background-grey-100">
-    <div class="hero-body">
-      <h2 data-th-text="#{page.home.latest-results.title}" class="title is-2 mb-2"></h2>
-      <p data-th-text="#{page.home.latest-results.subtitle}" class="subtitle is-5 has-text-grey mb-6"></p>
+      <div class="hero is-medium">
+        <div class="hero-body">
+          <h2 class="title is-2 mb-6" data-th-text="#{page.home.featured-articles.title}"></h2>
 
-      <div data-th-if="${#lists.isEmpty(latestRaces)}" data-th-remove="tag">
-        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
-      </div>
-
-      <div data-th-unless="${#lists.isEmpty(latestRaces)}" data-th-remove="tag">
-        <div class="columns is-desktop is-6 is-vcentered">
-          <div class="column">
-            <figure class="image">
-              <svg data-th-replace="~{fragments/svg :: spreadsheets}"></svg>
-            </figure>
+          <div data-th-if="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
+            <p class="subtitle" data-th-text="#{page.insights.empty}"></p>
           </div>
-          <div class="column">
-            <div data-th-each="race : ${latestRaces}" data-th-remove="tag">
-              <div data-th-replace="~{fragments/list-items :: simple-race(${race})}"></div>
+
+          <div data-th-unless="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
+            <div class="columns is-multiline is-8">
+              <div class="column is-half" data-th-each="article : ${featuredArticles}">
+                <div class="card is-stretched">
+                  <div class="card-image" data-th-if="${article.featuredImage != null}">
+                    <figure class="image">
+                      <img data-th-src="${article.featuredImage}"
+                        data-th-alt="${article.title}"
+                        alt="Article Title">
+                    </figure>
+                  </div>
+                  <div class="card-image" data-th-unless="${article.featuredImage != null}">
+                    <figure class="image">
+                      <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+                        data-th-alt="${article.title}"
+                        alt="Article Title">
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <div class="mb-3">
+                      <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
+                        <p class="title is-3" data-th-text="${article.title}"></p>
+                        <p class="subtitle is-5" data-th-text="${article.authorName}"></p>
+                      </a>
+                    </div>
+                    <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="hero is-medium">
-    <div class="hero-body">
-      <h2 data-th-text="#{page.home.latest-events.title}" class="title is-2 mb-2"></h2>
-      <p data-th-text="#{page.home.latest-events.subtitle}" class="subtitle is-5 has-text-grey mb-6"></p>
+      <div class="hero is-medium has-background-grey-100">
+        <div class="hero-body">
+          <h2 class="title is-2 mb-2" data-th-text="#{page.home.latest-results.title}"></h2>
+          <p class="subtitle is-5 has-text-grey mb-6" data-th-text="#{page.home.latest-results.subtitle}"></p>
 
-      <div data-th-if="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
-        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
-      </div>
+          <div data-th-if="${#lists.isEmpty(latestRaces)}" data-th-remove="tag">
+            <p class="subtitle" data-th-text="#{page.insights.empty}"></p>
+          </div>
 
-      <div data-th-unless="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
-        <div class="columns is-multiline">
-          <div data-th-each="event : ${latestEvents}" class="column is-half">
-            <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
+          <div data-th-unless="${#lists.isEmpty(latestRaces)}" data-th-remove="tag">
+            <div class="columns is-desktop is-6 is-vcentered">
+              <div class="column">
+                <figure class="image">
+                  <svg data-th-replace="~{fragments/svg :: spreadsheets}"></svg>
+                </figure>
+              </div>
+              <div class="column">
+                <div data-th-each="race : ${latestRaces}" data-th-remove="tag">
+                  <div data-th-replace="~{fragments/list-items :: simple-race(${race})}"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="buttons is-centered mt-6">
-          <a data-th-href="@{/{language}/events(language=${language})}"
-             data-th-text="#{page.home.button.events}"
-             class="button is-medium is-link">
-          </a>
+      </div>
+
+      <div class="hero is-medium">
+        <div class="hero-body">
+          <h2 class="title is-2 mb-2" data-th-text="#{page.home.latest-events.title}"></h2>
+          <p class="subtitle is-5 has-text-grey mb-6" data-th-text="#{page.home.latest-events.subtitle}"></p>
+
+          <div data-th-if="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
+            <p class="subtitle" data-th-text="#{page.insights.empty}"></p>
+          </div>
+
+          <div data-th-unless="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
+            <div class="columns is-multiline">
+              <div class="column is-half" data-th-each="event : ${latestEvents}">
+                <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
+              </div>
+            </div>
+            <div class="buttons is-centered mt-6">
+              <a class="button is-medium is-link"
+                data-th-href="@{/{language}/events(language=${language})}"
+                data-th-text="#{page.home.button.events}">
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</main>
+    </main>
 
-<footer data-th-replace="~{fragments/footer :: footer}"></footer>
-</body>
+    <footer data-th-replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>

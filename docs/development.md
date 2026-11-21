@@ -619,6 +619,8 @@ npm scripts are:
 - `npm run build:dev` - development bundle with source maps
 - `npm run build:prod` - production bundle without source maps
 - `npm run build:watch` - continuous development rebuilds with source maps
+- `npm run format:html` - fix template style and attribute order
+- `npm run format:check` - check formatting and linting, including templates, without rewriting files
 
 Icons are generated via `scripts/generate-icons.js`. The `prebuild:*` hooks run it automatically
 before every webpack build, so you rarely need to call it directly. To add a new icon, edit
@@ -2049,10 +2051,12 @@ From the webpack project directory:
 
 ```shell
 npm run format
+npm run format:check
 npm run build:prod
 ```
 
-- `npm run format` runs Prettier and ESLint; fix any reported errors before proceeding.
+- `npm run format` runs Prettier and ESLint, including HTML templates; fix any reported errors before proceeding.
+- `npm run format:check` performs the same checks without rewriting files, so it is safe to run as a final gate.
 - `npm run build:prod` (or `build:dev` to keep source maps) confirms webpack and its loaders
   still compile.
 

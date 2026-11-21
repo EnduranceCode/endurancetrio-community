@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,70 +17,71 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head>
-  <title>Main Navbar</title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head>
+    <title>Main Navbar</title>
+  </head>
 
-<body>
-<nav data-th-fragment="main-navbar(metadata)"
-     role="navigation"
-     data-th-attr="aria-label=#{navbar.a11y.main-navigation}"
-     class="endurance-navbar is-fixed-top has-shadow"
->
-  <div class="container is-fluid">
-    <div class="navbar-brand">
-      <a data-th-href="@{/{language}/(language=${language})}" class="navbar-item">
-        <svg data-th-replace="~{fragments/svg :: endurancetrio-logo-fixed-black}"></svg>
-      </a>
+  <body>
+    <nav class="endurance-navbar is-fixed-top has-shadow"
+      data-th-attr="aria-label=#{navbar.a11y.main-navigation}"
+      data-th-fragment="main-navbar(metadata)"
+      role="navigation">
+      <div class="container is-fluid">
+        <div class="navbar-brand">
+          <a class="navbar-item" data-th-href="@{/{language}/(language=${language})}">
+            <svg data-th-replace="~{fragments/svg :: endurancetrio-logo-fixed-black}"></svg>
+          </a>
 
-      <a role="button" class="navbar-burger" aria-expanded="false"
-         data-th-attr="aria-label=#{navbar.a11y.menu}"
-         data-target="main-navbar">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
+          <a class="navbar-burger" data-th-attr="aria-label=#{navbar.a11y.menu}" data-target="main-navbar"
+            role="button"
+            aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
 
-    <div id="main-navbar" class="navbar-menu">
-      <div class="navbar-end">
-        <a data-th-with="isAthlete=(${metadata.view == 'athletes' || metadata.view == 'athlete-profile'})"
-           data-th-href="@{/{language}/athletes(language=${language})}"
-           data-th-text="#{navbar.option.athletes}"
-           data-th-classappend="${isAthlete} ? 'is-active'"
-           class="navbar-item"></a>
-        <a data-th-with="isEvents=(${metadata.view == 'event-insights' || metadata.view == 'event-overview' || metadata.view == 'events'})"
-           data-th-href="@{/{language}/events(language=${language})}"
-           data-th-text="#{navbar.option.events}"
-           data-th-classappend="${isEvents} ? 'is-active'"
-           class="navbar-item"></a>
-        <a data-th-with="isInsights=(${metadata.view == 'insights' || metadata.view == 'insight-article'})"
-           data-th-href="@{/{language}/insights(language=${language})}"
-           data-th-text="#{navbar.option.insights}"
-           data-th-classappend="${isInsights} ? 'is-active'"
-           class="navbar-item"
-        ></a>
-        <a data-th-href="@{/{language}/mission(language=${language})}"
-           data-th-text="#{navbar.option.mission}"
-           data-th-classappend="${metadata.view == 'mission'} ? 'is-active'"
-           class="navbar-item"
-        ></a>
-        <div class="navbar-item">
-          <label class="switch is-inner-label is-rounded is-outlined">
-            <input id="language-selector" type="checkbox" data-th-checked="${language == 'pt'}">
-            <span class="check is-link">
-              <span data-off-label="EN" data-on-label="PT" class="switch-inner-label"></span>
-            </span>
-          </label>
+        <div class="navbar-menu" id="main-navbar">
+          <div class="navbar-end">
+            <a class="navbar-item"
+              data-th-with="isAthlete=(${metadata.view == 'athletes' || metadata.view == 'athlete-profile'})"
+              data-th-href="@{/{language}/athletes(language=${language})}"
+              data-th-classappend="${isAthlete} ? 'is-active'"
+              data-th-text="#{navbar.option.athletes}">
+            </a>
+            <a class="navbar-item"
+              data-th-with="isEvents=(${metadata.view == 'event-insights' || metadata.view == 'event-overview' || metadata.view == 'events'})"
+              data-th-href="@{/{language}/events(language=${language})}"
+              data-th-classappend="${isEvents} ? 'is-active'"
+              data-th-text="#{navbar.option.events}">
+            </a>
+            <a class="navbar-item"
+              data-th-with="isInsights=(${metadata.view == 'insights' || metadata.view == 'insight-article'})"
+              data-th-href="@{/{language}/insights(language=${language})}"
+              data-th-classappend="${isInsights} ? 'is-active'"
+              data-th-text="#{navbar.option.insights}">
+            </a>
+            <a class="navbar-item"
+              data-th-href="@{/{language}/mission(language=${language})}"
+              data-th-classappend="${metadata.view == 'mission'} ? 'is-active'"
+              data-th-text="#{navbar.option.mission}">
+            </a>
+            <div class="navbar-item">
+              <label class="switch is-inner-label is-rounded is-outlined">
+                <input id="language-selector" data-th-checked="${language == 'pt'}" type="checkbox">
+                <span class="check is-link">
+                  <span class="switch-inner-label" data-off-label="EN" data-on-label="PT"></span>
+                </span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</nav>
-</body>
+    </nav>
+  </body>
 </html>

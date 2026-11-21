@@ -12,11 +12,12 @@ guide only notes where the project overrides or extends them.
 
 1. [Foundations](#foundations)
 2. [Naming](./naming.md)
-3. [Conventions](#conventions)
-4. [Component Catalogue](#component-catalogue)
-5. [Third-Party Code](#third-party-code)
-6. [Adding a Component](#adding-a-component)
-7. [Building and Verifying](#building-and-verifying)
+3. [HTML](./html.md)
+4. [Conventions](#conventions)
+5. [Component Catalogue](#component-catalogue)
+6. [Third-Party Code](#third-party-code)
+7. [Adding a Component](#adding-a-component)
+8. [Building and Verifying](#building-and-verifying)
 
 ## Foundations
 
@@ -78,6 +79,8 @@ review checklist are on the [Naming](./naming.md) page.
   custom elements are `endurance-{block}-{element}`, and modifiers/states are the global
   `is-*`/`has-*` classes written next to the block. Partial names match what they define
   (`endurance-table-sort.scss` and `bulma-table-sort.js`).
+- **HTML.** Templates follow the [HTML](./html.md) specification: Code Guide syntax and attribute
+  order, adapted to Thymeleaf's `data-th-*` dialect.
 
 ## Component Catalogue
 
@@ -158,7 +161,8 @@ Run these from `endurancetrio-app/src/main/resources/webpack/`:
 npm run build:dev      # development build with source maps
 npm run build:watch    # rebuild on change (writes to target/classes/static when WEBPACK_OUTPUT_DIR is set)
 npm run generate:icons # regenerate endurance-icons.scss after editing icons.config.json
-npm run format         # Prettier and ESLint
+npm run format         # Prettier and ESLint, including templates
+npm run format:check   # check formatting and linting without rewriting files
 ```
 
 The Maven build runs the frontend build automatically (`./mvnw clean install`).

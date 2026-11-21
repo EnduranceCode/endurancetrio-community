@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,51 +17,51 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head>
-  <title>Event Hero</title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head>
+    <title>Event Hero</title>
+  </head>
 
-<body>
-<section data-th-fragment="event-hero(language, event, year, articlesCount, currentTab)"
-         class="hero has-background-grey-700">
-  <div class="hero-body">
-    <div class="container is-fullhd">
-      <h1 class="title is-1" data-th-text="${event.title()}">Event Title</h1>
+  <body>
+    <section class="hero has-background-grey-700"
+      data-th-fragment="event-hero(language, event, year, articlesCount, currentTab)">
+      <div class="hero-body">
+        <div class="container is-fullhd">
+          <h1 class="title is-1" data-th-text="${event.title()}"></h1>
 
-      <p class="subtitle is-3">
-        <span data-th-replace="~{fragments/utilities :: combined-long-date(${event.startDate}, ${event.endDate})}"></span>
-        <span class="icon">
-          <i class="et et-tally-mark-1"></i>
-        </span>
-        <span data-th-replace="~{fragments/utilities :: location(${event.city}, ${event.county}, ${event.district})}"></span>
-      </p>
-    </div>
-  </div>
-
-  <div class="hero-foot">
-    <div class="container is-fullhd">
-      <div class="tabs is-right">
-        <ul>
-          <li data-th-classappend="${currentTab == 'overview'} ? 'is-active' : ''">
-            <a data-th-href="@{/{language}/events/{year}/{id}/overview(language=${language}, year=${year}, id=${event.id()})}"
-               data-th-text="#{page.event.tab.overview}">Overview</a>
-          </li>
-          <li data-th-if="${articlesCount > 0}" data-th-classappend="${currentTab == 'insights'} ? 'is-active' : ''">
-            <a data-th-href="@{/{language}/events/{year}/{id}/insights(language=${language}, year=${year}, id=${event.id()})}"
-               data-th-text="#{page.event.tab.insights}">Insights</a>
-          </li>
-          <li data-th-if="${event.races().size() > 0}"
-              data-th-classappend="${currentTab == 'results'} ? 'is-active' : ''">
-            <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${event.races().getFirst().id()})}"
-               data-th-text="#{page.event.tab.results}">Results</a>
-          </li>
-        </ul>
+          <p class="subtitle is-3">
+            <span data-th-replace="~{fragments/utilities :: combined-long-date(${event.startDate}, ${event.endDate})}"></span>
+            <span class="icon">
+              <i class="et et-tally-mark-1"></i>
+            </span>
+            <span data-th-replace="~{fragments/utilities :: location(${event.city}, ${event.county}, ${event.district})}"></span>
+          </p>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-</body>
+
+      <div class="hero-foot">
+        <div class="container is-fullhd">
+          <div class="tabs is-right">
+            <ul>
+              <li data-th-classappend="${currentTab == 'overview'} ? 'is-active' : ''">
+                <a data-th-href="@{/{language}/events/{year}/{id}/overview(language=${language}, year=${year}, id=${event.id()})}"
+                  data-th-text="#{page.event.tab.overview}"></a>
+              </li>
+              <li data-th-if="${articlesCount > 0}" data-th-classappend="${currentTab == 'insights'} ? 'is-active' : ''">
+                <a data-th-href="@{/{language}/events/{year}/{id}/insights(language=${language}, year=${year}, id=${event.id()})}"
+                  data-th-text="#{page.event.tab.insights}"></a>
+              </li>
+              <li data-th-if="${event.races().size() > 0}"
+                data-th-classappend="${currentTab == 'results'} ? 'is-active' : ''">
+                <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${event.races().getFirst().id()})}"
+                  data-th-text="#{page.event.tab.results}"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
 </html>

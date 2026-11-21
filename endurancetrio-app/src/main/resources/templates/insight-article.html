@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,70 +17,70 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-replace="~{fragments/head :: head(${metadata})}">
-  <title></title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-replace="~{fragments/head :: head(${metadata})}">
+    <title></title>
+  </head>
 
-<body>
-<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+  <body>
+    <template data-th-replace="~{fragments/head :: googleTagManager}"></template>
 
-<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+    <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main class="section">
-  <section class="container">
-    <div class="card">
-      <div data-th-if="${article.featuredImage != null}" class="card-image">
-        <figure class="image">
-          <img data-th-src="${article.featuredImage}"
-               data-th-alt="${article.title}"
-               alt="Article Title"/>
-        </figure>
-      </div>
-      <div data-th-unless="${article.featuredImage != null}" class="card-image">
-        <figure class="image">
-          <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-               data-th-alt="${article.title}"
-               alt="Article Title"/>
-        </figure>
-      </div>
-    </div>
+    <main class="section">
+      <section class="container">
+        <div class="card">
+          <div class="card-image" data-th-if="${article.featuredImage != null}">
+            <figure class="image">
+              <img data-th-src="${article.featuredImage}"
+                data-th-alt="${article.title}"
+                alt="Article Title">
+            </figure>
+          </div>
+          <div class="card-image" data-th-unless="${article.featuredImage != null}">
+            <figure class="image">
+              <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+                data-th-alt="${article.title}"
+                alt="Article Title">
+            </figure>
+          </div>
+        </div>
 
-    <h1 data-th-text="${article.title}" class="title is-1 mb-3"></h1>
-    <p class="subtitle is-5">
-      <span data-th-text="${article.authorName}">Author Name</span>
-      <span data-th-if="${article.publishedDate != null}" data-th-remove="tag">
-        <span class="icon-text">
-          <span class="icon">
-            <i class="et et-tally-mark-1"></i>
+        <h1 class="title is-1 mb-3" data-th-text="${article.title}"></h1>
+        <p class="subtitle is-5">
+          <span data-th-text="${article.authorName}"></span>
+          <span data-th-if="${article.publishedDate != null}" data-th-remove="tag">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="et et-tally-mark-1"></i>
+              </span>
+            </span>
+            <span data-th-text="${#temporals.format(article.publishedDate, 'dd MMM yyyy')}"></span>
           </span>
-        </span>
-        <span data-th-text="${#temporals.format(article.publishedDate, 'dd MMM yyyy')}"></span>
-      </span>
-      <span data-th-if="${article.locale != language}" data-th-remove="tag">
-        <span class="icon-text">
-          <span class="icon"><i class="et et-tally-mark-1"></i></span>
-        </span>
-        <span data-th-with="
+          <span data-th-if="${article.locale != language}" data-th-remove="tag">
+            <span class="icon-text">
+              <span class="icon"><i class="et et-tally-mark-1"></i></span>
+            </span>
+            <span class="tag is-light is-warning"
+              data-th-with="
               langKey=${article.locale == 'pt'}
                 ? 'page.insights.detail.language.portuguese'
                 : 'page.insights.detail.language.english'"
-              data-th-text="#{page.insights.detail.language.note(${#messages.msg(langKey)})}"
-              class="tag is-light is-warning"></span>
-      </span>
-    </p>
+              data-th-text="#{page.insights.detail.language.note(${#messages.msg(langKey)})}"></span>
+          </span>
+        </p>
 
-    <section class="content">
-      <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
-      <p data-th-if="${article.fullText != null}"
-         data-th-utext="${article.fullText}"
-         data-th-remove="tag"></p>
-    </section>
-  </section>
-</main>
+        <section class="content">
+          <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+          <p data-th-if="${article.fullText != null}"
+            data-th-utext="${article.fullText}"
+            data-th-remove="tag"></p>
+        </section>
+      </section>
+    </main>
 
-<footer data-th-replace="~{fragments/footer :: footer}"></footer>
-</body>
+    <footer data-th-replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>

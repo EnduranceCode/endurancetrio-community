@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   ~ Copyright (c) 2011-2026 Ricardo do Canto
   ~
@@ -17,220 +17,226 @@
   ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
   ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
   ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
-  -->
+-->
 
-<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
-<head data-th-replace="~{fragments/head :: head(${metadata})}">
-  <title></title>
-</head>
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head data-th-replace="~{fragments/head :: head(${metadata})}">
+    <title></title>
+  </head>
 
-<body>
-<template data-th-replace="~{fragments/head :: googleTagManager}"></template>
+  <body>
+    <template data-th-replace="~{fragments/head :: googleTagManager}"></template>
 
-<nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
+    <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main>
-  <section class="hero has-background-grey-700">
-    <div class="hero-body">
-      <div class="container is-fullhd">
-        <h1 data-th-text="#{page.events.title}" class="title is-1">Events</h1>
-        <p data-th-text="#{page.events.subtitle}" class="subtitle is-3">
-          Events, races, and results
-        </p>
-      </div>
-    </div>
-  </section>
+    <main>
+      <section class="hero has-background-grey-700">
+        <div class="hero-body">
+          <div class="container is-fullhd">
+            <h1 class="title is-1" data-th-text="#{page.events.title}"></h1>
+            <p class="subtitle is-3" data-th-text="#{page.events.subtitle}"></p>
+          </div>
+        </div>
+      </section>
 
-  <section class="section">
-    <div class="endurance-box is-branded-thin is-branded-faded has-background-grey-200">
-      <form method="get" data-th-action="${eventsUrl}" role="search" class="columns is-multiline">
-        <div class="column is-two-fifths">
-          <div class="field">
-            <label for="events-district" class="label is-sr-only"
-                   data-th-text="#{page.events.filter.district}">District</label>
-            <div class="control">
-              <div class="select is-fullwidth is-small">
-                <select id="events-district" name="district"
-                        data-event-filter-district="events-county">
-                  <option value="" data-th-value="''"
-                          data-th-text="#{page.events.filter.anyDistrict}"
-                          data-th-selected="${filter.district() == null}">Any district
-                  </option>
-                  <option data-th-each="district : ${countiesByDistrict.keySet()}"
-                          data-th-value="${district}"
-                          data-th-text="${district}"
-                          data-th-selected="${filter.district() == district}">Aveiro
-                  </option>
-                </select>
+      <section class="section">
+        <div class="endurance-box is-branded-thin is-branded-faded has-background-grey-200">
+          <form class="columns is-multiline" data-th-action="${eventsUrl}" role="search" method="get">
+            <div class="column is-two-fifths">
+              <div class="field">
+                <label class="label is-sr-only"
+                  data-th-text="#{page.events.filter.district}"
+                  for="events-district">
+                </label>
+                <div class="control">
+                  <div class="select is-fullwidth is-small">
+                    <select id="events-district"
+                      name="district"
+                      data-event-filter-district="events-county">
+                      <option data-th-value="''" data-th-selected="${filter.district() == null}"
+                        data-th-text="#{page.events.filter.anyDistrict}"
+                        value="">
+                      </option>
+                      <option data-th-each="district : ${countiesByDistrict.keySet()}"
+                        data-th-value="${district}"
+                        data-th-selected="${filter.district() == district}"
+                        data-th-text="${district}">
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="column is-two-fifths">
+              <div class="field">
+                <label class="label is-sr-only"
+                  data-th-text="#{page.events.filter.county}"
+                  for="events-county">
+                </label>
+                <div class="control">
+                  <div class="select is-fullwidth is-small">
+                    <select id="events-county" name="county">
+                      <option data-th-value="''" data-th-selected="${filter.county() == null}"
+                        data-th-text="#{page.events.filter.anyCounty}"
+                        value="">
+                      </option>
+                      <optgroup data-th-each="districtCounties : ${countiesByDistrict}"
+                        data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null"
+                        data-th-label="${districtCounties.key}"
+                        label="Aveiro">
+                        <option data-th-each="county : ${districtCounties.value}"
+                          data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null, disabled=${filter.district() != null and filter.district() != districtCounties.key} ? 'disabled' : null"
+                          data-th-value="${county}"
+                          data-th-selected="${filter.county() == county}"
+                          data-th-text="${county}">
+                        </option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="column is-one-fifth">
+              <div class="field">
+                <label class="label is-sr-only"
+                  data-th-text="#{page.events.filter.year}"
+                  for="events-year">
+                </label>
+                <div class="control">
+                  <div class="select is-fullwidth is-small">
+                    <select id="events-year" name="year">
+                      <option data-th-value="''"
+                        data-th-selected="${filter.year() == null}"
+                        data-th-text="#{page.events.filter.anyYear}"
+                        value="">
+                      </option>
+                      <option data-th-each="year : ${years}"
+                        data-th-value="${year}"
+                        data-th-selected="${filter.year() == year}"
+                        data-th-text="${year}">
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  <label class="label is-sr-only" data-th-text="#{page.events.search.placeholder}"
+                    for="event-search">
+                  </label>
+                  <input class="input is-small"
+                    id="event-search"
+                    name="q"
+                    data-th-value="${filter.q()}"
+                    data-th-placeholder="#{page.events.search.placeholder}"
+                    type="search">
+                </div>
+                <div class="control">
+                  <button class="button is-small is-primary"
+                    data-th-attr="aria-label=#{page.events.search.submit}"
+                    data-loading
+                    type="submit">
+                    <span class="icon"><i class="et et-magnify"></i></span>
+                    <span data-th-text="#{page.events.search.submit}"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item" data-th-if="${pagination.totalItems() > 0}">
+                <span data-th-text="#{page.events.results(${pagination.totalItems()})}">
+                </span>
+              </div>
+              <div class="level-item has-text-centered-mobile" data-th-unless="${pagination.totalItems() > 0}">
+                <span data-th-text="${isFiltered ? #messages.msg('page.events.empty.filtered') : #messages.msg('page.events.empty')}">
+                </span>
+              </div>
+            </div>
+            <div class="level-right" data-th-if="${isFiltered}">
+              <div class="level-item">
+                <a class="button is-small is-dark"
+                  data-th-href="${eventsUrl}"
+                  data-th-text="#{page.events.filter.clear}">
+                </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="column is-two-fifths">
-          <div class="field">
-            <label for="events-county" class="label is-sr-only"
-                   data-th-text="#{page.events.filter.county}">County</label>
-            <div class="control">
-              <div class="select is-fullwidth is-small">
-                <select id="events-county" name="county">
-                  <option value="" data-th-value="''"
-                          data-th-text="#{page.events.filter.anyCounty}"
-                          data-th-selected="${filter.county() == null}">Any county
-                  </option>
-                  <optgroup data-th-each="districtCounties : ${countiesByDistrict}"
-                            label="Aveiro"
-                            data-th-label="${districtCounties.key}"
-                            data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null">
-                    <option data-th-each="county : ${districtCounties.value}"
-                            data-th-value="${county}"
-                            data-th-text="${county}"
-                            data-th-selected="${filter.county() == county}"
-                            data-th-attr="data-district=${districtCounties.key}, hidden=${filter.district() != null and filter.district() != districtCounties.key} ? 'hidden' : null, disabled=${filter.district() != null and filter.district() != districtCounties.key} ? 'disabled' : null">
-                      Aveiro
-                    </option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
+        <div class="columns is-multiline">
+          <div class="column is-full" data-th-each="event : ${events}">
+            <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
           </div>
         </div>
 
-        <div class="column is-one-fifth">
-          <div class="field">
-            <label for="events-year" class="label is-sr-only"
-                   data-th-text="#{page.events.filter.year}">Year</label>
-            <div class="control">
-              <div class="select is-fullwidth is-small">
-                <select id="events-year" name="year">
-                  <option value="" data-th-value="''"
-                          data-th-text="#{page.events.filter.anyYear}"
-                          data-th-selected="${filter.year() == null}">Any year
-                  </option>
-                  <option data-th-each="year : ${years}"
-                          data-th-value="${year}"
-                          data-th-text="${year}"
-                          data-th-selected="${filter.year() == year}">1984
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="column">
-          <div class="field has-addons">
-            <div class="control is-expanded">
-              <label for="event-search" class="label is-sr-only"
-                     data-th-text="#{page.events.search.placeholder}">Search events</label>
-              <input id="event-search"
-                     data-th-value="${filter.q()}"
-                     data-th-placeholder="#{page.events.search.placeholder}"
-                     type="search"
-                     name="q"
-                     class="input is-small">
-            </div>
-            <div class="control">
-              <button data-th-attr="aria-label=#{page.events.search.submit}"
-                      type="submit"
-                      data-loading
-                      class="button is-small is-primary">
-                <span class="icon"><i class="et et-magnify"></i></span>
-                <span data-th-text="#{page.events.search.submit}">Search</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-
-      <div class="level">
-        <div class="level-left">
-          <div data-th-if="${pagination.totalItems() > 0}" class="level-item">
-            <span data-th-text="#{page.events.results(${pagination.totalItems()})}">
+        <nav class="pagination is-centered"
+          data-th-if="${pagination.totalPages() > 1}"
+          data-th-attr="aria-label=#{pagination.a11y.label}"
+          role="navigation">
+          <a class="pagination-previous"
+            data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+            data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+            data-th-href="${paginationPreviousUrl}">
+            <span class="icon">
+              <i class="et et-chevron-double-left"></i>
             </span>
-          </div>
-          <div data-th-unless="${pagination.totalItems() > 0}" class="level-item has-text-centered-mobile">
-            <span data-th-text="${isFiltered ? #messages.msg('page.events.empty.filtered') : #messages.msg('page.events.empty')}">
+          </a>
+
+          <a class="pagination-next"
+            data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+            data-th-href="${paginationNextUrl}"
+            data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'">
+            <span class="icon">
+              <i class="et et-chevron-double-right"></i>
             </span>
-          </div>
-        </div>
-        <div data-th-if="${isFiltered}" class="level-right">
-          <div class="level-item">
-            <a data-th-href="${eventsUrl}"
-               data-th-text="#{page.events.filter.clear}"
-               class="button is-small is-dark">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="columns is-multiline">
-      <div data-th-each="event : ${events}" class="column is-full">
-        <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
-      </div>
-    </div>
-
-    <nav data-th-if="${pagination.totalPages() > 1}"
-         data-th-attr="aria-label=#{pagination.a11y.label}"
-         role="navigation"
-         class="pagination is-centered">
-      <a data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
-         data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
-         data-th-href="${paginationPreviousUrl}"
-         class="pagination-previous">
-        <span class="icon">
-          <i class="et et-chevron-double-left"></i>
-        </span>
-      </a>
-
-      <a data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
-         data-th-href="${paginationNextUrl}"
-         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
-         class="pagination-next">
-        <span class="icon">
-          <i class="et et-chevron-double-right"></i>
-        </span>
-      </a>
-
-      <ul data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}"
-          class="pagination-list">
-        <li data-th-if="${firstPage != null}">
-          <a data-th-href="${paginationUrls.get(firstPage)}"
-             data-th-text="${firstPage + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', firstPage + 1)}"
-             data-th-classappend="${firstPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link">
           </a>
-        </li>
-        <li data-th-if="${pageWindow.gapBefore()}">
-          <span class="pagination-ellipsis pagination-link">&hellip;</span>
-        </li>
-        <li data-th-each="page : ${pageWindow.pages()}"
-            data-th-if="${page != firstPage and page != lastPage}">
-          <a data-th-href="${paginationUrls.get(page)}"
-             data-th-text="${page + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', page + 1)}"
-             data-th-classappend="${page == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link">
-          </a>
-        </li>
-        <li data-th-if="${pageWindow.gapAfter()}">
-          <span class="pagination-ellipsis pagination-link">&hellip;</span>
-        </li>
-        <li data-th-if="${lastPage != null and lastPage != firstPage}">
-          <a data-th-href="${paginationUrls.get(lastPage)}"
-             data-th-text="${lastPage + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
-             data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
-             class="pagination-link">
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </section>
-</main>
 
-<footer data-th-replace="~{fragments/footer :: footer}"></footer>
-</body>
+          <ul class="pagination-list"
+            data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}">
+            <li data-th-if="${firstPage != null}">
+              <a class="pagination-link"
+                data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', firstPage + 1)}"
+                data-th-href="${paginationUrls.get(firstPage)}"
+                data-th-classappend="${firstPage == pagination.pageNumber()} ? 'is-current'"
+                data-th-text="${firstPage + 1}">
+              </a>
+            </li>
+            <li data-th-if="${pageWindow.gapBefore()}">
+              <span class="pagination-ellipsis pagination-link">&hellip;</span>
+            </li>
+            <li data-th-each="page : ${pageWindow.pages()}"
+              data-th-if="${page != firstPage and page != lastPage}">
+              <a class="pagination-link"
+                data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', page + 1)}"
+                data-th-href="${paginationUrls.get(page)}"
+                data-th-classappend="${page == pagination.pageNumber()} ? 'is-current'"
+                data-th-text="${page + 1}">
+              </a>
+            </li>
+            <li data-th-if="${pageWindow.gapAfter()}">
+              <span class="pagination-ellipsis pagination-link">&hellip;</span>
+            </li>
+            <li data-th-if="${lastPage != null and lastPage != firstPage}">
+              <a class="pagination-link"
+                data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
+                data-th-href="${paginationUrls.get(lastPage)}"
+                data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
+                data-th-text="${lastPage + 1}">
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </main>
+
+    <footer data-th-replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>
