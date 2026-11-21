@@ -33,83 +33,26 @@
   <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'overview')}"></section>
 
   <section id="overview" class="section">
-    <div class="columns is-multiline">
-      <div class="column is-half-tablet is-one-third-desktop"
-           data-th-if="${!#lists.isEmpty(event.organizers)}">
-        <div class="endurance-box is-branded-thin is-content-top">
-          <h2 class="title is-4"
-              data-th-text="#{page.event.overview.label.organizers}">Organizers</h2>
-          <div data-th-each="organizer : ${event.organizers}" class="mb-2">
-            <p class="has-text-weight-bold" data-th-text="${organizer.name}">Club Name</p>
-            <p class="has-text-grey"
-               data-th-text="${organizer.city} + ', ' + ${organizer.county} + ' (' + ${organizer.district} + ')'">
-              City, County (District)
-            </p>
-          </div>
+    <div data-th-if="${!#lists.isEmpty(event.organizers)}" class="endurance-box is-branded-thin">
+      <h2 class="title is-4" data-th-text="#{page.event.overview.label.organizers}">Organizers</h2>
+      <div class="columns is-multiline">
+        <div data-th-each="organizer : ${event.organizers}" class="column is-half">
+          <p class="has-text-weight-bold" data-th-text="${organizer.name}"></p>
+          <p class="has-text-grey">
+            <span data-th-replace="~{fragments/utilities :: location(${organizer.city}, ${organizer.county}, ${organizer.district})}">
+          </span>
+          </p>
         </div>
       </div>
+    </div>
 
-      <div class="column is-half-tablet is-one-third-desktop"
-           data-th-each="race : ${event.races}">
-        <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}">
-          <div class="endurance-box is-branded-thin is-content-top">
-            <div class="media">
-              <div class="media-left">
-                <div data-th-replace="~{fragments/calendar :: date-ddmmm(date=${race.date})}">
-                </div>
-              </div>
-              <div class="media-content">
-                <h2 class="title is-4" data-th-text="${race.title}">Triatlo de Peniche</h2>
-                <p class="subtitle is-6" data-th-text="${race.subtitle}">Geral</p>
-              </div>
-            </div>
-
-            <div class="level is-mobile">
-              <div class="level-item" data-th-if="${!#lists.isEmpty(race.sports)}">
-                <div class="tags has-addons">
-                <span class="tag is-medium" data-th-each="sport : ${race.sports}"
-                      data-th-text="#{sport.__${sport}__}">
-                  Triatlo
-                </span>
-                </div>
-              </div>
-
-              <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
-                <div class="tags has-addons">
-                <span class="tag is-medium" data-th-each="distanceType : ${race.distanceTypes}"
-                      data-th-text="#{distance.type.__${distanceType}__}">
-                  Triatlo
-                </span>
-                </div>
-              </div>
-
-              <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
-                <div class="tags has-addons">
-                <span class="tag is-medium" data-th-text="#{race.type.__${race.raceTypeGroup}__}">
-                  Triatlo
-                </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="level is-mobile" data-th-if="${race.distanceMetadata != null}">
-              <div class="level-item" data-th-each="leg : ${race.distanceMetadata.legs}">
-                <div class="level-item has-text-centered">
-                  <div>
-                    <p class="heading" data-th-if="${leg.coreSport != null}"
-                       data-th-text="#{core.sport.__${leg.coreSport}__}">Natação</p>
-                    <p class="title is-4"
-                       data-th-text="${#numbers.formatInteger(leg.length, 0, 'DEFAULT')}">600</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
+    <div class="columns is-multiline">
+      <div data-th-each="race : ${event.races}" class="column is-half-tablet is-one-third-desktop">
+        <div data-th-replace="~{fragments/list-items :: full-race(${race})}"></div>
       </div>
 
       <div class="column">
-        <div class="endurance-box is-branded-thin is-content-top">
+        <div class="endurance-box is-branded-thin is-stretched">
           <h2 class="title is-4" data-th-text="#{page.event.overview.section.support}">Help us
             complete the archive</h2>
           <div data-th-if="${language == 'pt'}">

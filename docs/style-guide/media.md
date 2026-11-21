@@ -2,129 +2,166 @@
 
 > Part of the [EnduranceTrio Style Guide](./index.md).
 
-`.endurance-media` is a CSS Grid version of Bulma's
-[media object](https://bulma.io/documentation/layout/media-object/). It places an image or a
-badge beside a block of content. Unlike Bulma's flexbox media object, the grid lets the left and
-right columns align on their own tracks, which keeps badges, dates and titles lined up across a
-list of items.
+`.endurance-media` is the project's media block. It extends Bulma's
+[media object](https://bulma.io/documentation/layout/media-object/), so it reuses Bulma's
+`.media-left` and `.media-content` element names and all of Bulma's media rules.
+
+It exists because the project adds a custom element, `.endurance-media-footer`. That element needs
+a project block to belong to; a `.endurance-media-footer` inside a plain `.media` would break the
+naming rules. The block also owns the `.is-stacked` modifier and the `--bulma-endurance-media-*`
+variables. Plain Bulma `.media` is still valid for a simple row with no footer and no stacked
+layout.
+
+By default the row is horizontal at every viewport. Add `.is-stacked` when the row should become a
+card: the left column turns into a full-width header on mobile, and the two columns sit on grid
+tracks on tablet and up.
 
 Source: `src/scss/layout/endurance-media.scss`. Its Sass variables have SassDoc comments.
 
 ## Structure
 
-| Class                      | Role                                                           |
-|----------------------------|----------------------------------------------------------------|
-| `.endurance-media`         | Grid container                                                 |
-| `.endurance-media-left`    | Left column: an image or a text badge                          |
-| `.endurance-media-content` | Content column: titles, text, and other blocks                 |
-| `.endurance-media-footer`  | Optional row at the bottom of the content column (tags, links) |
+| Class                     | Role                                                               |
+|---------------------------|--------------------------------------------------------------------|
+| `.endurance-media`        | Project media block; extends Bulma's `.media`                      |
+| `.media-left`             | Left column: contains a `.box` or `.image` (Bulma element)         |
+| `.media-content`          | Content column: titles, text and other blocks (Bulma element)      |
+| `.endurance-media-footer` | Optional row at the bottom of the content column (project element) |
+| `.is-stacked`             | Modifier: grid layout, stacked on mobile                           |
 
 ```html
 <div class="endurance-media">
-  <div class="endurance-media-left is-64x64">
-    <img src="/img/avatar.png" alt="Athlete photo">
+  <div class="media-left">
+    <div class="box is-64x64 has-background-grey-300"></div>
   </div>
-  <div class="endurance-media-content">
+  <div class="media-content">
     <p class="title is-5">Athlete name</p>
     <p class="subtitle is-6">Club, country</p>
-    <p class="endurance-media-footer">
-      <span class="tag is-swim is-light">Swim</span>
-    </p>
   </div>
 </div>
 ```
+
+## Naming
+
+The block is a project block, but the parts that are still Bulma's keep their Bulma names — the
+same pattern as `.endurance-navbar` with `.navbar-item`. `@extend .media` makes Bulma's descendant
+rules match `.media-left` and `.media-content`, so renaming them would only duplicate CSS. Only the
+footer, which Bulma does not have, is a new project element and takes the `endurance-media-`
+prefix. That element is the reason for the block prefix; the stacked modifier alone would have been
+enough to keep Bulma's `.media` name.
+
+Modifiers and helpers stay unprefixed: `is-stacked`, `is-64x64`, `is-og-320x167`,
+`has-text-wrapped`.
 
 ## Responsive behaviour
 
-- **Mobile:** the two columns stack. The left column takes the full width, with a bottom margin.
-- **Mobile with `.is-mobile`:** the two columns stay side by side. The left column keeps its
-  content width and loses the bottom margin, so a badge stays next to the content at every
-  viewport. The modifier mirrors `.columns.is-mobile` and `.level.is-mobile`.
-- **Tablet and up:** the left column is sized by its content (`auto`), and the content column fills
-  the remaining space (`1fr`).
-- **Footer:** the footer is pushed to the bottom of the content column. On mobile it gains a thin
-  top border and centred text, so it reads as a separate row.
-- **Long text:** the content column has `min-width: 0`, so long unbroken strings wrap instead of
-  pushing the layout wider.
+- **Default:** Bulma's horizontal flex row at every viewport. Left and content are separated by
+  Bulma's `--bulma-media-spacing` (1rem).
+- **`.is-stacked`:** CSS Grid, one column on mobile and `auto 1fr` on tablet and up. The left
+  column takes the full width on mobile; on tablet+ it is sized by its child and the content column
+  fills the remaining space.
+- **Stacked spacing:** `--bulma-endurance-media-gap` (1.5rem) is the column gap and the tablet+
+  row gap. On mobile the row gap is `--bulma-endurance-media-left-margin` (0.75rem); combined with
+  the left column's bottom margin of the same size, the effective vertical spacing is 1.5rem.
+  Bulma's adjacent-row border is suppressed in stacked mode.
+- **Footer:** pinned to the bottom of the content column when one is present. On mobile it gains a
+  thin top border and centred text.
+- **Long text:** opt in with `.has-text-wrapped` on `.media-content`; see
+  [Wrapping long text](#wrapping-long-text).
 
 ```html
-<div class="endurance-media is-mobile">
-  <div class="endurance-media-left p-0">
-    <div class="box is-outlined is-64x64">3</div>
+<div class="endurance-media is-stacked">
+  <div class="media-left">
+    <figure class="image is-og-320x167">
+      <img src="/img/article.jpg" alt="Article thumbnail">
+    </figure>
   </div>
-  <div class="endurance-media-content">
-    <p class="title is-5">Race title</p>
+  <div class="media-content">
+    <p class="title is-3">Article title</p>
+    <p class="endurance-media-footer">Published date</p>
   </div>
 </div>
 ```
 
-The `p-0` helper removes the left column's padding so the badge sits flush; the grid `column-gap`
-provides the spacing.
+## Wrapping long text
 
-## Left column sizing
-
-### Square pixel sizes
-
-`.is-{N}x{N}` fixes a square badge at N pixels. The available sizes are `16`, `24`, `32`, `48`,
-`64`, `96` and `128`. On tablet and up the height is fixed to N pixels and the aspect ratio is 1:
+`.media-content` is a flex item. Its default `min-width: auto` stops it shrinking below its longest
+unbreakable word, so a long URL can widen the row or create a horizontal scrollbar. Add the global
+`.has-text-wrapped` helper to the content column when it can contain such text:
 
 ```html
-<div class="endurance-media-left is-64x64"><img src="/img/icon.png" alt=""></div>
-<div class="endurance-media-left is-128x128"><img src="/img/logo.png" alt=""></div>
-```
-
-The list is set by the `$endurance-media-dimensions` Sass variable.
-
-### Aspect ratios
-
-| Class          | Result                                                       |
-|----------------|--------------------------------------------------------------|
-| `.is-square`   | `aspect-ratio: 1`                                            |
-| `.is-{W}by{H}` | Any ratio from Bulma's `$aspect-ratios`, such as `.is-16by9` |
-
-Ratio badges take the full column width, and their image fills the box with `object-fit: cover`.
-
-### Open Graph sizes
-
-`.is-og-1200x628`, `.is-og-600x314`, `.is-og-480x251` and `.is-og-320x167` give the standard
-social-share image proportions. Use them for article and event thumbnails:
-
-```html
-<div class="endurance-media-left is-og-320x167">
-  <img src="/img/article.jpg" alt="Article thumbnail">
+<div class="media">
+  <div class="media-left">…</div>
+  <div class="media-content has-text-wrapped">…</div>
 </div>
 ```
 
-### Minimum width
+It sets `min-width: 0` and `overflow-wrap: anywhere`, following Bulma's `has-text-*` helper
+pattern. It is defined in `helpers/endurance-text-wrapped.scss` and works on any text container,
+not just media. Leave it off rows that only hold short text so plain `.media` stays plain.
 
-`.is-min-width-4rem`, `.is-min-width-6rem` and `.is-min-width-8rem` keep a text badge at least that
-wide. Use them so badges with short labels line up in a list:
+## Sizing the left column
+
+`.media-left` is a layout slot, not the thing being sized. It has no size or ratio modifiers; put
+those on the child element instead:
+
+- **Text badge or avatar:** use `.box.is-{N}x{N}`. The sizes are defined in
+  `elements/endurance-box.scss` (see [Boxes and Cards](./boxes-and-cards.md)).
+- **Image:** use `.image.is-{N}x{N}` or `.image.is-{W}by{H}`. Bulma supplies the square pixel sizes
+  and its standard aspect ratios.
+- **Thumbnail with social-share proportions:** use `.image.is-og-*`, described below.
+
+This keeps sizing on the element that owns it and avoids a third, drifting list of sizes.
 
 ```html
-<div class="endurance-media-left is-min-width-6rem has-background-grey-300 has-text-centered">
-  <p class="title is-4">12-05</p>
-  <p class="subtitle is-6">2026</p>
+<div class="media-left">
+  <div class="box is-outlined is-64x64 is-size-5 has-text-weight-bold">3</div>
+</div>
+
+<div class="media-left">
+  <figure class="image is-64x64"><img src="/img/avatar.png" alt="Avatar"></figure>
+</div>
+```
+
+### Open Graph image sizes
+
+`.image.is-og-1200x628`, `.image.is-og-600x314`, `.image.is-og-480x251` and
+`.image.is-og-320x167` give the standard social-share proportions (~1.91:1). They are defined in
+`elements/endurance-image.scss`. On mobile the image fills the available width; on tablet and up it
+takes its fixed pixel size. The image fills the frame with `object-fit: cover`.
+
+```html
+<div class="media-left">
+  <figure class="image is-og-320x167">
+    <img src="/img/article.jpg" alt="Article thumbnail">
+  </figure>
 </div>
 ```
 
 ## Text badges
 
-A text badge is an `.endurance-media-left` without an image. Combine it with Bulma's colour
-helpers or the grey background helpers (see [Colors](./colors.md#grey-background-helpers)):
+A text badge is a `.box` inside `.media-left`. Combine it with Bulma's colour helpers or the grey
+background helpers (see [Colors](./colors.md#grey-background-helpers)):
 
 ```html
-<div class="endurance-media-left has-background-grey-600 has-text-white">
-  <p class="title is-4">Label</p>
+<div class="media-left">
+  <div class="box has-background-grey-600 has-text-white has-text-centered">
+    <p class="title is-4">Label</p>
+  </div>
 </div>
 ```
 
-The badge has `border-radius` from Bulma's `radius-large` and its padding comes from
-`$endurance-media-left-padding`.
+In the stacked variant the column centres its child and rounds/clips the outer edge. Use the box
+for the badge's own colour, padding and typography.
 
-## Choosing between Bulma's media object and this component
+## Choosing the variant
 
-| Need                                                                    | Use                          |
-|-------------------------------------------------------------------------|------------------------------|
-| A simple image-and-text row with no alignment across items              | Bulma `.media`               |
-| Aligned badges or dates in a list, a footer row, or responsive stacking | `.endurance-media`           |
-| A badge that must stay beside the content on mobile too                 | `.endurance-media.is-mobile` |
+| Need                                                                   | Use                           |
+|------------------------------------------------------------------------|-------------------------------|
+| A simple badge, avatar or date beside short text                       | `.media`                      |
+| A row that needs the footer or the project media variables             | `.endurance-media`            |
+| Aligned badges in a stacked list, a cropped thumbnail, or a footer row | `.endurance-media.is-stacked` |
+
+Choose between the default row and `.is-stacked`, not between competing media blocks. Plain
+`.media` is the Bulma original and stays available; use it when none of the project additions are
+needed. Do not put sizing modifiers on `.media-left`: size its `.box` or `.image` child. Add
+`.has-text-wrapped` to `.media-content` when the row can hold long text.

@@ -89,60 +89,35 @@
       <div data-th-unless="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
         <div class="columns is-desktop is-6 is-vcentered">
           <div class="column">
-            <a data-th-if="${featuredEventArticle != null}"
-               data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${featuredEventArticle.slug})}"
-               class="is-clickable"
-            >
-              <div class="endurance-card">
-                <div data-th-if="${featuredEventArticle.featuredImage != null}" class="card-image">
-                  <figure class="image">
-                    <img data-th-src="${featuredEventArticle.featuredImage}"
-                         data-th-alt="${featuredEventArticle.title}"
-                         alt="Article Title"/>
-                  </figure>
-                </div>
-                <div data-th-unless="${featuredEventArticle.featuredImage != null}" class="card-image">
-                  <figure class="image">
-                    <img data-th-src="@{/img/endurancetrio-open-graph.png}"
-                         data-th-alt="${featuredEventArticle.title}"
-                         alt="Article Title"/>
-                  </figure>
-                </div>
-                <div class="card-content">
-                  <div class="mb-3">
+            <div data-th-if="${featuredEventArticle != null}" class="card is-stretched">
+              <div data-th-if="${featuredEventArticle.featuredImage != null}" class="card-image">
+                <figure class="image">
+                  <img data-th-src="${featuredEventArticle.featuredImage}"
+                       data-th-alt="${featuredEventArticle.title}"
+                       alt="Article Title"/>
+                </figure>
+              </div>
+              <div data-th-unless="${featuredEventArticle.featuredImage != null}" class="card-image">
+                <figure class="image">
+                  <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+                       data-th-alt="${featuredEventArticle.title}"
+                       alt="Article Title"/>
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="mb-3">
+                  <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${featuredEventArticle.slug})}">
                     <p data-th-text="${featuredEventArticle.title}" class="title is-3"></p>
                     <p data-th-text="${featuredEventArticle.authorName}" class="subtitle is-5"></p>
-                  </div>
-                  <p data-th-utext="${featuredEventArticle.introText}" data-th-remove="tag"></p>
+                  </a>
                 </div>
+                <p data-th-utext="${featuredEventArticle.introText}" data-th-remove="tag"></p>
               </div>
-            </a>
+            </div>
           </div>
           <div class="column">
-            <div data-th-each="event : ${featuredEvents}" class="endurance-box is-branded-thin">
-              <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
-                 class="is-clickable"
-              >
-                <article class="media">
-                  <div class="media-left">
-                    <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}">
-                    </div>
-                  </div>
-                  <div class="media-content">
-                    <div class="content">
-                      <span data-th-text="${event.title}" class="title is-4"></span>
-                      <br>
-                      <span class="has-text-grey"
-                            data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
-                      ></span>
-                      <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}"><span class="tag is-link is-light" data-th-each="sportCode : ${event.sportCodes}" data-th-text="#{sport.__${sportCode}__}"
-                      >
-                      </span>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              </a>
+            <div data-th-each="event : ${featuredEvents}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
             </div>
           </div>
         </div>
@@ -161,10 +136,7 @@
       <div data-th-unless="${#lists.isEmpty(featuredArticles)}" data-th-remove="tag">
         <div class="columns is-multiline is-8">
           <div data-th-each="article : ${featuredArticles}" class="column is-half">
-            <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
-               class="is-clickable"
-            >
-              <div class="endurance-card">
+            <div class="card is-stretched">
                 <div data-th-if="${article.featuredImage != null}" class="card-image">
                   <figure class="image">
                     <img data-th-src="${article.featuredImage}"
@@ -181,13 +153,14 @@
                 </div>
                 <div class="card-content">
                   <div class="mb-3">
-                    <p data-th-text="${article.title}" class="title is-3"></p>
-                    <p data-th-text="${article.authorName}" class="subtitle is-5"></p>
+                    <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
+                      <p data-th-text="${article.title}" class="title is-3"></p>
+                      <p data-th-text="${article.authorName}" class="subtitle is-5"></p>
+                    </a>
                   </div>
                   <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
                 </div>
-              </div>
-            </a>
+            </div>
           </div>
         </div>
       </div>
@@ -211,24 +184,8 @@
             </figure>
           </div>
           <div class="column">
-            <div data-th-each="race : ${latestRaces}" class="endurance-box is-branded-thin">
-              <a data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}"
-                 class="is-clickable"
-              >
-                <article class="media">
-                  <div class="media-left">
-                    <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${race.date})}">
-                    </div>
-                  </div>
-                  <div class="media-content">
-                    <div class="content">
-                      <span data-th-text="${race.title}" class="title is-4"></span>
-                      <br>
-                      <span data-th-text="${race.subtitle}" class="subtitle is-6"></span>
-                    </div>
-                  </div>
-                </article>
-              </a>
+            <div data-th-each="race : ${latestRaces}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/list-items :: simple-race(${race})}"></div>
             </div>
           </div>
         </div>
@@ -248,35 +205,7 @@
       <div data-th-unless="${#lists.isEmpty(latestEvents)}" data-th-remove="tag">
         <div class="columns is-multiline">
           <div data-th-each="event : ${latestEvents}" class="column is-half">
-            <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
-               class="is-clickable"
-            >
-              <div class="endurance-box is-branded-thin is-content-top">
-                <article class="media">
-                  <div class="media-left">
-                    <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}">
-                    </div>
-                  </div>
-                  <div class="media-content">
-                    <div class="content">
-                      <span data-th-text="${event.title}" class="title is-4"></span>
-                      <br>
-                      <span class="has-text-grey"
-                            data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
-                      >
-                      </span>
-                      <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}">
-                        <span class="tag is-link is-light"
-                              data-th-each="sportCode : ${event.sportCodes}"
-                              data-th-text="#{sport.__${sportCode}__}"
-                        >
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </a>
+            <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
           </div>
         </div>
         <div class="buttons is-centered mt-6">
