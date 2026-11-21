@@ -33,12 +33,39 @@
   <section data-th-replace="~{fragments/event-hero :: event-hero(${language}, ${event}, ${year}, ${articlesCount}, 'insights')}"></section>
 
   <section class="section">
-    <h2 data-th-text="#{page.event.insights.title(${event.title()})}" class="title is-2">
-      Insights about Event Title
-    </h2>
+    <h2 data-th-text="#{page.event.insights.title(${event.title()})}" class="title is-2"></h2>
 
-    <div data-th-replace="~{fragments/insights-list :: insights-list(${language}, ${pagination}, ${articles}, '/events/' + ${year} + '/' + ${event.id()} + '/insights')}">
+    <div class="columns is-multiline">
+      <div data-th-each="article : ${articles}" class="column is-full">
+        <div data-th-replace="~{fragments/list-items :: insight-media(${article})}"></div>
+      </div>
     </div>
+
+    <nav class="pagination is-centered" role="navigation"
+         data-th-if="${pagination.totalPages() > 1}"
+         data-th-attr="aria-label=#{pagination.a11y.label}">
+      <a class="pagination-previous"
+         data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+         data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+         data-th-href="${pagination.hasPrevious()}
+              ? @{/{lang}/events/{year}/{id}/insights(lang=${language}, year=${year}, id=${event.id()}, page=${pagination.pageNumber() - 1})}
+              : null">
+        <span class="icon">
+          <i class="et et-chevron-double-left"></i>
+        </span>
+      </a>
+
+      <a class="pagination-next"
+         data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+         data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+         data-th-href="${pagination.hasNext()}
+              ? @{/{lang}/events/{year}/{id}/insights(lang=${language}, year=${year}, id=${event.id()}, page=${pagination.pageNumber() + 1})}
+              : null">
+        <span class="icon">
+          <i class="et et-chevron-double-right"></i>
+        </span>
+      </a>
+    </nav>
   </section>
 </main>
 

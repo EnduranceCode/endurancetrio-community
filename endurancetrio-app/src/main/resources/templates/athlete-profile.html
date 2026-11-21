@@ -341,29 +341,10 @@
     <div data-th-if="${!#lists.isEmpty(articles)}" class="container is-fullhd mt-6">
       <h2 data-th-text="#{page.athlete.profile.insights.title}" class="title is-2"></h2>
 
-      <div data-th-each="article : ${articles}" class="endurance-box is-branded-thin is-stretched">
-          <div class="endurance-media is-stacked">
-            <div class="media-left">
-              <figure class="image is-og-320x167">
-                <img data-th-src="${article.featuredImage}"
-                     data-th-alt="${article.title}"
-                     alt="Article Title"/>
-              </figure>
-            </div>
-            <div class="media-content has-text-wrapped">
-              <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
-                <div class="title is-3">
-                  <p data-th-text="${article.title}"></p>
-                </div>
-                <div class="subtitle is-5 mb-4">
-                  <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
-                </div>
-              </a>
-              <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
-                <p data-th-text="${#temporals.format(article.publishedDate.toLocalDate(), 'LONG')}"></p>
-              </div>
-            </div>
-          </div>
+      <div class="columns is-multiline">
+        <div data-th-each="article : ${articles}" class="column is-full">
+          <div data-th-replace="~{fragments/list-items :: insight-media(${article})}"></div>
+        </div>
       </div>
     </div>
   </section>

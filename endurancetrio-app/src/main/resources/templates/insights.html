@@ -29,21 +29,59 @@
 
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
-<main class="section">
-  <h1 data-th-text="#{page.insights.title}" class="title is-1">
-    Insights
-  </h1>
-
-  <div data-th-if="${#lists.isEmpty(articles)}" data-th-remove="tag">
-    <div class="endurance-box is-branded-thin has-text-centered">
-      <p data-th-text="#{page.insights.empty}" class="title is-4 m-4"></p>
+<main>
+  <section class="hero has-background-grey-700">
+    <div class="hero-body">
+      <div class="container is-fullhd">
+        <h1 data-th-text="#{page.insights.title}" class="title is-1"></h1>
+        <p data-th-text="#{page.insights.subtitle}" class="subtitle is-3">
+          Events, races, and results
+        </p>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div data-th-unless="${#lists.isEmpty(articles)}" data-th-remove="tag">
-    <div data-th-replace="~{fragments/insights-list :: insights-list(${language}, ${pagination}, ${articles}, '/insights')}">
+  <section class="section">
+    <div data-th-if="${#lists.isEmpty(articles)}" data-th-remove="tag">
+      <div class="endurance-box is-branded-thin has-text-centered">
+        <p data-th-text="#{page.insights.empty}" class="title is-4 m-4"></p>
+      </div>
     </div>
-  </div>
+
+    <div data-th-unless="${#lists.isEmpty(articles)}" data-th-remove="tag">
+      <div class="columns is-multiline">
+        <div data-th-each="article : ${articles}" class="column is-full">
+          <div data-th-replace="~{fragments/list-items :: insight-media(${article})}"></div>
+        </div>
+      </div>
+
+      <nav class="pagination is-centered" role="navigation"
+           data-th-if="${pagination.totalPages() > 1}"
+           data-th-attr="aria-label=#{pagination.a11y.label}">
+        <a class="pagination-previous"
+           data-th-classappend="${!pagination.hasPrevious()} ? 'is-disabled'"
+           data-th-attr="disabled=${!pagination.hasPrevious()} ? 'disabled' : null"
+           data-th-href="${pagination.hasPrevious()}
+                ? @{/{lang}/insights(lang=${language}, page=${pagination.pageNumber() - 1})}
+                : null">
+          <span class="icon">
+            <i class="et et-chevron-double-left"></i>
+          </span>
+        </a>
+
+        <a class="pagination-next"
+           data-th-classappend="${!pagination.hasNext()} ? 'is-disabled'"
+           data-th-attr="disabled=${!pagination.hasNext()} ? 'disabled' : null"
+           data-th-href="${pagination.hasNext()}
+                ? @{/{lang}/insights(lang=${language}, page=${pagination.pageNumber() + 1})}
+                : null">
+          <span class="icon">
+            <i class="et et-chevron-double-right"></i>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </section>
 </main>
 
 <footer data-th-replace="~{fragments/footer :: footer}"></footer>

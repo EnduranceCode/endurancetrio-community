@@ -112,5 +112,66 @@
   <p data-th-text="${race.title}" class="title is-5"></p>
   <p data-th-text="${race.subtitle}" class="subtitle is-6"></p>
 </div>
+
+<div data-th-fragment="insight-card(article)" data-th-remove="tag">
+  <article class="card is-stretched">
+    <div data-th-if="${article.featuredImage != null}" class="card-image">
+      <figure class="image">
+        <img data-th-src="${article.featuredImage}"
+             data-th-alt="${article.title}"
+             alt="Article Title"/>
+      </figure>
+    </div>
+    <div data-th-unless="${article.featuredImage != null}" class="card-image">
+      <figure class="image">
+        <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+             data-th-alt="${article.title}"
+             alt="Article Title"/>
+      </figure>
+    </div>
+    <div class="card-content">
+      <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
+        <div class="mb-3">
+          <p data-th-text="${article.title}" class="title is-3"></p>
+          <p data-th-text="${article.authorName}" class="subtitle is-5"></p>
+        </div>
+      </a>
+      <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+    </div>
+    <footer class="card-footer">
+      <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}"
+         data-th-text="#{page.insights.detail.read.more}"
+         class="card-footer-item">
+      </a>
+    </footer>
+  </article>
+</div>
+
+<div data-th-fragment="insight-media(article)" data-th-remove="tag">
+  <div class="endurance-box is-branded-thin is-stretched">
+    <div class="endurance-media is-stacked">
+      <div class="media-left">
+        <figure class="image is-og-320x167">
+          <img data-th-src="${article.featuredImage != null} ? ${article.featuredImage} : @{/img/endurancetrio-open-graph.png}"
+               data-th-alt="${article.title}"
+               alt="Article Title"/>
+        </figure>
+      </div>
+      <div class="media-content has-text-wrapped">
+        <a data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${article.slug})}">
+          <div class="title is-3 mb-2">
+            <p data-th-text="${article.title}"></p>
+          </div>
+          <div class="subtitle is-4 mb-4">
+            <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
+          </div>
+        </a>
+        <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
+          <p data-th-text="${#temporals.format(article.publishedDate.toLocalDate(), 'LONG')}"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
