@@ -86,8 +86,8 @@
     <frontend-maven-plugin.version>2.0.0</frontend-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
     <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
-    <node.version>v24.15.0</node.version>
-    <npm.version>11.12.1</npm.version>
+    <node.version>v26.13.1</node.version>
+    <npm.version>11.20.0</npm.version>
     <springdoc.version>3.2.1</springdoc.version>
     <!-- Override Boot's managed Tomcat 11.0.27 (CVEs affect through 11.0.27;
          11.0.28 was never released, fix is in 11.0.29). Remove this property
