@@ -2,14 +2,17 @@
 
 > Part of the [EnduranceTrio Style Guide](./index.md).
 
-`.endurance-box` and `.endurance-card` are EnduranceTrio versions of Bulma's
-[box](https://bulma.io/documentation/elements/box/) and
-[card](https://bulma.io/documentation/components/card/). Both extend the Bulma class, so every
-Bulma modifier and child element still works. What they add is the branded colour stripe, height
-presets for hero-like blocks, and column layouts that fill their height. The box also gains light
-and outlined variants plus square sizes, and those work on a plain `.box` too.
+`.endurance-box` is EnduranceTrio's version of Bulma's
+[box](https://bulma.io/documentation/elements/box/). It extends `.box`, so every Bulma modifier and
+child element still works, and adds the branded colour stripe plus height presets for hero-like
+blocks. It also gains light and outlined variants and square sizes, and those work on a plain `.box`
+too.
 
-Source: `src/scss/elements/endurance-box.scss` and `src/scss/components/endurance-card.scss`.
+Cards use plain Bulma [cards](https://bulma.io/documentation/components/card/) with the global
+`.is-stretched` helper: the project adds no custom card element or default card style, so there is
+no `.endurance-card` block.
+
+Source: `src/scss/elements/endurance-box.scss` and `src/scss/helpers/endurance-stretched.scss`.
 
 ## Endurance Box
 
@@ -110,75 +113,79 @@ A sized box has no padding, so keep its content short: a rank, a count, or an ic
 a different axis from the height presets above. Do not combine `is-{N}x{N}` with `.is-small`,
 `.is-medium`, `.is-large` or the viewport-height presets, because those set `min-height` and win.
 
-### Inside columns
+## Stretched blocks
 
-A box placed directly in a Bulma `.column`, or in an `<a>` that is a direct child of a column,
-stretches to the full height of the column. Use this to line up a row of boxes:
-
-```html
-<div class="columns">
-  <div class="column">
-    <a href="/events" class="is-clickable">
-      <div class="endurance-box is-branded-thin">…</div>
-    </a>
-  </div>
-  <div class="column">
-    <div class="endurance-box is-branded-thin">…</div>
-  </div>
-</div>
-```
-
-The `is-clickable` class on the link is Bulma's helper (it sets a pointer cursor). The box styles
-do not depend on it.
-
-## Endurance Card
-
-`.endurance-card` extends `.card`. Use it for an image-and-text tile, such as an article or event
-teaser. It keeps all Bulma card parts (`.card-image`, `.card-content`, `.card-footer`).
-
-```html
-<div class="endurance-card">
-  <div class="card-image">
-    <figure class="image">
-      <img src="/img/endurancetrio-open-graph.png" alt="Article title">
-    </figure>
-  </div>
-  <div class="card-content">
-    <p class="title is-3">Article title</p>
-    <p class="subtitle is-5">Author name</p>
-  </div>
-</div>
-```
-
-Inside a Bulma `.column`, a card becomes a flex column that fills the column height, and
-`.card-content` grows to take the spare space. Cards in a row therefore finish at the same height
-even when their text lengths differ:
+`.is-stretched` is a global helper for boxes and cards that must finish at the same height in a row
+of columns. It sets `height: 100%` and a flex column layout on the block; Bulma's columns already
+give each column the row's height.
 
 ```html
 <div class="columns">
   <div class="column">
-    <a href="/insights/slug" class="is-clickable">
-      <div class="endurance-card">…</div>
-    </a>
+    <div class="endurance-box is-branded-thin is-stretched">…</div>
+  </div>
+  <div class="column">
+    <div class="card is-stretched">…</div>
   </div>
 </div>
 ```
+
+The helper works on `.box`, `.endurance-box` and `.card`. It is not tied to any one of them.
+
+Links live inside the stretched block in their normal containers (typically the media or header),
+so only that part is clickable and the rest of the content remains selectable. Do not wrap the
+block in an `<a>`: that wrapper breaks the equal-height layout, and nested links are invalid
+HTML. The insights list card is an example, with a title link and a separate "read more" footer
+link.
+
+`is-clickable` is Bulma's pointer-cursor helper; add it to a link that should show a pointer.
+
+## Cards
+
+Use a plain Bulma `.card` for an image-and-text tile, such as an article or event teaser. Add
+`.is-stretched` when cards in a column row must finish at the same height; `.card-content` then
+grows to take the spare space.
+
+```html
+<div class="columns">
+  <div class="column">
+    <div class="card is-stretched">
+      <a href="/insights/slug" class="is-clickable">
+        <div class="card-image">
+          <figure class="image">
+            <img src="/img/endurancetrio-open-graph.png" alt="Article title">
+          </figure>
+        </div>
+        <div class="card-content">
+          <p class="title is-3">Article title</p>
+          <p class="subtitle is-5">Author name</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+```
+
+All Bulma card parts (`.card-image`, `.card-content`, `.card-footer`) still work. There is no
+`.endurance-card`: the only project rule for cards is the column height and link layout, which
+`.is-stretched` provides on the Bulma block. See [Stretched blocks](#stretched-blocks) for the
+linked-card pattern and the multi-link exception.
 
 ## Choosing between them
 
-| Need                                                  | Use               |
-|-------------------------------------------------------|-------------------|
-| A branded container for text, lists or a single block | `.endurance-box`  |
-| An image on top with title and text, as a teaser      | `.endurance-card` |
-| A plain Bulma box without the brand stripe            | `.box`            |
+| Need                                                  | Use                 |
+|-------------------------------------------------------|---------------------|
+| A branded container for text, lists or a single block | `.endurance-box`    |
+| An image on top with title and text, as a teaser      | `.card`             |
+| A plain Bulma box without the brand stripe            | `.box`              |
+| Equal heights in a row                                | add `.is-stretched` |
 
 ## Expand button
 
 `.expand` and `.close` are shared toggle buttons used by the expand behaviour
-(`js/endurance-expand.js`).
-They render a chevron-down (`.expand`) or chevron-up (`.close`) icon, are round, and are floated to
-the top-right corner when placed directly inside a `.box` or `.endurance-box`. They are static
-otherwise, e.g. inside a table cell.
+(`js/endurance-expand.js`). They render a chevron-down (`.expand`) or chevron-up (`.close`) icon,
+are round, and are floated to the top-right corner when placed directly inside a `.box`
+or `.endurance-box`. They are static otherwise, e.g. inside a table cell.
 
 ```html
 <div class="endurance-box">

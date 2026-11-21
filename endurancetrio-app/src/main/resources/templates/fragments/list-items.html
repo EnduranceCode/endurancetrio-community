@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+  -->
+
+<html data-th-lang="${#locale.language}" lang="en" class="has-endurance-navbar-fixed-top">
+<head>
+  <title>List Items</title>
+</head>
+
+<body>
+<article data-th-fragment="simple-event(event)" class="endurance-box is-branded-thin is-stretched">
+  <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
+     class="is-clickable">
+    <div class="media">
+      <div class="media-left">
+        <div data-th-replace="~{fragments/utilities :: box-date(date=${event.startDate}, pattern='dd-MM-yyyy')}"></div>
+      </div>
+      <div class="media-content has-text-wrapped">
+        <p data-th-text="${event.title}" class="title is-4"></p>
+        <p class="subtitle is-6">
+          <span data-th-replace="~{fragments/utilities :: location(${event.city}, ${event.county}, ${event.district})}">
+          </span>
+        </p>
+      </div>
+    </div>
+  </a>
+</article>
+
+<article data-th-fragment="simple-race(race)" class="endurance-box is-branded-thin is-stretched">
+  <a data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}">
+    <div class="media">
+      <div class="media-left">
+        <div data-th-replace="~{fragments/utilities :: box-date(date=${race.date}, pattern='dd-MM-yyyy')}"></div>
+      </div>
+      <div class="media-content has-text-wrapped">
+        <div data-th-replace="~{this :: race-titles(race=${race})}"></div>
+      </div>
+    </div>
+  </a>
+</article>
+
+<article data-th-fragment="full-race(race)" class="endurance-box is-branded-thin is-stretched">
+  <a data-th-href="@{/{language}/events/{year}/{eventId}/results/{raceId}(language=${language}, year=${year}, eventId=${event.id()}, raceId=${race.id()})}">
+    <div class="media mb-5">
+      <div class="media-left">
+        <div data-th-replace="~{fragments/utilities :: box-date(date=${race.date}, pattern='dd-MMM')}"></div>
+      </div>
+      <div class="media-content has-text-wrapped">
+        <div data-th-replace="~{this :: race-titles(race=${race})}"></div>
+      </div>
+    </div>
+  </a>
+
+  <div class="level is-mobile">
+    <div data-th-if="${!#lists.isEmpty(race.sports)}" class="level-item">
+      <div class="tags has-addons">
+        <span data-th-each="sport : ${race.sports}" data-th-text="#{sport.__${sport}__}" class="tag is-outlined"></span>
+      </div>
+    </div>
+
+    <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
+      <div class="tags has-addons">
+        <span data-th-each="distanceType : ${race.distanceTypes}"
+              data-th-text="#{distance.type.__${distanceType}__}"
+              class="tag is-outlined">
+        </span>
+      </div>
+    </div>
+
+    <div class="level-item" data-th-if="${!#lists.isEmpty(race.distanceTypes)}">
+      <div class="tags has-addons">
+        <span data-th-text="#{race.type.__${race.raceTypeGroup}__}" class="tag is-outlined"></span>
+      </div>
+    </div>
+  </div>
+
+  <div data-th-if="${race.distanceMetadata != null}" class="level is-mobile mt-auto">
+    <div data-th-each="leg : ${race.distanceMetadata.legs}" class="level-item">
+      <div class="level-item has-text-centered">
+        <div>
+          <p data-th-if="${leg.coreSport != null}" data-th-text="#{core.sport.__${leg.coreSport}__}" class="heading">
+          </p>
+          <p data-th-text="${#numbers.formatInteger(leg.length, 0, 'DEFAULT')}" class="title is-4"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<div data-th-fragment="race-titles(race)" data-th-remove="tag">
+  <p data-th-if="${race.event != null && race.event.title != race.title}"
+     data-th-text="${race.event.title}"
+     class="subtitle is-7">
+  </p>
+  <p data-th-text="${race.title}" class="title is-5"></p>
+  <p data-th-text="${race.subtitle}" class="subtitle is-6"></p>
+</div>
+</body>
+</html>

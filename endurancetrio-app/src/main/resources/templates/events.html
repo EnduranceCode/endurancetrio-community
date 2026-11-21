@@ -30,7 +30,7 @@
 <nav data-th-replace="~{fragments/main-navbar :: main-navbar(${metadata})}"></nav>
 
 <main>
-  <section class="hero has-background-grey-300">
+  <section class="hero has-background-grey-700">
     <div class="hero-body">
       <div class="container is-fullhd">
         <h1 data-th-text="#{page.events.title}" class="title is-1">Events</h1>
@@ -167,32 +167,7 @@
 
     <div class="columns is-multiline">
       <div data-th-each="event : ${events}" class="column is-full">
-        <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}">
-          <article class="endurance-box is-branded-thin mb-3">
-            <div class="media">
-              <div class="media-left">
-                <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}"></div>
-              </div>
-              <div class="media-content">
-                <div class="content">
-                  <p>
-                    <span data-th-text="${event.title}" class="title is-4"></span>
-                    <br>
-                    <span data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
-                          class="has-text-grey">
-                    </span>
-                  </p>
-                  <div data-th-if="${!#lists.isEmpty(event.sportCodes)}" class="tags mt-2">
-                    <span data-th-each="sportCode : ${event.sportCodes}"
-                          data-th-text="#{sport.__${sportCode}__}"
-                          class="tag is-link is-light">
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-        </a>
+        <div data-th-replace="~{fragments/list-items :: simple-event(${event})}"></div>
       </div>
     </div>
 
@@ -218,28 +193,26 @@
         </span>
       </a>
 
-      <ul class="pagination-list"
-          data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}">
+      <ul data-th-with="firstPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[0]}, lastPage=${pageWindow.pages().isEmpty() ? null : pageWindow.pages()[pageWindow.pages().size() - 1]}"
+          class="pagination-list">
         <li data-th-if="${firstPage != null}">
           <a data-th-href="${paginationUrls.get(firstPage)}"
              data-th-text="${firstPage + 1}"
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', firstPage + 1)}"
              data-th-classappend="${firstPage == pagination.pageNumber()} ? 'is-current'"
              class="pagination-link">
-            1
           </a>
         </li>
         <li data-th-if="${pageWindow.gapBefore()}">
           <span class="pagination-ellipsis pagination-link">&hellip;</span>
         </li>
-        <li data-th-each="p : ${pageWindow.pages()}"
-            data-th-if="${p != firstPage and p != lastPage}">
-          <a data-th-href="${paginationUrls.get(p)}"
-             data-th-text="${p + 1}"
-             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', p + 1)}"
-             data-th-classappend="${p == pagination.pageNumber()} ? 'is-current'"
+        <li data-th-each="page : ${pageWindow.pages()}"
+            data-th-if="${page != firstPage and page != lastPage}">
+          <a data-th-href="${paginationUrls.get(page)}"
+             data-th-text="${page + 1}"
+             data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', page + 1)}"
+             data-th-classappend="${page == pagination.pageNumber()} ? 'is-current'"
              class="pagination-link">
-            1
           </a>
         </li>
         <li data-th-if="${pageWindow.gapAfter()}">
@@ -251,7 +224,6 @@
              data-th-attr="aria-label=${#messages.msg('pagination.a11y.goto', lastPage + 1)}"
              data-th-classappend="${lastPage == pagination.pageNumber()} ? 'is-current'"
              class="pagination-link">
-            1
           </a>
         </li>
       </ul>

@@ -21,14 +21,25 @@
 @charset "utf-8";
 
 @use 'bulma/sass/utilities/initial-variables' as iv;
-@use 'bulma/sass/components/card';
 
-.#{iv.$class-prefix}endurance-card {
-  @extend .#{iv.$class-prefix}card;
-}
-
-.#{iv.$class-prefix}column > .#{iv.$class-prefix}endurance-card,
-.#{iv.$class-prefix}column > a > .#{iv.$class-prefix}endurance-card {
+/// Fills the column height so cards and boxes in a row finish at the same
+/// height. Works on any block; it is not tied to `.box` or `.card`.
+///
+/// Links stay inside their normal containers (typically the media/header), so
+/// only that part is clickable; the block itself is not a link and the rest of
+/// its content remains selectable.
+///
+/// @example html - Equal-height card
+///   <div class="card is-stretched">
+///     <div class="card-image">…</div>
+///     <div class="card-content">
+///       <a href="/insights/slug" class="is-clickable">…</a>
+///     </div>
+///   </div>
+///
+/// @group helpers
+/// @access public
+.#{iv.$class-prefix}#{iv.$helpers-prefix}stretched {
   display: flex;
   flex-direction: column;
   height: 100%;

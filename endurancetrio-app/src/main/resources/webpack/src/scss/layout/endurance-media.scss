@@ -20,12 +20,10 @@
 
 @charset "utf-8";
 
-@use 'sass:list';
-
 @use 'bulma/sass/utilities/css-variables' as cv;
 @use 'bulma/sass/utilities/initial-variables' as iv;
-@use 'bulma/sass/utilities/extends';
 @use 'bulma/sass/utilities/mixins' as mx;
+@use 'bulma/sass/layout/media';
 
 /// Gap between the left column and content on tablet+.
 /// @group endurance-media
@@ -41,253 +39,43 @@ $endurance-media-gap: 1.5rem !default;
 /// @see $endurance-media-gap
 $endurance-media-left-margin: 0.75rem !default;
 
-/// Padding inside `.endurance-media-left` text badges.
-/// Equivalent to Bulma's `.p-3` helper class.
-/// @group endurance-media
-/// @type {Length}
-/// @access public
-/// @see $endurance-media-left-margin
-$endurance-media-left-padding: 0.75rem !default;
-
-/// Square pixel-size variants available for `.endurance-media-left`.
-/// Generates `is-{N}x{N}` modifiers.
-/// @group endurance-media
-/// @type {List}
-/// @access public
-$endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
-
-/// CSS Grid media-object layout — two-column on tablet+, stacked on mobile.
+/// Project media block. Extends Bulma's `.media`, so `.media-left` and
+/// `.media-content` keep their standard names and styles. The default is a
+/// horizontal row at every viewport; add `.is-stacked` for the stacked card.
+/// Size the child of `.media-left` with `.box` or `.image`, not the column.
 ///
-/// Wraps Bulma's `.media` concept with CSS Grid for stricter alignment.
-/// On mobile the left column takes full width; on tablet+ it shrinks to
-/// `auto` while the content column fills the remaining space (`1fr`).
-///
-/// @example html - Basic usage
+/// @example html - Horizontal row (default)
 ///   <div class="endurance-media">
-///     <div class="endurance-media-left">
-///       <img src="avatar.jpg" alt="Avatar">
+///     <div class="media-left">
+///       <div class="box is-64x64"></div>
 ///     </div>
-///     <div class="endurance-media-content">
-///       <p class="title is-3">Name</p>
-///       <p class="subtitle is-5">Description</p>
-///     </div>
-///   </div>
-///
-/// @group endurance-media
-/// @access public
-.#{iv.$class-prefix}endurance-media {
-  @extend %block;
-  @include cv.register-vars(
-    (
-      'endurance-media-gap': #{$endurance-media-gap},
-      'endurance-media-left-margin': #{$endurance-media-left-margin},
-      'endurance-media-left-padding': #{$endurance-media-left-padding},
-    )
-  );
-  column-gap: cv.getVar('endurance-media-gap');
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: cv.getVar('endurance-media-gap');
-
-  @include mx.mobile {
-    row-gap: cv.getVar('endurance-media-left-margin');
-  }
-
-  @include mx.tablet {
-    grid-template-columns: auto 1fr;
-  }
-}
-
-/// Keeps the two-column grid on every viewport.
-///
-/// Mirrors Bulma's `.columns.is-mobile` and `.level.is-mobile`: the layout
-/// stays horizontal on mobile instead of stacking. The left column keeps its
-/// content width and loses the mobile bottom margin.
-///
-/// @example html - Badge beside content on every viewport
-///   <div class="endurance-media is-mobile">
-///     <div class="endurance-media-left p-0">
-///       <div class="box is-outlined is-64x64">3</div>
-///     </div>
-///     <div class="endurance-media-content">
+///     <div class="media-content">
 ///       <p class="title is-5">Race title</p>
 ///     </div>
 ///   </div>
 ///
 /// @group endurance-media
 /// @access public
-.#{iv.$class-prefix}endurance-media.#{iv.$class-prefix}is-mobile {
-  @include mx.mobile {
-    grid-template-columns: auto 1fr;
-
-    > .#{iv.$class-prefix}endurance-media-left {
-      margin-bottom: 0;
-      width: auto;
-    }
-  }
-}
-
-/// Left column — image or text badge. Behaves like Bulma's `.media-left`.
-///
-/// On mobile the column takes full width; on tablet+ it is sized by its
-/// content. Supports square pixel sizes (`is-64x64`), aspect ratios
-/// (`is-16by9`), OpenGraph sizes (`is-og-320x167`), and min-width
-/// variants (`is-min-width-4rem`).
-///
-/// Images inside the left column are aligned top, clipped to rounded
-/// corners, and fill the available space with `object-fit: cover`.
-///
-/// @example html - Image badge
-///   <div class="endurance-media-left is-og-320x167">
-///     <img src="photo.jpg" alt="Photo">
-///   </div>
-///
-/// @example html - Text badge
-///   <div class="endurance-media-left has-background-grey-300">
-///     <p class="title is-3">12-05</p>
-///     <p class="subtitle is-4">2026</p>
-///   </div>
-///
-/// @example html - Text badge with min-width
-///   <div class="endurance-media-left is-min-width-6rem">
-///     <p class="title is-3">Label</p>
-///   </div>
-///
-/// @group endurance-media
-/// @access public
-.#{iv.$class-prefix}endurance-media-left {
-  align-self: start;
-  border-radius: cv.getVar('radius-large');
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: cv.getVar('endurance-media-left-padding');
-
-  @include mx.mobile {
-    margin-bottom: cv.getVar('endurance-media-left-margin');
-    max-width: 100%;
-    width: 100%;
-  }
-
-  img,
-  .#{iv.$class-prefix}has-ratio {
-    height: 100%;
-    width: 100%;
-  }
-
-  img {
-    object-fit: cover;
-  }
-
-  // Pixel sizes
-  @each $dimension in $endurance-media-dimensions {
-    &.#{iv.$class-prefix}is-#{$dimension}x#{$dimension} {
-      aspect-ratio: 1;
-
-      @include mx.tablet {
-        height: $dimension * 1px;
-        width: $dimension * 1px;
-      }
-    }
-  }
-
-  // Aspect ratios
-  &.#{iv.$class-prefix}is-square {
-    aspect-ratio: 1;
-  }
-
-  @each $pair in iv.$aspect-ratios {
-    $w: list.nth($pair, 1);
-    $h: list.nth($pair, 2);
-
-    &.#{iv.$class-prefix}is-#{$w}by#{$h} {
-      aspect-ratio: #{$w} / #{$h};
-      width: 100%;
-    }
-  }
-
-  // OpenGraph ratio pixel sizes (~1.91:1)
-  &.#{iv.$class-prefix}is-og-1200x628 {
-    aspect-ratio: 1200 / 628;
-
-    @include mx.tablet {
-      height: 628px;
-      width: 1200px;
-    }
-  }
-
-  &.#{iv.$class-prefix}is-og-600x314 {
-    aspect-ratio: 1200 / 628;
-
-    @include mx.tablet {
-      height: 314px;
-      width: 600px;
-    }
-  }
-
-  &.#{iv.$class-prefix}is-og-480x251 {
-    aspect-ratio: 1200 / 628;
-
-    @include mx.tablet {
-      height: 251px;
-      width: 480px;
-    }
-  }
-
-  &.#{iv.$class-prefix}is-og-320x167 {
-    aspect-ratio: 1200 / 628;
-
-    @include mx.tablet {
-      height: 167px;
-      width: 320px;
-    }
-  }
-
-  &:has(img) {
-    justify-content: flex-start;
-    overflow: hidden;
-    padding: 0;
-  }
-
-  // Min-width variants for text badges
-  &.#{iv.$class-prefix}is-min-width-4rem {
-    min-width: 4rem;
-  }
-
-  &.#{iv.$class-prefix}is-min-width-6rem {
-    min-width: 6rem;
-  }
-
-  &.#{iv.$class-prefix}is-min-width-8rem {
-    min-width: 8rem;
-  }
-}
-
-/// Content column — flex column that fills the remaining grid space.
-/// Behaves like Bulma's `.media-content`. The `min-width: 0` prevents
-/// long unbreakable content from overflowing the `1fr` track.
-///
-/// @group endurance-media
-/// @access public
-.#{iv.$class-prefix}endurance-media-content {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+.#{iv.$class-prefix}endurance-media {
+  @extend .#{iv.$class-prefix}media;
+  @include cv.register-vars(
+    (
+      'endurance-media-gap': #{$endurance-media-gap},
+      'endurance-media-left-margin': #{$endurance-media-left-margin},
+    )
+  );
 }
 
 /// Footer row inside the content column — pinned to the bottom via
-/// `margin-top: auto`. On mobile, gains a top border and centered text
-/// to visually separate from the main content.
+/// `margin-top: auto`. On mobile, gains a top border and centered text.
 ///
 /// @example html - Footer with tags
-///   <div class="endurance-media">
-///     <div class="endurance-media-left is-64x64">
-///       <img src="icon.png" alt="Icon">
+///   <div class="endurance-media is-stacked">
+///     <div class="media-left">
+///       <figure class="image is-64x64"><img src="/img/icon.png" alt="Icon"></figure>
 ///     </div>
-///     <div class="endurance-media-content">
+///     <div class="media-content">
 ///       <p class="title is-3">Title</p>
-///       <p class="subtitle is-5">Description</p>
 ///       <p class="endurance-media-footer">
 ///         <span class="tag is-link is-light">Tag</span>
 ///       </p>
@@ -303,5 +91,95 @@ $endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
     border-top: 1px solid cv.getVar('border-weak');
     padding-top: 0.75rem;
     text-align: center;
+  }
+}
+
+// A footer only pins when its parent is a flex column of the row's height.
+// Bulma's `.media` sets `align-items: flex-start`, which survives `@extend`
+// and, on the `.is-stacked` grid, keeps the content column at its own content
+// height — so `margin-top: auto` on the footer has no free space to absorb.
+// Stretch the column to the row before pinning the footer to its bottom.
+// Scoped to content columns that actually contain a footer.
+.#{iv.$class-prefix}endurance-media
+  .#{iv.$class-prefix}media-content:has(> .#{iv.$class-prefix}endurance-media-footer) {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+/// Stacked media card — two-column grid on tablet+, stacked on mobile.
+///
+/// The left column takes the full width on mobile; on tablet+ it shrinks to
+/// `auto` while the content column fills the remaining space (`1fr`). Unlike
+/// the default horizontal row, the left column is styled as a badge here:
+/// centred, rounded, and with images cropped to fill the space.
+///
+/// @example html - Stacked article card
+///   <div class="endurance-media is-stacked">
+///     <div class="media-left">
+///       <figure class="image is-og-320x167">
+///         <img src="/img/article.jpg" alt="Article thumbnail">
+///       </figure>
+///     </div>
+///     <div class="media-content">
+///       <p class="title is-3">Title</p>
+///       <p class="endurance-media-footer">Published date</p>
+///     </div>
+///   </div>
+///
+/// @group endurance-media
+/// @access public
+.#{iv.$class-prefix}endurance-media.#{iv.$class-prefix}is-stacked {
+  column-gap: cv.getVar('endurance-media-gap');
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: cv.getVar('endurance-media-gap');
+
+  @include mx.mobile {
+    row-gap: cv.getVar('endurance-media-left-margin');
+  }
+
+  @include mx.tablet {
+    grid-template-columns: auto 1fr;
+  }
+
+  // Bulma separates adjacent `.media` rows with a top border; stacked cards
+  // provide their own separation through the surrounding box.
+  & + .#{iv.$class-prefix}endurance-media,
+  .#{iv.$class-prefix}endurance-media + & {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  > .#{iv.$class-prefix}media-left {
+    align-items: center;
+    align-self: start;
+    border-radius: cv.getVar('radius-large');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-inline-end: 0;
+
+    @include mx.mobile {
+      margin-bottom: cv.getVar('endurance-media-left-margin');
+      max-width: 100%;
+      width: 100%;
+    }
+
+    img,
+    .#{iv.$class-prefix}has-ratio {
+      height: 100%;
+      width: 100%;
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    &:has(img) {
+      justify-content: flex-start;
+      overflow: hidden;
+    }
   }
 }

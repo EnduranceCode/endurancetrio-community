@@ -46,7 +46,7 @@ else is Bulma's:
 | Role                | EnduranceTrio pattern                  | Example                              |
 |---------------------|----------------------------------------|--------------------------------------|
 | Block               | `endurance-{block}`                    | `.endurance-box`, `.endurance-media` |
-| Element             | `endurance-{block}-{element}`          | `.endurance-media-left`              |
+| Element             | `endurance-{block}-{element}`          | `.endurance-media-footer`            |
 | Modifier            | `is-{modifier}`                        | `.is-branded-thin`, `.is-swim`       |
 | Feature modifier    | `has-{feature}`                        | `.has-plain-heading`                 |
 | State               | `is-{state}`                           | `.is-active`, `.is-sorted-asc`       |
@@ -79,11 +79,21 @@ because project classes interpolate it too (see [rule 10](#rules)).
 
 ## Rules
 
-1. **Project blocks are `endurance-{block}`.** Use a lowercase, singular, hyphenated noun
-   (`.endurance-box`, `.endurance-media`). A block is the thing a template composes with.
+1. **A Bulma block gets `endurance-` only when the project changes it.** Add the prefix when the
+   project changes the block's default appearance (`.endurance-box` adds the brand stripe) or adds
+   a custom element (`.endurance-media` adds `.endurance-media-footer`). Keep Bulma's name when the
+   project only adds modifiers, states or helpers (`.tag.is-swim`, `.image.is-og-320x167`), or when
+   the rule depends on context such as a parent or wrapper: make it a modifier on the Bulma block
+   (`.card.is-stretched`, `.box.is-stretched`). A project block is a lowercase, singular,
+   hyphenated noun and is the thing a template composes with. Plain Bulma blocks stay valid in
+   templates: the prefix marks the project's version, it does not ban Bulma.
 2. **Project elements are `endurance-{block}-{element}`.** Elements are flat, exactly like
    `.card-content` and `.navbar-item`. Never use `__`, and never drop the block name
-   (`endurance-left` is wrong).
+   (`endurance-left` is wrong). When a project block `@extend`s a Bulma block, the parts that are
+   still Bulma's keep their Bulma names — `.endurance-navbar` uses `.navbar-item` and
+   `.endurance-media` uses `.media-left`. Only elements the project defines take the
+   `endurance-{block}-` prefix, such as `.endurance-media-footer`. A custom element is the
+   strongest reason to introduce a prefixed block: without one, a modifier is usually enough.
 3. **Modifiers never take the `endurance-` prefix.** They are `is-{modifier}` or
    `has-{feature}`, and they are always written with the block class:
    `class="endurance-box is-branded-thin"`. `endurance-box-is-branded-thin` and
@@ -95,10 +105,11 @@ because project classes interpolate it too (see [rule 10](#rules)).
    `.is-medium`, `.is-large`, `.is-active`, `.is-selected`, `.is-hidden`, `.is-rounded`,
    `.is-outlined`, `.is-fullwidth` and so on, use them. A project block may support them by
    `@extend`ing the Bulma block, not by redefining them.
-6. **A modifier belongs to the block that defines it.** `.is-branded-thin` is defined under
-   `.endurance-box`, so it only works on `.endurance-box`. Do not put it on a plain `.box` and
-   expect the stripe. If two project blocks need the same modifier, move the shared rule to the
-   Bulma block they both extend, or give each block its own modifier.
+6. **A modifier belongs to the block that defines it, unless it is global.** `.is-branded-thin`
+   is defined under `.endurance-box`, so it only works on `.endurance-box`; do not put it on a
+   plain `.box` and expect the stripe. A global modifier such as `.is-stretched` or
+   `.has-text-wrapped` is defined once in `helpers/` and works on any block. If two project blocks
+   need the same modifier, move the shared rule to a helper or to the Bulma block they both extend.
 7. **States are `is-{state}` and are for styling only.** JavaScript may add or remove them
    (`.is-active`, `.is-sorted-asc`), but it must find elements through `data-*` hooks, never
    through a styling class.
@@ -117,10 +128,13 @@ because project classes interpolate it too (see [rule 10](#rules)).
     selector when the prefix is available. `@use 'bulma/sass/utilities/initial-variables' as iv`
     (or the local `endurance-bulma-utilities` wrapper as `bu`) provides them.
 11. **Name the partial after what it defines or extends.** A new block gets
-    `endurance-{block}.scss`; an extension of a Bulma block gets `endurance-{bulma-block}.scss`
-    or `endurance-{bulma-block}-{feature}.scss`. Put it in the folder that matches Bulma's own
-    category (`elements/`, `components/`, `form/`, `layout/`, `grid/`, `utilities/`, `themes/`).
-    Behaviours are `bulma-{behaviour}.js`. Generated files keep their generator's output name.
+    `endurance-{block}.scss`; a project extension of a Bulma block gets
+    `endurance-{bulma-block}.scss` or `endurance-{bulma-block}-{feature}.scss`. A global modifier
+    gets `endurance-{feature}.scss` in `helpers/` (`endurance-stretched.scss`). The prefix marks
+    project ownership of the file, not of the block it styles. Put the file in the folder that
+    matches Bulma's own category (`elements/`, `components/`, `form/`, `layout/`, `grid/`,
+    `utilities/`, `themes/`, `helpers/`). Behaviours are `bulma-{behaviour}.js`. Generated files
+    keep their generator's output name.
 12. **Keep third-party namespaces intact.** Klaro (`klaro`, `cm-*`, `cn-*`) and
     bulma-switch-control (`switch`, `check`, `control-label`) keep their upstream class names, so
     upstream markup and documentation keep working. Project additions inside one of those
@@ -137,29 +151,39 @@ because project classes interpolate it too (see [rule 10](#rules)).
 
 ## Choosing a name
 
-| You need…                               | Use                                    | Example                              |
-|-----------------------------------------|----------------------------------------|--------------------------------------|
-| A new standalone component or container | `endurance-{block}`                    | `.endurance-card`                    |
-| A part inside a project block           | `endurance-{block}-{element}`          | `.endurance-media-footer`            |
-| A colour, size, variant or selection    | `is-{modifier}` with the block         | `.endurance-box.is-branded-thin`     |
-| Something the block has                 | `has-{feature}` with the block         | `.endurance-panel.has-plain-heading` |
-| A global project utility                | `has-{feature}` / `is-{feature}`       | `.has-background-grey-300`           |
-| An icon                                 | `et-{name}`                            | `.et-sort-ascending`                 |
-| A behaviour hook                        | `data-{hook}`                          | `data-sortable`                      |
-| A themeable value                       | `--bulma-endurance-{block}-{property}` | `--bulma-endurance-media-gap`        |
-| A build-time knob                       | `$endurance-{block}-{property}`        | `$endurance-media-gap`               |
+Decide first whether the project owns a *version of the block* or only a *variant of it*. Prefix the
+block only when it changes the default look or adds a project element. Otherwise keep Bulma's class
+and express the change with a modifier. The `endurance-` on a partial file marks the file as
+project-owned; it does not require a matching `endurance-` class in the markup.
+
+| You need…                                    | Use                                    | Example                              |
+|----------------------------------------------|----------------------------------------|--------------------------------------|
+| A project version of a Bulma block           | `endurance-{block}`                    | `.endurance-media`                   |
+| A custom part inside a project block         | `endurance-{block}-{element}`          | `.endurance-media-footer`            |
+| A Bulma element reused by a block            | Bulma's own element name               | `.navbar-item`                       |
+| A context-dependent variant of a Bulma block | `is-{modifier}` on the Bulma block     | `.card.is-stretched`                 |
+| A colour, size, variant or selection         | `is-{modifier}` with the block         | `.endurance-box.is-branded-thin`     |
+| Something the block has                      | `has-{feature}` with the block         | `.endurance-panel.has-plain-heading` |
+| A global project utility                     | `has-{feature}` / `is-{feature}`       | `.has-text-wrapped`                  |
+| An icon                                      | `et-{name}`                            | `.et-sort-ascending`                 |
+| A behaviour hook                             | `data-{hook}`                          | `data-sortable`                      |
+| A themeable value                            | `--bulma-endurance-{block}-{property}` | `--bulma-endurance-media-gap`        |
+| A build-time knob                            | `$endurance-{block}-{property}`        | `$endurance-media-gap`               |
 
 ## Common mistakes
 
 | Mistake                                   | Why it is wrong                                                         | Correct                                                                    |
 |-------------------------------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `.endurance-card`                         | Only a modifier was needed; no new element or default change            | `.card.is-stretched`                                                       |
+| `.endurance-image`                        | Only `.image.is-og-*` modifiers were added                              | `.image.is-og-320x167`                                                     |
+| `<a><div class="box">…</div></a>`         | Nested links are invalid; the wrapper also breaks equal heights         | `<div class="box is-stretched"><a>…</a></div>`                             |
 | `.box.is-branded-thin`                    | The modifier is defined under `.endurance-box`                          | `.endurance-box.is-branded-thin`                                           |
 | `.endurance-box.is-branded`               | The default box is already branded; no such modifier exists             | `.endurance-box`                                                           |
 | `.endurance-box.is is-branded-thick.is-b` | Unknown classes left in markup                                          | `.endurance-box.is-branded-thick`                                          |
 | `.endurance-box-is-branded-thin`          | Modifiers are not block-prefixed                                        | `.endurance-box.is-branded-thin`                                           |
 | `.endurance-is-branded-thin`              | The block name is missing from the modifier                             | `.endurance-box.is-branded-thin`                                           |
-| `.endurance-media_left`                   | Elements use a hyphen, not an underscore                                | `.endurance-media-left`                                                    |
-| `.endurance-media__left`                  | Bulma does not use BEM double underscores                               | `.endurance-media-left`                                                    |
+| `.endurance-media_footer`                 | Elements use a hyphen, not an underscore                                | `.endurance-media-footer`                                                  |
+| `.endurance-media__footer`                | Bulma does not use BEM double underscores                               | `.endurance-media-footer`                                                  |
 | `--navbar-height` on `.endurance-navbar`  | Custom properties need the Bulma prefix; the height is Bulma's variable | `--bulma-navbar-height` (or `--bulma-endurance-*` for project-only values) |
 | `.control-inner-label`                    | Reads as part of Bulma's `.control` block                               | `.switch-inner-label` (element of `.switch`)                               |
 | `.switch-inner-label` as the label        | A variant is a modifier, not a block                                    | `.switch.is-inner-label`                                                   |
@@ -169,11 +193,17 @@ because project classes interpolate it too (see [rule 10](#rules)).
 
 Use this list when adding or reviewing a component. It mirrors the rules above.
 
-- [ ] The block is `endurance-{block}` and `@extend`s the Bulma block it builds on.
-- [ ] Every element is `endurance-{block}-{element}`; no `__`, no missing block name.
+- [ ] A prefixed block changes the Bulma default or adds a project element; otherwise the template
+  uses the Bulma class with a modifier, and plain Bulma remains an option.
+- [ ] A prefixed block `@extend`s the Bulma block it builds on.
+- [ ] Every project-defined element is `endurance-{block}-{element}`; no `__`, no missing block
+  name. Bulma elements reused by an extending block keep their Bulma names.
 - [ ] Every modifier is `is-*` or `has-*`, written with its block, and has no `endurance-` prefix.
 - [ ] Bulma modifiers are reused, not redefined.
-- [ ] Each modifier is scoped to the block that defines it, and the template uses the right block.
+- [ ] Each modifier is scoped to the block that defines it (or is global in `helpers/`), and the
+  template uses the right block.
+- [ ] Linked boxes and cards put the link inside the block; no `<a>` wraps a block
+  block.
 - [ ] Behaviour is hooked with `data-*`; only state (`is-active`, `is-hidden`, `is-sorted-*`) is
   toggled through classes.
 - [ ] CSS custom properties are `--bulma-endurance-*`, registered with `cv.register-vars`.
