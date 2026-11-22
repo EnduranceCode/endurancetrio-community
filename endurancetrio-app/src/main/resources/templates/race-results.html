@@ -77,9 +77,11 @@
           </div>
         </div>
 
-        <div data-th-if="${raceResults.individualResults() != null}" data-th-remove="tag">
-          <div data-th-if="${#maps.size(raceResults.individualResults()) == 1}"
-            data-th-with="entry=${raceResults.individualResults().entrySet().iterator().next()}"
+        <div data-th-if="${raceResults.results().resultType() == 'INDIVIDUAL'}"
+          data-th-with="individualResults=${raceResults.results().individualResults()}"
+          data-th-remove="tag">
+          <div data-th-if="${#maps.size(individualResults) == 1}"
+            data-th-with="entry=${individualResults.entrySet().iterator().next()}"
             data-th-remove="tag">
             <div data-th-if="${!#lists.isEmpty(entry.value)}" data-th-remove="tag">
               <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry}, ${activeColumns})}"></div>
@@ -110,8 +112,8 @@
             </div>
           </div>
 
-          <div data-th-if="${#maps.size(raceResults.individualResults()) > 1}" data-th-remove="tag">
-            <div data-th-replace="~{fragments/individual-results :: individual-results-tabs(${raceResults.individualResults()}, ${activeColumns}, ${language})}">
+          <div data-th-if="${#maps.size(individualResults) > 1}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/individual-results :: individual-results-tabs(${individualResults}, ${activeColumns}, ${language})}">
             </div>
           </div>
 
@@ -122,7 +124,7 @@
           </div>
         </div>
 
-        <div data-th-unless="${raceResults.individualResults() != null}" data-th-remove="tag">
+        <div data-th-unless="${raceResults.results().resultType() == 'INDIVIDUAL'}" data-th-remove="tag">
           <div data-th-replace="~{fragments/result-status :: results-pending(${language})}"></div>
         </div>
       </section>

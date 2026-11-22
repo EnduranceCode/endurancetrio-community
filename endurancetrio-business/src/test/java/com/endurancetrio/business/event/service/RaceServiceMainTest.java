@@ -23,7 +23,6 @@ package com.endurancetrio.business.event.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -262,7 +261,6 @@ class RaceServiceMainTest {
     assertNotNull(result);
     assertEquals(collectiveRace, result.race());
     assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
-    assertNull(result.individualResults());
     verifyNoInteractions(individualResultRepository);
   }
 
@@ -273,7 +271,6 @@ class RaceServiceMainTest {
     assertNotNull(result);
     assertEquals(relayRace, result.race());
     assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
-    assertNull(result.individualResults());
     verifyNoInteractions(individualResultRepository);
   }
 
