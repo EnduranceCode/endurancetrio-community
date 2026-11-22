@@ -23,14 +23,11 @@ package com.endurancetrio.business.event.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.endurancetrio.business.common.exception.EnduranceTrioError;
-import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
@@ -261,18 +258,19 @@ class RaceServiceMainTest {
   }
 
   @Test
-  void getRaceResultsWithInvalidRaceTypeGroupShouldThrow() {
-    var invalidRace = new RaceDTO(RACE_ID, "Bad Race", "Bad",
-        LocalDate.of(2026, Month.JUNE, 1), null, List.of("TRIATHLON"), List.of("SPRINT"),
-        RaceType.INDIVIDUAL_PARENT, "UNKNOWN", null, null,
+  void getRaceResultsForConsistentIndividualRaceShouldReturnIndividualResults() {
+    when(individualResultRepository.findByRaceIdWithGraph(RACE_ID)).thenReturn(List.of());
+
+    var consistentRace = new RaceDTO(RACE_ID, "Consistent Race", "Consistent", LocalDate.of(2026, Month.JUNE, 1), null,
+      List.of("TRIATHLON"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null, null,
         "UNKNOWN"
     );
 
-    var exception = assertThrows(EnduranceTrioException.class,
-        () -> underTest.getRaceResults(invalidRace)
-    );
+    RaceResultsDTO result = underTest.getRaceResults(consistentRace);
 
-    assertEquals(EnduranceTrioError.INTERNAL_ERROR.getCode(), exception.getCode());
+    assertNotNull(result);
+    assertEquals(consistentRace, result.race());
+    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
   }
 
   @Test

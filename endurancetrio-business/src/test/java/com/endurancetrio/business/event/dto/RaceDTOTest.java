@@ -31,6 +31,8 @@ import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Unit test for the {@link RaceDTO} DTO.
@@ -49,7 +51,7 @@ class RaceDTOTest {
   private static final List<String> SPORTS = List.of("TRIATHLON");
   private static final List<String> DISTANCE_TYPES = List.of("SPRINT");
   private static final RaceType RACE_TYPE = RaceType.INDIVIDUAL_PARENT;
-  private static final String RACE_TYPE_GROUP = "TRIATHLON";
+  private static final String RACE_TYPE_GROUP = "INDIVIDUAL";
   private static final DistanceMetadataDTO DISTANCE_METADATA = new DistanceMetadataDTO(
       List.of(new DistanceLegDTO("SWIM", 1500), new DistanceLegDTO("RUN", 10000)));
 
@@ -180,5 +182,30 @@ class RaceDTOTest {
             DISTANCE_METADATA, null, "UNKNOWN"
         )
     );
+  }
+
+  @Test
+  void shouldRejectRaceTypeGroupMismatch() {
+    assertThrows(IllegalArgumentException.class,
+      () -> new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES, RaceType.TEAM_BY_RANK, "INDIVIDUAL",
+        DISTANCE_METADATA, null, "UNKNOWN"
+      )
+    );
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    {
+      "INDIVIDUAL_PARENT,   INDIVIDUAL", "INDIVIDUAL_DERIVED,  INDIVIDUAL", "TEAM_BY_RANK,        COLLECTIVE",
+      "TEAM_BY_TIME,        COLLECTIVE", "TEAM_BY_POINTS,      COLLECTIVE", "TEAM_RELAY_PARENT,   RELAY",
+      "TEAM_RELAY_DERIVED,  RELAY", "MIXED_RELAY_PARENT,  RELAY", "MIXED_RELAY_DERIVED, RELAY",
+    }
+  )
+  void shouldAcceptRaceTypeMatchingRaceTypeGroup(RaceType raceType, String raceTypeGroup) {
+    RaceDTO dto = new RaceDTO(ID, TITLE, SUBTITLE, DATE, TIME, SPORTS, DISTANCE_TYPES, raceType, raceTypeGroup,
+      DISTANCE_METADATA, null, "UNKNOWN"
+    );
+
+    assertEquals(raceTypeGroup, dto.raceTypeGroup());
   }
 }

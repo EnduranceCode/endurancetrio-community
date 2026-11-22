@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -68,6 +69,9 @@ public record RaceDTO(Long id, String title, String subtitle, LocalDate date, Lo
     }
     if (raceTypeGroup == null || raceTypeGroup.isBlank()) {
       throw new IllegalArgumentException("raceTypeGroup must not be null or blank");
+    }
+    if (!RaceTypeGroup.from(raceType).getCode().equals(raceTypeGroup)) {
+      throw new IllegalArgumentException("raceTypeGroup must match raceType");
     }
     if (resultStatus == null || resultStatus.isBlank()) {
       throw new IllegalArgumentException("resultStatus must not be null or blank");
