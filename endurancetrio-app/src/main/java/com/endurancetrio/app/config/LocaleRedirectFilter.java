@@ -56,8 +56,8 @@ public class LocaleRedirectFilter implements Filter {
 
     if (uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")
         || uri.startsWith("/webjars/") || STATIC_ROOT_FILES.contains(uri) || uri.startsWith("/api/")
-        || uri.equals("/v3/api-docs") || uri.startsWith("/v3/api-docs/") || uri.startsWith(
-        "/swagger-ui")) {
+        || uri.startsWith("/actuator") || uri.equals("/v3/api-docs") || uri.startsWith("/v3/api-docs/")
+        || uri.startsWith("/swagger-ui")) {
       chain.doFilter(request, response);
       return;
     }
