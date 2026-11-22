@@ -36,10 +36,12 @@ import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.event.dto.EmptyRaceResultsDTO;
 import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventFilterOptionsDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
@@ -418,22 +420,23 @@ public class EventWebController {
    * @return a set of column names with non-null data in the OPEN group
    */
   private static @NonNull Set<String> computeActiveColumns(RaceResultsDTO raceResults) {
-    Set<String> active = new HashSet<>();
-
-    if (raceResults.individualResults() != null) {
-      List<IndividualResultDTO> openResults = raceResults.individualResults().get(AgeGroup.OPEN);
-      if (openResults != null) {
-        for (IndividualResultDTO result : openResults) {
-          for (IndividualResultColumns column : IndividualResultColumns.values()) {
-            if (column.isActive(result)) {
-              active.add(column.getCode());
+    return switch (raceResults.results()) {
+      case IndividualRaceResultsDTO(Map<AgeGroup, List<IndividualResultDTO>> individualResults) -> {
+        Set<String> active = new HashSet<>();
+        List<IndividualResultDTO> openResults = individualResults.get(AgeGroup.OPEN);
+        if (openResults != null) {
+          for (IndividualResultDTO result : openResults) {
+            for (IndividualResultColumns column : IndividualResultColumns.values()) {
+              if (column.isActive(result)) {
+                active.add(column.getCode());
+              }
             }
           }
         }
+        yield active;
       }
-    }
-
-    return active;
+      case EmptyRaceResultsDTO() -> Set.of();
+    };
   }
 
   /**

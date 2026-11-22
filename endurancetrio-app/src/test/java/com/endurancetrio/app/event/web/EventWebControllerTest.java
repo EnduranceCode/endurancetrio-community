@@ -455,8 +455,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
-    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(emptyIndividualResults());
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
@@ -476,8 +475,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("Resultados de eventos de desportos de endurance");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
-    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(emptyIndividualResults());
 
     mockMvc.perform(get("/pt/events/1984/1/results/1"))
         .andExpect(status().isOk())
@@ -497,8 +495,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
-    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(emptyIndividualResults());
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
@@ -518,8 +515,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
-    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(emptyIndividualResults());
 
     mockMvc.perform(get("/en/events/1984/1/results/2"))
         .andExpect(status().isOk())
@@ -550,8 +546,7 @@ class EventWebControllerTest {
         any()
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
-    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(emptyIndividualResults());
 
     mockMvc.perform(get("/en/events/1984/1/results/3"))
         .andExpect(status().isOk())
@@ -589,6 +584,34 @@ class EventWebControllerTest {
                 "secondBike", "total", "gap", "points"
             )
         ));
+  }
+
+  @Test
+  void getRaceResultsShouldUseOnlyOpenGroupForActiveColumns() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(), any())).thenReturn(
+      "Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(), any())).thenReturn(
+      "View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    IndividualResultDTO openResult = new IndividualResultDTO(2L, RACE_1, 1, null, AthleteDTOFixtures.standard(),
+      AgeGroup.OPEN, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+      Duration.ofMinutes(10), null, null
+    );
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(new RaceResultsDTO(RACE_1,
+      new IndividualRaceResultsDTO(
+        Map.of(AgeGroup.OPEN, List.of(openResult), AgeGroup.CAT_A, List.of(getIndividualResultDTO())))
+    ));
+
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
+      .andExpect(status().isOk())
+      .andExpect(view().name("race-results"))
+      .andExpect(
+        model().attribute("activeColumns", Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "total")));
+  }
+
+  private static RaceResultsDTO emptyIndividualResults() {
+    return new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of()));
   }
 
   private static @NonNull IndividualResultDTO getIndividualResultDTO() {
