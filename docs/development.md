@@ -838,6 +838,18 @@ User-facing text lives in two message bundles, and both must always change toget
   `data-th-replace` discards the attributes of the replaced element, so an `alt` written on the
   `<img>` never reaches the browser and the SVG needs its own `role="img"` and `aria-label`.
 
+### Data Transfer Objects (DTOs)
+
+Every type declared in a `*.dto` package carries the `DTO` suffix. This is a hard rule and applies to
+records, interfaces, enums and sealed-hierarchy variants alike, not just to the outer wrapper object.
+
+- Name DTOs after their role, for example `RaceResultsDTO`, `IndividualResultDTO` and `ResultsDTO`.
+- When a sealed hierarchy models several result variants, give each variant the suffix too, for
+  example `IndividualRaceResultsDTO` and `EmptyRaceResultsDTO`.
+- If the natural name is already taken by an outer wrapper, choose a distinct name for the inner type
+  rather than dropping the suffix. The sealed interface is `ResultsDTO`, not `RaceResultsDTO`,
+  because `RaceResultsDTO` is the wrapper returned by the service.
+
 ### Controllers, Services and Repositories
 
 This section establishes naming guidelines for controllers, services and repositories, based on clarity,

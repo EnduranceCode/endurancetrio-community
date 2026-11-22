@@ -26,6 +26,7 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 ## Key conventions
 
 - Controller pattern: `interface ThingAPI` → `class ThingRestController implements ThingAPI`
+- DTO naming: every type in a `*.dto` package carries the `DTO` suffix (e.g. `ResultsDTO`, `IndividualRaceResultsDTO`, `RaceResultsDTO`)
 - Web controllers: `@EnduranceTrioWebController` for Thymeleaf views
 - API controllers: `@EnduranceTrioRestController` for REST endpoints
 - Exception handlers are scoped by annotation: `EnduranceTrioExceptionHandlerAuth` and `EnduranceTrioExceptionHandlerAPI` handle `@EnduranceTrioRestController`; `EnduranceTrioExceptionHandlerWeb` handles `@EnduranceTrioWebController`
