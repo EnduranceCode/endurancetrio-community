@@ -558,7 +558,7 @@ public class EventWebController {
 
     try {
       return Math.max(0, Integer.parseInt(page.trim()));
-    } catch (NumberFormatException exception) {
+    } catch (NumberFormatException _) {
       return 0;
     }
   }
@@ -597,7 +597,7 @@ public class EventWebController {
     try {
       Integer normalized = Integer.valueOf(year.trim());
       return filterOptions.yearLookup().contains(normalized) ? normalized : null;
-    } catch (NumberFormatException exception) {
+    } catch (NumberFormatException _) {
       return null;
     }
   }

@@ -318,7 +318,7 @@ public class AthleteWebController {
     if (gender != null) {
       try {
         normalizedGender = AthleteGender.valueOf(gender.trim().toUpperCase(Locale.ROOT));
-      } catch (IllegalArgumentException exception) {
+      } catch (IllegalArgumentException _) {
         normalizedGender = null;
       }
     } else {
