@@ -18,7 +18,8 @@
     "format:html": "cd .. && ./webpack/node_modules/.bin/eslint --config webpack/eslint.config.js templates --ext .html --fix",
     "format:check": "npm run format:check:prettier && npm run format:check:eslint",
     "format:check:prettier": "prettier --check '**/*.{css,scss,json,md}'",
-    "format:check:eslint": "cd .. && ./webpack/node_modules/.bin/eslint --config webpack/eslint.config.js webpack templates --ext .js,.html"
+    "format:check:eslint": "cd .. && ./webpack/node_modules/.bin/eslint --config webpack/eslint.config.js webpack templates --ext .js,.html",
+    "test": "node --test"
   },
   "keywords": [
     "HTML",

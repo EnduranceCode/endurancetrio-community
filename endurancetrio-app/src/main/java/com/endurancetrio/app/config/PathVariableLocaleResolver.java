@@ -47,8 +47,13 @@ public class PathVariableLocaleResolver implements LocaleResolver {
       if ("pt".equalsIgnoreCase(localePart)) {
         return Locale.of("pt", "PT");
       }
+      if ("en".equalsIgnoreCase(localePart)) {
+        return DEFAULT_LOCALE;
+      }
     }
 
+    // Without a language prefix (e.g. an error dispatch to /error), fall back to the browser's
+    // preference. A prefix in the URL is authoritative and must never be overridden by the header.
     String acceptLang = request.getHeader("Accept-Language");
     if (acceptLang != null && acceptLang.startsWith("pt")) {
       return Locale.of("pt", "PT");
