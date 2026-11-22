@@ -76,15 +76,19 @@
   </modules>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>25</java.version>
     <argLine />
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <sonar.organization>endurancecode</sonar.organization>
+    <expressly.version>6.0.0</expressly.version>
     <frontend-maven-plugin.version>2.0.0</frontend-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
+    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
     <node.version>v24.15.0</node.version>
     <npm.version>11.12.1</npm.version>
+    <springdoc.version>3.2.1</springdoc.version>
   </properties>
 
   <dependencyManagement>
@@ -92,12 +96,12 @@
       <dependency>
         <groupId>org.glassfish.expressly</groupId>
         <artifactId>expressly</artifactId>
-        <version>6.0.0</version>
+        <version>${expressly.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-        <version>3.2.1</version>
+        <version>${springdoc.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -142,7 +146,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.12.0</version>
+          <version>${maven-javadoc-plugin.version}</version>
           <configuration>
             <doclint>all,-missing</doclint>
           </configuration>
@@ -151,7 +155,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.15</version>
+          <version>${jacoco-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
