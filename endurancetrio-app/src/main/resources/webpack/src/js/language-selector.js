@@ -27,8 +27,9 @@ const languageSelector = {
   /**
    * Initializes the language selector functionality.
    *
-   * This function sets up an event listener on the language selector checkbox. When the checkbox is toggled, the
-   * language is updated in local storage and the page is redirected to the page with the selected language.
+   * This function sets up event listeners on the language selector checkbox. When the checkbox is toggled, the
+   * language is stored (when storage is available) and the page is redirected to the same path under the other
+   * language prefix. A stored preference that differs from the URL is applied on page load.
    *
    * @function init
    * @memberof languageSelector
@@ -38,6 +39,9 @@ const languageSelector = {
     if (!languageOption) {
       return;
     }
+
+    const storageKey = 'endurancetrioLanguage';
+    let navigating = false;
 
     /**
      * Gets the current language based on the URL path. Defaults to 'en' if no language is found.
@@ -53,13 +57,47 @@ const languageSelector = {
     }
 
     /**
+     * Reads the preferred language from local storage. Storage can be unavailable in private browsing or when
+     * cookies are blocked, in which case no preference is reported.
+     *
+     * @returns {?string} The stored language ('pt' or 'en'), or null
+     */
+    function getLanguagePreference() {
+      try {
+        return localStorage.getItem(storageKey);
+      } catch {
+        return null;
+      }
+    }
+
+    /**
      * Sets the preferred language in local storage ('pt' or 'en'). This function is called when the user changes
-     * the language preference.
+     * the language preference. A storage failure must not prevent the navigation: the URL prefix is authoritative
+     * for the request that follows.
      *
      * @param {String} locale The language to set as the preferred language ('pt' or 'en')
      */
     function setLanguagePreference(locale) {
-      localStorage.setItem('endurancetrioLanguage', locale);
+      try {
+        localStorage.setItem(storageKey, locale);
+      } catch {
+        // Storage is optional; the language prefix in the URL carries the choice.
+      }
+    }
+
+    /**
+     * Builds the current page path without its language prefix, keeping the query string.
+     *
+     * @param {string} currentLanguage The language prefix of the current URL
+     * @returns {string} The path and query string following the language prefix
+     */
+    function pathAndQueryWithoutPrefix(currentLanguage) {
+      const prefix = '/' + currentLanguage;
+      const pathname = globalThis.location.pathname;
+      const pathWithoutPrefix =
+        pathname.startsWith(prefix + '/') || pathname === prefix ? pathname.slice(prefix.length) : pathname;
+
+      return pathWithoutPrefix + globalThis.location.search;
     }
 
     /**
@@ -67,31 +105,37 @@ const languageSelector = {
      * URL, the page is redirected to the page with the selected language.
      */
     function applyStoredLanguage() {
-      const storedLanguage = localStorage.getItem('endurancetrioLanguage');
+      const storedLanguage = getLanguagePreference();
       const currentLanguage = getCurrentLanguage();
-      const pathWithoutPrefix = globalThis.location.pathname.slice(('/' + currentLanguage).length);
 
       if (storedLanguage && storedLanguage !== currentLanguage) {
-        globalThis.location.href = `/${storedLanguage}${pathWithoutPrefix}`;
+        globalThis.location.href = `/${storedLanguage}${pathAndQueryWithoutPrefix(currentLanguage)}`;
       } else {
         languageOption.checked = currentLanguage === 'pt';
       }
     }
 
     /**
-     * Event listener for the language switch. When the switch is toggled, the language is updated in local storage
-     * and the page is redirected to the page with the selected language.
+     * Event listener for the language switch. Some browsers fire only 'change' for a checkbox toggled through its
+     * label while others fire 'input' first; the guard keeps the navigation to a single occurrence.
      */
-    languageOption.addEventListener('input', function () {
+    function handleLanguageChange() {
+      if (navigating) {
+        return;
+      }
+
       const newLanguage = this.checked ? 'pt' : 'en';
       const currentLanguage = getCurrentLanguage();
 
       if (newLanguage !== currentLanguage) {
+        navigating = true;
         setLanguagePreference(newLanguage);
-        const pathWithoutPrefix = globalThis.location.pathname.slice(('/' + currentLanguage).length);
-        globalThis.location.replace(`/${newLanguage}${pathWithoutPrefix}`);
+        globalThis.location.replace(`/${newLanguage}${pathAndQueryWithoutPrefix(currentLanguage)}`);
       }
-    });
+    }
+
+    languageOption.addEventListener('input', handleLanguageChange);
+    languageOption.addEventListener('change', handleLanguageChange);
 
     applyStoredLanguage();
   },

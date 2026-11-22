@@ -67,6 +67,24 @@ class PathVariableLocaleResolverTest {
   }
 
   @Test
+  void shouldResolveEnglishFromPathDespitePortugueseAcceptLanguage() {
+    HttpServletRequest request = createRequest("/en/events", "pt-PT,pt;q=0.9,en;q=0.5", null);
+
+    Locale result = underTest.resolveLocale(request);
+
+    assertEquals(Locale.ENGLISH, result);
+  }
+
+  @Test
+  void shouldResolvePortugueseFromPathDespiteEnglishAcceptLanguage() {
+    HttpServletRequest request = createRequest("/pt/events", "en-US,en;q=0.9", null);
+
+    Locale result = underTest.resolveLocale(request);
+
+    assertEquals(Locale.of("pt", "PT"), result);
+  }
+
+  @Test
   void shouldReturnEnglishForApiPaths() {
     HttpServletRequest request = createRequest("/api/tracker/v1/devices", null, null);
 
@@ -105,6 +123,15 @@ class PathVariableLocaleResolverTest {
   @Test
   void shouldResolveEnglishFromErrorRequestUri() {
     HttpServletRequest request = createRequest("/error", null, "/en/events/404");
+
+    Locale result = underTest.resolveLocale(request);
+
+    assertEquals(Locale.ENGLISH, result);
+  }
+
+  @Test
+  void shouldResolveEnglishFromErrorRequestUriDespitePortugueseAcceptLanguage() {
+    HttpServletRequest request = createRequest("/error", "pt-PT,pt;q=0.9", "/en/events/404");
 
     Locale result = underTest.resolveLocale(request);
 

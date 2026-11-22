@@ -120,12 +120,13 @@ The language selector is the `.switch.is-inner-label` control in the navbar, wit
 `language-selector` (see [Switch Control](./switch-control.md#inner-label-variant)). It is part of
 the site's bilingual routing, and it behaves as follows:
 
-- The choice is saved in `localStorage` under `endurancetrioLanguage`.
+- The choice is saved in `localStorage` under `endurancetrioLanguage` when storage is available;
+  a storage failure (for example in private browsing) does not prevent navigation.
 - Toggling the switch moves the page to the same path under the other language prefix (`/en/…` to
-  `/pt/…`).
+  `/pt/…`), keeping the query string.
 - On each page load, a stored language that differs from the page's language redirects the
-  visitor to the matching page. The error pages submit a form instead, because they cannot be
-  reached by a plain redirect.
+  visitor to the matching page. Error pages use the same mechanism: the browser keeps the original
+  localized URL while only the server-side dispatch goes to `/error`.
 
 Do not reuse the `language-selector` id for another control. The script looks it up by id when
 the page loads.
