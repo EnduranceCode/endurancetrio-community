@@ -19,6 +19,21 @@
  */
 
 /**
+ * Builds the current page path without its language prefix, keeping the query string.
+ *
+ * @param {string} currentLanguage The language prefix of the current URL
+ * @returns {string} The path and query string following the language prefix
+ */
+function pathAndQueryWithoutPrefix(currentLanguage) {
+  const prefix = '/' + currentLanguage;
+  const pathname = globalThis.location.pathname;
+  const pathWithoutPrefix =
+    pathname.startsWith(prefix + '/') || pathname === prefix ? pathname.slice(prefix.length) : pathname;
+
+  return pathWithoutPrefix + globalThis.location.search;
+}
+
+/**
  * Object containing language selector functionality.
  *
  * @namespace languageSelector
@@ -83,21 +98,6 @@ const languageSelector = {
       } catch {
         // Storage is optional; the language prefix in the URL carries the choice.
       }
-    }
-
-    /**
-     * Builds the current page path without its language prefix, keeping the query string.
-     *
-     * @param {string} currentLanguage The language prefix of the current URL
-     * @returns {string} The path and query string following the language prefix
-     */
-    function pathAndQueryWithoutPrefix(currentLanguage) {
-      const prefix = '/' + currentLanguage;
-      const pathname = globalThis.location.pathname;
-      const pathWithoutPrefix =
-        pathname.startsWith(prefix + '/') || pathname === prefix ? pathname.slice(prefix.length) : pathname;
-
-      return pathWithoutPrefix + globalThis.location.search;
     }
 
     /**
