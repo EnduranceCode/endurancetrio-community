@@ -89,6 +89,10 @@
     <node.version>v24.15.0</node.version>
     <npm.version>11.12.1</npm.version>
     <springdoc.version>3.2.1</springdoc.version>
+    <!-- Override Boot's managed Tomcat 11.0.27 (CVEs affect through 11.0.27;
+         11.0.28 was never released, fix is in 11.0.29). Remove this property
+         once a Boot 4.2.x release manages 11.0.29 or newer. -->
+    <tomcat.version>11.0.29</tomcat.version>
   </properties>
 
   <dependencyManagement>
