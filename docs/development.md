@@ -30,7 +30,7 @@ an overview of the project, see the [main README.md](../README.md).
 - **Flyway** - Database migration and version control
 - **Spring Security** - API key authentication and security configuration
 - **SpringDoc OpenAPI** - Automated Swagger/OpenAPI documentation generation
-- **Maven** - Dependency management and build automation
+- **Maven 3.10.2** - Dependency management and build automation (pinned by the Maven wrapper)
 - **Webpack** - Frontend asset bundling, triggered automatically by the Maven build
 
 ## Repository and Release Topology
@@ -599,6 +599,13 @@ its dependencies:
 The Maven build automatically installs the required Node.js/npm toolchain for the app module,
 executes `npm ci`, bundles the frontend with Webpack, and packages the generated assets under the
 Spring Boot static resource path in the final JAR.
+
+The Maven version is pinned by `.mvn/wrapper/maven-wrapper.properties` and is currently **3.10.2**.
+Maven 3.10 moved to Maven Resolver 2.x, aligning dependency resolution with Maven 4, so this pin is
+kept in step with the Java and Spring Boot versions. Under Resolver 2 you may see two harmless
+`Could not transfer metadata /.meta/prefixes.txt ... HTTP Status: 401` warnings from repositories
+declared in Flyway's transitive POMs. They are an upstream prefix-file discovery issue
+([apache/maven#13050](https://github.com/apache/maven/issues/13050)) and do not affect resolution.
 
 The default Maven frontend build uses the production Webpack mode. Production assets are minified,
 do not emit source maps, and optimize raster images copied by Webpack. Development builds keep
