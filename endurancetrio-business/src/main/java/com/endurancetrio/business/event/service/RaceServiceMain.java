@@ -20,9 +20,8 @@
 
 package com.endurancetrio.business.event.service;
 
-import com.endurancetrio.business.common.dto.ErrorDTO;
-import com.endurancetrio.business.common.exception.EnduranceTrioError;
-import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import com.endurancetrio.business.event.dto.EmptyRaceResultsDTO;
+import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
@@ -45,8 +44,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -57,8 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RaceServiceMain implements RaceService {
-
-  private static final Logger LOG = LoggerFactory.getLogger(RaceServiceMain.class);
 
   private final IndividualResultRepository individualResultRepository;
   private final IndividualResultMapper individualResultMapper;
@@ -112,19 +107,11 @@ public class RaceServiceMain implements RaceService {
   @Cacheable(value = "raceResults", key = "#race.id()")
   @Transactional(readOnly = true)
   public RaceResultsDTO getRaceResults(RaceDTO race) {
-    try {
-      return switch (RaceTypeGroup.valueOf(race.raceTypeGroup())) {
-        case RaceTypeGroup.INDIVIDUAL -> buildIndividualRaceResults(race);
-        case RaceTypeGroup.COLLECTIVE -> buildTeamRaceResults(race);
-        case RaceTypeGroup.RELAY -> buildRelayRaceResults(race);
-      };
-    } catch (IllegalArgumentException | NullPointerException e) {
-      String errorMsg = String.format("Invalid raceTypeGroup '%s' for race ID %s",
-          race.raceTypeGroup(), race.id()
-      );
-      LOG.error(errorMsg, e);
-      throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.INTERNAL_ERROR, errorMsg));
-    }
+    return switch (RaceTypeGroup.from(race.raceType())) {
+      case RaceTypeGroup.INDIVIDUAL -> buildIndividualRaceResults(race);
+      case RaceTypeGroup.COLLECTIVE -> buildTeamRaceResults(race);
+      case RaceTypeGroup.RELAY -> buildRelayRaceResults(race);
+    };
   }
 
   /**
@@ -137,8 +124,8 @@ public class RaceServiceMain implements RaceService {
    * via the source-result chain, each independently ranked starting from 1.
    *
    * @param race the race whose individual results are to be built
-   * @return a {@link RaceResultsDTO} with the individual results, or an empty results DTO if no
-   * results exist for the race
+   * @return a {@link RaceResultsDTO} holding an {@link IndividualRaceResultsDTO} with the results,
+   *         or with a single empty OPEN group when no results exist for the race
    */
   private RaceResultsDTO buildIndividualRaceResults(RaceDTO race) {
     List<IndividualResult> results = individualResultRepository.findByRaceIdWithGraph(race.id());
@@ -147,7 +134,7 @@ public class RaceServiceMain implements RaceService {
 
     if (results.isEmpty()) {
       individualResults.put(AgeGroup.OPEN, List.of());
-      return new RaceResultsDTO(race, individualResults);
+      return new RaceResultsDTO(race, new IndividualRaceResultsDTO(individualResults));
     }
 
     final Duration overallWinnerTotal = getIndividualWinnerTotal(results.getFirst());
@@ -191,31 +178,31 @@ public class RaceServiceMain implements RaceService {
       );
     });
 
-    return new RaceResultsDTO(race, orderByAgeGroupOrdinal(individualResults));
+    return new RaceResultsDTO(race, new IndividualRaceResultsDTO(orderByAgeGroupOrdinal(individualResults)));
   }
 
   /**
    * Stub placeholder for team race results.
    * <p>
-   * Currently returns an empty {@link RaceResultsDTO} with no results.
+   * Currently returns a {@link RaceResultsDTO} holding an {@link EmptyRaceResultsDTO}.
    *
    * @param race the race whose team results are to be built
-   * @return an empty {@link RaceResultsDTO}
+   * @return a {@link RaceResultsDTO} with no results
    */
   private RaceResultsDTO buildTeamRaceResults(RaceDTO race) {
-    return new RaceResultsDTO(race, null);
+    return new RaceResultsDTO(race, new EmptyRaceResultsDTO());
   }
 
   /**
    * Stub placeholder for relay race results.
    * <p>
-   * Currently returns an empty {@link RaceResultsDTO} with no results.
+   * Currently returns a {@link RaceResultsDTO} holding an {@link EmptyRaceResultsDTO}.
    *
    * @param race the race whose relay results are to be built
-   * @return an empty {@link RaceResultsDTO}
+   * @return a {@link RaceResultsDTO} with no results
    */
   private RaceResultsDTO buildRelayRaceResults(RaceDTO race) {
-    return new RaceResultsDTO(race, null);
+    return new RaceResultsDTO(race, new EmptyRaceResultsDTO());
   }
 
   /**

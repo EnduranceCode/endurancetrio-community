@@ -25,14 +25,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The {@link RaceResultsDTO} holds the complete set of results for a given race, grouped by
- * {@link AgeGroup}.
+ * The {@link RaceResultsDTO} holds the complete set of results for a given race.
  *
- * @param race              the race these results belong to
- * @param individualResults the results grouped by age group, where each age group maps to a list of
- *                          {@link IndividualResultDTO}
+ * @param race    the race these results belong to
+ * @param results the results variant matching the race's result type
  */
-public record RaceResultsDTO(RaceDTO race,
-                             Map<AgeGroup, List<IndividualResultDTO>> individualResults) {
+public record RaceResultsDTO(RaceDTO race, ResultsDTO results) {
 
+  /**
+   * Returns the individual results grouped by age group.
+   *
+   * @return the individual result map, or {@code null} when this variant has no individual results
+   */
+  public Map<AgeGroup, List<IndividualResultDTO>> individualResults() {
+    return switch (results) {
+      case IndividualRaceResultsDTO(Map<AgeGroup, List<IndividualResultDTO>> individualResults) ->
+          individualResults;
+      case EmptyRaceResultsDTO() -> null;
+    };
+  }
 }

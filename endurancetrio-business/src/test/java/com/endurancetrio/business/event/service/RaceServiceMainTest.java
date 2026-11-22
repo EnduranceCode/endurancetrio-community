@@ -21,6 +21,7 @@
 package com.endurancetrio.business.event.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,6 +29,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.endurancetrio.business.event.dto.EmptyRaceResultsDTO;
+import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
@@ -139,11 +142,14 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     assertEquals(individualRace, result.race());
-    assertEquals(2, result.individualResults().size());
-    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
-    assertTrue(result.individualResults().containsKey(AgeGroup.SEN));
-    assertEquals(List.of(openDTO1, openDTO2), result.individualResults().get(AgeGroup.OPEN));
-    assertEquals(List.of(senDTO), result.individualResults().get(AgeGroup.SEN));
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class,
+        result.results()
+    );
+    assertEquals(2, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
+    assertTrue(results.individualResults().containsKey(AgeGroup.SEN));
+    assertEquals(List.of(openDTO1, openDTO2), results.individualResults().get(AgeGroup.OPEN));
+    assertEquals(List.of(senDTO), results.individualResults().get(AgeGroup.SEN));
   }
 
   @Test
@@ -155,9 +161,12 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     assertEquals(individualRace, result.race());
-    assertEquals(1, result.individualResults().size());
-    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
-    assertTrue(result.individualResults().get(AgeGroup.OPEN).isEmpty());
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class,
+        result.results()
+    );
+    assertEquals(1, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
+    assertTrue(results.individualResults().get(AgeGroup.OPEN).isEmpty());
   }
 
   @Test
@@ -173,9 +182,12 @@ class RaceServiceMainTest {
     RaceResultsDTO result = underTest.getRaceResults(individualRace);
 
     assertNotNull(result);
-    assertEquals(1, result.individualResults().size());
-    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
-    assertEquals(List.of(openDTO), result.individualResults().get(AgeGroup.OPEN));
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class,
+        result.results()
+    );
+    assertEquals(1, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
+    assertEquals(List.of(openDTO), results.individualResults().get(AgeGroup.OPEN));
   }
 
   @Test
@@ -199,9 +211,12 @@ class RaceServiceMainTest {
     RaceResultsDTO result = underTest.getRaceResults(individualRace);
 
     assertNotNull(result);
-    assertEquals(1, result.individualResults().size());
-    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
-    assertEquals(List.of(dnfDTO, dsqDTO), result.individualResults().get(AgeGroup.OPEN));
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class,
+        result.results()
+    );
+    assertEquals(1, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
+    assertEquals(List.of(dnfDTO, dsqDTO), results.individualResults().get(AgeGroup.OPEN));
   }
 
   @Test
@@ -230,11 +245,14 @@ class RaceServiceMainTest {
     RaceResultsDTO result = underTest.getRaceResults(individualRace);
 
     assertNotNull(result);
-    assertEquals(2, result.individualResults().size());
-    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
-    assertTrue(result.individualResults().containsKey(AgeGroup.SEN));
-    assertEquals(List.of(openDTO), result.individualResults().get(AgeGroup.OPEN));
-    assertEquals(List.of(senDTO), result.individualResults().get(AgeGroup.SEN));
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class,
+        result.results()
+    );
+    assertEquals(2, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
+    assertTrue(results.individualResults().containsKey(AgeGroup.SEN));
+    assertEquals(List.of(openDTO), results.individualResults().get(AgeGroup.OPEN));
+    assertEquals(List.of(senDTO), results.individualResults().get(AgeGroup.SEN));
   }
 
   @Test
@@ -243,6 +261,7 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     assertEquals(collectiveRace, result.race());
+    assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
     assertNull(result.individualResults());
     verifyNoInteractions(individualResultRepository);
   }
@@ -253,6 +272,7 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     assertEquals(relayRace, result.race());
+    assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
     assertNull(result.individualResults());
     verifyNoInteractions(individualResultRepository);
   }
@@ -270,7 +290,10 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     assertEquals(consistentRace, result.race());
-    assertTrue(result.individualResults().containsKey(AgeGroup.OPEN));
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class,
+        result.results()
+    );
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
   }
 
   @Test
