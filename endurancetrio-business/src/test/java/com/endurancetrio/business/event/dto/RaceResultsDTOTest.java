@@ -23,7 +23,6 @@ package com.endurancetrio.business.event.dto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
@@ -41,6 +40,7 @@ import org.junit.jupiter.api.Test;
 class RaceResultsDTOTest {
 
   private static final AgeGroup AGE_GROUP = AgeGroup.ELITE;
+  private static final Map<AgeGroup, List<IndividualResultDTO>> EMPTY_RESULTS = Map.of();
 
   private RaceDTO race;
   private IndividualResultDTO individualResult;
@@ -78,19 +78,20 @@ class RaceResultsDTOTest {
     );
 
     assertEquals("INDIVIDUAL", dto.results().resultType());
-    assertNotNull(dto.individualResults());
-    assertTrue(dto.individualResults().containsKey(AgeGroup.OPEN));
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, dto.results());
+    assertNotNull(results.individualResults());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
   }
 
   @Test
   void individualResultsCanBeEmpty() {
-    RaceResultsDTO dto = new RaceResultsDTO(race, new IndividualRaceResultsDTO(Map.of()));
+    RaceResultsDTO dto = new RaceResultsDTO(race, new IndividualRaceResultsDTO(EMPTY_RESULTS));
 
     assertNotNull(dto);
     assertEquals(race, dto.race());
     assertEquals("INDIVIDUAL", dto.results().resultType());
-    assertNotNull(dto.individualResults());
-    assertTrue(dto.individualResults().isEmpty());
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, dto.results());
+    assertEquals(EMPTY_RESULTS, results.individualResults());
   }
 
   @Test
@@ -98,6 +99,6 @@ class RaceResultsDTOTest {
     RaceResultsDTO dto = new RaceResultsDTO(race, new EmptyRaceResultsDTO());
 
     assertEquals("NONE", dto.results().resultType());
-    assertNull(dto.individualResults());
+    assertInstanceOf(EmptyRaceResultsDTO.class, dto.results());
   }
 }
