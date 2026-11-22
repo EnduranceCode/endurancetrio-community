@@ -63,6 +63,16 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation-test</artifactId>
       <scope>test</scope>
+      <!-- jsonassert 1.5.3 (Boot-managed) pulls com.vaadin.external.google:android-json,
+           which has CVE-2026-110974. No test uses JSONassert/content().json(),
+           so exclude it to drop the vulnerable transitive dep. If a JSON assertion
+           is ever needed, use net.javacrumbs.json-unit:json-unit-core instead. -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.skyscreamer</groupId>
+          <artifactId>jsonassert</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
