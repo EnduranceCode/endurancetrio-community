@@ -18,14 +18,14 @@
 # EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
 #
 
-FROM eclipse-temurin:21-jre-alpine AS builder
+FROM eclipse-temurin:25-jre-alpine AS builder
 WORKDIR /opt/endurancetrio-community
 
 ARG JAR_FILE=endurancetrio-app/target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /opt/endurancetrio-community
 
 # We define a default user 'endurancetrio', but it can be overrided at build time

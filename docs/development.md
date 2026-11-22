@@ -21,7 +21,7 @@ an overview of the project, see the [main README.md](../README.md).
 
 ## Technology Stack
 
-- **Java 21** - Latest LTS version for optimal performance and features
+- **Java 25** - Latest LTS version for optimal performance and features
 - **Spring Boot 4.2.0** - Modern application framework with latest stable features
 - **Spring Data JPA** - Robust data persistence and repository abstraction
 - **PostgreSQL 18** - An advanced Open Source Relational Database for data persistence
@@ -551,7 +551,7 @@ Issues discovered in Tracker-domain code during integration should be filed in t
 
 ### 1. Prerequisites
 
-- [Java 21](https://javaalmanac.io/jdk/21/) or higher
+- [Java 25](https://javaalmanac.io/jdk/25/) or higher
 - [Apache Maven](https://maven.apache.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 

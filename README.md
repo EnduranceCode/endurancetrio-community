@@ -1,6 +1,6 @@
 # EnduranceTrio
 
-![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk&logoColor=white)
+![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.2.0-brightgreen?logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
@@ -42,7 +42,7 @@ triathlon events, results, athletes, and related content, starting from the earl
 sport and expanding over time toward broader historical coverage and more current competition data.
 
 The platform combines a public-facing web application with a programmatic REST API. It is built on
-a **Java 21** and **Spring Boot 4** foundation and is designed to support both archival use cases,
+a **Java 25** and **Spring Boot 4** foundation and is designed to support both archival use cases,
 such as preserving and organizing historical race information, and operational use cases, such as
 telemetry ingestion and route management for live event scenarios.
 
@@ -162,7 +162,7 @@ to the [Development Guide](./docs/development.md).
 
 ### Quick Start
 
-1. **Prerequisites**: Java 21, Maven, PostgreSQL
+1. **Prerequisites**: Java 25, Maven, PostgreSQL
 2. **Clone**: `git clone git@github.com:EnduranceCode/endurancetrio-community.git`
 3. **Configure**: Set up `application-secrets.yaml` from template
 4. **Build**: `./mvnw clean install` (frontend assets are generated automatically in production mode)

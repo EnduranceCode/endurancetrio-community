@@ -8,7 +8,7 @@ cp endurancetrio-app/src/main/resources/template-secrets.yaml \
 ./launch-app.sh   # builds with -Dfrontend.build.script=build:dev, runs with local profile
 ```
 
-IntelliJ: `.run/EnduranceTrioApplication.run.xml` (Temurin 21, local profile, pre-launch frontend build).
+IntelliJ: `.run/EnduranceTrioApplication.run.xml` (Temurin 25, local profile, pre-launch frontend build).
 
 ## Build & test
 
@@ -117,7 +117,7 @@ Profiles: `local` (localhost PG), `dev`/`prod` (env-var PG), `test` (H2). Activa
 
 ## Docker
 
-- Image: `ghcr.io/endurancetrio/endurancetrio-community`, multi-stage `eclipse-temurin:21-jre-alpine`
+- Image: `ghcr.io/endurancetrio/endurancetrio-community`, multi-stage `eclipse-temurin:25-jre-alpine`
 - Entrypoint drops privileges via PUID/PGID env vars. G1GC JVM tuning.
 - CI: `.github/workflows/publish-image.yml` — triggers on release publish or `workflow_dispatch`
 - Deployment Postgres port mapping is loopback-only (`127.0.0.1:${POSTGRES_EXT_PORT:-5432}:5432`), intended for local access on server or SSH tunnel clients
