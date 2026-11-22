@@ -1,7 +1,7 @@
 # EnduranceTrio
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.0-brightgreen?logo=springboot)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.2.0-brightgreen?logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 

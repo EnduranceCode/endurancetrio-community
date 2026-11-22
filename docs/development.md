@@ -22,7 +22,7 @@ an overview of the project, see the [main README.md](../README.md).
 ## Technology Stack
 
 - **Java 21** - Latest LTS version for optimal performance and features
-- **Spring Boot 4.0.0** - Modern application framework with latest stable features
+- **Spring Boot 4.2.0** - Modern application framework with latest stable features
 - **Spring Data JPA** - Robust data persistence and repository abstraction
 - **PostgreSQL 18** - An advanced Open Source Relational Database for data persistence
 - **H2 Database** - In-memory database for testing

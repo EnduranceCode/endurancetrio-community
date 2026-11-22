@@ -23,7 +23,7 @@ WORKDIR /opt/endurancetrio-community
 
 ARG JAR_FILE=endurancetrio-app/target/*.jar
 COPY ${JAR_FILE} application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /opt/endurancetrio-community
@@ -35,14 +35,14 @@ ENV APP_USER=${APP_USER}
 # We set the APP_HOME value matching the WORKDIR path
 ENV APP_HOME=/opt/endurancetrio-community
 
-RUN addgroup -S ${APP_USER} && adduser -S ${APP_USER} -G ${APP_USER} && apk --no-cache add curl shadow su-exec
+RUN addgroup -S "${APP_USER}" && adduser -S "${APP_USER}" -G "${APP_USER}" && apk --no-cache add curl shadow su-exec
 
-COPY --from=builder /opt/endurancetrio-community/dependencies/ ./
-COPY --from=builder /opt/endurancetrio-community/spring-boot-loader/ ./
-COPY --from=builder /opt/endurancetrio-community/snapshot-dependencies/ ./
-COPY --from=builder /opt/endurancetrio-community/application/ ./
+COPY --from=builder /opt/endurancetrio-community/extracted/dependencies/ ./
+COPY --from=builder /opt/endurancetrio-community/extracted/spring-boot-loader/ ./
+COPY --from=builder /opt/endurancetrio-community/extracted/snapshot-dependencies/ ./
+COPY --from=builder /opt/endurancetrio-community/extracted/application/ ./
 
-RUN mkdir -p /opt/endurancetrio-community/logs && chown -R ${APP_USER}:${APP_USER} /opt/endurancetrio-community
+RUN mkdir -p /opt/endurancetrio-community/logs && chown -R "${APP_USER}":"${APP_USER}" /opt/endurancetrio-community
 
 COPY docker/build-assets/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
