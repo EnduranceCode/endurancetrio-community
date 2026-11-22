@@ -23,11 +23,11 @@ app:
   featured-article-ids: ${FEATURED_ARTICLE_IDS:1,2}
   featured-event-article-id: ${FEATURED_EVENT_ARTICLE_ID:3}
   featured-event-ids: ${FEATURED_EVENT_IDS:300001,300002,300003,300004}
-  initialization:
-    first-account-owner: ${FIRST_OWNER:}
-    first-account-key-hash: ${FIRST_HASH:}
   google:
     adsense-id: ${GOOGLE_ADSENSE_ID:}
+  initialization:
+    first-account-key-hash: ${FIRST_HASH:}
+    first-account-owner: ${FIRST_OWNER:}
   kofi:
     user-id: ${KOFI_USER_ID:}
   open-graph:
@@ -62,19 +62,22 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n"
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health,metrics,info
   endpoint:
     health:
       show-details: always
     metrics:
       enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
 
 server:
-  forward-headers-strategy: native
   port: 8080
+  request:
+    header:
+      forwarded:
+        strategy: web-server
 
 spring:
   application:
@@ -86,14 +89,14 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     hikari:
-      pool-name: EnduranceTrio-HikariPool
       connection-test-query: SELECT 1
       connection-timeout: 30000
       idle-timeout: 600000
       keepalive-time: 300000
-      maximum-pool-size: 3
       max-lifetime: 1800000
+      maximum-pool-size: 3
       minimum-idle: 1
+      pool-name: EnduranceTrio-HikariPool
       transaction-isolation: TRANSACTION_READ_COMMITTED
 
   flyway:
