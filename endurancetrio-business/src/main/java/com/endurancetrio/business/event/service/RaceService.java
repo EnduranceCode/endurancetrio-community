@@ -20,9 +20,9 @@
 
 package com.endurancetrio.business.event.service;
 
-import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.ResultsDTO;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,13 +46,13 @@ public interface RaceService {
   Page<RaceDTO> getNonDerivedRacesWithMostRecentAddedResults(Pageable pageable);
 
   /**
-   * Returns a {@link RaceResultsDTO} containing the results of the given {@code race}, grouped by
-   * {@link AgeGroup}. The results include individual, team, or relay entries depending on the
-   * race's type group, each enriched with computed time gaps relative to the overall winner.
+   * Returns a {@link RaceResultsDTO} containing the results of the given {@code race}. The wrapped
+   * {@link ResultsDTO} variant matches the race's type group: individual results are grouped by
+   * {@link AgeGroup} and enriched with computed time gaps relative to the overall winner, while
+   * team and relay results are currently empty placeholders.
    *
    * @param race the race whose results are to be retrieved
    * @return a {@link RaceResultsDTO} with the race results
-   * @throws EnduranceTrioException if the race's type group is invalid or unsupported
    */
   RaceResultsDTO getRaceResults(RaceDTO race);
 }

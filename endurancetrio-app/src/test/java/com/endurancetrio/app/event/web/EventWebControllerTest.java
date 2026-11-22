@@ -49,6 +49,7 @@ import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
+import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
@@ -455,7 +456,7 @@ class EventWebControllerTest {
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-        new RaceResultsDTO(null, Map.of()));
+      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
@@ -476,7 +477,7 @@ class EventWebControllerTest {
     )).thenReturn("Resultados de eventos de desportos de endurance");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-        new RaceResultsDTO(null, Map.of()));
+      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
 
     mockMvc.perform(get("/pt/events/1984/1/results/1"))
         .andExpect(status().isOk())
@@ -497,7 +498,7 @@ class EventWebControllerTest {
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-        new RaceResultsDTO(null, Map.of()));
+      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())
@@ -518,7 +519,7 @@ class EventWebControllerTest {
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-        new RaceResultsDTO(null, Map.of()));
+      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
 
     mockMvc.perform(get("/en/events/1984/1/results/2"))
         .andExpect(status().isOk())
@@ -550,7 +551,7 @@ class EventWebControllerTest {
     )).thenReturn("View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-        new RaceResultsDTO(null, Map.of()));
+      new RaceResultsDTO(null, new IndividualRaceResultsDTO(Map.of())));
 
     mockMvc.perform(get("/en/events/1984/1/results/3"))
         .andExpect(status().isOk())
@@ -577,7 +578,7 @@ class EventWebControllerTest {
         List.of(fullResult)
     );
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
-        new RaceResultsDTO(RACE_1, individualResults));
+      new RaceResultsDTO(RACE_1, new IndividualRaceResultsDTO(individualResults)));
 
     mockMvc.perform(get("/en/events/1984/1/results/1"))
         .andExpect(status().isOk())

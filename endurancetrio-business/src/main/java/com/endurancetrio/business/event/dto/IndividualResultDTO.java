@@ -55,10 +55,30 @@ import java.time.Duration;
  * @param gap        the time gap to the overall winner (may be null)
  * @param points     the points awarded for this result (may be null)
  */
-public record IndividualResultDTO(Long id, RaceDTO race, Integer rank, Penalty penalty, AthleteDTO athlete,
-                                  AgeGroup ageGroup, ParaClass paraClass, TeamDTO team, String teamName, String bib,
-                                  Duration swim, Duration firstBike, Duration firstRun, Duration t1, Duration bike,
-                                  Duration t2, Duration run, Duration secondRun, Duration t3, Duration secondBike,
-                                  Duration total, Duration gap, Integer points) {
+public record IndividualResultDTO(
+  Long id,
+  RaceDTO race,
+  Integer rank,
+  Penalty penalty,
+  AthleteDTO athlete,
+  AgeGroup ageGroup,
+  ParaClass paraClass,
+  TeamDTO team,
+  String teamName,
+  String bib,
+  Duration swim,
+  Duration firstBike,
+  Duration firstRun,
+  Duration t1,
+  Duration bike,
+  Duration t2,
+  Duration run,
+  Duration secondRun,
+  Duration t3,
+  Duration secondBike,
+  Duration total,
+  Duration gap,
+  Integer points
+) {
 
 }

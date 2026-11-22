@@ -21,7 +21,9 @@
 package com.endurancetrio.business.event.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
@@ -56,22 +58,46 @@ class RaceResultsDTOTest {
         Duration.ofMinutes(116).plusSeconds(20), Duration.ZERO, 1000
     );
 
-    underTest = new RaceResultsDTO(race, Map.of(AGE_GROUP, List.of(individualResult)));
+    underTest = new RaceResultsDTO(race, new IndividualRaceResultsDTO(Map.of(AGE_GROUP, List.of(individualResult))));
   }
 
   @Test
   void dtoShouldRetainValues() {
     assertEquals(race, underTest.race());
-    assertEquals(1, underTest.individualResults().size());
-    assertTrue(underTest.individualResults().containsKey(AGE_GROUP));
-    assertEquals(individualResult, underTest.individualResults().get(AGE_GROUP).getFirst());
+    assertEquals("INDIVIDUAL", underTest.results().resultType());
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, underTest.results());
+    assertEquals(1, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AGE_GROUP));
+    assertEquals(individualResult, results.individualResults().get(AGE_GROUP).getFirst());
+  }
+
+  @Test
+  void individualResultsCanContainOpenGroup() {
+    RaceResultsDTO dto = new RaceResultsDTO(race,
+      new IndividualRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(individualResult)))
+    );
+
+    assertEquals("INDIVIDUAL", dto.results().resultType());
+    assertNotNull(dto.individualResults());
+    assertTrue(dto.individualResults().containsKey(AgeGroup.OPEN));
   }
 
   @Test
   void individualResultsCanBeEmpty() {
-    RaceResultsDTO dto = new RaceResultsDTO(race, Map.of());
+    RaceResultsDTO dto = new RaceResultsDTO(race, new IndividualRaceResultsDTO(Map.of()));
+
     assertNotNull(dto);
     assertEquals(race, dto.race());
+    assertEquals("INDIVIDUAL", dto.results().resultType());
+    assertNotNull(dto.individualResults());
     assertTrue(dto.individualResults().isEmpty());
+  }
+
+  @Test
+  void emptyVariantShouldHaveNoIndividualResults() {
+    RaceResultsDTO dto = new RaceResultsDTO(race, new EmptyRaceResultsDTO());
+
+    assertEquals("NONE", dto.results().resultType());
+    assertNull(dto.individualResults());
   }
 }
