@@ -63,7 +63,7 @@ public enum AthleteLetterRange {
     }
     try {
       return valueOf(id.trim().toUpperCase(Locale.ROOT));
-    } catch (IllegalArgumentException exception) {
+    } catch (IllegalArgumentException _) {
       return null;
     }
   }

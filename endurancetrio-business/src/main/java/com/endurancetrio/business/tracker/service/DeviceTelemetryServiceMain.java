@@ -61,7 +61,7 @@ public class DeviceTelemetryServiceMain implements DeviceTelemetryService {
 
     try {
       return deviceTelemetryMapper.map(deviceTelemetryRepository.save(deviceTelemetry));
-    } catch (EntityNotFoundException exception) {
+    } catch (EntityNotFoundException _) {
       throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND));
     }
   }
