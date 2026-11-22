@@ -74,35 +74,6 @@
 
   <link rel="stylesheet" data-th-href="@{/css/style.css}">
   <script defer="defer" data-th-src="@{/js/script.js}"></script>
-
-  <script th:if="${metadata.view != 'error' and @environment.acceptsProfiles('local')}">
-    (function () {
-      // Connects to Spring Boot DevTools' embedded LiveReload WebSocket server,
-      // which sends "reload" commands when template or resource changes are detected.
-      // The WebSocket is explicitly closed before the page enters bfcache to avoid
-      // interfering with Firefox's back-forward cache.
-      const ws = new WebSocket('ws://localhost:35729/livereload');
-      ws.onopen = function () {
-        ws.send(JSON.stringify({
-          command: 'hello',
-          protocols: ['http://livereload.com/protocols/official-7'],
-          serverName: 'browser'
-        }));
-      };
-      ws.onmessage = function (event) {
-        try {
-          const msg = JSON.parse(event.data);
-          if (msg.command === 'reload') {
-            location.reload();
-          }
-        } catch (e) {
-        }
-      };
-      window.addEventListener('pagehide', function () {
-        ws.close();
-      });
-    })();
-  </script>
 </head>
 
 <body>

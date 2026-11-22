@@ -663,20 +663,19 @@ the project in [IntelliJ](https://www.jetbrains.com/idea/), the available run co
 
 ### Hot Reload
 
-The project is configured for fast development feedback using Spring Boot DevTools and an inline
-LiveReload client:
+The project uses Spring Boot DevTools and a webpack watch build for fast development feedback.
+DevTools restarts the application when Java classes change. Templates and frontend assets are read
+directly from their source or build output, so a manual browser refresh (`Ctrl/Cmd+R`) is all that
+is needed after saving them.
 
-1. **Spring Boot DevTools** starts an embedded LiveReload WebSocket server on port `35729`
-   (visible in the logs as `LiveReload server is running on port 35729`)
-2. An inline script in the HTML `<head>` (only rendered on the `local` profile) connects to this
-   server and listens for reload commands
-3. When a file changes, DevTools sends a reload notification and the browser auto-refreshes
+Spring Boot's LiveReload server is not used: it is deprecated with no replacement. There is no
+inline client script and no WebSocket listener on port `35729`.
 
 #### Template changes (`.html`)
 
 Templates are read directly from the source tree using a `file:` prefix (configured in
-`application-local.yaml`). Saving a template triggers a LiveReload signal via DevTools and
-the browser auto-refreshes — no build step, compilation, or manual refresh is needed.
+`application-local.yaml`), with Thymeleaf caching disabled. Saving a template needs no build step
+and no restart: refresh the browser to see the change.
 
 #### XML sitemap template (`.xml`)
 
@@ -693,15 +692,15 @@ press Alt+Enter on the reported URI and choose *Ignore external resource*.
 
 For continuous frontend rebuilds, run `FrontendAssetsWatch` in a separate IntelliJ run tab.
 Webpack watches the source files and rebuilds to `target/classes/static/` on every change
-(the `WEBPACK_OUTPUT_DIR` env var is set in the run config). DevTools detects the new files
-there and triggers a browser auto-refresh.
+(the `WEBPACK_OUTPUT_DIR` env var is set in the run config). Refresh the browser to pick up the
+rebuilt assets.
 
-#### What triggers a browser refresh
+#### What happens when files change
 
 | Change                       | What happens                                                                 |
 |------------------------------|------------------------------------------------------------------------------|
-| Thymeleaf template (`.html`) | DevTools detects the change → browser auto-refreshes                         |
-| Frontend (`.scss`, `.js`)    | Webpack watch rebuilds → DevTools detects → browser auto-refreshes           |
+| Thymeleaf template (`.html`) | Read from source on the next request → refresh the browser                   |
+| Frontend (`.scss`, `.js`)    | Webpack watch rebuilds to `target/classes/static/` → refresh the browser     |
 | Java class                   | IntelliJ offers a hotswap button (no restart needed for method body changes) |
 
 #### Profile safety
@@ -709,10 +708,9 @@ there and triggers a browser auto-refresh.
 All hot-reload features are scoped to the `local` profile only:
 
 - `spring.thymeleaf.cache: false` — only in `application-local.yaml`; production uses `cache: true`
-- LiveReload client script — gated on `@environment.acceptsProfiles('local')` in the Thymeleaf
-  template
 - DevTools — only active when running from an IDE or `spring-boot:run`; excluded from the
   production JAR by the Spring Boot Maven plugin
+- No browser auto-refresh client is rendered in any profile
 
 ### Testing Error Pages
 
@@ -751,8 +749,9 @@ the `local` profile and poses no risk in production deployments.
 
 #### Notes
 
-- LiveReload will **not** auto-refresh error pages because the browser URL does not change on
-  error. Manually refresh to see error-page updates.
+- Refresh the browser after changing a template or a frontend asset. Error pages are no
+  exception: the browser URL does not change on error, so the new markup is only visible after
+  a refresh.
 - The language selector works on error pages: switching between `en` and `pt` in the URL
   changes the rendered locale.
 
