@@ -33,6 +33,7 @@ import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.common.utils.PaginationUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
+import com.endurancetrio.app.event.enumerator.TeamResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
@@ -46,6 +47,7 @@ import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
@@ -85,6 +87,7 @@ public class EventWebController {
   private static final String VIEW_RACE_RESULTS = "race-results";
 
   private static final String ATTRIBUTE_ACTIVE_COLUMNS = "activeColumns";
+  private static final String ATTRIBUTE_ACTIVE_CONTRIBUTOR_COLUMNS = "activeContributorColumns";
   private static final String ATTRIBUTE_ARTICLES = "articles";
   private static final String ATTRIBUTE_ARTICLES_COUNT = "articlesCount";
   private static final String ATTRIBUTE_COUNTIES_BY_DISTRICT = "countiesByDistrict";
@@ -354,6 +357,7 @@ public class EventWebController {
 
     RaceResultsDTO raceResults = raceService.getRaceResults(currentRace);
     Set<String> activeColumns = computeActiveColumns(raceResults);
+    Set<String> activeContributorColumns = computeActiveIndividualColumns(getContributors(raceResults));
 
     long articlesCount = insightService.getArticlesCountByEvent(eventId);
 
@@ -365,6 +369,7 @@ public class EventWebController {
     model.addAttribute(ATTRIBUTE_RACE_ID_NEXT, raceIdNext);
     model.addAttribute(ATTRIBUTE_RACE_RESULTS, raceResults);
     model.addAttribute(ATTRIBUTE_ACTIVE_COLUMNS, activeColumns);
+    model.addAttribute(ATTRIBUTE_ACTIVE_CONTRIBUTOR_COLUMNS, activeContributorColumns);
     model.addAttribute(ATTRIBUTE_ARTICLES_COUNT, articlesCount);
 
     return VIEW_RACE_RESULTS;
@@ -412,32 +417,81 @@ public class EventWebController {
   }
 
   /**
-   * Computes the set of column names that have at least one non-null value across all OPEN results.
+   * Computes the columns for the result table matching the race's result variant.
    * <p>
-   * Only the OPEN group is scanned so that column visibility is consistent across all age-group
-   * tables.
+   * Individual races use the OPEN group of individual results. Collective races (and later relay
+   * races) use the team columns computed from the stored team rows. Contributors of those races are
+   * handled separately through {@link #computeActiveIndividualColumns(List)}.
    *
    * @param raceResults the race results
-   * @return a set of column names with non-null data in the OPEN group
+   * @return a set of column codes for the result table of this variant
    */
   private static @NonNull Set<String> computeActiveColumns(RaceResultsDTO raceResults) {
     return switch (raceResults.results()) {
-      case IndividualRaceResultsDTO(Map<AgeGroup, List<IndividualResultDTO>> individualResults) -> {
-        Set<String> active = new HashSet<>();
-        List<IndividualResultDTO> openResults = individualResults.get(AgeGroup.OPEN);
-        if (openResults != null) {
-          for (IndividualResultDTO result : openResults) {
-            for (IndividualResultColumns column : IndividualResultColumns.values()) {
-              if (column.isActive(result)) {
-                active.add(column.getCode());
-              }
-            }
-          }
-        }
-        yield active;
-      }
-      case TeamRaceResultsDTO _ -> Set.of();
+      case IndividualRaceResultsDTO(Map<AgeGroup, List<IndividualResultDTO>> individualResults) ->
+        computeActiveIndividualColumns(individualResults.get(AgeGroup.OPEN));
+      case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) -> computeActiveTeamColumns(teamResults);
       case EmptyRaceResultsDTO() -> Set.of();
+    };
+  }
+
+  /**
+   * Computes the set of column names that have at least one non-null value across the given
+   * individual results. Used for the OPEN group of individual races and, with the flattened
+   * contributors, for collective and relay races. A null list, as produced by a map with no OPEN
+   * group, yields an empty set.
+   *
+   * @param results the individual results to scan, may be null
+   * @return a set of column names with non-null data
+   */
+  private static @NonNull Set<String> computeActiveIndividualColumns(
+    @Nullable List<IndividualResultDTO> results
+  ) {
+    if (results == null) {
+      return Set.of();
+    }
+
+    Set<String> active = new HashSet<>();
+    for (IndividualResultDTO result : results) {
+      for (IndividualResultColumns column : IndividualResultColumns.values()) {
+        if (column.isActive(result)) {
+          active.add(column.getCode());
+        }
+      }
+    }
+    return active;
+  }
+
+  /**
+   * Computes the set of team column names that have at least one value across all the given team
+   * results.
+   *
+   * @param teamResults the team results of a collective race
+   * @return a set of column names with values in at least one team row
+   */
+  private static @NonNull Set<String> computeActiveTeamColumns(List<TeamResultDTO> teamResults) {
+    Set<String> active = new HashSet<>();
+    for (TeamResultDTO teamResult : teamResults) {
+      for (TeamResultColumns column : TeamResultColumns.values()) {
+        if (column.isActive(teamResult)) {
+          active.add(column.getCode());
+        }
+      }
+    }
+    return active;
+  }
+
+  /**
+   * Returns the individual results contributing to the given race, flattened across all team rows.
+   *
+   * @param raceResults the race results
+   * @return the contributors of a collective race, or an empty list for other result types
+   */
+  private static @NonNull List<IndividualResultDTO> getContributors(RaceResultsDTO raceResults) {
+    return switch (raceResults.results()) {
+      case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) ->
+        teamResults.stream().flatMap(teamResult -> teamResult.individualResults().stream()).toList();
+      case IndividualRaceResultsDTO _, EmptyRaceResultsDTO() -> List.of();
     };
   }
 

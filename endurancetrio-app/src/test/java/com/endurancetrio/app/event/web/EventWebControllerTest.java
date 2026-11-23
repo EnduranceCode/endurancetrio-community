@@ -53,6 +53,8 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
@@ -608,6 +610,68 @@ class EventWebControllerTest {
       .andExpect(view().name("race-results"))
       .andExpect(
         model().attribute("activeColumns", Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "total")));
+  }
+
+  @Test
+  void getRaceResultsShouldDetectTeamColumnsWithValues() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(), any())).thenReturn(
+      "Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(), any())).thenReturn(
+      "View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    var fullTeam = teamResultDTO(1L, List.of());
+    var partialTeam = new TeamResultDTO(2L, RACE_1, null, "", null, null, null, null, null, null, null, null,
+      List.of()
+    );
+
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+      new RaceResultsDTO(RACE_1, new TeamRaceResultsDTO(List.of(fullTeam, partialTeam))));
+
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
+      .andExpect(status().isOk())
+      .andExpect(view().name("race-results"))
+      .andExpect(model().attribute("activeColumns",
+        Matchers.containsInAnyOrder("rank", "teamName", "bib", "total", "points", "cumulativeRank", "athletesCount")
+      ))
+      .andExpect(model().attribute("activeContributorColumns", Matchers.empty()));
+  }
+
+  @Test
+  void getRaceResultsShouldComputeContributorColumnsAcrossAllTeams() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(), any())).thenReturn(
+      "Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(), any())).thenReturn(
+      "View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    var teamWithAgeGroup = teamResultDTO(1L, List.of(contributor(10L, AgeGroup.OPEN, null)));
+    var teamWithParaClass = teamResultDTO(2L, List.of(contributor(11L, null, ParaClass.AQ_S1)));
+
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+      new RaceResultsDTO(RACE_1, new TeamRaceResultsDTO(List.of(teamWithAgeGroup, teamWithParaClass))));
+
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
+      .andExpect(status().isOk())
+      .andExpect(view().name("race-results"))
+      .andExpect(model().attribute("activeColumns",
+        Matchers.containsInAnyOrder("rank", "teamName", "bib", "total", "points", "cumulativeRank", "athletesCount")
+      ))
+      .andExpect(model().attribute("activeContributorColumns",
+        Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "paraClass", "total")
+      ));
+  }
+
+  private static TeamResultDTO teamResultDTO(Long id, List<IndividualResultDTO> contributors) {
+    return new TeamResultDTO(id, RACE_1, 1, "Team Alpha", "101", Duration.ofMinutes(200), null, 100, null, 5, null, 3,
+      contributors
+    );
+  }
+
+  private static IndividualResultDTO contributor(Long id, AgeGroup ageGroup, ParaClass paraClass) {
+    return new IndividualResultDTO(id, RACE_1, 1, null, AthleteDTOFixtures.standard(), ageGroup, paraClass, null, null,
+      null, null, null, null, null, null, null, null, null, null, null, Duration.ofMinutes(10), null, null
+    );
   }
 
   private static RaceResultsDTO emptyIndividualResults() {
