@@ -25,14 +25,19 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
 import com.endurancetrio.business.event.mapper.RaceMapper;
+import com.endurancetrio.business.event.mapper.TeamResultMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
 import com.endurancetrio.data.event.model.entity.Race;
+import com.endurancetrio.data.event.model.entity.TeamResult;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
 import com.endurancetrio.data.event.repository.RaceRepository;
+import com.endurancetrio.data.event.repository.TeamResultRepository;
 import java.time.Duration;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -59,18 +64,21 @@ public class RaceServiceMain implements RaceService {
   private final IndividualResultMapper individualResultMapper;
   private final RaceRepository raceRepository;
   private final RaceMapper raceMapper;
+  private final TeamResultMapper teamResultMapper;
+  private final TeamResultRepository teamResultRepository;
 
   @Autowired
   public RaceServiceMain(
-      IndividualResultRepository individualResultRepository,
-      IndividualResultMapper individualResultMapper,
-      RaceRepository raceRepository,
-      RaceMapper raceMapper
+    IndividualResultRepository individualResultRepository, IndividualResultMapper individualResultMapper,
+    RaceRepository raceRepository, RaceMapper raceMapper, TeamResultMapper teamResultMapper,
+    TeamResultRepository teamResultRepository
   ) {
     this.individualResultRepository = individualResultRepository;
     this.individualResultMapper = individualResultMapper;
     this.raceRepository = raceRepository;
     this.raceMapper = raceMapper;
+    this.teamResultMapper = teamResultMapper;
+    this.teamResultRepository = teamResultRepository;
   }
 
   @Override
@@ -182,15 +190,31 @@ public class RaceServiceMain implements RaceService {
   }
 
   /**
-   * Stub placeholder for team race results.
+   * Builds the team race results for the given {@code race} from the stored
+   * {@link TeamResult team result} rows.
    * <p>
-   * Currently returns a {@link RaceResultsDTO} holding an {@link EmptyRaceResultsDTO}.
+   * The rows come back ordered by rank ascending, so the first row is the winner: its cumulative
+   * rank, total or points (depending on the race type) is the reference used by the mapper to
+   * compute each team's gap. Rank, total and points are read as stored; nothing is recalculated.
    *
    * @param race the race whose team results are to be built
-   * @return a {@link RaceResultsDTO} with no results
+   * @return a {@link RaceResultsDTO} holding a {@link TeamRaceResultsDTO}, which is empty when the
+   *         race has no team results
    */
   private RaceResultsDTO buildTeamRaceResults(RaceDTO race) {
-    return new RaceResultsDTO(race, new EmptyRaceResultsDTO());
+    List<TeamResult> teamResults = teamResultRepository.findByRaceIdWithGraph(race.id());
+
+    if (teamResults.isEmpty()) {
+      return new RaceResultsDTO(race, new TeamRaceResultsDTO(List.of()));
+    }
+
+    TeamResult winner = teamResults.getFirst();
+
+    List<TeamResultDTO> results = teamResults.stream()
+      .map(teamResult -> teamResultMapper.map(race, teamResult, winner))
+      .toList();
+
+    return new RaceResultsDTO(race, new TeamRaceResultsDTO(results));
   }
 
   /**

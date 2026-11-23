@@ -21,8 +21,8 @@
 package com.endurancetrio.business.event.dto;
 
 /**
- * The {@link EmptyRaceResultsDTO} variant carries no results. It is used by the collective and
- * relay stubs until those result types are implemented.
+ * The {@link EmptyRaceResultsDTO} variant carries no results. It is used by the relay stub until
+ * that result type is implemented.
  */
 public record EmptyRaceResultsDTO() implements ResultsDTO {
 

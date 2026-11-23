@@ -101,4 +101,18 @@ class RaceResultsDTOTest {
     assertEquals("NONE", dto.results().resultType());
     assertInstanceOf(EmptyRaceResultsDTO.class, dto.results());
   }
+
+  @Test
+  void teamVariantShouldHoldContributors() {
+    TeamResultDTO teamResult = new TeamResultDTO(2L, race, 1, "Team Alpha", "201", Duration.ofMinutes(200), null, 10,
+      null, 5, null, 3, List.of(individualResult)
+    );
+
+    RaceResultsDTO dto = new RaceResultsDTO(race, new TeamRaceResultsDTO(List.of(teamResult)));
+
+    assertEquals("COLLECTIVE", dto.results().resultType());
+    TeamRaceResultsDTO results = assertInstanceOf(TeamRaceResultsDTO.class, dto.results());
+    assertEquals(List.of(teamResult), results.teamResults());
+    assertEquals(List.of(individualResult), results.teamResults().getFirst().individualResults());
+  }
 }
