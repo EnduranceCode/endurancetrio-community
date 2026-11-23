@@ -24,7 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -33,24 +36,31 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
 import com.endurancetrio.business.event.mapper.RaceMapper;
+import com.endurancetrio.business.event.mapper.TeamResultMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
 import com.endurancetrio.data.event.model.entity.Race;
+import com.endurancetrio.data.event.model.entity.TeamResult;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import com.endurancetrio.data.event.model.enumerator.ResultStatus;
 import com.endurancetrio.data.event.repository.IndividualResultRepository;
 import com.endurancetrio.data.event.repository.RaceRepository;
+import com.endurancetrio.data.event.repository.TeamResultRepository;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -76,6 +86,12 @@ class RaceServiceMainTest {
 
   @Mock
   private RaceMapper raceMapper;
+
+  @Mock
+  private TeamResultMapper teamResultMapper;
+
+  @Mock
+  private TeamResultRepository teamResultRepository;
 
   @InjectMocks
   private RaceServiceMain underTest;
@@ -255,23 +271,75 @@ class RaceServiceMainTest {
   }
 
   @Test
-  void getRaceResultsForCollectiveRaceShouldReturnNullIndividualResults() {
+  void getRaceResultsForCollectiveRaceShouldReturnStoredTeamResults() {
+    var teamResult = teamResult(1L, 1, "Alpha");
+    teamResult.setBib("101");
+    teamResult.setTotal(Duration.ofMinutes(200));
+    teamResult.setPoints(10);
+    teamResult.setCumulativeRank(5);
+    teamResult.setAthletesCount(3);
+    teamResult.setIndividualResults(Set.of(result1));
+
+    var contributorDTO = mock(IndividualResultDTO.class);
+    var expected = new TeamResultDTO(1L, collectiveRace, 1, "Alpha", "101", Duration.ofMinutes(200), null, 10, null, 5,
+      null, 3, List.of(contributorDTO)
+    );
+
+    when(teamResultRepository.findByRaceIdWithGraph(collectiveRace.id())).thenReturn(List.of(teamResult));
+    when(teamResultMapper.map(collectiveRace, teamResult, teamResult)).thenReturn(expected);
+
     RaceResultsDTO result = underTest.getRaceResults(collectiveRace);
 
     assertNotNull(result);
     assertEquals(collectiveRace, result.race());
-    assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
+    TeamRaceResultsDTO results = assertInstanceOf(TeamRaceResultsDTO.class, result.results());
+    assertEquals("COLLECTIVE", results.resultType());
+    assertEquals(List.of(expected), results.teamResults());
     verifyNoInteractions(individualResultRepository);
   }
 
   @Test
-  void getRaceResultsForRelayRaceShouldReturnNullIndividualResults() {
+  void getRaceResultsForCollectiveRaceShouldPreserveRepositoryOrder() {
+    var rankOneAlpha = teamResult(3L, 1, "Alpha");
+    var rankOneZulu = teamResult(2L, 1, "Zulu");
+    var rankTwo = teamResult(1L, 2, "Bravo");
+    var rankThree = teamResult(4L, 3, "Aardvark");
+
+    when(teamResultRepository.findByRaceIdWithGraph(collectiveRace.id())).thenReturn(
+      List.of(rankOneAlpha, rankOneZulu, rankTwo, rankThree));
+
+    underTest.getRaceResults(collectiveRace);
+
+    var captor = ArgumentCaptor.forClass(TeamResult.class);
+    verify(teamResultMapper, times(4)).map(eq(collectiveRace), captor.capture(), eq(rankOneAlpha));
+
+    assertEquals(List.of("Alpha", "Zulu", "Bravo", "Aardvark"),
+      captor.getAllValues().stream().map(TeamResult::getTeamName).toList()
+    );
+  }
+
+  @Test
+  void getRaceResultsForCollectiveRaceWithNoTeamResultsShouldReturnEmptyTeamResults() {
+    when(teamResultRepository.findByRaceIdWithGraph(collectiveRace.id())).thenReturn(List.of());
+
+    RaceResultsDTO result = underTest.getRaceResults(collectiveRace);
+
+    assertNotNull(result);
+    assertEquals(collectiveRace, result.race());
+    TeamRaceResultsDTO results = assertInstanceOf(TeamRaceResultsDTO.class, result.results());
+    assertTrue(results.teamResults().isEmpty());
+    verifyNoInteractions(individualResultRepository);
+  }
+
+  @Test
+  void getRaceResultsForRelayRaceShouldReturnEmptyResults() {
     RaceResultsDTO result = underTest.getRaceResults(relayRace);
 
     assertNotNull(result);
     assertEquals(relayRace, result.race());
     assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
     verifyNoInteractions(individualResultRepository);
+    verifyNoInteractions(teamResultRepository);
   }
 
   @Test
@@ -334,5 +402,13 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     assertTrue(result.getContent().isEmpty());
+  }
+
+  private static TeamResult teamResult(Long id, Integer rank, String teamName) {
+    var teamResult = new TeamResult();
+    teamResult.setId(id);
+    teamResult.setRank(rank);
+    teamResult.setTeamName(teamName);
+    return teamResult;
   }
 }

@@ -45,6 +45,7 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
@@ -435,6 +436,7 @@ public class EventWebController {
         }
         yield active;
       }
+      case TeamRaceResultsDTO _ -> Set.of();
       case EmptyRaceResultsDTO() -> Set.of();
     };
   }

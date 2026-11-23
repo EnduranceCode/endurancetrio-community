@@ -36,6 +36,30 @@ import org.springframework.stereotype.Repository;
 public interface TeamResultRepository extends JpaRepository<@NonNull TeamResult, @NonNull Long> {
 
   /**
+   * Returns the {@link TeamResult team results} of the race with the given {@code raceId}, with
+   * their contributing individual results eagerly fetched.
+   * <p>
+   * The {@code individualResults} collection and, for each contributor, the athlete, team and
+   * source result are fetched to avoid N+1 queries when mapping to DTOs. For derived results
+   * (where a contributor's {@code sourceResult} is not null), the performance fields must be read
+   * from the source result. Rows are ordered by rank ascending.
+   *
+   * @param raceId the ID of the race to fetch team results for
+   * @return the team results of the given race, in classification order, possibly empty
+   */
+  @Query(
+    "SELECT DISTINCT tr FROM TeamResult tr "
+      + "LEFT JOIN FETCH tr.individualResults ir "
+      + "LEFT JOIN FETCH ir.athlete "
+      + "LEFT JOIN FETCH ir.team "
+      + "LEFT JOIN FETCH ir.sourceResult sr "
+      + "LEFT JOIN FETCH sr.team "
+      + "WHERE tr.race.id = :raceId "
+      + "ORDER BY tr.rank ASC"
+  )
+  List<TeamResult> findByRaceIdWithGraph(@Param("raceId") Long raceId);
+
+  /**
    * Returns the team placement (rank and penalty) for each of the given individual results that is
    * linked to a {@link TeamResult} in the <em>same</em> race.
    * <p>

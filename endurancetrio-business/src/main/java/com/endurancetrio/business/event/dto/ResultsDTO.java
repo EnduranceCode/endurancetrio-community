@@ -27,7 +27,7 @@ package com.endurancetrio.business.event.dto;
  * Each permitted variant carries only the data relevant to that result type and exposes a
  * {@link #resultType()} discriminator so callers can branch on the concrete variant.
  */
-public sealed interface ResultsDTO permits IndividualRaceResultsDTO, EmptyRaceResultsDTO {
+public sealed interface ResultsDTO permits IndividualRaceResultsDTO, TeamRaceResultsDTO, EmptyRaceResultsDTO {
 
   /**
    * Returns the discriminator identifying this result type.
