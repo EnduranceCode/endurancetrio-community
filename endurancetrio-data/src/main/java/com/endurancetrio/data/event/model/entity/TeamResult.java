@@ -99,6 +99,41 @@ import java.util.StringJoiner;
  *     {@link #getBib() bib} : the team's race bib number.
  *   </li>
  *   <li>
+ *     {@link #getSwim() swim} : the swim split time.
+ *   </li>
+ *   <li>
+ *     {@link #getFirstBike() firstBike} : the first bike split time
+ *     (for double-biathlon based disciplines).
+ *   </li>
+ *   <li>
+ *     {@link #getFirstRun() firstRun} : the first run split time
+ *     (for duathlon and double-biathlon based disciplines).
+ *   </li>
+ *   <li>
+ *     {@link #getT1() t1} : the first transition time.
+ *   </li>
+ *   <li>
+ *     {@link #getBike() bike} : the bike split time.
+ *   </li>
+ *   <li>
+ *     {@link #getT2() t2} : the second transition time.
+ *   </li>
+ *   <li>
+ *     {@link #getRun() run} : the run split time.
+ *   </li>
+ *   <li>
+ *     {@link #getSecondRun() secondRun} : the second run split time
+ *     (for duathlon and double-biathlon based disciplines).
+ *   </li>
+ *   <li>
+ *     {@link #getT3() t3} : the third transition time
+ *     (for double-biathlon based disciplines).
+ *   </li>
+ *   <li>
+ *     {@link #getSecondBike() secondBike} : the second bike split time
+ *     (for double-biathlon based disciplines).
+ *   </li>
+ *   <li>
  *     {@link #getCumulativeRank() cumulativeRank} : the sum of the finishing positions
  *     of the athletes contributing to the team classification.
  *   </li>
@@ -163,6 +198,46 @@ public class TeamResult extends BaseEntity<Long> {
 
   @Column(name = "bib")
   private String bib;
+
+  @Column(name = "swim")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration swim;
+
+  @Column(name = "first_bike")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration firstBike;
+
+  @Column(name = "first_run")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration firstRun;
+
+  @Column(name = "t1")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration t1;
+
+  @Column(name = "bike")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration bike;
+
+  @Column(name = "t2")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration t2;
+
+  @Column(name = "run")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration run;
+
+  @Column(name = "second_run")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration secondRun;
+
+  @Column(name = "t3")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration t3;
+
+  @Column(name = "second_bike")
+  @Convert(converter = DurationToIntegerConverter.class)
+  private Duration secondBike;
 
   @Column(name = "cumulative_rank")
   private Integer cumulativeRank;
@@ -292,6 +367,86 @@ public class TeamResult extends BaseEntity<Long> {
     this.bib = bib;
   }
 
+  public Duration getSwim() {
+    return swim;
+  }
+
+  public void setSwim(Duration swim) {
+    this.swim = swim;
+  }
+
+  public Duration getFirstBike() {
+    return firstBike;
+  }
+
+  public void setFirstBike(Duration firstBike) {
+    this.firstBike = firstBike;
+  }
+
+  public Duration getFirstRun() {
+    return firstRun;
+  }
+
+  public void setFirstRun(Duration firstRun) {
+    this.firstRun = firstRun;
+  }
+
+  public Duration getT1() {
+    return t1;
+  }
+
+  public void setT1(Duration t1) {
+    this.t1 = t1;
+  }
+
+  public Duration getBike() {
+    return bike;
+  }
+
+  public void setBike(Duration bike) {
+    this.bike = bike;
+  }
+
+  public Duration getT2() {
+    return t2;
+  }
+
+  public void setT2(Duration t2) {
+    this.t2 = t2;
+  }
+
+  public Duration getRun() {
+    return run;
+  }
+
+  public void setRun(Duration run) {
+    this.run = run;
+  }
+
+  public Duration getSecondRun() {
+    return secondRun;
+  }
+
+  public void setSecondRun(Duration secondRun) {
+    this.secondRun = secondRun;
+  }
+
+  public Duration getT3() {
+    return t3;
+  }
+
+  public void setT3(Duration t3) {
+    this.t3 = t3;
+  }
+
+  public Duration getSecondBike() {
+    return secondBike;
+  }
+
+  public void setSecondBike(Duration secondBike) {
+    this.secondBike = secondBike;
+  }
+
   public Integer getCumulativeRank() {
     return cumulativeRank;
   }
@@ -345,6 +500,16 @@ public class TeamResult extends BaseEntity<Long> {
         .add("ageGroup=" + Optional.ofNullable(ageGroup).map(AgeGroup::getCode).orElse(null))
         .add("paraClass=" + Optional.ofNullable(paraClass).map(ParaClass::getCode).orElse(null))
         .add("bib='" + bib + "'")
+        .add("swim=" + swim)
+        .add("firstBike=" + firstBike)
+        .add("firstRun=" + firstRun)
+        .add("t1=" + t1)
+        .add("bike=" + bike)
+        .add("t2=" + t2)
+        .add("run=" + run)
+        .add("secondRun=" + secondRun)
+        .add("t3=" + t3)
+        .add("secondBike=" + secondBike)
         .add("total=" + total)
         .add("points=" + points)
         .add("cumulativeRank=" + cumulativeRank)
