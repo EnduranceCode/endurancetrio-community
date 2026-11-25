@@ -190,6 +190,18 @@ public class RaceServiceMain implements RaceService {
   }
 
   /**
+   * Stub placeholder for relay race results.
+   * <p>
+   * Currently returns a {@link RaceResultsDTO} holding an {@link EmptyRaceResultsDTO}.
+   *
+   * @param race the race whose relay results are to be built
+   * @return a {@link RaceResultsDTO} with no results
+   */
+  private RaceResultsDTO buildRelayRaceResults(RaceDTO race) {
+    return new RaceResultsDTO(race, new EmptyRaceResultsDTO());
+  }
+
+  /**
    * Builds the team race results for the given {@code race} from the stored
    * {@link TeamResult team result} rows.
    * <p>
@@ -215,18 +227,6 @@ public class RaceServiceMain implements RaceService {
       .toList();
 
     return new RaceResultsDTO(race, new TeamRaceResultsDTO(results));
-  }
-
-  /**
-   * Stub placeholder for relay race results.
-   * <p>
-   * Currently returns a {@link RaceResultsDTO} holding an {@link EmptyRaceResultsDTO}.
-   *
-   * @param race the race whose relay results are to be built
-   * @return a {@link RaceResultsDTO} with no results
-   */
-  private RaceResultsDTO buildRelayRaceResults(RaceDTO race) {
-    return new RaceResultsDTO(race, new EmptyRaceResultsDTO());
   }
 
   /**

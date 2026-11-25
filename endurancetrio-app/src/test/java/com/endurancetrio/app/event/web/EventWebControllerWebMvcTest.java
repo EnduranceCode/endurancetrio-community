@@ -38,6 +38,7 @@ import com.endurancetrio.app.config.AppSecurityConfig;
 import com.endurancetrio.app.config.WebConfig;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
+import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
@@ -46,12 +47,14 @@ import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
 import com.endurancetrio.business.insight.service.InsightService;
+import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import com.endurancetrio.data.event.model.enumerator.ResultStatus;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +87,21 @@ class EventWebControllerWebMvcTest {
     ResultStatus.EMPTY.getCode()
   );
 
+  private static final RaceDTO RANK_RACE = new RaceDTO(RACE_ID, "Prova Coletiva", "Geral", EVENT_DATE, null,
+    List.of("TRIATHLON"), List.of("SPRINT"), RaceType.TEAM_BY_RANK, "COLLECTIVE", null, null,
+    ResultStatus.COMPLETE.getCode()
+  );
+
+  private static final RaceDTO INCOMPLETE_COLLECTIVE_RACE = new RaceDTO(RACE_ID, "Prova Coletiva", "Geral", EVENT_DATE,
+    null, List.of("TRIATHLON"), List.of("SPRINT"), RaceType.TEAM_BY_TIME, "COLLECTIVE", null, null,
+    ResultStatus.INCOMPLETE.getCode()
+  );
+
+  private static final RaceDTO INDIVIDUAL_INCOMPLETE_RACE = new RaceDTO(RACE_ID, "Individual Race", "Geral", EVENT_DATE,
+    null, List.of("TRIATHLON"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null, null,
+    ResultStatus.INCOMPLETE.getCode()
+  );
+
   private static final EventOverviewDTO EVENT_OVERVIEW = new EventOverviewDTO(EVENT_ID, "Triatlo de Peniche",
     EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(), List.of(COLLECTIVE_RACE), List.of()
   );
@@ -91,6 +109,21 @@ class EventWebControllerWebMvcTest {
   private static final EventOverviewDTO EVENT_OVERVIEW_WITH_EMPTY_RACE = new EventOverviewDTO(EVENT_ID,
     "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(), List.of(EMPTY_RACE),
     List.of()
+  );
+
+  private static final EventOverviewDTO EVENT_OVERVIEW_WITH_RANK_RACE = new EventOverviewDTO(EVENT_ID,
+    "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(), List.of(RANK_RACE),
+    List.of()
+  );
+
+  private static final EventOverviewDTO EVENT_OVERVIEW_WITH_INCOMPLETE_COLLECTIVE_RACE = new EventOverviewDTO(EVENT_ID,
+    "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(),
+    List.of(INCOMPLETE_COLLECTIVE_RACE), List.of()
+  );
+
+  private static final EventOverviewDTO EVENT_OVERVIEW_WITH_INDIVIDUAL_INCOMPLETE_RACE = new EventOverviewDTO(EVENT_ID,
+    "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(),
+    List.of(INDIVIDUAL_INCOMPLETE_RACE), List.of()
   );
 
   private static final String ALPHA_CONTRIBUTOR = AthleteDTOFixtures.standard().knownName();
@@ -146,6 +179,123 @@ class EventWebControllerWebMvcTest {
     assertEquals(1, StringUtils.countOccurrencesOf(html, ALPHA_CONTRIBUTOR));
     assertEquals(1, StringUtils.countOccurrencesOf(html, BRAVO_CONTRIBUTOR));
     assertEquals(1, StringUtils.countOccurrencesOf(html, CHARLIE_CONTRIBUTOR));
+  }
+
+  @Test
+  void collectiveRaceShouldRenderDurationGapForWinnerAndTrailingTeam() throws Exception {
+    var winner = new TeamResultDTO(1L, COLLECTIVE_RACE, 1, "Team Alpha", "101", 2, Duration.ofMinutes(200),
+      Duration.ZERO, null, null, null, null,
+      List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(100)))
+    );
+    var trailing = new TeamResultDTO(2L, COLLECTIVE_RACE, 2, "Team Bravo", "102", 2, Duration.ofMinutes(210),
+      Duration.ofMinutes(10), null, null, null, null,
+      List.of(contributor(11L, AthleteDTOFixtures.athleteCavaleiro(), Duration.ofMinutes(105)))
+    );
+
+    when(raceService.getRaceResults(COLLECTIVE_RACE)).thenReturn(
+      new RaceResultsDTO(COLLECTIVE_RACE, new TeamRaceResultsDTO(List.of(winner, trailing))));
+
+    mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andExpect(content().string(containsString("Gap")))
+      .andExpect(content().string(containsString("00:00:00")))
+      .andExpect(content().string(containsString("00:10:00")));
+  }
+
+  @Test
+  void collectiveRaceShouldRenderIntegerGapForByRankRace() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_RANK_RACE);
+
+    var winner = new TeamResultDTO(1L, RANK_RACE, 1, "Team Alpha", "101", 2, null, null, null, null, 5, 0,
+      List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(100)))
+    );
+    var trailing = new TeamResultDTO(2L, RANK_RACE, 2, "Team Bravo", "102", 2, null, null, null, null, 8, 3,
+      List.of(contributor(11L, AthleteDTOFixtures.athleteCavaleiro(), Duration.ofMinutes(105)))
+    );
+
+    when(raceService.getRaceResults(RANK_RACE)).thenReturn(
+      new RaceResultsDTO(RANK_RACE, new TeamRaceResultsDTO(List.of(winner, trailing))));
+
+    mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andExpect(content().string(containsString("Gap")))
+      .andExpect(content().string(containsString("<span>0</span>")))
+      .andExpect(content().string(containsString("<span>3</span>")));
+  }
+
+  @Test
+  void collectiveRaceShouldOmitExpandControlsWhenTeamHasNoContributors() throws Exception {
+    var withContributors = teamResult(1L, 1, "Team Alpha", "101", 1, Duration.ofMinutes(200), 5,
+      List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(200)))
+    );
+    var withoutContributors = teamResult(2L, 2, "Team Bravo", "102", 0, Duration.ofMinutes(210), 8, List.of());
+
+    when(raceService.getRaceResults(COLLECTIVE_RACE)).thenReturn(
+      new RaceResultsDTO(COLLECTIVE_RACE, new TeamRaceResultsDTO(List.of(withContributors, withoutContributors))));
+
+    String html = mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andReturn()
+      .getResponse()
+      .getContentAsString();
+
+    assertEquals(1, StringUtils.countOccurrencesOf(html, "class=\"expand\""));
+    assertEquals(1, StringUtils.countOccurrencesOf(html, "data-expand-content"));
+    assertEquals(1, StringUtils.countOccurrencesOf(html, "type=\"button\""));
+  }
+
+  @Test
+  void collectiveRaceWithResultsShouldRenderIncompleteStatus() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_INCOMPLETE_COLLECTIVE_RACE);
+    var team = teamResult(1L, 1, "Team Alpha", "101", 1, Duration.ofMinutes(200), 5,
+      List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(200)))
+    );
+
+    when(raceService.getRaceResults(INCOMPLETE_COLLECTIVE_RACE)).thenReturn(
+      new RaceResultsDTO(INCOMPLETE_COLLECTIVE_RACE, new TeamRaceResultsDTO(List.of(team))));
+
+    mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andExpect(content().string(containsString("Help complete this race")));
+  }
+
+  @Test
+  void collectiveRaceWithNoResultsShouldNotRenderIncompleteStatus() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_INCOMPLETE_COLLECTIVE_RACE);
+    when(raceService.getRaceResults(INCOMPLETE_COLLECTIVE_RACE)).thenReturn(
+      new RaceResultsDTO(INCOMPLETE_COLLECTIVE_RACE, new TeamRaceResultsDTO(List.of())));
+
+    mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andExpect(content().string(not(containsString("Help complete this race"))));
+  }
+
+  @Test
+  void individualRaceWithNoResultsShouldNotRenderIncompleteStatus() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_INDIVIDUAL_INCOMPLETE_RACE);
+    when(raceService.getRaceResults(INDIVIDUAL_INCOMPLETE_RACE)).thenReturn(
+      new RaceResultsDTO(INDIVIDUAL_INCOMPLETE_RACE, new IndividualRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of()))));
+
+    mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andExpect(content().string(not(containsString("Help complete this race"))));
+  }
+
+  @Test
+  void individualRaceWithResultsShouldRenderIncompleteStatus() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_INDIVIDUAL_INCOMPLETE_RACE);
+    var result = new IndividualResultDTO(10L, INDIVIDUAL_INCOMPLETE_RACE, 1, null, AthleteDTOFixtures.standard(),
+      AgeGroup.OPEN, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+      Duration.ofMinutes(100), Duration.ZERO, null
+    );
+    when(raceService.getRaceResults(INDIVIDUAL_INCOMPLETE_RACE)).thenReturn(
+      new RaceResultsDTO(INDIVIDUAL_INCOMPLETE_RACE,
+        new IndividualRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(result)))
+      ));
+
+    mockMvc.perform(get(RESULTS_PATH))
+      .andExpect(status().isOk())
+      .andExpect(content().string(containsString("Help complete this race")));
   }
 
   @Test

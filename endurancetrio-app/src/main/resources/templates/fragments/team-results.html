@@ -26,9 +26,9 @@
 
   <body>
     <div class="table-container"
-      data-th-fragment="team-results-table(results, activeColumns, activeContributorColumns)">
+      data-th-fragment="team-results-table(results, race, activeColumns, activeContributorColumns)">
       <table class="table is-fullwidth is-hoverable is-narrow"
-        data-th-with="TeamResultColumns=${T(com.endurancetrio.app.event.enumerator.TeamResultColumns)}"
+        data-th-with="TeamResultColumns=${T(com.endurancetrio.app.event.enumerator.TeamResultColumns)}, RaceType=${T(com.endurancetrio.data.event.model.enumerator.RaceType)}"
         data-sortable>
         <thead>
           <tr>
@@ -95,6 +95,15 @@
                 <span data-th-text="#{page.event.results.label.cumulativeRank}"></span>
               </span>
             </th>
+            <th class="is-narrow has-text-centered"
+              data-th-if="${activeColumns.contains(TeamResultColumns.GAP.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.GAP.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.gap}"></span>
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -105,6 +114,7 @@
                   data-th-if="${!#lists.isEmpty(team.individualResults())}"
                   data-th-attr="aria-label=#{page.event.results.a11y.toggle}"
                   data-expand
+                  type="button"
                   aria-expanded="false">
                 </button>
               </td>
@@ -125,7 +135,8 @@
               </td>
               <td class="is-narrow has-text-centered has-text-weight-semibold"
                 data-th-if="${activeColumns.contains(TeamResultColumns.TOTAL.getCode())}">
-                <span data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(team.total())}"></span>
+                <span data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(team.total())}">
+                </span>
               </td>
               <td class="is-narrow has-text-right"
                 data-th-if="${activeColumns.contains(TeamResultColumns.POINTS.getCode())}"
@@ -135,8 +146,24 @@
                 data-th-if="${activeColumns.contains(TeamResultColumns.CUMULATIVE_RANK.getCode())}"
                 data-th-text="${team.cumulativeRank()}">
               </td>
+              <td class="is-narrow has-text-centered"
+                data-th-if="${activeColumns.contains(TeamResultColumns.GAP.getCode())}">
+                <span data-th-switch="${race.raceType()}" data-th-remove="tag">
+                  <span data-th-case="${RaceType.TEAM_BY_TIME}"
+                    data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(team.totalGap())}">
+                  </span>
+                  <span data-th-case="${RaceType.TEAM_BY_RANK}"
+                    data-th-text="${team.cumulativeRankGap()}">
+                  </span>
+                  <span data-th-case="${RaceType.TEAM_BY_POINTS}"
+                    data-th-text="${team.pointsGap()}">
+                  </span>
+                </span>
+              </td>
             </tr>
-            <tr class="is-hidden" data-expand-content>
+            <tr class="is-hidden"
+              data-th-if="${!#lists.isEmpty(team.individualResults())}"
+              data-expand-content>
               <td>
                 <div class="box is-outlined m-3">
                   <div data-th-replace="~{fragments/individual-results :: individual-results-table(${team.individualResults()}, ${activeContributorColumns})}"></div>
