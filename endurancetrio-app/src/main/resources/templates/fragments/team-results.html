@@ -1,0 +1,151 @@
+<!doctype html>
+<!--
+  ~ Copyright (c) 2011-2026 Ricardo do Canto
+  ~
+  ~ This file is part of the EnduranceTrio project.
+  ~
+  ~ Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+  ~ (the "License");
+  ~
+  ~ You may not use this file except in compliance with the License. You may obtain a copy
+  ~ of the License at https://fsl.software/
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+  ~ PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+  ~
+  ~ IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+  ~ SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+  ~ EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+-->
+
+<html class="has-endurance-navbar-fixed-top" data-th-lang="${#locale.language}" lang="en">
+  <head>
+    <title>Team Results</title>
+  </head>
+
+  <body>
+    <div class="table-container"
+      data-th-fragment="team-results-table(results, activeColumns, activeContributorColumns)">
+      <table class="table is-fullwidth is-hoverable is-narrow"
+        data-th-with="TeamResultColumns=${T(com.endurancetrio.app.event.enumerator.TeamResultColumns)}"
+        data-sortable>
+        <thead>
+          <tr>
+            <th class="is-narrow" scope="col"></th>
+            <th class="is-narrow is-sorted-asc has-text-centered"
+              data-th-if="${activeColumns.contains(TeamResultColumns.RANK.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.RANK.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort-ascending"></i></span>
+                <span data-th-text="#{page.event.results.label.rank}"></span>
+              </span>
+            </th>
+            <th data-th-if="${activeColumns.contains(TeamResultColumns.TEAM_NAME.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.TEAM_NAME.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.team}"></span>
+              </span>
+            </th>
+            <th class="is-narrow has-text-centered"
+              data-th-if="${activeColumns.contains(TeamResultColumns.BIB.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.BIB.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.bib}"></span>
+              </span>
+            </th>
+            <th class="is-narrow has-text-centered"
+              data-th-if="${activeColumns.contains(TeamResultColumns.ATHLETES_COUNT.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.ATHLETES_COUNT.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.athletesCount}"></span>
+              </span>
+            </th>
+            <th class="is-narrow has-text-centered has-text-weight-semibold"
+              data-th-if="${activeColumns.contains(TeamResultColumns.TOTAL.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.TOTAL.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.total}"></span>
+              </span>
+            </th>
+            <th class="is-narrow has-text-right"
+              data-th-if="${activeColumns.contains(TeamResultColumns.POINTS.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.POINTS.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.points}"></span>
+              </span>
+            </th>
+            <th class="is-narrow has-text-centered"
+              data-th-if="${activeColumns.contains(TeamResultColumns.CUMULATIVE_RANK.getCode())}"
+              data-th-attr="data-sort=${TeamResultColumns.CUMULATIVE_RANK.getCode()}"
+              scope="col">
+              <span class="icon-text">
+                <span class="icon"><i class="et et-sort"></i></span>
+                <span data-th-text="#{page.event.results.label.cumulativeRank}"></span>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <th:block data-th-each="team : ${results}">
+            <tr>
+              <td>
+                <button class="expand"
+                  data-th-if="${!#lists.isEmpty(team.individualResults())}"
+                  data-th-attr="aria-label=#{page.event.results.a11y.toggle}"
+                  data-expand
+                  aria-expanded="false">
+                </button>
+              </td>
+              <td class="is-narrow has-text-centered"
+                data-th-if="${activeColumns.contains(TeamResultColumns.RANK.getCode())}"
+                data-th-text="${team.rank()}">
+              </td>
+              <td data-th-if="${activeColumns.contains(TeamResultColumns.TEAM_NAME.getCode())}"
+                data-th-text="${team.teamName()}">
+              </td>
+              <td class="is-narrow has-text-centered"
+                data-th-if="${activeColumns.contains(TeamResultColumns.BIB.getCode())}"
+                data-th-text="${team.bib()}">
+              </td>
+              <td class="is-narrow has-text-centered"
+                data-th-if="${activeColumns.contains(TeamResultColumns.ATHLETES_COUNT.getCode())}"
+                data-th-text="${team.athletesCount()}">
+              </td>
+              <td class="is-narrow has-text-centered has-text-weight-semibold"
+                data-th-if="${activeColumns.contains(TeamResultColumns.TOTAL.getCode())}">
+                <span data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(team.total())}"></span>
+              </td>
+              <td class="is-narrow has-text-right"
+                data-th-if="${activeColumns.contains(TeamResultColumns.POINTS.getCode())}"
+                data-th-text="${team.points()}">
+              </td>
+              <td class="is-narrow has-text-centered"
+                data-th-if="${activeColumns.contains(TeamResultColumns.CUMULATIVE_RANK.getCode())}"
+                data-th-text="${team.cumulativeRank()}">
+              </td>
+            </tr>
+            <tr class="is-hidden" data-expand-content>
+              <td>
+                <div class="box is-outlined m-3">
+                  <div data-th-replace="~{fragments/individual-results :: individual-results-table(${team.individualResults()}, ${activeContributorColumns})}"></div>
+                </div>
+              </td>
+            </tr>
+          </th:block>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

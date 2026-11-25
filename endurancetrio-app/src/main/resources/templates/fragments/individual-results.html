@@ -25,7 +25,7 @@
   </head>
 
   <body>
-    <div class="table-container" data-th-fragment="individual-results-table(entry, activeColumns)">
+    <div class="table-container" data-th-fragment="individual-results-table(results, activeColumns)">
       <table class="table is-fullwidth is-hoverable is-narrow is-striped"
         data-th-with="IndividualResultColumns=${T(com.endurancetrio.app.event.enumerator.IndividualResultColumns)}"
         data-sortable>
@@ -238,7 +238,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-th-each="result : ${entry.value}"
+          <tr data-th-each="result : ${results}"
             data-th-classappend="${result.penalty() != null} ? 'has-text-grey-light'">
             <td class="has-text-centered">
               <span data-th-if="${result.penalty() == null}"
@@ -350,7 +350,7 @@
         data-th-classappend="${entry.key.name() == AgeGroup.OPEN.getCode()} ? 'is-active'"
         data-th-id="${entry.key.name()}"
         data-tab-content>
-        <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry}, ${activeColumns})}"></div>
+        <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry.value}, ${activeColumns})}"></div>
       </div>
     </div>
   </body>

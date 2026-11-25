@@ -32,6 +32,7 @@ import java.util.List;
  * @param rank              the team's final rank in the race (may be null if unranked)
  * @param teamName          the team name as recorded for this race
  * @param bib               the team's bib number (may be null)
+ * @param athletesCount     the number of athletes contributing to the team result
  * @param total             the team's total time (may be null)
  * @param totalGap          the difference between the team's total and the winner's, for
  *                          TEAM_BY_TIME races (may be null)
@@ -41,22 +42,18 @@ import java.util.List;
  * @param cumulativeRank    the sum of the contributing athletes' ranks (may be null)
  * @param cumulativeRankGap the difference between the team's rank sum and the winner's, for
  *                          TEAM_BY_RANK races (may be null)
- * @param athletesCount     the number of athletes contributing to the team result
  * @param individualResults the individual results that contribute to the team result
  */
 public record TeamResultDTO(
   Long id,
   RaceDTO race,
-  Integer rank,
-  String teamName,
-  String bib,
+  Integer rank, String teamName, String bib, Integer athletesCount,
   Duration total,
   Duration totalGap,
   Integer points,
   Integer pointsGap,
   Integer cumulativeRank,
   Integer cumulativeRankGap,
-  Integer athletesCount,
   List<IndividualResultDTO> individualResults
 ) {
 

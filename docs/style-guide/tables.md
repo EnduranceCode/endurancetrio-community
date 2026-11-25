@@ -92,8 +92,8 @@ Expandable rows behave like the HTML `<details>` element. A row can be expanded 
 detail row below it, which is hidden until the user expands the row. This suits longer data that
 would make the table too wide, such as a command's output or a list of splits.
 
-Add `data-expandable` to the table. Each expandable row has `data-expandable-row`, and it is
-directly followed by a detail row with `data-expandable-detail` and the `is-hidden` class.
+Each expandable row carries a trigger button with `data-expand` in its first cell, and is
+directly followed by a detail row with `data-expand-content` and the `is-hidden` class.
 
 ```html
 <table class="table is-fullwidth is-hoverable is-narrow">
@@ -105,7 +105,7 @@ directly followed by a detail row with `data-expandable-detail` and the `is-hidd
   </tr>
   </thead>
   <tbody>
-  <tr data-expand-row>
+  <tr>
     <td>
       <button type="button" data-expand aria-expanded="false" class="expand"></button>
     </td>
@@ -123,10 +123,8 @@ directly followed by a detail row with `data-expandable-detail` and the `is-hidd
 
 ### Behaviour
 
-- The trigger (`data-expand`) always toggles on click. Add `data-expand-row` to the row to make
-  the whole row a toggle as well (a convenience for wide rows); clicks on links, buttons, form
-  controls and labels inside the row then do their own job and do not toggle the row. Omitting
-  `data-expand-row` leaves only the button as the trigger.
+- The trigger (`data-expand`) toggles the detail row on click. Clicking anywhere else in the row
+  has no effect.
 - The trigger carries `data-expand` and the `expand`/`close` class (chevron-down / chevron-up);
   its `aria-expanded` is kept in sync. Use a real `<button>`, not a link or an icon, so it can
   be reached with the keyboard.
@@ -141,7 +139,6 @@ directly followed by a detail row with `data-expandable-detail` and the `is-hidd
 |-----------------------|-------------------------------|-----------|------------------------------------------------------|
 | `data-expand`         | Trigger button (box or table) | Yes       | Behaviour hook; carries `aria-expanded`              |
 | `data-expand-content` | Region revealed on expand     | Yes       | Content shown when expanded; starts with `is-hidden` |
-| `data-expand-row`     | `<tr>` wrapping the trigger   | No        | Makes the whole row clickable as a toggle            |
 
 ### Tips
 
@@ -154,13 +151,17 @@ chevron icons to render; it is forwarded from `src/scss/style.scss`.
 
 ## Sorting and expanding together
 
-`data-sortable` and `data-expandable` can be used on the same table. When the rows are sorted,
+`data-sortable` and expandable rows can be used on the same table. When the rows are sorted,
 each detail row moves with its parent row, so expanded content stays with the correct item.
 
 ```html
-<table data-sortable data-expandable class="table is-fullwidth is-narrow">
+<table data-sortable class="table is-fullwidth is-narrow">
   …
 </table>
 ```
 
 Put the sort headers on the data columns, and leave the toggle column without `data-sort`.
+
+A sortable table nested in an expandable row sorts on its own: the script reads only the table's
+own `<thead>` and `<tbody>`, so sorting the nested table never reorders the rows of the table that
+contains it.
