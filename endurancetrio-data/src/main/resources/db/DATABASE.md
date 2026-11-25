@@ -326,3 +326,6 @@ timestamp-based naming convention.
 65. Adds indexes supporting event directory filters and ordering:
     - [V20261119.001__add-event-directory-indexes-h2.sql](migration/ddl/h2/V20261119.001__add-event-directory-indexes-h2.sql)
     - [V20261119.001__add-event-directory-indexes-postgres.sql](migration/ddl/postgres/V20261119.001__add-event-directory-indexes-postgres.sql)
+66. Recreates the team_result table with the relay duration columns in the IndividualResult field order:
+    - [V20261125.001__recreate-team-result-with-duration-columns-h2.sql](migration/ddl/h2/V20261125.001__recreate-team-result-with-duration-columns-h2.sql)
+    - [V20261125.001__recreate-team-result-with-duration-columns-postgres.sql](migration/ddl/postgres/V20261125.001__recreate-team-result-with-duration-columns-postgres.sql)
