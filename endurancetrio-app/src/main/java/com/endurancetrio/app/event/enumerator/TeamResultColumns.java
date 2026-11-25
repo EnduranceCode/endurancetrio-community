@@ -38,10 +38,10 @@ public enum TeamResultColumns {
   RANK("rank", r -> r.rank() != null),
   TEAM_NAME("teamName", r -> StringUtils.isNotBlank(r.teamName())),
   BIB("bib", r -> StringUtils.isNotBlank(r.bib())),
+  ATHLETES_COUNT("athletesCount", r -> r.athletesCount() != null),
   TOTAL("total", r -> r.total() != null),
   POINTS("points", r -> r.points() != null),
-  CUMULATIVE_RANK("cumulativeRank", r -> r.cumulativeRank() != null),
-  ATHLETES_COUNT("athletesCount", r -> r.athletesCount() != null);
+  CUMULATIVE_RANK("cumulativeRank", r -> r.cumulativeRank() != null);
 
   private final String code;
   private final Predicate<TeamResultDTO> activator;

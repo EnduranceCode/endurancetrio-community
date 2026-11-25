@@ -23,7 +23,7 @@
  *
  * A trigger carrying the `data-expand` attribute (and the `expand`/`close` class for its
  * icon) toggles the visibility of the region marked `data-expand-content` that follows it
- * at the same nesting level. On a `tr[data-expand-row]` the whole row toggles the same way.
+ * at the same nesting level. Only the trigger toggles it; clicking elsewhere in the row does not.
  *
  * No ids or content-derived names are required: the relationship is structural.
  *
@@ -37,9 +37,8 @@ const enduranceExpand = {
     document.querySelectorAll('[data-expand]').forEach((trigger) => {
       const row = trigger.closest('tr');
       // Target resolution uses the containing row when the trigger lives in a table,
-      // so the detail row (the row's next sibling) is found even without data-expand-row.
+      // so the detail row (the row's next sibling) is found.
       const scope = row || trigger;
-      const wholeRow = row?.dataset.expandRow !== undefined;
 
       const target = this._findTarget(scope);
       if (!target) {
@@ -63,17 +62,7 @@ const enduranceExpand = {
 
       this._sync(trigger, target);
 
-      if (wholeRow && row) {
-        row.addEventListener('click', (event) => {
-          const interactive = event.target.closest('a, button, input, select, textarea, label');
-          if (interactive && interactive !== trigger) {
-            return;
-          }
-          this.toggle(trigger, target);
-        });
-      } else {
-        trigger.addEventListener('click', () => this.toggle(trigger, target));
-      }
+      trigger.addEventListener('click', () => this.toggle(trigger, target));
     });
   },
 

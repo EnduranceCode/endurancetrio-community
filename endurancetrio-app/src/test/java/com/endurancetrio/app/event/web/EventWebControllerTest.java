@@ -663,7 +663,7 @@ class EventWebControllerTest {
   }
 
   private static TeamResultDTO teamResultDTO(Long id, List<IndividualResultDTO> contributors) {
-    return new TeamResultDTO(id, RACE_1, 1, "Team Alpha", "101", Duration.ofMinutes(200), null, 100, null, 5, null, 3,
+    return new TeamResultDTO(id, RACE_1, 1, "Team Alpha", "101", 3, Duration.ofMinutes(200), null, 100, null, 5, null,
       contributors
     );
   }

@@ -83,32 +83,13 @@
           <div data-th-if="${#maps.size(individualResults) == 1}"
             data-th-with="entry=${individualResults.entrySet().iterator().next()}"
             data-th-remove="tag">
-            <div data-th-if="${!#lists.isEmpty(entry.value)}" data-th-remove="tag">
-              <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry}, ${activeColumns})}"></div>
+            <div data-th-if="${#lists.isEmpty(entry.value)}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/result-status :: status-switcher(${raceResults.race.resultStatus},${language})}">
+              </div>
             </div>
 
-            <div data-th-unless="${!#lists.isEmpty(entry.value)}"
-              data-th-switch="${raceResults.race.resultStatus}"
-              data-th-remove="tag">
-              <div data-th-case="${ResultStatus.UNKNOWN.getCode()}" data-th-remove="tag">
-                <div data-th-replace="~{fragments/result-status :: results-unknown(${language})}">
-                </div>
-              </div>
-
-              <div data-th-case="${ResultStatus.PENDING.getCode()}" data-th-remove="tag">
-                <div data-th-replace="~{fragments/result-status :: results-pending(${language})}">
-                </div>
-              </div>
-
-              <div data-th-case="${ResultStatus.EMPTY.getCode()}" data-th-remove="tag">
-                <div data-th-replace="~{fragments/result-status :: results-empty(${language})}">
-                </div>
-              </div>
-
-              <div data-th-case="*" data-th-remove="tag">
-                <div data-th-replace="~{fragments/result-status :: results-pending(${language})}">
-                </div>
-              </div>
+            <div data-th-unless="${#lists.isEmpty(entry.value)}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/individual-results :: individual-results-table(${entry.value}, ${activeColumns})}"></div>
             </div>
           </div>
 
@@ -124,7 +105,23 @@
           </div>
         </div>
 
-        <div data-th-unless="${raceResults.results().resultType() == 'INDIVIDUAL'}" data-th-remove="tag">
+        <div data-th-if="${raceResults.results().resultType() == 'COLLECTIVE'}" data-th-remove="tag">
+          <div data-th-if="${#lists.isEmpty(raceResults.results().teamResults())}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/result-status :: status-switcher(${raceResults.race.resultStatus},${language})}">
+            </div>
+          </div>
+
+          <div data-th-unless="${#lists.isEmpty(raceResults.results().teamResults())}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/team-results :: team-results-table(${raceResults.results().teamResults()}, ${activeColumns}, ${activeContributorColumns})}">
+            </div>
+
+            <div data-th-if="${raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/result-status :: results-incomplete(${language})}"></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-th-unless="${raceResults.results().resultType() == 'INDIVIDUAL' or raceResults.results().resultType() == 'COLLECTIVE'}" data-th-remove="tag">
           <div data-th-replace="~{fragments/result-status :: results-pending(${language})}"></div>
         </div>
       </section>

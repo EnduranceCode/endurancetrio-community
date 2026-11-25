@@ -112,11 +112,16 @@
 // Expandable table rows
 // -------------------------------------------------------------------------------------------------
 //
-// Cursor affordance for table rows that carry the `data-expand-row` attribute. The chevron
-// icons themselves come from the shared expand button rules above, so this stylesheet is
-// the single entry point for the expand behaviour on both boxes and tables.
+// The chevron icons come from the shared expand button rules above, so this stylesheet is
+// the single entry point for the expand behaviour on both boxes and tables. Only the trigger
+// button expands the detail row; the rest of the row is not clickable.
 // Full reference: docs/style-guide/tables.md#expandable-rows.
 
-[data-expand-row] {
-  cursor: pointer;
+// Detail rows that reveal on expand are not themselves hoverable data rows, so their
+// background must not change on hover (Bulma's `.is-hoverable` would otherwise stripe them).
+// The `:not(.is-selected)` clause keeps the same specificity shape as Bulma's hover rule, so
+// this rule wins over it regardless of stylesheet order.
+.table.is-hoverable tbody tr[data-expand-content]:not(.#{iv.$class-prefix}is-selected),
+.table.is-hoverable tbody tr[data-expand-content]:not(.#{iv.$class-prefix}is-selected):hover {
+  background-color: transparent;
 }

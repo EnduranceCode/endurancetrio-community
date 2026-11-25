@@ -28,8 +28,11 @@ const bulmaTableSort = {
   /** Initializes sort listeners on all tables with `data-sortable`. */
   init() {
     document.querySelectorAll('table[data-sortable]').forEach((table) => {
-      const tbody = table.querySelector('tbody');
-      const headers = table.querySelectorAll('thead th[data-sort]');
+      // Scope the queries to this table's own sections, so that a sortable table nested in a
+      // detail row (for example, expandable results rows) does not inherit the outer table's
+      // headers and rows.
+      const tbody = table.querySelector(':scope > tbody');
+      const headers = table.querySelectorAll(':scope > thead > tr > th[data-sort]');
 
       headers.forEach((th) => {
         th.addEventListener('click', () => this.sort(table, tbody, th));
@@ -50,7 +53,7 @@ const bulmaTableSort = {
     const isAsc = clickedTh.classList.contains('is-sorted-asc');
 
     // Reset all headers to neutral sort icon and remove state classes
-    table.querySelectorAll('thead th[data-sort]').forEach((th) => {
+    table.querySelectorAll(':scope > thead > tr > th[data-sort]').forEach((th) => {
       th.classList.remove('is-sorted-asc', 'is-sorted-desc');
       this.setIcon(th, 'sort');
     });

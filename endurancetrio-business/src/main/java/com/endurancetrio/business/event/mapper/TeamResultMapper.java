@@ -82,8 +82,8 @@ public class TeamResultMapper {
     }
 
     return new TeamResultDTO(entity.getId(), race, entity.getRank(), entity.getTeamName(), entity.getBib(),
-      entity.getTotal(), totalGap, entity.getPoints(), pointsGap, entity.getCumulativeRank(), cumulativeRankGap,
-      entity.getAthletesCount(), individualResults
+      entity.getAthletesCount(), entity.getTotal(), totalGap, entity.getPoints(), pointsGap, entity.getCumulativeRank(),
+      cumulativeRankGap, individualResults
     );
   }
 
