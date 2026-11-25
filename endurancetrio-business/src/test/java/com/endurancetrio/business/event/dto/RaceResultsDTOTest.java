@@ -115,4 +115,28 @@ class RaceResultsDTOTest {
     assertEquals(List.of(teamResult), results.teamResults());
     assertEquals(List.of(individualResult), results.teamResults().getFirst().individualResults());
   }
+
+  @Test
+  void relayVariantShouldHoldDurationsAndContributors() {
+    RaceDTO relayRace = new RaceDTO(2L, "Relay Men", "Relay", LocalDate.of(2026, Month.JUNE, 2), null,
+        List.of("TRIATHLON"), List.of("OLYMPIC"), RaceType.TEAM_RELAY_PARENT, "RELAY", null, null, "UNKNOWN"
+    );
+    RelayResultDTO relayResult = new RelayResultDTO(3L, relayRace, 1, null, "Team Alpha", "301", 2, AGE_GROUP, null,
+        Duration.ofMinutes(10), Duration.ofMinutes(20), Duration.ofMinutes(15), Duration.ofMinutes(2),
+        Duration.ofMinutes(40), Duration.ofMinutes(3), Duration.ofMinutes(30), null, Duration.ofMinutes(4),
+        Duration.ofMinutes(25), Duration.ofMinutes(149), List.of(individualResult),
+        List.of(AthleteDTOFixtures.standard())
+    );
+
+    Map<AgeGroup, List<RelayResultDTO>> relayResults = Map.of(AGE_GROUP, List.of(relayResult), AgeGroup.OPEN,
+        List.of()
+    );
+    RaceResultsDTO dto = new RaceResultsDTO(relayRace, new RelayRaceResultsDTO(relayResults));
+
+    assertEquals("RELAY", dto.results().resultType());
+    RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, dto.results());
+    assertEquals(relayResults, results.relayResults());
+    assertTrue(results.relayResults().containsKey(AGE_GROUP));
+    assertTrue(results.relayResults().containsKey(AgeGroup.OPEN));
+  }
 }

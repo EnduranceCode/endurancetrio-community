@@ -46,6 +46,7 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
@@ -419,8 +420,8 @@ public class EventWebController {
   /**
    * Computes the columns for the result table matching the race's result variant.
    * <p>
-   * Individual races use the OPEN group of individual results. Collective races (and later relay
-   * races) use the team columns computed from the stored team rows. Contributors of those races are
+   * Individual races use the OPEN group of individual results. Collective races use the team
+   * columns computed from the stored team rows. Other variants yield no columns. Contributors are
    * handled separately through {@link #computeActiveIndividualColumns(List)}.
    *
    * @param raceResults the race results
@@ -431,7 +432,7 @@ public class EventWebController {
       case IndividualRaceResultsDTO(Map<AgeGroup, List<IndividualResultDTO>> individualResults) ->
         computeActiveIndividualColumns(individualResults.get(AgeGroup.OPEN));
       case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) -> computeActiveTeamColumns(teamResults);
-      case EmptyRaceResultsDTO() -> Set.of();
+      case RelayRaceResultsDTO _, EmptyRaceResultsDTO() -> Set.of();
     };
   }
 
@@ -491,7 +492,7 @@ public class EventWebController {
     return switch (raceResults.results()) {
       case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) ->
         teamResults.stream().flatMap(teamResult -> teamResult.individualResults().stream()).toList();
-      case IndividualRaceResultsDTO _, EmptyRaceResultsDTO() -> List.of();
+      case IndividualRaceResultsDTO _, RelayRaceResultsDTO _, EmptyRaceResultsDTO() -> List.of();
     };
   }
 
