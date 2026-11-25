@@ -31,7 +31,8 @@ import org.apache.commons.lang3.StringUtils;
  * based on the data in a {@link TeamResultDTO}.
  * <p>
  * A column is active when at least one team row has a value for it. Field-present columns test for
- * a non-null value; text columns additionally require non-blank content.
+ * a non-null value; text columns additionally require non-blank content. The {@link #GAP} column is
+ * active when any of the three race-type-specific gap fields has a value.
  */
 public enum TeamResultColumns {
 
@@ -41,7 +42,8 @@ public enum TeamResultColumns {
   ATHLETES_COUNT("athletesCount", r -> r.athletesCount() != null),
   TOTAL("total", r -> r.total() != null),
   POINTS("points", r -> r.points() != null),
-  CUMULATIVE_RANK("cumulativeRank", r -> r.cumulativeRank() != null);
+  CUMULATIVE_RANK("cumulativeRank", r -> r.cumulativeRank() != null),
+  GAP("gap", r -> r.totalGap() != null || r.pointsGap() != null || r.cumulativeRankGap() != null);
 
   private final String code;
   private final Predicate<TeamResultDTO> activator;

@@ -662,6 +662,30 @@ class EventWebControllerTest {
       ));
   }
 
+  @Test
+  void getRaceResultsShouldDetectGapColumnWhenAnyTeamHasAGap() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(), any())).thenReturn(
+      "Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(), any())).thenReturn(
+      "View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    var winner = new TeamResultDTO(1L, RACE_1, 1, "Team Alpha", "101", 3, Duration.ofMinutes(200), Duration.ZERO, 100,
+      0, 5, 0, List.of()
+    );
+    var trailing = new TeamResultDTO(2L, RACE_1, 2, "Team Bravo", "102", 3, Duration.ofMinutes(210),
+      Duration.ofMinutes(10), 90, 10, 8, 3, List.of()
+    );
+
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+      new RaceResultsDTO(RACE_1, new TeamRaceResultsDTO(List.of(winner, trailing))));
+
+    mockMvc.perform(get("/en/events/1984/1/results/1"))
+      .andExpect(status().isOk())
+      .andExpect(view().name("race-results"))
+      .andExpect(model().attribute("activeColumns", Matchers.hasItem("gap")));
+  }
+
   private static TeamResultDTO teamResultDTO(Long id, List<IndividualResultDTO> contributors) {
     return new TeamResultDTO(id, RACE_1, 1, "Team Alpha", "101", 3, Duration.ofMinutes(200), null, 100, null, 5, null,
       contributors

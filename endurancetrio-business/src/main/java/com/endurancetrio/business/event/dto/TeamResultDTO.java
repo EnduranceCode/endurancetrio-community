@@ -47,7 +47,10 @@ import java.util.List;
 public record TeamResultDTO(
   Long id,
   RaceDTO race,
-  Integer rank, String teamName, String bib, Integer athletesCount,
+  Integer rank,
+  String teamName,
+  String bib,
+  Integer athletesCount,
   Duration total,
   Duration totalGap,
   Integer points,

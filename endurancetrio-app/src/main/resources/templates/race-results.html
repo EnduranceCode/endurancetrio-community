@@ -34,7 +34,7 @@
 
       <section class="section"
         id="results"
-        data-th-with="ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}">
+        data-th-with="ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}, AgeGroup=${T(com.endurancetrio.data.competitor.model.enumerator.AgeGroup)}">
         <div class="mb-6">
           <div class="field has-addons">
             <div class="control">
@@ -98,7 +98,7 @@
             </div>
           </div>
 
-          <div data-th-if="${raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}"
+          <div data-th-if="${!#lists.isEmpty(individualResults.get(AgeGroup.OPEN)) and raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}"
             data-th-remove="tag">
             <div data-th-replace="~{fragments/result-status :: results-incomplete(${language})}">
             </div>
@@ -112,7 +112,7 @@
           </div>
 
           <div data-th-unless="${#lists.isEmpty(raceResults.results().teamResults())}" data-th-remove="tag">
-            <div data-th-replace="~{fragments/team-results :: team-results-table(${raceResults.results().teamResults()}, ${activeColumns}, ${activeContributorColumns})}">
+            <div data-th-replace="~{fragments/team-results :: team-results-table(${raceResults.results().teamResults()}, ${raceResults.race}, ${activeColumns}, ${activeContributorColumns})}">
             </div>
 
             <div data-th-if="${raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}" data-th-remove="tag">
