@@ -8,6 +8,9 @@ indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.java]
+ij_continuation_indent_size = 4
+
 [*.html]
 # IntelliJ reads ij_* properties; other editors ignore them. Keep wrapped attributes
 # at one continuation indent so the IDE matches html/indent in eslint.config.js.
