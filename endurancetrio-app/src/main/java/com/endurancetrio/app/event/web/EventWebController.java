@@ -33,6 +33,7 @@ import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.common.utils.PaginationUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
+import com.endurancetrio.app.event.enumerator.RelayResultColumns;
 import com.endurancetrio.app.event.enumerator.TeamResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
@@ -47,6 +48,7 @@ import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
 import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayResultDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
@@ -421,8 +423,9 @@ public class EventWebController {
    * Computes the columns for the result table matching the race's result variant.
    * <p>
    * Individual races use the OPEN group of individual results. Collective races use the team
-   * columns computed from the stored team rows. Other variants yield no columns. Contributors are
-   * handled separately through {@link #computeActiveIndividualColumns(List)}.
+   * columns computed from the stored team rows. Relay races use the relay columns computed from the
+   * OPEN group of stored relay rows. Other variants yield no columns. Contributors are handled
+   * separately through {@link #computeActiveIndividualColumns(List)}.
    *
    * @param raceResults the race results
    * @return a set of column codes for the result table of this variant
@@ -432,7 +435,9 @@ public class EventWebController {
       case IndividualRaceResultsDTO(Map<AgeGroup, List<IndividualResultDTO>> individualResults) ->
         computeActiveIndividualColumns(individualResults.get(AgeGroup.OPEN));
       case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) -> computeActiveTeamColumns(teamResults);
-      case RelayRaceResultsDTO _, EmptyRaceResultsDTO() -> Set.of();
+      case RelayRaceResultsDTO(Map<AgeGroup, List<RelayResultDTO>> relayResults) ->
+          computeActiveRelayColumns(relayResults.get(AgeGroup.OPEN));
+      case EmptyRaceResultsDTO() -> Set.of();
     };
   }
 
@@ -464,6 +469,31 @@ public class EventWebController {
   }
 
   /**
+   * Computes the set of relay column names that have at least one value across the given relay
+   * results. A null list, as produced by a map with no OPEN group, yields an empty set.
+   *
+   * @param relayResults the relay results of the OPEN group, may be null
+   * @return a set of column names with values in at least one relay row
+   */
+  private static @NonNull Set<String> computeActiveRelayColumns(
+      @Nullable List<RelayResultDTO> relayResults
+  ) {
+    if (relayResults == null) {
+      return Set.of();
+    }
+
+    Set<String> active = new HashSet<>();
+    for (RelayResultDTO relayResult : relayResults) {
+      for (RelayResultColumns column : RelayResultColumns.values()) {
+        if (column.isActive(relayResult)) {
+          active.add(column.getCode());
+        }
+      }
+    }
+    return active;
+  }
+
+  /**
    * Computes the set of team column names that have at least one value across all the given team
    * results.
    *
@@ -484,15 +514,18 @@ public class EventWebController {
 
   /**
    * Returns the individual results contributing to the given race, flattened across all team rows.
+   * For relay races, the contributors come from the OPEN group, which holds every relay row.
    *
    * @param raceResults the race results
-   * @return the contributors of a collective race, or an empty list for other result types
+   * @return the contributors of a collective or relay race, or an empty list for other result types
    */
   private static @NonNull List<IndividualResultDTO> getContributors(RaceResultsDTO raceResults) {
     return switch (raceResults.results()) {
       case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) ->
         teamResults.stream().flatMap(teamResult -> teamResult.individualResults().stream()).toList();
-      case IndividualRaceResultsDTO _, RelayRaceResultsDTO _, EmptyRaceResultsDTO() -> List.of();
+      case RelayRaceResultsDTO(Map<AgeGroup, List<RelayResultDTO>> relayResults) ->
+          getRelayContributors(relayResults.get(AgeGroup.OPEN));
+      case IndividualRaceResultsDTO _, EmptyRaceResultsDTO() -> List.of();
     };
   }
 
@@ -537,6 +570,22 @@ public class EventWebController {
    */
   private static @Nullable Long getPreviousRaceId(int currentIndex, List<RaceDTO> races) {
     return currentIndex > 0 ? races.get(currentIndex - 1).id() : null;
+  }
+
+  /**
+   * Flattens the individual results of the given relay rows into a single list.
+   *
+   * @param relayResults the relay rows of the OPEN group, may be null
+   * @return the contributors of the given relay rows, or an empty list when there are none
+   */
+  private static @NonNull List<IndividualResultDTO> getRelayContributors(
+      @Nullable List<RelayResultDTO> relayResults
+  ) {
+    if (relayResults == null) {
+      return List.of();
+    }
+
+    return relayResults.stream().flatMap(relayResult -> relayResult.individualResults().stream()).toList();
   }
 
   /**

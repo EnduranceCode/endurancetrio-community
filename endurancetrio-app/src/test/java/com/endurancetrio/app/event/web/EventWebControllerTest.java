@@ -53,6 +53,8 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayResultDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
@@ -684,6 +686,64 @@ class EventWebControllerTest {
       .andExpect(status().isOk())
       .andExpect(view().name("race-results"))
       .andExpect(model().attribute("activeColumns", Matchers.hasItem("gap")));
+  }
+
+  @Test
+  void getRaceResultsShouldDetectRelayColumnsWithValues() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(), any())).thenReturn(
+        "Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(), any())).thenReturn(
+        "View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    var winner = relayResultDTO(1L, 1, Duration.ofMinutes(10), Duration.ofMinutes(40), Duration.ZERO, List.of());
+    var trailing = relayResultDTO(2L, 2, null, null, null, List.of());
+
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
+        new RaceResultsDTO(RACE_2, new RelayRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(winner, trailing)))));
+
+    mockMvc.perform(get("/en/events/1984/1/results/2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("race-results"))
+        .andExpect(model().attribute("activeColumns",
+            Matchers.containsInAnyOrder("rank", "teamName", "bib", "athletesCount", "swim", "bike", "total", "gap")
+        ))
+        .andExpect(model().attribute("activeContributorColumns", Matchers.empty()));
+  }
+
+  @Test
+  void getRaceResultsShouldComputeRelayContributorColumns() throws Exception {
+    when(messageService.getMessage(eq("page.event.results.metadata.title"), any(), any())).thenReturn(
+        "Results - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.results.metadata.description"), any(), any())).thenReturn(
+        "View endurance sports event results");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
+
+    var withAgeGroup = relayResultDTO(1L, 1, null, null, null, List.of(contributor(10L, AgeGroup.OPEN, null)));
+    var withParaClass = relayResultDTO(2L, 2, null, null, null, List.of(contributor(11L, null, ParaClass.AQ_S1)));
+
+    when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(new RaceResultsDTO(RACE_2,
+        new RelayRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(withAgeGroup, withParaClass)))
+    ));
+
+    mockMvc.perform(get("/en/events/1984/1/results/2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("race-results"))
+        .andExpect(model().attribute("activeColumns",
+            Matchers.containsInAnyOrder("rank", "teamName", "bib", "athletesCount", "total")
+        ))
+        .andExpect(model().attribute("activeContributorColumns",
+            Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "paraClass", "total")
+        ));
+  }
+
+  private static RelayResultDTO relayResultDTO(
+      Long id, Integer rank, Duration swim, Duration bike, Duration gap,
+      List<IndividualResultDTO> contributors
+  ) {
+    return new RelayResultDTO(id, RACE_2, rank, null, TeamDTOFixtures.standard(), "Team Alpha", "301", 3, AgeGroup.OPEN,
+        null, swim, null, null, null, bike, null, null, null, null, null, Duration.ofMinutes(120), gap, contributors
+    );
   }
 
   private static TeamResultDTO teamResultDTO(Long id, List<IndividualResultDTO> contributors) {
