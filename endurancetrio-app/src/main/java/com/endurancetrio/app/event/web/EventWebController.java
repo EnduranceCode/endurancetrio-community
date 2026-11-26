@@ -38,7 +38,6 @@ import com.endurancetrio.app.event.enumerator.TeamResultColumns;
 import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
-import com.endurancetrio.business.event.dto.EmptyRaceResultsDTO;
 import com.endurancetrio.business.event.dto.EventFilterDTO;
 import com.endurancetrio.business.event.dto.EventFilterOptionsDTO;
 import com.endurancetrio.business.event.dto.EventOverviewDTO;
@@ -437,7 +436,6 @@ public class EventWebController {
       case TeamRaceResultsDTO(List<TeamResultDTO> teamResults) -> computeActiveTeamColumns(teamResults);
       case RelayRaceResultsDTO(Map<AgeGroup, List<RelayResultDTO>> relayResults) ->
           computeActiveRelayColumns(relayResults.get(AgeGroup.OPEN));
-      case EmptyRaceResultsDTO() -> Set.of();
     };
   }
 
@@ -525,7 +523,7 @@ public class EventWebController {
         teamResults.stream().flatMap(teamResult -> teamResult.individualResults().stream()).toList();
       case RelayRaceResultsDTO(Map<AgeGroup, List<RelayResultDTO>> relayResults) ->
           getRelayContributors(relayResults.get(AgeGroup.OPEN));
-      case IndividualRaceResultsDTO _, EmptyRaceResultsDTO() -> List.of();
+      case IndividualRaceResultsDTO _ -> List.of();
     };
   }
 

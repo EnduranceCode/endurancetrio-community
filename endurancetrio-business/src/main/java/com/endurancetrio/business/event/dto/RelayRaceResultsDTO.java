@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ import java.util.Map;
 public record RelayRaceResultsDTO(Map<AgeGroup, List<RelayResultDTO>> relayResults) implements ResultsDTO {
 
   @Override
-  public String resultType() {
-    return "RELAY";
+  public RaceTypeGroup resultType() {
+    return RaceTypeGroup.RELAY;
   }
 }

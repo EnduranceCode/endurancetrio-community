@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
 public record TeamRaceResultsDTO(List<TeamResultDTO> teamResults) implements ResultsDTO {
 
   @Override
-  public String resultType() {
-    return "COLLECTIVE";
+  public RaceTypeGroup resultType() {
+    return RaceTypeGroup.COLLECTIVE;
   }
 }

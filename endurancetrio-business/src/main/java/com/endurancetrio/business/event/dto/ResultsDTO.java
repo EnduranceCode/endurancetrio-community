@@ -20,6 +20,8 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
+
 /**
  * The {@link ResultsDTO} sealed hierarchy models the results of a race according to its result
  * type.
@@ -27,13 +29,12 @@ package com.endurancetrio.business.event.dto;
  * Each permitted variant carries only the data relevant to that result type and exposes a
  * {@link #resultType()} discriminator so callers can branch on the concrete variant.
  */
-public sealed interface ResultsDTO permits IndividualRaceResultsDTO, TeamRaceResultsDTO, RelayRaceResultsDTO,
-    EmptyRaceResultsDTO {
+public sealed interface ResultsDTO permits IndividualRaceResultsDTO, TeamRaceResultsDTO, RelayRaceResultsDTO {
 
   /**
    * Returns the discriminator identifying this result type.
    *
-   * @return the result type code
+   * @return the result type group
    */
-  String resultType();
+  RaceTypeGroup resultType();
 }

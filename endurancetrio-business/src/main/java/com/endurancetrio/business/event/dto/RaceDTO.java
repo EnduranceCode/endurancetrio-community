@@ -43,10 +43,20 @@ import java.util.List;
  * @param event            the event that the race belongs to (may be null)
  * @param resultStatus     the result data availability status code
  */
-public record RaceDTO(Long id, String title, String subtitle, LocalDate date, LocalTime time,
-                      List<String> sports, List<String> distanceTypes, RaceType raceType,
-                      String raceTypeGroup, DistanceMetadataDTO distanceMetadata, EventDTO event,
-                      String resultStatus) {
+public record RaceDTO(
+    Long id,
+    String title,
+    String subtitle,
+    LocalDate date,
+    LocalTime time,
+    List<String> sports,
+    List<String> distanceTypes,
+    RaceType raceType,
+    String raceTypeGroup,
+    DistanceMetadataDTO distanceMetadata,
+    EventDTO event,
+    String resultStatus
+) {
 
   public RaceDTO {
     if (title == null || title.isBlank()) {

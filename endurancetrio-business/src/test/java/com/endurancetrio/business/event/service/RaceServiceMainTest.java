@@ -39,6 +39,7 @@ import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
 import com.endurancetrio.business.event.dto.RelayResultDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
 import com.endurancetrio.business.event.mapper.RaceMapper;
 import com.endurancetrio.business.event.mapper.RelayResultMapper;
@@ -298,7 +299,7 @@ class RaceServiceMainTest {
     assertNotNull(result);
     assertEquals(collectiveRace, result.race());
     TeamRaceResultsDTO results = assertInstanceOf(TeamRaceResultsDTO.class, result.results());
-    assertEquals("COLLECTIVE", results.resultType());
+    assertEquals(RaceTypeGroup.COLLECTIVE, results.resultType());
     assertEquals(List.of(expected), results.teamResults());
     verifyNoInteractions(individualResultRepository);
   }

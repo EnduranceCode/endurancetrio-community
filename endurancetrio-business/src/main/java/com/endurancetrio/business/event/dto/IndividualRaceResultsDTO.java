@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public record IndividualRaceResultsDTO(
 ) implements ResultsDTO {
 
   @Override
-  public String resultType() {
-    return "INDIVIDUAL";
+  public RaceTypeGroup resultType() {
+    return RaceTypeGroup.INDIVIDUAL;
   }
 }
