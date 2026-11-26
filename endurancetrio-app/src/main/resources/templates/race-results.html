@@ -34,7 +34,7 @@
 
       <section class="section"
         id="results"
-        data-th-with="ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}, AgeGroup=${T(com.endurancetrio.data.competitor.model.enumerator.AgeGroup)}">
+        data-th-with="resultType=${raceResults.results().resultType()}, RaceTypeGroup=${T(com.endurancetrio.business.event.enumerator.RaceTypeGroup)}, ResultStatus=${T(com.endurancetrio.data.event.model.enumerator.ResultStatus)}, AgeGroup=${T(com.endurancetrio.data.competitor.model.enumerator.AgeGroup)}">
         <div class="mb-6">
           <div class="field has-addons">
             <div class="control">
@@ -77,7 +77,7 @@
           </div>
         </div>
 
-        <div data-th-if="${raceResults.results().resultType() == 'INDIVIDUAL'}"
+        <div data-th-if="${resultType == RaceTypeGroup.INDIVIDUAL}"
           data-th-with="individualResults=${raceResults.results().individualResults()}"
           data-th-remove="tag">
           <div data-th-if="${#maps.size(individualResults) == 1}"
@@ -105,7 +105,8 @@
           </div>
         </div>
 
-        <div data-th-if="${raceResults.results().resultType() == 'COLLECTIVE'}" data-th-remove="tag">
+        <div data-th-if="${resultType == RaceTypeGroup.COLLECTIVE}"
+          data-th-remove="tag">
           <div data-th-if="${#lists.isEmpty(raceResults.results().teamResults())}" data-th-remove="tag">
             <div data-th-replace="~{fragments/result-status :: status-switcher(${raceResults.race.resultStatus},${language})}">
             </div>
@@ -121,7 +122,7 @@
           </div>
         </div>
 
-        <div data-th-if="${raceResults.results().resultType() == 'RELAY'}"
+        <div data-th-if="${resultType == RaceTypeGroup.RELAY}"
           data-th-with="relayResults=${raceResults.results().relayResults()}"
           data-th-remove="tag">
           <div data-th-if="${#maps.size(relayResults) == 1}"
@@ -145,11 +146,6 @@
             data-th-remove="tag">
             <div data-th-replace="~{fragments/result-status :: results-incomplete(${language})}"></div>
           </div>
-        </div>
-
-        <div data-th-unless="${raceResults.results().resultType() == 'INDIVIDUAL' or raceResults.results().resultType() == 'COLLECTIVE' or raceResults.results().resultType() == 'RELAY'}"
-          data-th-remove="tag">
-          <div data-th-replace="~{fragments/result-status :: results-pending(${language})}"></div>
         </div>
       </section>
     </main>

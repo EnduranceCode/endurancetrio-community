@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
 import com.endurancetrio.business.competitor.fixtures.TeamDTOFixtures;
+import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.Duration;
@@ -64,7 +65,7 @@ class RaceResultsDTOTest {
   @Test
   void dtoShouldRetainValues() {
     assertEquals(race, underTest.race());
-    assertEquals("INDIVIDUAL", underTest.results().resultType());
+    assertEquals(RaceTypeGroup.INDIVIDUAL, underTest.results().resultType());
     IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, underTest.results());
     assertEquals(1, results.individualResults().size());
     assertTrue(results.individualResults().containsKey(AGE_GROUP));
@@ -77,7 +78,7 @@ class RaceResultsDTOTest {
       new IndividualRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(individualResult)))
     );
 
-    assertEquals("INDIVIDUAL", dto.results().resultType());
+    assertEquals(RaceTypeGroup.INDIVIDUAL, dto.results().resultType());
     IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, dto.results());
     assertNotNull(results.individualResults());
     assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
@@ -89,17 +90,9 @@ class RaceResultsDTOTest {
 
     assertNotNull(dto);
     assertEquals(race, dto.race());
-    assertEquals("INDIVIDUAL", dto.results().resultType());
+    assertEquals(RaceTypeGroup.INDIVIDUAL, dto.results().resultType());
     IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, dto.results());
     assertEquals(EMPTY_RESULTS, results.individualResults());
-  }
-
-  @Test
-  void emptyVariantShouldHaveNoIndividualResults() {
-    RaceResultsDTO dto = new RaceResultsDTO(race, new EmptyRaceResultsDTO());
-
-    assertEquals("NONE", dto.results().resultType());
-    assertInstanceOf(EmptyRaceResultsDTO.class, dto.results());
   }
 
   @Test
@@ -110,7 +103,7 @@ class RaceResultsDTOTest {
 
     RaceResultsDTO dto = new RaceResultsDTO(race, new TeamRaceResultsDTO(List.of(teamResult)));
 
-    assertEquals("COLLECTIVE", dto.results().resultType());
+    assertEquals(RaceTypeGroup.COLLECTIVE, dto.results().resultType());
     TeamRaceResultsDTO results = assertInstanceOf(TeamRaceResultsDTO.class, dto.results());
     assertEquals(List.of(teamResult), results.teamResults());
     assertEquals(List.of(individualResult), results.teamResults().getFirst().individualResults());
@@ -133,7 +126,7 @@ class RaceResultsDTOTest {
     );
     RaceResultsDTO dto = new RaceResultsDTO(relayRace, new RelayRaceResultsDTO(relayResults));
 
-    assertEquals("RELAY", dto.results().resultType());
+    assertEquals(RaceTypeGroup.RELAY, dto.results().resultType());
     RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, dto.results());
     assertEquals(relayResults, results.relayResults());
     assertTrue(results.relayResults().containsKey(AGE_GROUP));
