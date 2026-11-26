@@ -20,16 +20,18 @@
 
 package com.endurancetrio.business.event.service;
 
-import com.endurancetrio.business.event.dto.EmptyRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayResultDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.enumerator.RaceTypeGroup;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
 import com.endurancetrio.business.event.mapper.RaceMapper;
+import com.endurancetrio.business.event.mapper.RelayResultMapper;
 import com.endurancetrio.business.event.mapper.TeamResultMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
@@ -64,19 +66,21 @@ public class RaceServiceMain implements RaceService {
   private final IndividualResultMapper individualResultMapper;
   private final RaceRepository raceRepository;
   private final RaceMapper raceMapper;
+  private final RelayResultMapper relayResultMapper;
   private final TeamResultMapper teamResultMapper;
   private final TeamResultRepository teamResultRepository;
 
   @Autowired
   public RaceServiceMain(
-    IndividualResultRepository individualResultRepository, IndividualResultMapper individualResultMapper,
-    RaceRepository raceRepository, RaceMapper raceMapper, TeamResultMapper teamResultMapper,
-    TeamResultRepository teamResultRepository
+      IndividualResultRepository individualResultRepository, IndividualResultMapper individualResultMapper,
+      RaceRepository raceRepository, RaceMapper raceMapper, RelayResultMapper relayResultMapper,
+      TeamResultMapper teamResultMapper, TeamResultRepository teamResultRepository
   ) {
     this.individualResultRepository = individualResultRepository;
     this.individualResultMapper = individualResultMapper;
     this.raceRepository = raceRepository;
     this.raceMapper = raceMapper;
+    this.relayResultMapper = relayResultMapper;
     this.teamResultMapper = teamResultMapper;
     this.teamResultRepository = teamResultRepository;
   }
@@ -190,15 +194,68 @@ public class RaceServiceMain implements RaceService {
   }
 
   /**
-   * Stub placeholder for relay race results.
+   * Builds the relay race results for the given {@code race} from the stored
+   * {@link TeamResult team result} rows.
    * <p>
-   * Currently returns a {@link RaceResultsDTO} holding an {@link EmptyRaceResultsDTO}.
+   * The same {@link TeamResultRepository#findByRaceIdWithGraph(Long) fetch query} used by collective
+   * races returns the relay rows with their contributing individual results. Rank, penalty and all
+   * split durations are read as stored; nothing is recalculated. For derived races the mapper reads
+   * the classification and performance values through the source-result chain.
+   * <p>
+   * All rows are first placed in the {@link AgeGroup#OPEN} group sorted by rank (with null-safe
+   * handling for unranked rows) and penalty ordinal (nulls last), each keeping its stored rank and
+   * the gap to the overall winner. Additional age-group segments are then extracted via the
+   * source-result chain, each independently ranked starting from 1 and with the gap computed against
+   * its own group winner.
    *
    * @param race the race whose relay results are to be built
-   * @return a {@link RaceResultsDTO} with no results
+   * @return a {@link RaceResultsDTO} holding a {@link RelayRaceResultsDTO}, with a single empty OPEN
+   *         group when the race has no relay results
    */
   private RaceResultsDTO buildRelayRaceResults(RaceDTO race) {
-    return new RaceResultsDTO(race, new EmptyRaceResultsDTO());
+    List<TeamResult> results = teamResultRepository.findByRaceIdWithGraph(race.id());
+
+    final Map<AgeGroup, List<RelayResultDTO>> relayResults = new LinkedHashMap<>();
+
+    if (results.isEmpty()) {
+      relayResults.put(AgeGroup.OPEN, List.of());
+      return new RaceResultsDTO(race, new RelayRaceResultsDTO(relayResults));
+    }
+
+    final Duration overallWinnerTotal = getRelayWinnerTotal(results.getFirst());
+
+    Comparator<TeamResult> resultComparator = Comparator.comparing(TeamResult::getRank,
+        Comparator.nullsLast(Integer::compareTo)
+    ).thenComparing(TeamResult::getPenalty, Comparator.nullsLast(Comparator.comparingInt(Enum::ordinal)));
+
+    relayResults.put(AgeGroup.OPEN, results.stream()
+        .sorted(resultComparator)
+        .map(result -> relayResultMapper.map(race, result, result.getRank(), overallWinnerTotal))
+        .toList()
+    );
+
+    Map<AgeGroup, List<TeamResult>> allAgeGroupResults = results.stream().collect(Collectors.groupingBy(result -> {
+          AgeGroup ageGroup = Optional.ofNullable(result.getSourceResult())
+              .map(TeamResult::getAgeGroup)
+              .orElse(result.getAgeGroup());
+          return ageGroup != null ? ageGroup : AgeGroup.OPEN;
+        }, LinkedHashMap::new, Collectors.toList()
+    ));
+
+    allAgeGroupResults.forEach((ageGroup, ageGroupResults) -> {
+      if (ageGroup == null || ageGroup == AgeGroup.OPEN) {
+        return;
+      }
+      ageGroupResults.sort(resultComparator);
+      Duration winnerTotal = getRelayWinnerTotal(ageGroupResults.getFirst());
+      AtomicInteger rank = new AtomicInteger(0);
+      relayResults.put(ageGroup, ageGroupResults.stream()
+          .map(result -> relayResultMapper.map(race, result, rank.incrementAndGet(), winnerTotal))
+          .toList()
+      );
+    });
+
+    return new RaceResultsDTO(race, new RelayRaceResultsDTO(orderByAgeGroupOrdinal(relayResults)));
   }
 
   /**
@@ -242,6 +299,24 @@ public class RaceServiceMain implements RaceService {
    * @return the winner's total duration, or null if neither the result nor its source has a total
    */
   private static @Nullable Duration getIndividualWinnerTotal(IndividualResult result) {
+    if (result.getSourceResult() == null) {
+      return result.getTotal();
+    }
+    return result.getSourceResult().getTotal();
+  }
+
+  /**
+   * Returns the total {@link Duration} of a winner's {@link TeamResult}, resolving the source result
+   * chain for inherited competitions.
+   * <p>
+   * If the given {@code result} has an associated {@link TeamResult#getSourceResult() source result},
+   * the total is taken from that source (the original result from the feeder race). Otherwise,
+   * the result's own total is used directly.
+   *
+   * @param result the winner's relay result, must not be null
+   * @return the winner's total duration, or null if neither the result nor its source has a total
+   */
+  private static @Nullable Duration getRelayWinnerTotal(TeamResult result) {
     if (result.getSourceResult() == null) {
       return result.getTotal();
     }

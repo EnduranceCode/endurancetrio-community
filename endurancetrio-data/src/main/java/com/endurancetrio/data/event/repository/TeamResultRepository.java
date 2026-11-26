@@ -19,6 +19,7 @@
 
 package com.endurancetrio.data.event.repository;
 
+import com.endurancetrio.data.competitor.model.entity.RelayEntry;
 import com.endurancetrio.data.event.model.entity.TeamResult;
 import com.endurancetrio.data.event.repository.projection.ResultPlacement;
 import java.util.Collection;
@@ -39,10 +40,16 @@ public interface TeamResultRepository extends JpaRepository<@NonNull TeamResult,
    * Returns the {@link TeamResult team results} of the race with the given {@code raceId}, with
    * their contributing individual results eagerly fetched.
    * <p>
-   * The {@code individualResults} collection and, for each contributor, the athlete, team and
-   * source result are fetched to avoid N+1 queries when mapping to DTOs. For derived results
-   * (where a contributor's {@code sourceResult} is not null), the performance fields must be read
-   * from the source result. Rows are ordered by rank ascending.
+   * The {@code individualResults} collection, the result's own {@code team} (a {@link RelayEntry}
+   * for relay races) and, for each contributor, the athlete, team and source result are fetched to
+   * avoid N+1 queries when mapping to DTOs. Fetching {@code team} also resolves its concrete subtype,
+   * so the relay mapper can recognise a {@link RelayEntry}. For derived results (where a
+   * contributor's {@code sourceResult} is not null), the performance fields must be read from the
+   * source result. Rows are ordered by rank ascending.
+   * <p>
+   * The members of a {@link RelayEntry} ({@link RelayEntry#getAthletes() athletes}) are deliberately
+   * not fetched. No current caller maps them; if a future feature needs the relay members, either
+   * widen this fetch graph or resolve the collection with a dedicated query.
    *
    * @param raceId the ID of the race to fetch team results for
    * @return the team results of the given race, in classification order, possibly empty
@@ -50,6 +57,7 @@ public interface TeamResultRepository extends JpaRepository<@NonNull TeamResult,
   @Query(
     "SELECT DISTINCT tr FROM TeamResult tr "
       + "LEFT JOIN FETCH tr.individualResults ir "
+      + "LEFT JOIN FETCH tr.team "
       + "LEFT JOIN FETCH ir.athlete "
       + "LEFT JOIN FETCH ir.team "
       + "LEFT JOIN FETCH ir.sourceResult sr "

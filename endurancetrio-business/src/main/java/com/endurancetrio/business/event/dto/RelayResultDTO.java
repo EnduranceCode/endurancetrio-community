@@ -20,7 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
-import com.endurancetrio.business.competitor.dto.AthleteDTO;
+import com.endurancetrio.business.competitor.dto.TeamDTO;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
@@ -35,6 +35,7 @@ import java.util.List;
  * @param race              the race context for this result
  * @param rank              the team's final rank in the race (may be null if unranked)
  * @param penalty           the penalty applied to the team (may be null)
+ * @param team              the team the relay entry represents (may be null)
  * @param teamName          the team name as recorded for this race
  * @param bib               the team's bib number (may be null)
  * @param athletesCount     the number of athletes contributing to the relay result
@@ -51,14 +52,12 @@ import java.util.List;
  * @param t3                the third transition time (may be null)
  * @param secondBike        the second bike split time (may be null)
  * @param total             the team's total time (may be null)
+ * @param gap               the time gap to the overall winner (may be null)
  * @param individualResults the individual results that contribute to the relay result
- * @param athletes          the relay entry's members, used when no individual results are stored
  */
 public record RelayResultDTO(
     Long id,
-    RaceDTO race,
-    Integer rank,
-    Penalty penalty,
+    RaceDTO race, Integer rank, Penalty penalty, TeamDTO team,
     String teamName,
     String bib,
     Integer athletesCount,
@@ -75,8 +74,8 @@ public record RelayResultDTO(
     Duration t3,
     Duration secondBike,
     Duration total,
-    List<IndividualResultDTO> individualResults,
-    List<AthleteDTO> athletes
+    Duration gap,
+    List<IndividualResultDTO> individualResults
 ) {
 
 }
