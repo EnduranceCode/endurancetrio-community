@@ -52,8 +52,9 @@ public class RelayResultMapper {
    * If the entity has a {@link TeamResult#getSourceResult() source result} (a derived relay race),
    * the classification and performance values are read from that source - the original result from
    * the feeder race - while the current row's id, rank, team name and athlete count are preserved.
-   * The race context is always the given {@code race}. The {@code team} is resolved through the same
-   * source chain, as in {@link IndividualResultMapper}.
+   * The race context is always the given {@code race}. The {@code team} and the contributing
+   * individual results are resolved through the same source chain, as in
+   * {@link IndividualResultMapper}.
    * <p>
    * The given {@code rank} is the classification position to display: the stored rank for the OPEN
    * group, or the age-group position when the results are grouped by age group. As in
@@ -82,10 +83,10 @@ public class RelayResultMapper {
 
     TeamResult source = entity.getSourceResult() == null ? entity : entity.getSourceResult();
 
-    List<IndividualResultDTO> contributors = mapContributors(race, entity);
+    List<IndividualResultDTO> contributors = mapContributors(race, source);
 
     return new RelayResultDTO(entity.getId(), race, rank, source.getPenalty(), teamMapper.map(source.getTeam()),
-        entity.getTeamName(), source.getBib(), entity.getAthletesCount(), source.getAgeGroup(), source.getParaClass(),
+        entity.getTeamName(), source.getAgeGroup(), source.getParaClass(), source.getBib(), entity.getAthletesCount(),
         source.getSwim(), source.getFirstBike(), source.getFirstRun(), source.getT1(), source.getBike(), source.getT2(),
         source.getRun(), source.getSecondRun(), source.getT3(), source.getSecondBike(), source.getTotal(), gap,
         contributors

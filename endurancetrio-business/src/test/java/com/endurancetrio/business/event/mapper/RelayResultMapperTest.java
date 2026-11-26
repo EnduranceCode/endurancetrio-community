@@ -255,4 +255,28 @@ class RelayResultMapperTest {
     assertEquals(Duration.ofMinutes(164), result.total());
     assertEquals(Duration.ofMinutes(24), result.gap());
   }
+
+  @Test
+  void mapWithSourceResultMapsContributorsFromSource() {
+    TeamResult source = new TeamResult();
+    source.setId(99L);
+    entity.setSourceResult(source);
+
+    var sourceContributor = new IndividualResult();
+    sourceContributor.setId(20L);
+    sourceContributor.setRank(1);
+    source.setIndividualResults(Set.of(sourceContributor));
+
+    var entityContributor = new IndividualResult();
+    entityContributor.setId(10L);
+    entityContributor.setRank(1);
+    entity.setIndividualResults(Set.of(entityContributor));
+
+    var sourceDTO = mock(IndividualResultDTO.class);
+    when(individualResultMapper.map(race, sourceContributor, 1, null)).thenReturn(sourceDTO);
+
+    RelayResultDTO result = underTest.map(race, entity, entity.getRank(), WINNER_TOTAL);
+
+    assertEquals(List.of(sourceDTO), result.individualResults());
+  }
 }

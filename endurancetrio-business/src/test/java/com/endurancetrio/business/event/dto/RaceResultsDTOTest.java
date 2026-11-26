@@ -122,7 +122,7 @@ class RaceResultsDTOTest {
         List.of("TRIATHLON"), List.of("OLYMPIC"), RaceType.TEAM_RELAY_PARENT, "RELAY", null, null, "UNKNOWN"
     );
     RelayResultDTO relayResult = new RelayResultDTO(3L, relayRace, 1, null, TeamDTOFixtures.standard(), "Team Alpha",
-        "301", 2, AGE_GROUP, null, Duration.ofMinutes(10), Duration.ofMinutes(20), Duration.ofMinutes(15),
+        AGE_GROUP, null, "301", 2, Duration.ofMinutes(10), Duration.ofMinutes(20), Duration.ofMinutes(15),
         Duration.ofMinutes(2), Duration.ofMinutes(40), Duration.ofMinutes(3), Duration.ofMinutes(30), null,
         Duration.ofMinutes(4), Duration.ofMinutes(25), Duration.ofMinutes(149), Duration.ofSeconds(20),
         List.of(individualResult)

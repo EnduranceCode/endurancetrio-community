@@ -121,7 +121,34 @@
           </div>
         </div>
 
-        <div data-th-unless="${raceResults.results().resultType() == 'INDIVIDUAL' or raceResults.results().resultType() == 'COLLECTIVE'}" data-th-remove="tag">
+        <div data-th-if="${raceResults.results().resultType() == 'RELAY'}"
+          data-th-with="relayResults=${raceResults.results().relayResults()}"
+          data-th-remove="tag">
+          <div data-th-if="${#maps.size(relayResults) == 1}"
+            data-th-with="entry=${relayResults.entrySet().iterator().next()}"
+            data-th-remove="tag">
+            <div data-th-if="${#lists.isEmpty(entry.value)}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/result-status :: status-switcher(${raceResults.race.resultStatus},${language})}">
+              </div>
+            </div>
+
+            <div data-th-unless="${#lists.isEmpty(entry.value)}" data-th-remove="tag">
+              <div data-th-replace="~{fragments/relay-results :: relay-results-table(${entry.value}, ${activeColumns}, ${activeContributorColumns})}"></div>
+            </div>
+          </div>
+
+          <div data-th-if="${#maps.size(relayResults) > 1}" data-th-remove="tag">
+            <div data-th-replace="~{fragments/relay-results :: relay-results-tabs(${relayResults}, ${activeColumns}, ${activeContributorColumns}, ${language})}"></div>
+          </div>
+
+          <div data-th-if="${!#lists.isEmpty(relayResults.get(AgeGroup.OPEN)) and raceResults.race.resultStatus == ResultStatus.INCOMPLETE.getCode()}"
+            data-th-remove="tag">
+            <div data-th-replace="~{fragments/result-status :: results-incomplete(${language})}"></div>
+          </div>
+        </div>
+
+        <div data-th-unless="${raceResults.results().resultType() == 'INDIVIDUAL' or raceResults.results().resultType() == 'COLLECTIVE' or raceResults.results().resultType() == 'RELAY'}"
+          data-th-remove="tag">
           <div data-th-replace="~{fragments/result-status :: results-pending(${language})}"></div>
         </div>
       </section>

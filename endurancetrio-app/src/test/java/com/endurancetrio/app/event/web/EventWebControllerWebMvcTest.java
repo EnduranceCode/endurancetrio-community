@@ -43,6 +43,8 @@ import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayResultDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.service.EventService;
@@ -98,6 +100,16 @@ class EventWebControllerWebMvcTest {
     ResultStatus.INCOMPLETE.getCode()
   );
 
+  private static final RaceDTO RELAY_RACE = new RaceDTO(RACE_ID, "Prova de Estafetas", "Geral", EVENT_DATE, null,
+      List.of("TRIATHLON"), List.of("SPRINT"), RaceType.TEAM_RELAY_PARENT, "RELAY", null, null,
+      ResultStatus.COMPLETE.getCode()
+  );
+
+  private static final RaceDTO EMPTY_RELAY_RACE = new RaceDTO(RACE_ID, "Prova de Estafetas", "Geral", EVENT_DATE, null,
+      List.of("TRIATHLON"), List.of("SPRINT"), RaceType.TEAM_RELAY_PARENT, "RELAY", null, null,
+      ResultStatus.EMPTY.getCode()
+  );
+
   private static final RaceDTO INDIVIDUAL_INCOMPLETE_RACE = new RaceDTO(RACE_ID, "Individual Race", "Geral", EVENT_DATE,
     null, List.of("TRIATHLON"), List.of("SPRINT"), RaceType.INDIVIDUAL_PARENT, "INDIVIDUAL", null, null,
     ResultStatus.INCOMPLETE.getCode()
@@ -125,6 +137,17 @@ class EventWebControllerWebMvcTest {
   private static final EventOverviewDTO EVENT_OVERVIEW_WITH_INDIVIDUAL_INCOMPLETE_RACE = new EventOverviewDTO(EVENT_ID,
     "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(),
     List.of(INDIVIDUAL_INCOMPLETE_RACE), List.of()
+  );
+
+  private static final EventOverviewDTO EVENT_OVERVIEW_WITH_RELAY_RACE = new EventOverviewDTO(EVENT_ID,
+      "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(), List.of(RELAY_RACE),
+      List.of()
+  );
+
+  private static final EventOverviewDTO EVENT_OVERVIEW_WITH_EMPTY_RELAY_RACE = new EventOverviewDTO(EVENT_ID,
+      "Triatlo de Peniche", EVENT_DATE, EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of(),
+      List.of(EMPTY_RELAY_RACE),
+      List.of()
   );
 
   private static final String ALPHA_CONTRIBUTOR = AthleteDTOFixtures.standard().knownName();
@@ -177,6 +200,7 @@ class EventWebControllerWebMvcTest {
 
     assertEquals(2, StringUtils.countOccurrencesOf(html, "class=\"expand\""));
     assertEquals(2, StringUtils.countOccurrencesOf(html, "data-expand-content"));
+    assertEquals(3, StringUtils.countOccurrencesOf(html, "data-sort=\"rank\""));
     assertEquals(1, StringUtils.countOccurrencesOf(html, ALPHA_CONTRIBUTOR));
     assertEquals(1, StringUtils.countOccurrencesOf(html, BRAVO_CONTRIBUTOR));
     assertEquals(1, StringUtils.countOccurrencesOf(html, CHARLIE_CONTRIBUTOR));
@@ -310,6 +334,77 @@ class EventWebControllerWebMvcTest {
       .andExpect(status().isOk())
       .andExpect(content().string(containsString("This race was planned but had no registered participants")))
       .andExpect(content().string(not(containsString("data-expand"))));
+  }
+
+  @Test
+  void relayRaceShouldRenderRelayTableWithExpandableContributors() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_RELAY_RACE);
+
+    var alpha = relayResult(1L, 1, AgeGroup.OPEN, Duration.ofMinutes(150), Duration.ZERO,
+        List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(37)))
+    );
+    var bravo = relayResult(2L, 2, AgeGroup.OPEN, Duration.ofMinutes(160), Duration.ofMinutes(10), List.of());
+
+    when(raceService.getRaceResults(RELAY_RACE)).thenReturn(
+        new RaceResultsDTO(RELAY_RACE, new RelayRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(alpha, bravo)))));
+
+    String html = mockMvc.perform(get(RESULTS_PATH))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("Team Alpha")))
+        .andExpect(content().string(containsString("Team Bravo")))
+        .andExpect(content().string(containsString("OPEN")))
+        .andExpect(content().string(containsString("00:00:00")))
+        .andExpect(content().string(containsString("00:10:00")))
+        .andExpect(content().string(containsString(ALPHA_CONTRIBUTOR)))
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+    assertEquals(1, StringUtils.countOccurrencesOf(html, "class=\"expand\""));
+    assertEquals(1, StringUtils.countOccurrencesOf(html, "data-expand-content"));
+    assertEquals(1, StringUtils.countOccurrencesOf(html, "data-sort=\"rank\""));
+    assertEquals(1, StringUtils.countOccurrencesOf(html, ALPHA_CONTRIBUTOR));
+  }
+
+  @Test
+  void relayRaceWithMultipleAgeGroupsShouldRenderTabs() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_RELAY_RACE);
+
+    var open = relayResult(1L, 1, AgeGroup.OPEN, Duration.ofMinutes(150), Duration.ZERO, List.of());
+    var sen = relayResult(2L, 1, AgeGroup.SEN, Duration.ofMinutes(160), Duration.ZERO, List.of());
+
+    when(raceService.getRaceResults(RELAY_RACE)).thenReturn(new RaceResultsDTO(RELAY_RACE,
+        new RelayRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of(open), AgeGroup.SEN, List.of(sen)))
+    ));
+
+    mockMvc.perform(get(RESULTS_PATH))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("Team Alpha")))
+        .andExpect(content().string(containsString("Team Bravo")))
+        .andExpect(content().string(containsString("SEN")));
+  }
+
+  @Test
+  void relayRaceWithNoResultsShouldRenderResultStatus() throws Exception {
+    when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_EMPTY_RELAY_RACE);
+    when(raceService.getRaceResults(EMPTY_RELAY_RACE)).thenReturn(
+        new RaceResultsDTO(EMPTY_RELAY_RACE, new RelayRaceResultsDTO(Map.of(AgeGroup.OPEN, List.of()))));
+
+    mockMvc.perform(get(RESULTS_PATH))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("This race was planned but had no registered participants")))
+        .andExpect(content().string(not(containsString("data-expand"))));
+  }
+
+  private static RelayResultDTO relayResult(
+      Long id, Integer rank, AgeGroup ageGroup, Duration total, Duration gap,
+      List<IndividualResultDTO> contributors
+  ) {
+    return new RelayResultDTO(id, RELAY_RACE, rank, null, TeamDTOFixtures.standard(),
+        id == 1 ? "Team Alpha" : "Team Bravo",
+        ageGroup, null, "10" + id, 3, null, null, null, null, null, null, null, null, null, null, total, gap,
+        contributors
+    );
   }
 
   private static IndividualResultDTO contributor(Long id, AthleteDTO athlete, Duration total) {

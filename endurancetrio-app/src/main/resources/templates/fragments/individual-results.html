@@ -32,6 +32,7 @@
         <thead>
           <tr>
             <th class="is-narrow is-sorted-asc has-text-centered"
+              data-th-unless="${raceResults.race.raceTypeGroup() == 'RELAY'}"
               data-th-attr="data-sort=${IndividualResultColumns.RANK.getCode()}"
               scope="col">
               <span class="icon-text">
@@ -240,7 +241,8 @@
         <tbody>
           <tr data-th-each="result : ${results}"
             data-th-classappend="${result.penalty() != null} ? 'has-text-grey-light'">
-            <td class="has-text-centered">
+            <td class="has-text-centered"
+              data-th-unless="${raceResults.race.raceTypeGroup() == 'RELAY'}">
               <span data-th-if="${result.penalty() == null}"
                 data-th-text="${result.rank()}">
               </span>

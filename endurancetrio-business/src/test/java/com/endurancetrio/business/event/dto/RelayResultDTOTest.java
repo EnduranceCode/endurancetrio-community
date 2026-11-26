@@ -69,8 +69,8 @@ class RelayResultDTOTest {
     individualResult = new IndividualResultDTO(4L, race, 2, null, AthleteDTOFixtures.standard(), AGE_GROUP, null, null,
         null, "102", SWIM, null, null, null, BIKE, null, RUN, null, null, null, TOTAL, null, null
     );
-    underTest = new RelayResultDTO(ID, race, RANK, PENALTY, TeamDTOFixtures.standard(), TEAM_NAME, BIB, ATHLETES_COUNT,
-        AGE_GROUP, null, SWIM, FIRST_BIKE, FIRST_RUN, T1, BIKE, T2, RUN, SECOND_RUN, T3, SECOND_BIKE, TOTAL, GAP,
+    underTest = new RelayResultDTO(ID, race, RANK, PENALTY, TeamDTOFixtures.standard(), TEAM_NAME, AGE_GROUP, null, BIB,
+        ATHLETES_COUNT, SWIM, FIRST_BIKE, FIRST_RUN, T1, BIKE, T2, RUN, SECOND_RUN, T3, SECOND_BIKE, TOTAL, GAP,
         List.of(individualResult)
     );
   }

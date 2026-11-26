@@ -39,6 +39,7 @@ public enum RelayResultColumns {
 
   RANK("rank", r -> r.rank() != null),
   TEAM_NAME("teamName", r -> StringUtils.isNotBlank(r.teamName())),
+  AGE_GROUP("ageGroup", r -> r.ageGroup() != null),
   BIB("bib", r -> StringUtils.isNotBlank(r.bib())),
   ATHLETES_COUNT("athletesCount", r -> r.athletesCount() != null),
   SWIM("swim", r -> r.swim() != null),

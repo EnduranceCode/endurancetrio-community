@@ -37,10 +37,10 @@ import java.util.List;
  * @param penalty           the penalty applied to the team (may be null)
  * @param team              the team the relay entry represents (may be null)
  * @param teamName          the team name as recorded for this race
- * @param bib               the team's bib number (may be null)
- * @param athletesCount     the number of athletes contributing to the relay result
  * @param ageGroup          the team's age group classification (may be null)
  * @param paraClass         the team's para-classification (may be null)
+ * @param bib               the team's bib number (may be null)
+ * @param athletesCount     the number of athletes contributing to the relay result
  * @param swim              the swim split time (may be null)
  * @param firstBike         the first bike split time (may be null)
  * @param firstRun          the first run split time (may be null)
@@ -59,10 +59,10 @@ public record RelayResultDTO(
     Long id,
     RaceDTO race, Integer rank, Penalty penalty, TeamDTO team,
     String teamName,
-    String bib,
-    Integer athletesCount,
     AgeGroup ageGroup,
     ParaClass paraClass,
+    String bib,
+    Integer athletesCount,
     Duration swim,
     Duration firstBike,
     Duration firstRun,
