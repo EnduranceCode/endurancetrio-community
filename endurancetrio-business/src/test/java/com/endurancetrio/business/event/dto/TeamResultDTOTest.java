@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
+import com.endurancetrio.business.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.Duration;
@@ -58,8 +59,8 @@ class TeamResultDTOTest {
     individualResult = new IndividualResultDTO(3L, race, 2, null, AthleteDTOFixtures.standard(), AgeGroup.ELITE, null,
         null, null, "102", null, null, null, null, null, null, null, null, null, null, null, null, null
     );
-    underTest = new TeamResultDTO(ID, race, RANK, TEAM_NAME, BIB, ATHLETES_COUNT, TOTAL, TOTAL_GAP, POINTS, POINTS_GAP,
-        CUMULATIVE_RANK, CUMULATIVE_RANK_GAP, List.of(individualResult)
+    underTest = new TeamResultDTO(ID, race, RANK, TeamDTOFixtures.standard(), TEAM_NAME, BIB, ATHLETES_COUNT, TOTAL,
+        TOTAL_GAP, POINTS, POINTS_GAP, CUMULATIVE_RANK, CUMULATIVE_RANK_GAP, List.of(individualResult)
     );
   }
 
@@ -68,6 +69,7 @@ class TeamResultDTOTest {
     assertEquals(ID, underTest.id());
     assertNotNull(underTest.race());
     assertEquals(RANK, underTest.rank());
+    assertEquals(TeamDTOFixtures.standard(), underTest.team());
     assertEquals(TEAM_NAME, underTest.teamName());
     assertEquals(BIB, underTest.bib());
     assertEquals(ATHLETES_COUNT, underTest.athletesCount());

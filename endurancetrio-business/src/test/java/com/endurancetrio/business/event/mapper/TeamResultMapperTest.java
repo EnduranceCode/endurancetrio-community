@@ -26,6 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.endurancetrio.business.competitor.dto.TeamDTO;
+import com.endurancetrio.business.competitor.fixtures.TeamDTOFixtures;
+import com.endurancetrio.business.competitor.fixtures.TeamFixture;
+import com.endurancetrio.business.competitor.mapper.TeamMapper;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
@@ -52,6 +56,9 @@ class TeamResultMapperTest {
   @Mock
   private IndividualResultMapper individualResultMapper;
 
+  @Mock
+  private TeamMapper teamMapper;
+
   @InjectMocks
   private TeamResultMapper underTest;
 
@@ -68,6 +75,7 @@ class TeamResultMapperTest {
     entity = new TeamResult();
     entity.setId(1L);
     entity.setRank(1);
+    entity.setTeam(TeamFixture.standard());
     entity.setTeamName("Alpha");
     entity.setBib("101");
     entity.setTotal(Duration.ofMinutes(200));
@@ -107,11 +115,15 @@ class TeamResultMapperTest {
     when(individualResultMapper.map(race, rankedFirst, 1, null)).thenReturn(firstDTO);
     when(individualResultMapper.map(race, rankedSecond, 2, null)).thenReturn(secondDTO);
 
+    TeamDTO teamDTO = TeamDTOFixtures.standard();
+    when(teamMapper.map(entity.getTeam())).thenReturn(teamDTO);
+
     TeamResultDTO result = underTest.map(race, entity, winner);
 
     assertEquals(1L, result.id());
     assertEquals(race, result.race());
     assertEquals(1, result.rank());
+    assertEquals(teamDTO, result.team());
     assertEquals("Alpha", result.teamName());
     assertEquals("101", result.bib());
     assertEquals(Duration.ofMinutes(200), result.total());

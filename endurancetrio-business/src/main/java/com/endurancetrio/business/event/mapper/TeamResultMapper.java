@@ -20,9 +20,11 @@
 
 package com.endurancetrio.business.event.mapper;
 
+import com.endurancetrio.business.competitor.mapper.TeamMapper;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
+import com.endurancetrio.data.competitor.model.entity.Team;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
 import com.endurancetrio.data.event.model.entity.TeamResult;
 import java.time.Duration;
@@ -35,13 +37,18 @@ import org.springframework.stereotype.Component;
 public class TeamResultMapper {
 
   private final IndividualResultMapper individualResultMapper;
+  private final TeamMapper teamMapper;
 
-  public TeamResultMapper(IndividualResultMapper individualResultMapper) {
+  public TeamResultMapper(IndividualResultMapper individualResultMapper, TeamMapper teamMapper) {
     this.individualResultMapper = individualResultMapper;
+    this.teamMapper = teamMapper;
   }
 
   /**
    * Maps a {@link TeamResult} entity to a {@link TeamResultDTO}.
+   * <p>
+   * The {@code team} is read from the entity and mapped through {@link TeamMapper}, so it is the
+   * base {@link Team} projection of the collective race's team.
    * <p>
    * The winner is the first row of the classification (lowest rank), so its values are the gap
    * reference. For {@code TEAM_BY_RANK} the reference is the smallest sum of the contributors'
@@ -81,9 +88,9 @@ public class TeamResultMapper {
       default -> throw new IllegalArgumentException("Unsupported collective race type: " + race.raceType());
     }
 
-    return new TeamResultDTO(entity.getId(), race, entity.getRank(), entity.getTeamName(), entity.getBib(),
-      entity.getAthletesCount(), entity.getTotal(), totalGap, entity.getPoints(), pointsGap, entity.getCumulativeRank(),
-      cumulativeRankGap, individualResults
+    return new TeamResultDTO(entity.getId(), race, entity.getRank(), teamMapper.map(entity.getTeam()),
+        entity.getTeamName(), entity.getBib(), entity.getAthletesCount(), entity.getTotal(), totalGap,
+        entity.getPoints(), pointsGap, entity.getCumulativeRank(), cumulativeRankGap, individualResults
     );
   }
 

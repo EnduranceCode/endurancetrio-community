@@ -286,8 +286,8 @@ class RaceServiceMainTest {
     teamResult.setIndividualResults(Set.of(result1));
 
     var contributorDTO = mock(IndividualResultDTO.class);
-    var expected = new TeamResultDTO(1L, collectiveRace, 1, "Alpha", "101", 3, Duration.ofMinutes(200), null, 10, null,
-      5, null, List.of(contributorDTO)
+    var expected = new TeamResultDTO(1L, collectiveRace, 1, null, "Alpha", "101", 3, Duration.ofMinutes(200), null, 10,
+        null, 5, null, List.of(contributorDTO)
     );
 
     when(teamResultRepository.findByRaceIdWithGraph(collectiveRace.id())).thenReturn(List.of(teamResult));

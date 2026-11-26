@@ -20,6 +20,7 @@
 
 package com.endurancetrio.business.event.dto;
 
+import com.endurancetrio.business.competitor.dto.TeamDTO;
 import java.time.Duration;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import java.util.List;
  * @param id                the unique identifier of the team result
  * @param race              the race context for this result
  * @param rank              the team's final rank in the race (may be null if unranked)
+ * @param team              the team the result represents (may be null)
  * @param teamName          the team name as recorded for this race
  * @param bib               the team's bib number (may be null)
  * @param athletesCount     the number of athletes contributing to the team result
@@ -48,6 +50,7 @@ public record TeamResultDTO(
   Long id,
   RaceDTO race,
   Integer rank,
+  TeamDTO team,
   String teamName,
   String bib,
   Integer athletesCount,
