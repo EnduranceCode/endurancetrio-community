@@ -31,15 +31,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.endurancetrio.business.event.dto.EmptyRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualRaceResultsDTO;
 import com.endurancetrio.business.event.dto.IndividualResultDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.dto.RaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayRaceResultsDTO;
+import com.endurancetrio.business.event.dto.RelayResultDTO;
 import com.endurancetrio.business.event.dto.TeamRaceResultsDTO;
 import com.endurancetrio.business.event.dto.TeamResultDTO;
 import com.endurancetrio.business.event.mapper.IndividualResultMapper;
 import com.endurancetrio.business.event.mapper.RaceMapper;
+import com.endurancetrio.business.event.mapper.RelayResultMapper;
 import com.endurancetrio.business.event.mapper.TeamResultMapper;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.entity.IndividualResult;
@@ -86,6 +88,9 @@ class RaceServiceMainTest {
 
   @Mock
   private RaceMapper raceMapper;
+
+  @Mock
+  private RelayResultMapper relayResultMapper;
 
   @Mock
   private TeamResultMapper teamResultMapper;
@@ -333,13 +338,114 @@ class RaceServiceMainTest {
 
   @Test
   void getRaceResultsForRelayRaceShouldReturnEmptyResults() {
+    when(teamResultRepository.findByRaceIdWithGraph(relayRace.id())).thenReturn(List.of());
+
     RaceResultsDTO result = underTest.getRaceResults(relayRace);
 
     assertNotNull(result);
     assertEquals(relayRace, result.race());
-    assertInstanceOf(EmptyRaceResultsDTO.class, result.results());
+    RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, result.results());
+    assertEquals(1, results.relayResults().size());
+    assertTrue(results.relayResults().get(AgeGroup.OPEN).isEmpty());
     verifyNoInteractions(individualResultRepository);
-    verifyNoInteractions(teamResultRepository);
+    verifyNoInteractions(relayResultMapper);
+  }
+
+  @Test
+  void getRaceResultsForRelayRaceShouldSortByRankAndPenalty() {
+    var rankOne = teamResult(3L, 1, "Bravo");
+    rankOne.setTotal(Duration.ofMinutes(150));
+    var rankTwoDnf = teamResult(1L, 2, "Alpha");
+    rankTwoDnf.setPenalty(Penalty.DNF);
+    rankTwoDnf.setTotal(Duration.ofMinutes(160));
+    var rankTwoDsq = teamResult(2L, 2, "Zulu");
+    rankTwoDsq.setPenalty(Penalty.DSQ);
+    rankTwoDsq.setTotal(Duration.ofMinutes(170));
+    var unranked = teamResult(4L, null, "Aardvark");
+    unranked.setTotal(Duration.ofMinutes(180));
+
+    when(teamResultRepository.findByRaceIdWithGraph(relayRace.id())).thenReturn(
+        List.of(rankOne, rankTwoDsq, rankTwoDnf, unranked));
+
+    var rankOneDTO = mock(RelayResultDTO.class);
+    var dnfDTO = mock(RelayResultDTO.class);
+    var dsqDTO = mock(RelayResultDTO.class);
+    var unrankedDTO = mock(RelayResultDTO.class);
+
+    when(relayResultMapper.map(relayRace, rankOne, 1, Duration.ofMinutes(150))).thenReturn(rankOneDTO);
+    when(relayResultMapper.map(relayRace, rankTwoDnf, 2, Duration.ofMinutes(150))).thenReturn(dnfDTO);
+    when(relayResultMapper.map(relayRace, rankTwoDsq, 2, Duration.ofMinutes(150))).thenReturn(dsqDTO);
+    when(relayResultMapper.map(relayRace, unranked, null, Duration.ofMinutes(150))).thenReturn(unrankedDTO);
+
+    RaceResultsDTO result = underTest.getRaceResults(relayRace);
+
+    assertNotNull(result);
+    RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, result.results());
+    assertEquals(1, results.relayResults().size());
+    assertEquals(List.of(rankOneDTO, dnfDTO, dsqDTO, unrankedDTO), results.relayResults().get(AgeGroup.OPEN));
+    verifyNoInteractions(individualResultRepository);
+  }
+
+  @Test
+  void getRaceResultsForDerivedRelayRaceShouldGroupBySourceAgeGroup() {
+    var source = teamResult(99L, 1, "Source");
+    source.setAgeGroup(AgeGroup.SEN);
+    source.setTotal(Duration.ofMinutes(140));
+    var derived = teamResult(1L, 1, "Alpha");
+    derived.setAgeGroup(AgeGroup.OPEN);
+    derived.setSourceResult(source);
+
+    when(teamResultRepository.findByRaceIdWithGraph(relayRace.id())).thenReturn(List.of(derived));
+
+    var dto = mock(RelayResultDTO.class);
+    when(relayResultMapper.map(relayRace, derived, 1, Duration.ofMinutes(140))).thenReturn(dto);
+
+    RaceResultsDTO result = underTest.getRaceResults(relayRace);
+
+    assertNotNull(result);
+    RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, result.results());
+    assertEquals(2, results.relayResults().size());
+    assertEquals(List.of(dto), results.relayResults().get(AgeGroup.OPEN));
+    assertEquals(List.of(dto), results.relayResults().get(AgeGroup.SEN));
+  }
+
+  @Test
+  void getRaceResultsForRelayRaceShouldRankAgeGroupsAndUseGroupWinnerForGaps() {
+    var overallWinner = teamResult(1L, 1, "Overall");
+    overallWinner.setAgeGroup(AgeGroup.OPEN);
+    overallWinner.setTotal(Duration.ofMinutes(140));
+    var senWinner = teamResult(2L, 2, "Sen Winner");
+    senWinner.setTotal(Duration.ofMinutes(150));
+    var senRunnerUp = teamResult(3L, 3, "Sen Runner Up");
+    senRunnerUp.setTotal(Duration.ofMinutes(160));
+
+    var senSource = teamResult(99L, 1, "Sen Source");
+    senSource.setAgeGroup(AgeGroup.SEN);
+    senSource.setTotal(Duration.ofMinutes(150));
+    senWinner.setSourceResult(senSource);
+    senRunnerUp.setSourceResult(senSource);
+
+    when(teamResultRepository.findByRaceIdWithGraph(relayRace.id())).thenReturn(
+        List.of(overallWinner, senWinner, senRunnerUp));
+
+    var overallDTO = mock(RelayResultDTO.class);
+    var senOpenDTO = mock(RelayResultDTO.class);
+    var senRunnerUpOpenDTO = mock(RelayResultDTO.class);
+    var senGroupWinnerDTO = mock(RelayResultDTO.class);
+    var senGroupRunnerUpDTO = mock(RelayResultDTO.class);
+
+    when(relayResultMapper.map(relayRace, overallWinner, 1, Duration.ofMinutes(140))).thenReturn(overallDTO);
+    when(relayResultMapper.map(relayRace, senWinner, 2, Duration.ofMinutes(140))).thenReturn(senOpenDTO);
+    when(relayResultMapper.map(relayRace, senRunnerUp, 3, Duration.ofMinutes(140))).thenReturn(senRunnerUpOpenDTO);
+    when(relayResultMapper.map(relayRace, senWinner, 1, Duration.ofMinutes(150))).thenReturn(senGroupWinnerDTO);
+    when(relayResultMapper.map(relayRace, senRunnerUp, 2, Duration.ofMinutes(150))).thenReturn(senGroupRunnerUpDTO);
+
+    RaceResultsDTO result = underTest.getRaceResults(relayRace);
+
+    assertNotNull(result);
+    RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, result.results());
+    assertEquals(List.of(overallDTO, senOpenDTO, senRunnerUpOpenDTO), results.relayResults().get(AgeGroup.OPEN));
+    assertEquals(List.of(senGroupWinnerDTO, senGroupRunnerUpDTO), results.relayResults().get(AgeGroup.SEN));
   }
 
   @Test

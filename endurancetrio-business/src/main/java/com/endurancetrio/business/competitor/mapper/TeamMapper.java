@@ -21,18 +21,27 @@
 package com.endurancetrio.business.competitor.mapper;
 
 import com.endurancetrio.business.competitor.dto.TeamDTO;
+import com.endurancetrio.data.competitor.model.entity.RelayEntry;
 import com.endurancetrio.data.competitor.model.entity.Team;
 import org.springframework.stereotype.Component;
 
 /**
  * The {@link TeamMapper} provides mapping between {@link Team} entities and {@link TeamDTO}
  * objects.
+ * <p>
+ * A {@link RelayEntry} is mapped through its {@link Team} base only. The relay-specific
+ * {@code genderCategory}, {@code ageGroup} and {@code athletes} are not part of {@link TeamDTO} and
+ * are therefore dropped. Callers that need that data must read it from the entity or from a
+ * relay-specific DTO.
  */
 @Component
 public class TeamMapper {
 
   /**
    * Maps a {@link Team} entity to a {@link TeamDTO}.
+   * <p>
+   * When the entity is a {@link RelayEntry}, only the {@link Team} base fields are mapped; its
+   * {@code genderCategory}, {@code ageGroup} and {@code athletes} are dropped.
    *
    * @param entity the Team entity to map; may be null
    * @return the corresponding TeamDTO, or {@code null} if the entity is {@code null}

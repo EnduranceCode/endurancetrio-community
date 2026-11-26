@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.endurancetrio.business.competitor.fixtures.AthleteDTOFixtures;
+import com.endurancetrio.business.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
@@ -55,6 +56,7 @@ class RelayResultDTOTest {
   private static final Duration T3 = Duration.ofMinutes(4);
   private static final Duration SECOND_BIKE = Duration.ofMinutes(25);
   private static final Duration TOTAL = Duration.ofMinutes(154);
+  private static final Duration GAP = Duration.ofSeconds(30);
 
   private IndividualResultDTO individualResult;
   private RelayResultDTO underTest;
@@ -67,9 +69,9 @@ class RelayResultDTOTest {
     individualResult = new IndividualResultDTO(4L, race, 2, null, AthleteDTOFixtures.standard(), AGE_GROUP, null, null,
         null, "102", SWIM, null, null, null, BIKE, null, RUN, null, null, null, TOTAL, null, null
     );
-    underTest = new RelayResultDTO(ID, race, RANK, PENALTY, TEAM_NAME, BIB, ATHLETES_COUNT, AGE_GROUP, null, SWIM,
-        FIRST_BIKE, FIRST_RUN, T1, BIKE, T2, RUN, SECOND_RUN, T3, SECOND_BIKE, TOTAL, List.of(individualResult),
-        List.of(AthleteDTOFixtures.standard())
+    underTest = new RelayResultDTO(ID, race, RANK, PENALTY, TeamDTOFixtures.standard(), TEAM_NAME, BIB, ATHLETES_COUNT,
+        AGE_GROUP, null, SWIM, FIRST_BIKE, FIRST_RUN, T1, BIKE, T2, RUN, SECOND_RUN, T3, SECOND_BIKE, TOTAL, GAP,
+        List.of(individualResult)
     );
   }
 
@@ -79,6 +81,7 @@ class RelayResultDTOTest {
     assertNotNull(underTest.race());
     assertEquals(RANK, underTest.rank());
     assertEquals(PENALTY, underTest.penalty());
+    assertEquals(TeamDTOFixtures.standard(), underTest.team());
     assertEquals(TEAM_NAME, underTest.teamName());
     assertEquals(BIB, underTest.bib());
     assertEquals(ATHLETES_COUNT, underTest.athletesCount());
@@ -95,7 +98,7 @@ class RelayResultDTOTest {
     assertEquals(T3, underTest.t3());
     assertEquals(SECOND_BIKE, underTest.secondBike());
     assertEquals(TOTAL, underTest.total());
+    assertEquals(GAP, underTest.gap());
     assertEquals(List.of(individualResult), underTest.individualResults());
-    assertEquals(List.of(AthleteDTOFixtures.standard()), underTest.athletes());
   }
 }
