@@ -21,6 +21,7 @@
 package com.endurancetrio.business.event.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -252,14 +253,21 @@ class RaceServiceMainTest {
     result1.setSourceResult(source);
     result1.setTotal(RUNNER_TOTAL);
 
-    when(individualResultRepository.findByRaceIdWithGraph(RACE_ID))
-        .thenReturn(List.of(result1));
+    var openResult = new IndividualResult();
+    openResult.setId(3L);
+    openResult.setRank(6);
+    openResult.setAgeGroup(AgeGroup.OPEN);
+    openResult.setTotal(RUNNER_TOTAL.plusMinutes(10));
+
+    when(individualResultRepository.findByRaceIdWithGraph(RACE_ID)).thenReturn(List.of(result1, openResult));
 
     var openDTO = mock(IndividualResultDTO.class);
+    var otherOpenDTO = mock(IndividualResultDTO.class);
     var senDTO = mock(IndividualResultDTO.class);
 
     when(individualResultMapper.map(individualRace, result1, 5, WINNER_TOTAL))
         .thenReturn(openDTO);
+    when(individualResultMapper.map(individualRace, openResult, 6, WINNER_TOTAL)).thenReturn(otherOpenDTO);
     when(individualResultMapper.map(individualRace, result1, 1, WINNER_TOTAL))
         .thenReturn(senDTO);
 
@@ -272,8 +280,31 @@ class RaceServiceMainTest {
     assertEquals(2, results.individualResults().size());
     assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
     assertTrue(results.individualResults().containsKey(AgeGroup.SEN));
-    assertEquals(List.of(openDTO), results.individualResults().get(AgeGroup.OPEN));
+    assertEquals(List.of(openDTO, otherOpenDTO), results.individualResults().get(AgeGroup.OPEN));
     assertEquals(List.of(senDTO), results.individualResults().get(AgeGroup.SEN));
+  }
+
+  @Test
+  void getRaceResultsWhenAllResultsShareOneAgeGroupShouldKeepOnlyOpenGroup() {
+    result1.setAgeGroup(AgeGroup.SEN);
+    result2.setAgeGroup(AgeGroup.SEN);
+
+    when(individualResultRepository.findByRaceIdWithGraph(RACE_ID)).thenReturn(List.of(result1, result2));
+
+    var winnerDTO = mock(IndividualResultDTO.class);
+    var runnerUpDTO = mock(IndividualResultDTO.class);
+
+    when(individualResultMapper.map(individualRace, result1, 1, WINNER_TOTAL)).thenReturn(winnerDTO);
+    when(individualResultMapper.map(individualRace, result2, 2, WINNER_TOTAL)).thenReturn(runnerUpDTO);
+
+    RaceResultsDTO result = underTest.getRaceResults(individualRace);
+
+    assertNotNull(result);
+    IndividualRaceResultsDTO results = assertInstanceOf(IndividualRaceResultsDTO.class, result.results());
+    assertEquals(1, results.individualResults().size());
+    assertTrue(results.individualResults().containsKey(AgeGroup.OPEN));
+    assertFalse(results.individualResults().containsKey(AgeGroup.SEN));
+    assertEquals(List.of(winnerDTO, runnerUpDTO), results.individualResults().get(AgeGroup.OPEN));
   }
 
   @Test
@@ -388,7 +419,7 @@ class RaceServiceMainTest {
   }
 
   @Test
-  void getRaceResultsForDerivedRelayRaceShouldGroupBySourceAgeGroup() {
+  void getRaceResultsForDerivedRelayRaceWithSingleAgeGroupShouldKeepOnlyOpenGroup() {
     var source = teamResult(99L, 1, "Source");
     source.setAgeGroup(AgeGroup.SEN);
     source.setTotal(Duration.ofMinutes(140));
@@ -405,9 +436,37 @@ class RaceServiceMainTest {
 
     assertNotNull(result);
     RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, result.results());
-    assertEquals(2, results.relayResults().size());
+    assertEquals(1, results.relayResults().size());
+    assertTrue(results.relayResults().containsKey(AgeGroup.OPEN));
+    assertFalse(results.relayResults().containsKey(AgeGroup.SEN));
     assertEquals(List.of(dto), results.relayResults().get(AgeGroup.OPEN));
-    assertEquals(List.of(dto), results.relayResults().get(AgeGroup.SEN));
+  }
+
+  @Test
+  void getRaceResultsForRelayRaceWhenAllResultsShareOneAgeGroupShouldKeepOnlyOpenGroup() {
+    var winner = teamResult(1L, 1, "Alpha");
+    winner.setAgeGroup(AgeGroup.SEN);
+    winner.setTotal(Duration.ofMinutes(150));
+    var runnerUp = teamResult(2L, 2, "Bravo");
+    runnerUp.setAgeGroup(AgeGroup.SEN);
+    runnerUp.setTotal(Duration.ofMinutes(160));
+
+    when(teamResultRepository.findByRaceIdWithGraph(relayRace.id())).thenReturn(List.of(winner, runnerUp));
+
+    var winnerDTO = mock(RelayResultDTO.class);
+    var runnerUpDTO = mock(RelayResultDTO.class);
+
+    when(relayResultMapper.map(relayRace, winner, 1, Duration.ofMinutes(150))).thenReturn(winnerDTO);
+    when(relayResultMapper.map(relayRace, runnerUp, 2, Duration.ofMinutes(150))).thenReturn(runnerUpDTO);
+
+    RaceResultsDTO result = underTest.getRaceResults(relayRace);
+
+    assertNotNull(result);
+    RelayRaceResultsDTO results = assertInstanceOf(RelayRaceResultsDTO.class, result.results());
+    assertEquals(1, results.relayResults().size());
+    assertTrue(results.relayResults().containsKey(AgeGroup.OPEN));
+    assertFalse(results.relayResults().containsKey(AgeGroup.SEN));
+    assertEquals(List.of(winnerDTO, runnerUpDTO), results.relayResults().get(AgeGroup.OPEN));
   }
 
   @Test

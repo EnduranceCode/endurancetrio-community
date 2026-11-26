@@ -190,6 +190,8 @@ public class RaceServiceMain implements RaceService {
       );
     });
 
+    removeRedundantSingleAgeGroup(individualResults);
+
     return new RaceResultsDTO(race, new IndividualRaceResultsDTO(orderByAgeGroupOrdinal(individualResults)));
   }
 
@@ -253,6 +255,8 @@ public class RaceServiceMain implements RaceService {
           .toList()
       );
     });
+
+    removeRedundantSingleAgeGroup(relayResults);
 
     return new RaceResultsDTO(race, new RelayRaceResultsDTO(orderByAgeGroupOrdinal(relayResults)));
   }
@@ -346,5 +350,29 @@ public class RaceServiceMain implements RaceService {
         .forEach(entry -> ordered.put(entry.getKey(), entry.getValue()));
 
     return ordered;
+  }
+
+  /**
+   * Removes the single age-group entry from {@code results} when it merely duplicates the
+   * {@link AgeGroup#OPEN} entry: the map holds exactly the OPEN entry plus one age group, and both
+   * lists contain the same number of results. That means every result belongs to that one age
+   * group, so the separate age-group breakdown is redundant and only OPEN is kept.
+   *
+   * @param results the age-group keyed results map, modified in place when the entry is redundant
+   * @param <T> the result DTO type
+   */
+  private static <T> void removeRedundantSingleAgeGroup(Map<AgeGroup, List<T>> results) {
+    if (results.size() != 2 || !results.containsKey(AgeGroup.OPEN)) {
+      return;
+    }
+
+    AgeGroup ageGroup = results.keySet().stream()
+        .filter(key -> key != AgeGroup.OPEN)
+        .findFirst()
+        .orElseThrow();
+
+    if (results.get(ageGroup).size() == results.get(AgeGroup.OPEN).size()) {
+      results.remove(ageGroup);
+    }
   }
 }
