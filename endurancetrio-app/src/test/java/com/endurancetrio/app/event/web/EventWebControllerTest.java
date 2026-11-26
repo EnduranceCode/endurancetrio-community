@@ -706,7 +706,9 @@ class EventWebControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("activeColumns",
-            Matchers.containsInAnyOrder("rank", "teamName", "bib", "athletesCount", "swim", "bike", "total", "gap")
+            Matchers.containsInAnyOrder("rank", "teamName", "ageGroup", "bib", "athletesCount", "swim", "bike", "total",
+                "gap"
+            )
         ))
         .andExpect(model().attribute("activeContributorColumns", Matchers.empty()));
   }
@@ -730,7 +732,7 @@ class EventWebControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("race-results"))
         .andExpect(model().attribute("activeColumns",
-            Matchers.containsInAnyOrder("rank", "teamName", "bib", "athletesCount", "total")
+            Matchers.containsInAnyOrder("rank", "teamName", "ageGroup", "bib", "athletesCount", "total")
         ))
         .andExpect(model().attribute("activeContributorColumns",
             Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "paraClass", "total")
@@ -741,8 +743,8 @@ class EventWebControllerTest {
       Long id, Integer rank, Duration swim, Duration bike, Duration gap,
       List<IndividualResultDTO> contributors
   ) {
-    return new RelayResultDTO(id, RACE_2, rank, null, TeamDTOFixtures.standard(), "Team Alpha", "301", 3, AgeGroup.OPEN,
-        null, swim, null, null, null, bike, null, null, null, null, null, Duration.ofMinutes(120), gap, contributors
+    return new RelayResultDTO(id, RACE_2, rank, null, TeamDTOFixtures.standard(), "Team Alpha", AgeGroup.OPEN, null,
+        "301", 3, swim, null, null, null, bike, null, null, null, null, null, Duration.ofMinutes(120), gap, contributors
     );
   }
 
