@@ -64,13 +64,13 @@ public class IndividualResultMapper {
       return null;
     }
 
-    rank = entity.getRank() == null ? null : rank;
+    Integer displayedRank = entity.getRank() == null ? null : rank;
     Duration gap = getGap(entity, winnerTotal);
 
     IndividualResult sourceEntity = entity.getSourceResult();
 
     if (sourceEntity == null) {
-      return new IndividualResultDTO(entity.getId(), race, rank, entity.getPenalty(),
+      return new IndividualResultDTO(entity.getId(), race, displayedRank, entity.getPenalty(),
           athleteMapper.map(entity.getAthlete()), entity.getAgeGroup(), entity.getParaClass(),
           teamMapper.map(entity.getTeam()), entity.getTeamName(), entity.getBib(), entity.getSwim(),
           entity.getFirstBike(), entity.getFirstRun(), entity.getT1(), entity.getBike(), entity.getT2(),
@@ -79,7 +79,7 @@ public class IndividualResultMapper {
       );
     }
 
-    return new IndividualResultDTO(entity.getId(), race, rank, sourceEntity.getPenalty(),
+    return new IndividualResultDTO(entity.getId(), race, displayedRank, sourceEntity.getPenalty(),
         athleteMapper.map(entity.getAthlete()), sourceEntity.getAgeGroup(), sourceEntity.getParaClass(),
         teamMapper.map(sourceEntity.getTeam()), sourceEntity.getTeamName(), sourceEntity.getBib(),
         sourceEntity.getSwim(), sourceEntity.getFirstBike(), sourceEntity.getFirstRun(), sourceEntity.getT1(),

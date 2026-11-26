@@ -78,17 +78,18 @@ public class RelayResultMapper {
       return null;
     }
 
-    rank = entity.getRank() == null ? null : rank;
+    Integer displayedRank = entity.getRank() == null ? null : rank;
     Duration gap = getGap(entity, winnerTotal);
 
     TeamResult source = entity.getSourceResult() == null ? entity : entity.getSourceResult();
 
     List<IndividualResultDTO> contributors = mapContributors(race, source);
 
-    return new RelayResultDTO(entity.getId(), race, rank, source.getPenalty(), teamMapper.map(source.getTeam()),
-        entity.getTeamName(), source.getAgeGroup(), source.getParaClass(), source.getBib(), entity.getAthletesCount(),
-        source.getSwim(), source.getFirstBike(), source.getFirstRun(), source.getT1(), source.getBike(), source.getT2(),
-        source.getRun(), source.getSecondRun(), source.getT3(), source.getSecondBike(), source.getTotal(), gap,
+    return new RelayResultDTO(entity.getId(), race, displayedRank, source.getPenalty(),
+        teamMapper.map(source.getTeam()), entity.getTeamName(), source.getAgeGroup(), source.getParaClass(),
+        source.getBib(), entity.getAthletesCount(), source.getSwim(), source.getFirstBike(), source.getFirstRun(),
+        source.getT1(), source.getBike(), source.getT2(), source.getRun(), source.getSecondRun(), source.getT3(),
+        source.getSecondBike(), source.getTotal(), gap,
         contributors
     );
   }
