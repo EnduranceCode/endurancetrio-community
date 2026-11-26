@@ -58,7 +58,7 @@ public interface IndividualResultRepository
           + "LEFT JOIN FETCH ir.sourceResult sr "
           + "LEFT JOIN FETCH sr.team "
           + "WHERE ir.race.id = :raceId "
-          + "ORDER BY ir.rank ASC"
+          + "ORDER BY ir.rank ASC NULLS LAST"
   )
   List<IndividualResult> findByRaceIdWithGraph(@Param("raceId") Long raceId);
 

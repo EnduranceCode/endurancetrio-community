@@ -45,7 +45,7 @@ public interface TeamResultRepository extends JpaRepository<@NonNull TeamResult,
    * avoid N+1 queries when mapping to DTOs. Fetching {@code team} also resolves its concrete subtype,
    * so the relay mapper can recognise a {@link RelayEntry}. For derived results (where a
    * contributor's {@code sourceResult} is not null), the performance fields must be read from the
-   * source result. Rows are ordered by rank ascending.
+   * source result. Rows are ordered by rank ascending, with unranked rows last.
    * <p>
    * The members of a {@link RelayEntry} ({@link RelayEntry#getAthletes() athletes}) are deliberately
    * not fetched. No current caller maps them; if a future feature needs the relay members, either
@@ -63,7 +63,7 @@ public interface TeamResultRepository extends JpaRepository<@NonNull TeamResult,
       + "LEFT JOIN FETCH ir.sourceResult sr "
       + "LEFT JOIN FETCH sr.team "
       + "WHERE tr.race.id = :raceId "
-      + "ORDER BY tr.rank ASC"
+      + "ORDER BY tr.rank ASC NULLS LAST"
   )
   List<TeamResult> findByRaceIdWithGraph(@Param("raceId") Long raceId);
 

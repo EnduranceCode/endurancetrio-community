@@ -131,9 +131,9 @@ public class RaceServiceMain implements RaceService {
    * {@link IndividualResult} records from the repository, grouping them by {@link AgeGroup}, and
    * mapping each entry to an {@link IndividualResultDTO}.
    * <p>
-   * All results are first placed in the {@link AgeGroup#OPEN} group sorted by rank (with null-safe
-   * handling for unranked entries) and penalty. Additional age-group segments are then extracted
-   * via the source-result chain, each independently ranked starting from 1.
+   * All results are first placed in the {@link AgeGroup#OPEN} group sorted by rank (unranked rows
+   * last) and penalty. Additional age-group segments are then extracted via the source-result chain,
+   * each independently ranked starting from 1.
    *
    * @param race the race whose individual results are to be built
    * @return a {@link RaceResultsDTO} holding an {@link IndividualRaceResultsDTO} with the results,
@@ -202,11 +202,10 @@ public class RaceServiceMain implements RaceService {
    * split durations are read as stored; nothing is recalculated. For derived races the mapper reads
    * the classification and performance values through the source-result chain.
    * <p>
-   * All rows are first placed in the {@link AgeGroup#OPEN} group sorted by rank (with null-safe
-   * handling for unranked rows) and penalty ordinal (nulls last), each keeping its stored rank and
-   * the gap to the overall winner. Additional age-group segments are then extracted via the
-   * source-result chain, each independently ranked starting from 1 and with the gap computed against
-   * its own group winner.
+   * All rows are first placed in the {@link AgeGroup#OPEN} group sorted by rank (unranked rows last)
+   * and penalty ordinal (nulls last), each keeping its stored rank and the gap to the overall
+   * winner. Additional age-group segments are then extracted via the source-result chain, each
+   * independently ranked starting from 1 and with the gap computed against its own group winner.
    *
    * @param race the race whose relay results are to be built
    * @return a {@link RaceResultsDTO} holding a {@link RelayRaceResultsDTO}, with a single empty OPEN
@@ -262,9 +261,10 @@ public class RaceServiceMain implements RaceService {
    * Builds the team race results for the given {@code race} from the stored
    * {@link TeamResult team result} rows.
    * <p>
-   * The rows come back ordered by rank ascending, so the first row is the winner: its cumulative
-   * rank, total or points (depending on the race type) is the reference used by the mapper to
-   * compute each team's gap. Rank, total and points are read as stored; nothing is recalculated.
+   * The rows come back ordered by rank ascending with unranked rows last, so the first row is the
+   * winner: its cumulative rank, total or points (depending on the race type) is the reference used
+   * by the mapper to compute each team's gap. Rank, total and points are read as stored; nothing is
+   * recalculated.
    *
    * @param race the race whose team results are to be built
    * @return a {@link RaceResultsDTO} holding a {@link TeamRaceResultsDTO}, which is empty when the
