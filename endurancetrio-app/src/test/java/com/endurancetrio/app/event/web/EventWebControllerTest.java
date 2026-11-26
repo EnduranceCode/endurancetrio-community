@@ -621,8 +621,8 @@ class EventWebControllerTest {
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
 
     var fullTeam = teamResultDTO(1L, List.of());
-    var partialTeam = new TeamResultDTO(2L, RACE_1, null, "", null, null, null, null, null, null, null, null,
-      List.of()
+    var partialTeam = new TeamResultDTO(2L, RACE_1, null, TeamDTOFixtures.standard(), "", null, null, null, null, null,
+        null, null, null, List.of()
     );
 
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
@@ -670,11 +670,11 @@ class EventWebControllerTest {
       "View endurance sports event results");
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW_WITH_RACES);
 
-    var winner = new TeamResultDTO(1L, RACE_1, 1, "Team Alpha", "101", 3, Duration.ofMinutes(200), Duration.ZERO, 100,
-      0, 5, 0, List.of()
+    var winner = new TeamResultDTO(1L, RACE_1, 1, TeamDTOFixtures.standard(), "Team Alpha", "101", 3,
+        Duration.ofMinutes(200), Duration.ZERO, 100, 0, 5, 0, List.of()
     );
-    var trailing = new TeamResultDTO(2L, RACE_1, 2, "Team Bravo", "102", 3, Duration.ofMinutes(210),
-      Duration.ofMinutes(10), 90, 10, 8, 3, List.of()
+    var trailing = new TeamResultDTO(2L, RACE_1, 2, TeamDTOFixtures.standard(), "Team Bravo", "102", 3,
+        Duration.ofMinutes(210), Duration.ofMinutes(10), 90, 10, 8, 3, List.of()
     );
 
     when(raceService.getRaceResults(any(RaceDTO.class))).thenReturn(
@@ -687,8 +687,8 @@ class EventWebControllerTest {
   }
 
   private static TeamResultDTO teamResultDTO(Long id, List<IndividualResultDTO> contributors) {
-    return new TeamResultDTO(id, RACE_1, 1, "Team Alpha", "101", 3, Duration.ofMinutes(200), null, 100, null, 5, null,
-      contributors
+    return new TeamResultDTO(id, RACE_1, 1, TeamDTOFixtures.standard(), "Team Alpha", "101", 3, Duration.ofMinutes(200),
+        null, 100, null, 5, null, contributors
     );
   }
 

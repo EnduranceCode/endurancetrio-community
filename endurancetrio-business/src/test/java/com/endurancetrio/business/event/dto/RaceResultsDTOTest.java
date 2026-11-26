@@ -104,8 +104,8 @@ class RaceResultsDTOTest {
 
   @Test
   void teamVariantShouldHoldContributors() {
-    TeamResultDTO teamResult = new TeamResultDTO(2L, race, 1, "Team Alpha", "201", 3, Duration.ofMinutes(200), null, 10,
-      null, 5, null, List.of(individualResult)
+    TeamResultDTO teamResult = new TeamResultDTO(2L, race, 1, TeamDTOFixtures.standard(), "Team Alpha", "201", 3,
+        Duration.ofMinutes(200), null, 10, null, 5, null, List.of(individualResult)
     );
 
     RaceResultsDTO dto = new RaceResultsDTO(race, new TeamRaceResultsDTO(List.of(teamResult)));

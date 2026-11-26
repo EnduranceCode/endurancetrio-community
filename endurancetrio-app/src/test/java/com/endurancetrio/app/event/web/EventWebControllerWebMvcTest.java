@@ -33,6 +33,7 @@ import com.endurancetrio.app.common.security.entrypoint.EnduranceTrioAuthEntryPo
 import com.endurancetrio.app.common.security.provider.EnduranceTrioAuthProvider;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.competitor.fixtures.AthleteDTOFixtures;
+import com.endurancetrio.app.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.config.AppSecurityConfig;
 import com.endurancetrio.app.config.WebConfig;
@@ -183,12 +184,12 @@ class EventWebControllerWebMvcTest {
 
   @Test
   void collectiveRaceShouldRenderDurationGapForWinnerAndTrailingTeam() throws Exception {
-    var winner = new TeamResultDTO(1L, COLLECTIVE_RACE, 1, "Team Alpha", "101", 2, Duration.ofMinutes(200),
-      Duration.ZERO, null, null, null, null,
+    var winner = new TeamResultDTO(1L, COLLECTIVE_RACE, 1, TeamDTOFixtures.standard(), "Team Alpha", "101", 2,
+        Duration.ofMinutes(200), Duration.ZERO, null, null, null, null,
       List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(100)))
     );
-    var trailing = new TeamResultDTO(2L, COLLECTIVE_RACE, 2, "Team Bravo", "102", 2, Duration.ofMinutes(210),
-      Duration.ofMinutes(10), null, null, null, null,
+    var trailing = new TeamResultDTO(2L, COLLECTIVE_RACE, 2, TeamDTOFixtures.standard(), "Team Bravo", "102", 2,
+        Duration.ofMinutes(210), Duration.ofMinutes(10), null, null, null, null,
       List.of(contributor(11L, AthleteDTOFixtures.athleteCavaleiro(), Duration.ofMinutes(105)))
     );
 
@@ -206,10 +207,11 @@ class EventWebControllerWebMvcTest {
   void collectiveRaceShouldRenderIntegerGapForByRankRace() throws Exception {
     when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW_WITH_RANK_RACE);
 
-    var winner = new TeamResultDTO(1L, RANK_RACE, 1, "Team Alpha", "101", 2, null, null, null, null, 5, 0,
-      List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(100)))
+    var winner = new TeamResultDTO(1L, RANK_RACE, 1, TeamDTOFixtures.standard(), "Team Alpha", "101", 2, null, null,
+        null, null, 5, 0, List.of(contributor(10L, AthleteDTOFixtures.standard(), Duration.ofMinutes(100)))
     );
-    var trailing = new TeamResultDTO(2L, RANK_RACE, 2, "Team Bravo", "102", 2, null, null, null, null, 8, 3,
+    var trailing = new TeamResultDTO(2L, RANK_RACE, 2, TeamDTOFixtures.standard(), "Team Bravo", "102", 2, null, null,
+        null, null, 8, 3,
       List.of(contributor(11L, AthleteDTOFixtures.athleteCavaleiro(), Duration.ofMinutes(105)))
     );
 
@@ -320,8 +322,8 @@ class EventWebControllerWebMvcTest {
     Long id, Integer rank, String teamName, String bib, Integer athletesCount,
     Duration total, Integer cumulativeRank, List<IndividualResultDTO> contributors
   ) {
-    return new TeamResultDTO(id, COLLECTIVE_RACE, rank, teamName, bib, athletesCount, total, null, null, null,
-      cumulativeRank, null, contributors
+    return new TeamResultDTO(id, COLLECTIVE_RACE, rank, TeamDTOFixtures.standard(), teamName, bib, athletesCount, total,
+        null, null, null, cumulativeRank, null, contributors
     );
   }
 
