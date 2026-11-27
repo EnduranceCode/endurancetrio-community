@@ -26,10 +26,13 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -44,6 +47,7 @@ import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
+import com.endurancetrio.business.competitor.dto.AthleteResultDTO;
 import com.endurancetrio.business.competitor.dto.AthleteResultsPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
 import com.endurancetrio.business.insight.dto.ArticleSummaryDTO;
@@ -436,5 +440,215 @@ class AthleteWebControllerTest {
         new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, "No athlete found with ID 999")));
 
     mockMvc.perform(get("/en/athletes/999")).andExpect(status().isNotFound());
+  }
+
+  @Test
+  void athleteProfileWithNonNumericIdShouldReturnNotFound() throws Exception {
+    mockMvc.perform(get("/en/athletes/not-a-number")).andExpect(status().isNotFound());
+
+    verifyNoInteractions(athleteService, insightService, messageService);
+  }
+
+  @Test
+  void athleteProfileOutOfRangePageShouldRedirectToLastPage() throws Exception {
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(), new PaginationDTO(9, 6, 55, true, false)));
+
+    mockMvc.perform(get("/en/athletes/1").param("page", "9"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/athletes/1?page=5"));
+
+    verify(athleteService).getAthleteResults(eq(1L), eq(PageRequest.of(9, 10)));
+    verifyNoInteractions(insightService);
+  }
+
+  @Test
+  void athleteProfileOutOfRangePageShouldRedirectToLastPageInPortuguese() throws Exception {
+    when(athleteService.getAthleteById(4L)).thenReturn(
+        new AthleteDTO(4L, "Paulo Cavaleiro", null, "Paulo Cavaleiro", AthleteGender.MALE, Country.POR, null));
+    when(athleteService.getAthleteResults(eq(4L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(), new PaginationDTO(12, 4, 40, true, false)));
+
+    mockMvc.perform(get("/pt/athletes/4").param("page", "12"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/pt/athletes/4?page=3"));
+  }
+
+  @Test
+  void athleteProfileRedirectShouldBeContextRelative() throws Exception {
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(), new PaginationDTO(9, 6, 55, true, false)));
+
+    mockMvc.perform(get("/app/en/athletes/1").contextPath("/app").param("page", "9"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/app/en/athletes/1?page=5"));
+  }
+
+  @Test
+  void athleteProfileWithNoResultsAndOutOfRangePageShouldRedirectToBareUrl() throws Exception {
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(), new PaginationDTO(3, 0, 0, false, false)));
+
+    mockMvc.perform(get("/en/athletes/1").param("page", "3"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/athletes/1"));
+
+    verifyNoInteractions(insightService);
+  }
+
+  @Test
+  void athleteProfileWithNoResultsAndOutOfRangePageShouldRedirectToBareUrlInPortuguese() throws Exception {
+    when(athleteService.getAthleteById(4L)).thenReturn(
+        new AthleteDTO(4L, "Paulo Cavaleiro", null, "Paulo Cavaleiro", AthleteGender.MALE, Country.POR, null));
+    when(athleteService.getAthleteResults(eq(4L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(), new PaginationDTO(2, 0, 0, false, false)));
+
+    mockMvc.perform(get("/pt/athletes/4").param("page", "2"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/pt/athletes/4"));
+  }
+
+  @Test
+  void athleteProfileFirstPageWithNoResultsShouldRenderEmptyState() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(), any())).thenReturn(
+        "Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(), any())).thenReturn(
+        "View athlete profile and race history");
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    AthleteResultsPageDTO emptyPage = new AthleteResultsPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false));
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(emptyPage);
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of());
+
+    mockMvc.perform(get("/en/athletes/1").param("page", "0"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("athlete-profile"))
+        .andExpect(model().attribute("pagination", emptyPage.pagination()))
+        .andExpect(model().attribute("results", List.of()))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(), false, false)));
+  }
+
+  @Test
+  void athleteProfileLastValidPageShouldRenderResults() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(), any())).thenReturn(
+        "Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(), any())).thenReturn(
+        "View athlete profile and race history");
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    List<AthleteResultDTO> results = List.of(mock(AthleteResultDTO.class));
+    PaginationDTO pagination = new PaginationDTO(1, 2, 11, true, false);
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(new AthleteResultsPageDTO(results, pagination));
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of());
+
+    mockMvc.perform(get("/en/athletes/1").param("page", "1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("athlete-profile"))
+        .andExpect(model().attribute("results", results))
+        .andExpect(model().attribute("pagination", pagination))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1), false, false)));
+
+    verify(athleteService).getAthleteResults(eq(1L), eq(PageRequest.of(1, 10)));
+  }
+
+  @Test
+  void athleteProfileNegativePageShouldBeClamped() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(), any())).thenReturn(
+        "Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(), any())).thenReturn(
+        "View athlete profile and race history");
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    PaginationDTO pagination = new PaginationDTO(0, 3, 25, false, true);
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(new AthleteResultsPageDTO(List.of(), pagination));
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of());
+
+    mockMvc.perform(get("/en/athletes/1").param("page", "-2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("athlete-profile"))
+        .andExpect(model().attribute("pagination", pagination));
+
+    verify(athleteService).getAthleteResults(eq(1L), eq(PageRequest.of(0, 10)));
+  }
+
+  @Test
+  void athletesPageOutOfRangePageShouldRedirectToLastPagePreservingFilters() throws Exception {
+    when(athleteService.getAthletes(any(), any())).thenReturn(AthletesPageDTOFixtures.page2());
+
+    mockMvc.perform(get("/en/athletes").param("page", "7")
+            .param("letterRange", "A_F")
+            .param("gender", "FEMALE")
+            .param("q", "Paula"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/athletes?page=2&letterRange=A_F&gender=FEMALE&q=Paula"));
+
+    verify(athleteService).getAthletes(eq(PageRequest.of(7, 30)), any());
+  }
+
+  @Test
+  void athletesPageOutOfRangePageShouldRedirectToLastPageInPortuguese() throws Exception {
+    when(athleteService.getAthletes(any(), any())).thenReturn(AthletesPageDTOFixtures.page2());
+
+    mockMvc.perform(get("/pt/athletes").param("page", "9").param("gender", "MALE"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/pt/athletes?page=2&gender=MALE"));
+  }
+
+  @Test
+  void athletesPageOutOfRangePageShouldRedirectWithEncodedSearchTerm() throws Exception {
+    when(athleteService.getAthletes(any(), any())).thenReturn(AthletesPageDTOFixtures.page2());
+
+    mockMvc.perform(get("/en/athletes").param("page", "7").param("q", "José Silva"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/athletes?page=2&q=Jos%C3%A9%20Silva"));
+  }
+
+  @Test
+  void athletesPageWithNoResultsAndOutOfRangePageShouldRedirectToBareUrlPreservingFilters() throws Exception {
+    when(athleteService.getAthletes(any(), any())).thenReturn(AthletesPageDTOFixtures.empty());
+
+    mockMvc.perform(get("/en/athletes").param("page", "4").param("gender", "FEMALE").param("q", "Paula"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/athletes?gender=FEMALE&q=Paula"));
+  }
+
+  @Test
+  void athletesPageLastValidPageShouldRenderResults() throws Exception {
+    when(messageService.getMessage(eq("page.athletes.metadata.title"), any(), any())).thenReturn(
+        "Athletes - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athletes.metadata.description"), any(), any())).thenReturn(
+        "Browse endurance sports athletes");
+    when(athleteService.getAthletes(any(), any())).thenReturn(AthletesPageDTOFixtures.page2());
+
+    mockMvc.perform(get("/en/athletes").param("page", "2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("athletes"))
+        .andExpect(model().attribute("athletes", AthletesPageDTOFixtures.page2().athletes()))
+        .andExpect(model().attribute("pagination", AthletesPageDTOFixtures.page2().pagination()))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1, 2), false, false)))
+        .andExpect(model().attribute("paginationUrls", hasEntry(0, "/en/athletes?page=0")))
+        .andExpect(model().attribute("paginationUrls", hasEntry(2, "/en/athletes?page=2")))
+        .andExpect(model().attribute("paginationPreviousUrl", "/en/athletes?page=1"))
+        .andExpect(model().attribute("paginationNextUrl", nullValue()));
+
+    verify(athleteService).getAthletes(eq(PageRequest.of(2, 30)), any());
   }
 }

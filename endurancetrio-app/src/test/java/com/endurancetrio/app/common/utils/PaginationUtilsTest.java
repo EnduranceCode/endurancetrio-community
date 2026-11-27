@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.endurancetrio.app.common.model.PageWindow;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.OptionalInt;
 import org.junit.jupiter.api.Test;
 
 class PaginationUtilsTest {
@@ -81,6 +82,43 @@ class PaginationUtilsTest {
   @Test
   void pageWindowShouldClampOutOfRangeCurrentPageToLastPage() {
     assertEquals(new PageWindow(List.of(0, 11, 12, 13), true, false), PaginationUtils.pageWindow(99, 14));
+  }
+
+  @Test
+  void redirectTargetPageShouldReturnEmptyWhenPageIsWithinRange() {
+    assertEquals(OptionalInt.empty(), PaginationUtils.redirectTargetPage(0, 5));
+    assertEquals(OptionalInt.empty(), PaginationUtils.redirectTargetPage(4, 5));
+  }
+
+  @Test
+  void redirectTargetPageShouldReturnLastPageWhenPageEqualsTotalPages() {
+    assertEquals(OptionalInt.of(4), PaginationUtils.redirectTargetPage(5, 5));
+  }
+
+  @Test
+  void redirectTargetPageShouldReturnLastPageWhenPageExceedsTotalPages() {
+    assertEquals(OptionalInt.of(4), PaginationUtils.redirectTargetPage(99, 5));
+  }
+
+  @Test
+  void redirectTargetPageShouldReturnLastPageWhenTotalPagesIsOneAndPageIsOutOfRange() {
+    assertEquals(OptionalInt.of(0), PaginationUtils.redirectTargetPage(1, 1));
+  }
+
+  @Test
+  void redirectTargetPageShouldReturnEmptyWhenFirstPageOfEmptyResults() {
+    assertEquals(OptionalInt.empty(), PaginationUtils.redirectTargetPage(0, 0));
+  }
+
+  @Test
+  void redirectTargetPageShouldReturnPageZeroWhenOutOfRangeOnEmptyResults() {
+    assertEquals(OptionalInt.of(0), PaginationUtils.redirectTargetPage(3, 0));
+  }
+
+  @Test
+  void redirectTargetPageShouldTreatNegativeTotalPagesAsEmpty() {
+    assertEquals(OptionalInt.empty(), PaginationUtils.redirectTargetPage(0, -2));
+    assertEquals(OptionalInt.of(0), PaginationUtils.redirectTargetPage(3, -2));
   }
 
   @Test
