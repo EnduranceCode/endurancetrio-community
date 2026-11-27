@@ -21,6 +21,8 @@
 package com.endurancetrio.data.insight.repository;
 
 import com.endurancetrio.data.insight.model.entity.Article;
+import com.endurancetrio.data.insight.model.entity.ArticleContent;
+import com.endurancetrio.data.insight.repository.projection.ArticleContentSummary;
 import java.util.List;
 import java.util.Optional;
 import org.jspecify.annotations.NonNull;
@@ -56,20 +58,6 @@ public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonN
   Page<Article> findAllByOrderByPublishedDateDesc(@NonNull Pageable pageable);
 
   /**
-   * Returns a {@link Page} of {@link Article articles} authored by the athlete with the given ID,
-   * ordered by published date descending.
-   *
-   * @param athleteId the ID of the {@link com.endurancetrio.data.competitor.model.entity.Athlete}
-   * @param pageable  the pagination information
-   * @return a {@link Page} of {@link Article articles} authored by the given athlete
-   */
-  @Query(
-      "SELECT DISTINCT a FROM Article a JOIN a.author au JOIN au.athlete at "
-          + "WHERE at.id = :athleteId ORDER BY a.publishedDate DESC"
-  )
-  Page<Article> findByAthleteId(@Param("athleteId") Long athleteId, @NonNull Pageable pageable);
-
-  /**
    * Returns a {@link Page} of {@link Article articles} associated with a given event ID.
    *
    * @param eventId  the ID of the {@link com.endurancetrio.data.event.model.entity.Event}
@@ -95,4 +83,33 @@ public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonN
    * @return an {@link Optional} containing the {@link Article} if found, or empty if not found
    */
   Optional<Article> findBySlug(String slug);
+
+  /**
+   * Returns the {@link ArticleContentSummary article-content rows} authored by the athlete with the
+   * given ID, ordered by the article's published date descending, with articles that have no
+   * published date listed last.
+   * <p>
+   * The query projects only the columns rendered by the athlete profile article cards, so it never
+   * selects the article's full text and never hydrates the {@link Article} or
+   * {@link ArticleContent} entities. The inner join excludes articles without content,
+   * which the card cannot render.
+   *
+   * @param athleteId the ID of the {@link com.endurancetrio.data.competitor.model.entity.Athlete}
+   * @return the {@link ArticleContentSummary rows} authored by the given athlete
+   */
+  @Query(
+      """
+          SELECT new com.endurancetrio.data.insight.repository.projection.ArticleContentSummary(
+              a.id, c.locale, c.title, c.introText, a.slug, a.featuredImage, a.publishedDate)
+          FROM Article a
+          JOIN a.contents c
+          JOIN a.author au
+          JOIN au.athlete at
+          WHERE at.id = :athleteId
+          ORDER BY a.publishedDate DESC NULLS LAST, a.id DESC, c.id ASC
+          """
+  )
+  List<ArticleContentSummary> findContentSummariesByAthleteId(
+      @Param("athleteId") Long athleteId
+  );
 }

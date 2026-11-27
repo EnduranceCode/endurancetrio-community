@@ -25,13 +25,17 @@ import com.endurancetrio.business.common.dto.PaginationDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
+import com.endurancetrio.business.insight.dto.ArticleSummaryDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.mapper.ArticleMapper;
 import com.endurancetrio.data.insight.repository.ArticleRepository;
+import com.endurancetrio.data.insight.repository.projection.ArticleContentSummary;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,11 +93,12 @@ public class InsightServiceMain implements InsightService {
 
   @Override
   @Transactional(readOnly = true)
-  public InsightPageDTO getArticlesByAthleteId(Long athleteId, Pageable pageable, Locale locale) {
-    var articlePage = articleRepository.findByAthleteId(athleteId, pageable)
-        .map(entity -> articleMapper.map(entity, locale));
+  public List<ArticleSummaryDTO> getArticlesByAthleteId(Long athleteId, Pageable pageable, Locale locale) {
+    var contentsByArticle = articleRepository.findContentSummariesByAthleteId(athleteId)
+        .stream()
+        .collect(Collectors.groupingBy(ArticleContentSummary::articleId, LinkedHashMap::new, Collectors.toList()));
 
-    return new InsightPageDTO(articlePage.getContent(), PaginationDTO.from(articlePage));
+    return contentsByArticle.values().stream().map(contents -> mapToSummary(contents, locale)).toList();
   }
 
   @Override
@@ -109,5 +114,31 @@ public class InsightServiceMain implements InsightService {
   @Transactional(readOnly = true)
   public long getArticlesCountByEvent(Long eventId) {
     return articleRepository.countByEventId(eventId);
+  }
+
+  /**
+   * Resolves the content for the requested {@link Locale} and maps the article to an
+   * {@link ArticleSummaryDTO}.
+   * <p>
+   * The content is chosen with the same rule as {@link ArticleMapper}: the content whose locale matches
+   * {@code locale.getLanguage()}, otherwise the first content in the list. The summary query uses an inner
+   * join to {@code article_content}, so every group has at least one content row and this method always
+   * returns a summary.
+   *
+   * @param contents the content rows of a single article, in the order returned by the repository
+   * @param locale   the requested locale for content resolution
+   * @return the summary built from the resolved content
+   */
+  private ArticleSummaryDTO mapToSummary(List<ArticleContentSummary> contents, Locale locale) {
+    String requestedLocale = locale.getLanguage();
+
+    ArticleContentSummary content = contents.stream()
+        .filter(candidate -> candidate.locale().equals(requestedLocale))
+        .findFirst()
+        .orElse(contents.getFirst());
+
+    return new ArticleSummaryDTO(content.articleId(), content.slug(), content.title(), content.introText(),
+        content.featuredImage(), content.publishedDate()
+    );
   }
 }

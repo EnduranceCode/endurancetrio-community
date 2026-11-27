@@ -22,6 +22,7 @@ package com.endurancetrio.business.insight.service;
 
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
+import com.endurancetrio.business.insight.dto.ArticleSummaryDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import java.util.List;
 import java.util.Locale;
@@ -68,16 +69,16 @@ public interface InsightService {
   List<ArticleDTO> getArticlesByIds(List<Long> ids, Locale locale);
 
   /**
-   * Returns an {@link InsightPageDTO} containing a paginated list of {@link ArticleDTO articles}
-   * authored by the athlete with the given ID, with content resolved for the requested locale.
+   * Returns a {@link List} of {@link ArticleSummaryDTO article summaries} authored by the athlete
+   * with the given ID, ordered by published date descending, with content resolved for the
+   * requested locale. Articles without content are excluded.
    *
    * @param athleteId the ID of the athlete to filter articles by
    * @param pageable  the pagination information (page number, page size, etc.)
    * @param locale    the requested locale for content resolution
-   * @return an {@link InsightPageDTO} with the articles authored by the given athlete and
-   * pagination metadata
+   * @return the list of {@link ArticleSummaryDTO article summaries} authored by the given athlete
    */
-  InsightPageDTO getArticlesByAthleteId(Long athleteId, Pageable pageable, Locale locale);
+  List<ArticleSummaryDTO> getArticlesByAthleteId(Long athleteId, Pageable pageable, Locale locale);
 
   /**
    * Returns an {@link InsightPageDTO} containing a paginated list of {@link ArticleDTO articles}

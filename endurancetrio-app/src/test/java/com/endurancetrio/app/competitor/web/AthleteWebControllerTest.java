@@ -46,10 +46,11 @@ import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
 import com.endurancetrio.business.competitor.dto.AthleteResultsPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
-import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import com.endurancetrio.business.insight.dto.ArticleSummaryDTO;
 import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
 import com.endurancetrio.data.competitor.model.enumerator.Country;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -340,8 +341,7 @@ class AthleteWebControllerTest {
         ));
     when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
         new AthleteResultsPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
-    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(
-        new InsightPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of());
 
     mockMvc.perform(get("/en/athletes/1"))
         .andExpect(status().isOk())
@@ -357,6 +357,30 @@ class AthleteWebControllerTest {
   }
 
   @Test
+  void athleteProfileIncludesArticleSummaries() throws Exception {
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(), any())).thenReturn(
+        "Athlete Profile - EnduranceTrio");
+    when(messageService.getMessage(eq("page.athlete.profile.metadata.description"), any(), any())).thenReturn(
+        "View athlete profile and race history");
+    when(athleteService.getAthleteById(1L)).thenReturn(
+        new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho", AthleteGender.MALE, Country.POR,
+            1961
+        ));
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
+    ArticleSummaryDTO summary = new ArticleSummaryDTO(1L, "race-analysis-2024", "Race Analysis 2024",
+        "This is the introduction.", "/img/insights/insights-001.jpg", LocalDateTime.of(2024, 6, 15, 10, 0)
+    );
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of(summary));
+
+    mockMvc.perform(get("/en/athletes/1"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("articles", List.of(summary)));
+
+    verify(insightService).getArticlesByAthleteId(eq(1L), eq(Pageable.unpaged()), any());
+  }
+
+  @Test
   void athleteProfileWithPortugueseLocale() throws Exception {
     when(messageService.getMessage(eq("page.athlete.profile.metadata.title"), any(), any())).thenReturn(
         "Perfil do Atleta - EnduranceTrio");
@@ -366,8 +390,7 @@ class AthleteWebControllerTest {
         new AthleteDTO(4L, "Paulo Cavaleiro", null, "Paulo Cavaleiro", AthleteGender.MALE, Country.POR, null));
     when(athleteService.getAthleteResults(eq(4L), any())).thenReturn(
         new AthleteResultsPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
-    when(insightService.getArticlesByAthleteId(eq(4L), any(), any())).thenReturn(
-        new InsightPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
+    when(insightService.getArticlesByAthleteId(eq(4L), any(), any())).thenReturn(List.of());
 
     mockMvc.perform(get("/pt/athletes/4"))
         .andExpect(status().isOk())
@@ -394,8 +417,7 @@ class AthleteWebControllerTest {
         ));
     when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
         new AthleteResultsPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
-    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(
-        new InsightPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
+    when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of());
 
     mockMvc.perform(get("/en/athletes/1"))
         .andExpect(model().attribute("metadata",
