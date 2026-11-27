@@ -45,6 +45,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.OptionalInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -102,7 +103,8 @@ public class AthleteWebController {
    * and free-text search term, ordered by known name. Invalid letter-range and gender values are
    * ignored. The search term is trimmed and capped in length but otherwise applied verbatim as an
    * accent-insensitive partial match against known and long names. Also builds the pagination and
-   * filter-toggle URLs used by the view.
+   * filter-toggle URLs used by the view. An out-of-range page redirects to the last valid page, or
+   * to the bare listing URL when there are no results, retaining the active filters.
    *
    * @param language    the language path variable ({@code en} or {@code pt})
    * @param page        the page number from the query string (default {@code 0}, clamped to
@@ -113,7 +115,7 @@ public class AthleteWebController {
    * @param searchTerm  the optional free-text search term (query parameter {@code q})
    * @param request     the current HTTP request for building page metadata
    * @param model       the model to populate with view attributes
-   * @return the athletes view name
+   * @return the athletes view name, or a redirect view name for an out-of-range page
    */
   @GetMapping("/{language:en|pt}/athletes")
   public String getAthletes(
@@ -121,7 +123,7 @@ public class AthleteWebController {
       @RequestParam(required = false) String letterRange, @RequestParam(required = false) String gender,
       @RequestParam(name = "q", required = false) String searchTerm, HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+    Locale locale = resolveLocale(language);
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_ATHLETES,
         messageService.getMessage("page.athletes.metadata.title", null, locale),
@@ -130,52 +132,19 @@ public class AthleteWebController {
     );
 
     int clampedPage = Math.max(0, page);
-    Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
     AthleteFilterDTO filter = normalizeFilter(letterRange, gender, searchTerm);
-    AthletesPageDTO athletesPage = athleteService.getAthletes(pageable, filter);
+    AthletesPageDTO athletesPage = athleteService.getAthletes(PageRequest.of(clampedPage, PAGE_SIZE), filter);
     int totalPages = athletesPage.pagination().totalPages();
-    boolean isFiltered = filter.letterRange() != null || filter.gender() != null || filter.searchTerm() != null;
+    boolean isFiltered = hasActiveFilter(filter);
 
-    if (isFiltered || clampedPage > 0) {
-      String baseUrl = PageMetadataUtils.getBaseUrl(appProperties);
-      metadata.setCanonicalUrl(buildAbsoluteAthletesUrl(baseUrl, locale.getLanguage()));
-      metadata.setHreflangUrlEn(buildAbsoluteAthletesUrl(baseUrl, "en"));
-      metadata.setHreflangUrlPt(buildAbsoluteAthletesUrl(baseUrl, "pt"));
+    String athletesPath = buildAthletesPath(locale);
+
+    String redirectView = buildRedirectView(athletesPath, clampedPage, totalPages, filter);
+    if (redirectView != null) {
+      return redirectView;
     }
 
-    String athletesPath = UriComponentsBuilder.fromPath("/")
-        .pathSegment(locale.getLanguage(), VIEW_ATHLETES)
-        .build()
-        .toUriString();
-
-    Map<Integer, String> paginationUrls = new LinkedHashMap<>();
-    for (Integer pageIndex : PaginationUtils.pageWindow(clampedPage, totalPages).pages()) {
-      paginationUrls.put(pageIndex, buildAthletesUrl(athletesPath, pageIndex, filter));
-    }
-
-    Map<String, String> letterRangeUrls = new LinkedHashMap<>();
-    letterRangeUrls.put("ALL",
-        buildAthletesUrl(athletesPath, null, new AthleteFilterDTO(null, filter.gender(), filter.searchTerm()))
-    );
-    for (AthleteLetterRange range : AthleteLetterRange.values()) {
-      String rangeId =
-          filter.letterRange() != null && filter.letterRange().equals(range.getId()) ? null : range.getId();
-      letterRangeUrls.put(range.getId(),
-          buildAthletesUrl(athletesPath, null, new AthleteFilterDTO(rangeId, filter.gender(), filter.searchTerm()))
-      );
-    }
-
-    Map<String, String> genderUrls = new LinkedHashMap<>();
-    genderUrls.put("ALL",
-        buildAthletesUrl(athletesPath, null, new AthleteFilterDTO(filter.letterRange(), null, filter.searchTerm()))
-    );
-    for (AthleteGender athleteGender : AthleteGender.values()) {
-      AthleteGender selectedGender = filter.gender() == athleteGender ? null : athleteGender;
-      genderUrls.put(athleteGender.getCode(), buildAthletesUrl(athletesPath, null,
-              new AthleteFilterDTO(filter.letterRange(), selectedGender, filter.searchTerm())
-          )
-      );
-    }
+    applyMetadataUrls(metadata, locale, isFiltered, clampedPage, appProperties);
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
@@ -185,23 +154,24 @@ public class AthleteWebController {
     model.addAttribute(ATTRIBUTE_FILTER, filter);
     model.addAttribute(ATTRIBUTE_LETTER_RANGES, athletesPage.letterRanges());
     model.addAttribute(ATTRIBUTE_FILTERED, isFiltered);
-    model.addAttribute(ATTRIBUTE_PAGINATION_URLS, paginationUrls);
+    model.addAttribute(ATTRIBUTE_PAGINATION_URLS, buildPaginationUrls(athletesPath, clampedPage, totalPages, filter));
     model.addAttribute(ATTRIBUTE_PAGINATION_PREVIOUS_URL,
-        athletesPage.pagination().hasPrevious() ? buildAthletesUrl(athletesPath, clampedPage - 1, filter) : null
+        paginationUrl(athletesPage.pagination().hasPrevious(), athletesPath, clampedPage - 1, filter)
     );
     model.addAttribute(ATTRIBUTE_PAGINATION_NEXT_URL,
-        athletesPage.pagination().hasNext() ? buildAthletesUrl(athletesPath, clampedPage + 1, filter) : null
+        paginationUrl(athletesPage.pagination().hasNext(), athletesPath, clampedPage + 1, filter)
     );
     model.addAttribute(ATTRIBUTE_ATHLETES_URL, athletesPath);
-    model.addAttribute(ATTRIBUTE_LETTER_RANGE_URLS, letterRangeUrls);
-    model.addAttribute(ATTRIBUTE_GENDER_URLS, genderUrls);
+    model.addAttribute(ATTRIBUTE_LETTER_RANGE_URLS, buildLetterRangeUrls(athletesPath, filter));
+    model.addAttribute(ATTRIBUTE_GENDER_URLS, buildGenderUrls(athletesPath, filter));
 
     return VIEW_ATHLETES;
   }
 
   /**
    * Returns the athlete profile page for a specific athlete, including their races and all
-   * authored insight articles.
+   * authored insight articles. An out-of-range page redirects to the last valid page, or to the bare
+   * profile URL when there are no results.
    *
    * @param language the language path variable ({@code en} or {@code pt})
    * @param id       the ID of the athlete
@@ -209,16 +179,16 @@ public class AthleteWebController {
    *                 non-negative)
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
-   * @return the athlete profile view name
+   * @return the athlete profile view name, or a redirect view name for an out-of-range page
    */
-  @GetMapping("/{language:en|pt}/athletes/{id}")
+  @GetMapping("/{language:en|pt}/athletes/{id:\\d+}")
   public String getAthleteById(
       @PathVariable String language,
       @PathVariable Long id,
       @RequestParam(defaultValue = "0") int page,
       HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+    Locale locale = resolveLocale(language);
 
     AthleteDTO athlete = athleteService.getAthleteById(id);
 
@@ -235,14 +205,20 @@ public class AthleteWebController {
     Pageable pageable = PageRequest.of(clampedPage, PROFILE_PAGE_SIZE);
     AthleteResultsPageDTO athleteResults = athleteService.getAthleteResults(id, pageable);
 
-    List<ArticleSummaryDTO> athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
-
     int totalPages = athleteResults.pagination().totalPages();
 
     String athletePath = UriComponentsBuilder.fromPath("/")
         .pathSegment(locale.getLanguage(), ATTRIBUTE_ATHLETES, String.valueOf(id))
         .build()
         .toUriString();
+
+    OptionalInt redirectTargetPage = PaginationUtils.redirectTargetPage(clampedPage, totalPages);
+    if (redirectTargetPage.isPresent()) {
+      int targetPage = redirectTargetPage.getAsInt();
+      return "redirect:" + buildAthleteUrl(athletePath, targetPage == 0 ? null : targetPage);
+    }
+
+    List<ArticleSummaryDTO> athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
 
     Map<Integer, String> paginationUrls = new LinkedHashMap<>();
     for (Integer pageIndex : PaginationUtils.pageWindow(clampedPage, totalPages).pages()) {
@@ -267,10 +243,44 @@ public class AthleteWebController {
     return VIEW_ATHLETE_PROFILE;
   }
 
+  /**
+   * Replaces the default metadata URLs with listing URLs when the view is filtered or paginated.
+   *
+   * @param metadata      the page metadata to update
+   * @param locale        the resolved locale, whose language is used for the canonical URL
+   * @param isFiltered    whether an active filter is applied
+   * @param clampedPage   the non-negative requested page number
+   * @param appProperties the application configuration used to resolve the site URL
+   */
+  private static void applyMetadataUrls(
+      PageMetadata metadata, Locale locale, boolean isFiltered, int clampedPage, AppProperties appProperties
+  ) {
+    if (isFiltered || clampedPage > 0) {
+      String baseUrl = PageMetadataUtils.getBaseUrl(appProperties);
+      metadata.setCanonicalUrl(buildAbsoluteAthletesUrl(baseUrl, locale.getLanguage()));
+      metadata.setHreflangUrlEn(buildAbsoluteAthletesUrl(baseUrl, "en"));
+      metadata.setHreflangUrlPt(buildAbsoluteAthletesUrl(baseUrl, "pt"));
+    }
+  }
+
+  /**
+   * Builds an absolute URL for the athletes listing in the given language.
+   *
+   * @param baseUrl  the site base URL
+   * @param language the language path segment
+   * @return the absolute athletes listing URL
+   */
   private static String buildAbsoluteAthletesUrl(String baseUrl, String language) {
     return UriComponentsBuilder.fromUriString(baseUrl).pathSegment(language, VIEW_ATHLETES).build().toUriString();
   }
 
+  /**
+   * Builds a context-relative athlete profile URL, optionally carrying a page query parameter.
+   *
+   * @param path the profile path, already containing the language and athlete ID
+   * @param page the 0-based page number, or {@code null} to omit the query parameter
+   * @return the encoded, context-relative profile URL
+   */
   private static String buildAthleteUrl(String path, Integer page) {
     UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
     if (page != null) {
@@ -279,6 +289,28 @@ public class AthleteWebController {
     return builder.build().encode().toUriString();
   }
 
+  /**
+   * Builds the context-relative path of the athletes listing for the given locale.
+   *
+   * @param locale the resolved locale, whose language is used as the first path segment
+   * @return the context-relative listing path
+   */
+  private static String buildAthletesPath(Locale locale) {
+    return UriComponentsBuilder.fromPath("/")
+        .pathSegment(locale.getLanguage(), VIEW_ATHLETES)
+        .build()
+        .toUriString();
+  }
+
+  /**
+   * Builds a context-relative athletes listing URL carrying the page number and any active filters.
+   * A {@code null} page omits the {@code page} query parameter.
+   *
+   * @param path   the listing path, already containing the language segment
+   * @param page   the 0-based page number, or {@code null} to omit the query parameter
+   * @param filter the normalized filter supplying the optional query parameters
+   * @return the encoded, context-relative listing URL
+   */
   private static String buildAthletesUrl(String path, Integer page, AthleteFilterDTO filter) {
     UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
     if (page != null) {
@@ -298,6 +330,102 @@ public class AthleteWebController {
     }
 
     return builder.build().encode().toUriString();
+  }
+
+  /**
+   * Builds the filter-toggle URLs for every gender option, plus an {@code ALL} entry that clears the
+   * active gender while retaining the other filters.
+   *
+   * @param athletesPath the context-relative listing path
+   * @param filter       the currently active filter
+   * @return a map of gender code to listing URL
+   */
+  private static Map<String, String> buildGenderUrls(String athletesPath, AthleteFilterDTO filter) {
+    Map<String, String> genderUrls = new LinkedHashMap<>();
+    genderUrls.put("ALL",
+        buildAthletesUrl(athletesPath, null, new AthleteFilterDTO(filter.letterRange(), null, filter.searchTerm()))
+    );
+    for (AthleteGender athleteGender : AthleteGender.values()) {
+      AthleteGender selectedGender = filter.gender() == athleteGender ? null : athleteGender;
+      genderUrls.put(athleteGender.getCode(), buildAthletesUrl(athletesPath, null,
+              new AthleteFilterDTO(filter.letterRange(), selectedGender, filter.searchTerm())
+          )
+      );
+    }
+    return genderUrls;
+  }
+
+  /**
+   * Builds the filter-toggle URLs for every letter range, plus an {@code ALL} entry that clears the
+   * active letter range while retaining the other filters.
+   *
+   * @param athletesPath the context-relative listing path
+   * @param filter       the currently active filter
+   * @return a map of letter-range ID to listing URL
+   */
+  private static Map<String, String> buildLetterRangeUrls(String athletesPath, AthleteFilterDTO filter) {
+    Map<String, String> letterRangeUrls = new LinkedHashMap<>();
+    letterRangeUrls.put("ALL",
+        buildAthletesUrl(athletesPath, null, new AthleteFilterDTO(null, filter.gender(), filter.searchTerm()))
+    );
+    for (AthleteLetterRange range : AthleteLetterRange.values()) {
+      String rangeId =
+          filter.letterRange() != null && filter.letterRange().equals(range.getId()) ? null : range.getId();
+      letterRangeUrls.put(range.getId(),
+          buildAthletesUrl(athletesPath, null, new AthleteFilterDTO(rangeId, filter.gender(), filter.searchTerm()))
+      );
+    }
+    return letterRangeUrls;
+  }
+
+  /**
+   * Builds the URLs of the page indices in the pagination window for the current request.
+   *
+   * @param athletesPath the context-relative listing path
+   * @param clampedPage  the non-negative requested page number
+   * @param totalPages   the total number of pages
+   * @param filter       the currently active filter, retained on every URL
+   * @return a map of 0-based page index to listing URL
+   */
+  private static Map<Integer, String> buildPaginationUrls(
+      String athletesPath, int clampedPage, int totalPages, AthleteFilterDTO filter
+  ) {
+    Map<Integer, String> paginationUrls = new LinkedHashMap<>();
+    for (Integer pageIndex : PaginationUtils.pageWindow(clampedPage, totalPages).pages()) {
+      paginationUrls.put(pageIndex, buildAthletesUrl(athletesPath, pageIndex, filter));
+    }
+    return paginationUrls;
+  }
+
+  /**
+   * Returns the redirect view name for an out-of-range page, or {@code null} when the page is valid.
+   * The redirect targets the last valid page, or the bare listing URL when there are no results.
+   *
+   * @param athletesPath the context-relative listing path
+   * @param clampedPage  the non-negative requested page number
+   * @param totalPages   the total number of pages
+   * @param filter       the currently active filter, retained on the redirect
+   * @return the redirect view name, or {@code null} when no redirect is needed
+   */
+  private static String buildRedirectView(
+      String athletesPath, int clampedPage, int totalPages, AthleteFilterDTO filter
+  ) {
+    OptionalInt redirectTargetPage = PaginationUtils.redirectTargetPage(clampedPage, totalPages);
+    if (redirectTargetPage.isEmpty()) {
+      return null;
+    }
+    int targetPage = redirectTargetPage.getAsInt();
+    return "redirect:" + buildAthletesUrl(athletesPath, targetPage == 0 ? null : targetPage, filter);
+  }
+
+  /**
+   * Tells whether any of the three listing filters is active.
+   *
+   * @param filter the normalized filter
+   * @return {@code true} when a letter range, gender or search term is set
+   */
+  private static boolean hasActiveFilter(AthleteFilterDTO filter) {
+    return filter.letterRange() != null || filter.gender() != null || filter.searchTerm() != null;
   }
 
   /**
@@ -331,6 +459,12 @@ public class AthleteWebController {
     );
   }
 
+  /**
+   * Trims a raw search term and caps its length. The content is otherwise kept verbatim.
+   *
+   * @param searchTerm the raw search-term request parameter, possibly {@code null}
+   * @return the normalized search term, or {@code null} when none was supplied
+   */
   private static String normalizeSearchTerm(String searchTerm) {
     if (searchTerm == null) {
       return null;
@@ -338,5 +472,29 @@ public class AthleteWebController {
 
     String normalized = searchTerm.trim();
     return normalized.length() > MAX_SEARCH_TERM_LENGTH ? normalized.substring(0, MAX_SEARCH_TERM_LENGTH) : normalized;
+  }
+
+  /**
+   * Builds the listing URL for an adjacent page, or {@code null} when that page does not exist.
+   *
+   * @param hasPage      whether the adjacent page exists
+   * @param athletesPath the context-relative listing path
+   * @param page         the 0-based adjacent page number
+   * @param filter       the currently active filter, retained on the URL
+   * @return the listing URL, or {@code null} when there is no adjacent page
+   */
+  private static String paginationUrl(boolean hasPage, String athletesPath, int page, AthleteFilterDTO filter) {
+    return hasPage ? buildAthletesUrl(athletesPath, page, filter) : null;
+  }
+
+  /**
+   * Resolves the locale for a language path segment, treating anything other than {@code pt} as
+   * English.
+   *
+   * @param language the language path variable ({@code en} or {@code pt})
+   * @return the resolved locale
+   */
+  private static Locale resolveLocale(String language) {
+    return "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
   }
 }

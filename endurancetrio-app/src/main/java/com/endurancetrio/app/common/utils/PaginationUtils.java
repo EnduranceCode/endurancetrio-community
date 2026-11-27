@@ -23,6 +23,7 @@ package com.endurancetrio.app.common.utils;
 import com.endurancetrio.app.common.model.PageWindow;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.TreeSet;
 
 /**
@@ -77,5 +78,31 @@ public final class PaginationUtils {
     boolean gapAfter = !innerPages.isEmpty() && innerPages.getLast() < totalPages - 2;
 
     return new PageWindow(List.copyOf(pages), gapBefore, gapAfter);
+  }
+
+  /**
+   * Decides whether a clamped, 0-based page index is out of range and, if so, returns the page the
+   * request should be redirected to. A page is out of range when it points beyond the last page of
+   * a non-empty result set ({@code clampedPage >= totalPages}) or when it is any page other than
+   * page 0 of an empty result set. The redirect target is the last valid page
+   * ({@code totalPages - 1}) when results exist, or page 0 when there are none. An empty optional
+   * means no redirect is needed: the requested page is valid, or it is already page 0 of an empty
+   * result set showing the empty state.
+   *
+   * @param clampedPage the 0-based, non-negative page index requested by the client
+   * @param totalPages  the total number of pages available (zero or negative when empty)
+   * @return an {@link OptionalInt} containing the 0-based page to redirect to, or an empty
+   *         optional when the request should be served as-is
+   */
+  public static OptionalInt redirectTargetPage(int clampedPage, int totalPages) {
+    if (totalPages <= 0) {
+      return clampedPage > 0 ? OptionalInt.of(0) : OptionalInt.empty();
+    }
+
+    if (clampedPage >= totalPages) {
+      return OptionalInt.of(totalPages - 1);
+    }
+
+    return OptionalInt.empty();
   }
 }
