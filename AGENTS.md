@@ -48,6 +48,9 @@ Entrypoint: `com.endurancetrio.app.EnduranceTrioApplication` (port 8080, Thymele
 - Business tests use `@ExtendWith(MockitoExtension.class)` (pure Mockito, no Spring context)
 - Flyway migrations for H2 are in `db/migration/ddl/h2` and `db/migration/dml/h2`
 - Tests do NOT require PostgreSQL — H2 is fully self-contained
+- JPA and E2E tests use the H2 seed data or entities persisted in Java inside the test transaction.
+  Never add `@Sql` fixtures or SQL scripts under `src/test/resources`. See
+  [`docs/development.md`](docs/development.md#test-data)
 - App-module tests are pure Mockito unless a behaviour can only be verified with the real Spring
   wiring (e.g., `SecurityFilterChain` request rules). Those are Spring slice tests named
   `{ClassUnderTest}{Slice}Test` (e.g., `AppSecurityConfigWebMvcTest`), use

@@ -29,12 +29,15 @@ import static org.mockito.Mockito.when;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.insight.dto.ArticleDTO;
+import com.endurancetrio.business.insight.dto.ArticleSummaryDTO;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.fixtures.ArticleDTOFixture;
 import com.endurancetrio.business.insight.fixtures.ArticleFixture;
 import com.endurancetrio.business.insight.mapper.ArticleMapper;
 import com.endurancetrio.data.insight.model.entity.Article;
 import com.endurancetrio.data.insight.repository.ArticleRepository;
+import com.endurancetrio.data.insight.repository.projection.ArticleContentSummary;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -56,6 +59,7 @@ class InsightServiceMainTest {
   private static final String SLUG = "test-article";
   private static final Long EVENT_ID = 1L;
   private static final Long ATHLETE_ID = 1L;
+  private static final LocalDateTime PUBLISHED_DATE = LocalDateTime.of(2026, 8, 15, 10, 0);
   private static final Pageable PAGEABLE = PageRequest.of(0, 10);
 
   @Mock
@@ -198,31 +202,45 @@ class InsightServiceMainTest {
   }
 
   @Test
-  void getArticlesByAthleteIdShouldReturnPaginatedResults() {
-    Page<Article> articlePage = new PageImpl<>(List.of(testArticle), PAGEABLE, 1L);
-    when(articleRepository.findByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(articlePage);
-    when(articleMapper.map(testArticle, LOCALE)).thenReturn(testArticleDTO);
+  void getArticlesByAthleteIdShouldResolveRequestedLocale() {
+    when(articleRepository.findContentSummariesByAthleteId(ATHLETE_ID)).thenReturn(
+        List.of(contentRow(1L, "pt", "Título"), contentRow(1L, "en", "Title")));
 
-    InsightPageDTO result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
+    List<ArticleSummaryDTO> result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
 
-    assertNotNull(result);
-    assertEquals(1, result.articles().size());
-    assertEquals(testArticleDTO, result.articles().getFirst());
-    assertEquals(0, result.pagination().pageNumber());
-    assertEquals(1, result.pagination().totalPages());
-    assertEquals(1L, result.pagination().totalItems());
+    assertEquals(1, result.size());
+    assertEquals(1L, result.getFirst().id());
+    assertEquals("Title", result.getFirst().title());
   }
 
   @Test
-  void getArticlesByAthleteIdWithEmptyPage() {
-    Page<Article> articlePage = new PageImpl<>(List.of(), PAGEABLE, 0L);
-    when(articleRepository.findByAthleteId(ATHLETE_ID, PAGEABLE)).thenReturn(articlePage);
+  void getArticlesByAthleteIdShouldFallBackToFirstContent() {
+    when(articleRepository.findContentSummariesByAthleteId(ATHLETE_ID)).thenReturn(
+        List.of(contentRow(1L, "pt", "Título")));
 
-    InsightPageDTO result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
+    List<ArticleSummaryDTO> result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, Locale.FRENCH);
 
-    assertNotNull(result);
-    assertEquals(0, result.articles().size());
-    assertEquals(0, result.pagination().totalItems());
+    assertEquals(1, result.size());
+    assertEquals("Título", result.getFirst().title());
+  }
+
+  @Test
+  void getArticlesByAthleteIdShouldKeepPublishedDateOrder() {
+    when(articleRepository.findContentSummariesByAthleteId(ATHLETE_ID)).thenReturn(
+        List.of(contentRow(2L, "en", "Second"), contentRow(1L, "en", "First")));
+
+    List<ArticleSummaryDTO> result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
+
+    assertEquals(List.of(2L, 1L), result.stream().map(ArticleSummaryDTO::id).toList());
+  }
+
+  @Test
+  void getArticlesByAthleteIdWithEmptyList() {
+    when(articleRepository.findContentSummariesByAthleteId(ATHLETE_ID)).thenReturn(List.of());
+
+    List<ArticleSummaryDTO> result = underTest.getArticlesByAthleteId(ATHLETE_ID, PAGEABLE, LOCALE);
+
+    assertTrue(result.isEmpty());
   }
 
   @Test
@@ -241,5 +259,11 @@ class InsightServiceMainTest {
     long result = underTest.getArticlesCountByEvent(EVENT_ID);
 
     assertEquals(0L, result);
+  }
+
+  private static ArticleContentSummary contentRow(Long articleId, String locale, String title) {
+    return new ArticleContentSummary(articleId, locale, title, "<p>" + title + "</p>", "slug-" + articleId,
+        "/img/" + articleId + ".jpg", PUBLISHED_DATE
+    );
   }
 }

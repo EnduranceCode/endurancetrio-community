@@ -1853,6 +1853,23 @@ Flyway migration scripts are **duplicated** for H2 alongside PostgreSQL:
 When adding a new migration, the H2 variant must be added in the same version as the PostgreSQL
 variant. The `application-test.yaml` configures Flyway to use these H2 scripts.
 
+### Test Data
+
+JPA and end-to-end tests run against the H2 database populated by the Flyway DML scripts in
+`db/migration/dml/h2/`. That seed is the only source of shared test data.
+
+- **No SQL fixtures.** Do not add `@Sql` annotations or SQL scripts under `src/test/resources`.
+  Existing SQL fixtures are removed when the H2 seed is completed.
+- **Read seeded data through repositories.** Load the rows a test needs through repository methods,
+  and derive expected values in Java from the loaded entities. Do not hard-code IDs, counts or names
+  from the seed.
+- **Persist data in Java when the seed lacks it.** When a scenario needs data the seed does not
+  provide, such as several articles for one author or an unpublished article, create the entities in
+  the test and persist them through repositories inside the `@DataJpaTest` transaction. The
+  transaction rolls back, so the data never persists beyond the test.
+- **Seed changes are reviewed against the tests.** A new H2 DML script can change the outcome of
+  tests that count or order seeded rows. Review those tests in the same change.
+
 ### Spring Context Slice Tests
 
 Spring slice tests load only the part of the context needed for the behaviour under test. The

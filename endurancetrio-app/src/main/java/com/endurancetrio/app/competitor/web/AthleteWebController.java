@@ -37,11 +37,12 @@ import com.endurancetrio.business.competitor.dto.AthleteResultsPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import com.endurancetrio.business.competitor.enumerator.AthleteLetterRange;
 import com.endurancetrio.business.competitor.service.AthleteService;
-import com.endurancetrio.business.insight.dto.InsightPageDTO;
+import com.endurancetrio.business.insight.dto.ArticleSummaryDTO;
 import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -234,7 +235,7 @@ public class AthleteWebController {
     Pageable pageable = PageRequest.of(clampedPage, PROFILE_PAGE_SIZE);
     AthleteResultsPageDTO athleteResults = athleteService.getAthleteResults(id, pageable);
 
-    InsightPageDTO athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
+    List<ArticleSummaryDTO> athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
 
     int totalPages = athleteResults.pagination().totalPages();
 
@@ -251,7 +252,7 @@ public class AthleteWebController {
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, athleteResults.pagination());
-    model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles.articles());
+    model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles);
     model.addAttribute(ATTRIBUTE_ATHLETE, athlete);
     model.addAttribute(ATTRIBUTE_RESULTS, athleteResults.results());
     model.addAttribute(ATTRIBUTE_PAGE_WINDOW, PaginationUtils.pageWindow(clampedPage, totalPages));
