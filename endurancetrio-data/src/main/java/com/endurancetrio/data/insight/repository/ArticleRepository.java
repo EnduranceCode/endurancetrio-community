@@ -40,31 +40,49 @@ import org.springframework.stereotype.Repository;
 public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonNull Long> {
 
   /**
-   * Returns the number of {@link Article articles} related to the event with the given ID.
+   * Returns the number of published {@link Article articles} (i.e. with a non-null published date)
+   * related to the event with the given ID.
    *
    * @param eventId the ID of the {@link com.endurancetrio.data.event.model.entity.Event}
-   * @return the number of articles related to the given event (0 if none)
+   * @return the number of published articles related to the given event (0 if none)
    */
-  @Query("SELECT COUNT(DISTINCT a) FROM Article a JOIN a.relatedEvents e WHERE e.id = :eventId")
+  @Query(
+      """
+          SELECT COUNT(DISTINCT a)
+          FROM Article a JOIN a.relatedEvents e
+          WHERE e.id = :eventId AND a.publishedDate IS NOT NULL
+          """
+  )
   long countByEventId(@Param("eventId") Long eventId);
 
   /**
-   * Returns a {@link Page} of all {@link Article articles} ordered by their published date
-   * descending.
+   * Returns a {@link Page} of all published {@link Article articles} (i.e. with a non-null published
+   * date), ordered by their published date descending. Articles without a published date are
+   * excluded; {@code NULLS LAST} keeps the ordering rule the same as the other public listings.
    *
    * @param pageable the pagination information
-   * @return a {@link Page} of {@link Article articles} ordered by published date descending
+   * @return a {@link Page} of published {@link Article articles} ordered by published date descending
    */
+  @Query("SELECT a FROM Article a WHERE a.publishedDate IS NOT NULL ORDER BY a.publishedDate DESC NULLS LAST")
   Page<Article> findAllByOrderByPublishedDateDesc(@NonNull Pageable pageable);
 
   /**
-   * Returns a {@link Page} of {@link Article articles} associated with a given event ID.
+   * Returns a {@link Page} of published {@link Article articles} associated with a given event ID,
+   * ordered by their published date descending. Articles without a published date are excluded;
+   * {@code NULLS LAST} keeps the ordering rule the same as the other public listings.
    *
    * @param eventId  the ID of the {@link com.endurancetrio.data.event.model.entity.Event}
    * @param pageable the pagination information
-   * @return a {@link Page} of {@link Article articles} associated with the given event
+   * @return a {@link Page} of published {@link Article articles} associated with the given event
    */
-  @Query("SELECT DISTINCT a FROM Article a JOIN a.relatedEvents e WHERE e.id = :eventId")
+  @Query(
+      """
+          SELECT DISTINCT a
+          FROM Article a JOIN a.relatedEvents e
+          WHERE e.id = :eventId AND a.publishedDate IS NOT NULL
+          ORDER BY a.publishedDate DESC NULLS LAST
+          """
+  )
   Page<Article> findByEventId(@Param("eventId") Long eventId, @NonNull Pageable pageable);
 
   /**
@@ -77,17 +95,9 @@ public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonN
   List<Article> findByPublishedDateIsNotNullOrderByPublishedDateDesc();
 
   /**
-   * Finds an {@link Article} by its unique URL slug.
-   *
-   * @param slug the URL slug of the {@link Article}
-   * @return an {@link Optional} containing the {@link Article} if found, or empty if not found
-   */
-  Optional<Article> findBySlug(String slug);
-
-  /**
    * Returns the {@link ArticleContentSummary article-content rows} authored by the athlete with the
-   * given ID, ordered by the article's published date descending, with articles that have no
-   * published date listed last.
+   * given ID, ordered by the article's published date descending. Articles without a published date
+   * are excluded; {@code NULLS LAST} keeps the ordering rule the same as the other public listings.
    * <p>
    * The query projects only the columns rendered by the athlete profile article cards, so it never
    * selects the article's full text and never hydrates the {@link Article} or
@@ -105,11 +115,31 @@ public interface ArticleRepository extends JpaRepository<@NonNull Article, @NonN
           JOIN a.contents c
           JOIN a.author au
           JOIN au.athlete at
-          WHERE at.id = :athleteId
+          WHERE at.id = :athleteId AND a.publishedDate IS NOT NULL
           ORDER BY a.publishedDate DESC NULLS LAST, a.id DESC, c.id ASC
           """
   )
   List<ArticleContentSummary> findContentSummariesByAthleteId(
       @Param("athleteId") Long athleteId
   );
+
+  /**
+   * Returns the published {@link Article articles} (i.e. with a non-null published date) whose IDs
+   * are in the given list.
+   *
+   * @param ids the IDs of the {@link Article articles} to fetch
+   * @return a {@link List} of published {@link Article articles} matching the given IDs
+   */
+  @Query("SELECT a FROM Article a WHERE a.id IN :ids AND a.publishedDate IS NOT NULL")
+  List<Article> findPublishedByIds(@Param("ids") List<Long> ids);
+
+  /**
+   * Finds a published {@link Article} (i.e. with a non-null published date) by its unique URL slug.
+   *
+   * @param slug the URL slug of the {@link Article}
+   * @return an {@link Optional} containing the published {@link Article} if found, or empty if not
+   *         found
+   */
+  @Query("SELECT a FROM Article a WHERE a.slug = :slug AND a.publishedDate IS NOT NULL")
+  Optional<Article> findPublishedBySlug(@Param("slug") String slug);
 }
