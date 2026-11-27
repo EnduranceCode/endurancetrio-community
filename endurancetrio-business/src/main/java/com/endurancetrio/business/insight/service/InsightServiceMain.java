@@ -60,7 +60,7 @@ public class InsightServiceMain implements InsightService {
   @Override
   @Transactional(readOnly = true)
   public ArticleDTO getArticleBySlug(String slug, Locale locale) {
-    var article = articleRepository.findBySlug(slug).orElseThrow(() -> {
+    var article = articleRepository.findPublishedBySlug(slug).orElseThrow(() -> {
       String errorMsg = String.format("No article found with slug '%s'", slug);
       LOG.warn(errorMsg);
       return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
@@ -81,7 +81,7 @@ public class InsightServiceMain implements InsightService {
   @Override
   @Transactional(readOnly = true)
   public List<ArticleDTO> getArticlesByIds(List<Long> ids, Locale locale) {
-    var entities = articleRepository.findAllById(ids);
+    var entities = articleRepository.findPublishedByIds(ids);
     var idOrder = new ArrayList<>(ids);
 
     return entities.stream()

@@ -21,10 +21,11 @@
 package com.endurancetrio.data.insight.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.endurancetrio.data.config.JpaConfig;
+import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.insight.model.entity.Article;
 import com.endurancetrio.data.insight.model.entity.ArticleContent;
 import com.endurancetrio.data.insight.model.entity.Author;
@@ -32,7 +33,11 @@ import com.endurancetrio.data.insight.repository.projection.ArticleContentSummar
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.Test;
@@ -44,6 +49,7 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -94,28 +100,26 @@ class ArticleRepositoryDataJpaTest {
   }
 
   @Test
-  void findContentSummariesByAthleteIdSortsArticlesWithoutPublishedDateLast() {
+  void findContentSummariesByAthleteIdExcludesArticlesWithoutPublishedDate() {
     Author author = entityManager.createQuery("SELECT au FROM Author au JOIN au.athlete at WHERE at.id = :athleteId",
         Author.class
     ).setParameter("athleteId", ATHLETE_WITH_FIVE_ARTICLES).getSingleResult();
+    int publishedRowCount = repository.findContentSummariesByAthleteId(ATHLETE_WITH_FIVE_ARTICLES).size();
 
-    var unpublished = new Article();
-    unpublished.setSlug("summary-unpublished");
-    unpublished.setAuthor(author);
-
+    var unpublished = article("summary-unpublished", author);
     var content = new ArticleContent();
     content.setLocale("en");
     content.setTitle("Summary Unpublished EN");
     content.setIntroText("<p>Unpublished intro</p>");
     content.setFullText("<p>Unpublished full text</p>");
     unpublished.addContent(content);
-    entityManager.persist(unpublished);
-    entityManager.flush();
+    persist(unpublished);
 
     List<ArticleContentSummary> rows = repository.findContentSummariesByAthleteId(ATHLETE_WITH_FIVE_ARTICLES);
 
-    assertEquals(unpublished.getId(), rows.getLast().articleId());
-    assertNull(rows.getLast().publishedDate());
+    assertEquals(publishedRowCount, rows.size());
+    assertTrue(rows.stream().noneMatch(row -> row.articleId().equals(unpublished.getId())));
+    assertTrue(rows.stream().noneMatch(row -> row.publishedDate() == null));
   }
 
   @Test
@@ -129,6 +133,111 @@ class ArticleRepositoryDataJpaTest {
     assertEquals(oneArticleStatements, fiveArticleStatements);
   }
 
+  @Test
+  void findAllByOrderByPublishedDateDescExcludesArticlesWithoutPublishedDate() {
+    List<Article> published = repository.findByPublishedDateIsNotNullOrderByPublishedDateDesc();
+    Article unpublished = persist(article("insights-unpublished", author()));
+
+    List<Article> result = repository.findAllByOrderByPublishedDateDesc(PageRequest.of(0, 20))
+        .getContent();
+
+    assertEquals(published.size(), result.size());
+    assertTrue(result.containsAll(published));
+    assertFalse(result.contains(unpublished));
+    assertOrderedByPublishedDateDesc(result);
+  }
+
+  @Test
+  void findPublishedBySlugExcludesArticleWithoutPublishedDate() {
+    Article published = repository.findByPublishedDateIsNotNullOrderByPublishedDateDesc().getFirst();
+    Article unpublished = persist(article("slug-unpublished", author()));
+
+    assertTrue(repository.findPublishedBySlug(unpublished.getSlug()).isEmpty());
+    assertEquals(published, repository.findPublishedBySlug(published.getSlug()).orElseThrow());
+  }
+
+  @Test
+  void findPublishedByIdsExcludesArticlesWithoutPublishedDate() {
+    List<Long> publishedIds = repository.findByPublishedDateIsNotNullOrderByPublishedDateDesc()
+        .stream().map(Article::getId).toList();
+    Article unpublished = persist(article("featured-unpublished", author()));
+    List<Long> ids = new ArrayList<>(publishedIds);
+    ids.add(unpublished.getId());
+
+    List<Long> resultIds = repository.findPublishedByIds(ids).stream().map(Article::getId).toList();
+
+    assertEquals(publishedIds.size(), resultIds.size());
+    assertTrue(resultIds.containsAll(publishedIds));
+    assertFalse(resultIds.contains(unpublished.getId()));
+  }
+
+  @Test
+  void findPublishedByIdsWithEmptyIdsReturnsEmpty() {
+    assertTrue(repository.findPublishedByIds(List.of()).isEmpty());
+  }
+
+  @Test
+  void countByEventIdExcludesArticlesWithoutPublishedDate() {
+    Event event = eventWithPublishedArticle();
+    long publishedCount = repository.countByEventId(event.getId());
+    assertTrue(publishedCount > 0);
+
+    Article unpublished = article("event-count-unpublished", author());
+    unpublished.getRelatedEvents().add(event);
+    persist(unpublished);
+
+    assertEquals(publishedCount, repository.countByEventId(event.getId()));
+  }
+
+  @Test
+  void findByEventIdExcludesArticlesWithoutPublishedDate() {
+    Event event = eventWithPublishedArticle();
+    List<Long> publishedIds = repository.findByEventId(event.getId(), PageRequest.of(0, 20))
+        .getContent().stream().map(Article::getId).toList();
+    assertFalse(publishedIds.isEmpty());
+
+    Article unpublished = article("event-list-unpublished", author());
+    unpublished.getRelatedEvents().add(event);
+    persist(unpublished);
+
+    List<Article> result = repository.findByEventId(event.getId(), PageRequest.of(0, 20)).getContent();
+
+    assertEquals(publishedIds.size(), result.size());
+    assertFalse(result.contains(unpublished));
+    assertOrderedByPublishedDateDesc(result);
+  }
+
+  private void assertOrderedByPublishedDateDesc(List<Article> articles) {
+    List<LocalDateTime> dates = articles.stream().map(Article::getPublishedDate).toList();
+    assertTrue(dates.stream().allMatch(Objects::nonNull));
+    assertEquals(dates.stream().sorted(Comparator.reverseOrder()).toList(), dates);
+  }
+
+  private Article article(String slug, Author author) {
+    Article article = new Article();
+    article.setSlug(slug);
+    article.setAuthor(author);
+    return article;
+  }
+
+  private Author author() {
+    return entityManager.createQuery("SELECT au FROM Author au ORDER BY au.id", Author.class)
+        .getResultList().getFirst();
+  }
+
+  private Event eventWithPublishedArticle() {
+    return repository.findByPublishedDateIsNotNullOrderByPublishedDateDesc().stream()
+        .flatMap(article -> article.getRelatedEvents().stream())
+        .findFirst()
+        .orElseThrow();
+  }
+
+  private Article persist(Article article) {
+    entityManager.persist(article);
+    entityManager.flush();
+    return article;
+  }
+
   private Statistics statistics() {
     return entityManagerFactory.unwrap(SessionFactory.class).getStatistics();
   }
@@ -138,15 +247,13 @@ class ArticleRepositoryDataJpaTest {
     List<ArticleContentSummary> rows = repository.findContentSummariesByAthleteId(athleteId);
 
     // Touch every projected column to prove that consuming the rows issues no further statements.
-    rows.forEach(row -> {
-      row.articleId();
-      row.locale();
-      row.title();
-      row.introText();
-      row.slug();
-      row.featuredImage();
-      row.publishedDate();
-    });
+    List<Object> consumedValues = rows.stream()
+        .flatMap(row -> Stream.<Object>of(row.articleId(), row.locale(), row.title(), row.introText(),
+            row.slug(), row.featuredImage(), row.publishedDate()
+        ))
+        .toList();
+
+    assertEquals(rows.size() * 7, consumedValues.size());
 
     return statistics.getPrepareStatementCount();
   }

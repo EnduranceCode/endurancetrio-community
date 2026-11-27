@@ -116,7 +116,7 @@ class InsightServiceMainTest {
   @Test
   void getArticlesByIdsShouldReturnArticlesInRequestedOrder() {
     var ids = List.of(2L, 1L);
-    when(articleRepository.findAllById(ids)).thenReturn(List.of(testArticle, secondArticle));
+    when(articleRepository.findPublishedByIds(ids)).thenReturn(List.of(testArticle, secondArticle));
     when(articleMapper.map(testArticle, LOCALE)).thenReturn(testArticleDTO);
     when(articleMapper.map(secondArticle, LOCALE)).thenReturn(secondArticleDTO);
 
@@ -131,7 +131,7 @@ class InsightServiceMainTest {
   @Test
   void getArticlesByIdsShouldExcludeUnresolvableArticles() {
     var ids = List.of(1L);
-    when(articleRepository.findAllById(ids)).thenReturn(List.of(testArticle));
+    when(articleRepository.findPublishedByIds(ids)).thenReturn(List.of(testArticle));
     when(articleMapper.map(testArticle, LOCALE)).thenReturn(null);
 
     List<ArticleDTO> result = underTest.getArticlesByIds(ids, LOCALE);
@@ -143,7 +143,7 @@ class InsightServiceMainTest {
   @Test
   void getArticlesByIdsWithEmptyIdList() {
     var ids = List.<Long>of();
-    when(articleRepository.findAllById(ids)).thenReturn(List.of());
+    when(articleRepository.findPublishedByIds(ids)).thenReturn(List.of());
 
     List<ArticleDTO> result = underTest.getArticlesByIds(ids, LOCALE);
 
@@ -153,7 +153,7 @@ class InsightServiceMainTest {
 
   @Test
   void getArticleBySlugShouldReturnArticle() {
-    when(articleRepository.findBySlug(SLUG)).thenReturn(Optional.of(testArticle));
+    when(articleRepository.findPublishedBySlug(SLUG)).thenReturn(Optional.of(testArticle));
     when(articleMapper.map(testArticle, LOCALE)).thenReturn(testArticleDTO);
 
     ArticleDTO result = underTest.getArticleBySlug(SLUG, LOCALE);
@@ -163,8 +163,8 @@ class InsightServiceMainTest {
   }
 
   @Test
-  void getArticleBySlugWithUnknownSlugShouldThrow() {
-    when(articleRepository.findBySlug(SLUG)).thenReturn(Optional.empty());
+  void getArticleBySlugWithNoPublishedArticleShouldThrow() {
+    when(articleRepository.findPublishedBySlug(SLUG)).thenReturn(Optional.empty());
 
     EnduranceTrioException exception = assertThrows(EnduranceTrioException.class,
         () -> underTest.getArticleBySlug(SLUG, LOCALE)
