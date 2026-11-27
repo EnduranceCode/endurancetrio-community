@@ -54,6 +54,15 @@ public class WebConfig implements WebMvcConfigurer {
     return registrationBean;
   }
 
+  @Bean
+  public FilterRegistrationBean<Filter> contentLanguageFilter() {
+    FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+    registrationBean.setFilter(new ContentLanguageFilter());
+    registrationBean.addUrlPatterns("/*");
+    registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 60);
+    return registrationBean;
+  }
+
   /**
    * Registers view controllers to handle direct URL-to-view mapping without requiring explicit
    * controller methods.
