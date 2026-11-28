@@ -55,6 +55,7 @@ import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.competitor.model.enumerator.AthleteGender;
 import com.endurancetrio.data.competitor.model.enumerator.Country;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -373,7 +374,7 @@ class AthleteWebControllerTest {
     when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
         new AthleteResultsPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
     ArticleSummaryDTO summary = new ArticleSummaryDTO(1L, "race-analysis-2024", "Race Analysis 2024",
-        "This is the introduction.", "/img/insights/insights-001.jpg", LocalDateTime.of(2024, 6, 15, 10, 0)
+        "This is the introduction.", "/img/insights/insights-001.jpg", LocalDateTime.of(2024, Month.JUNE, 15, 10, 0)
     );
     when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(List.of(summary));
 
@@ -462,7 +463,7 @@ class AthleteWebControllerTest {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/en/athletes/1?page=5"));
 
-    verify(athleteService).getAthleteResults(eq(1L), eq(PageRequest.of(9, 10)));
+    verify(athleteService).getAthleteResults(1L, PageRequest.of(9, 10));
     verifyNoInteractions(insightService);
   }
 
@@ -564,7 +565,7 @@ class AthleteWebControllerTest {
         .andExpect(model().attribute("pagination", pagination))
         .andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1), false, false)));
 
-    verify(athleteService).getAthleteResults(eq(1L), eq(PageRequest.of(1, 10)));
+    verify(athleteService).getAthleteResults(1L, PageRequest.of(1, 10));
   }
 
   @Test
@@ -586,7 +587,7 @@ class AthleteWebControllerTest {
         .andExpect(view().name("athlete-profile"))
         .andExpect(model().attribute("pagination", pagination));
 
-    verify(athleteService).getAthleteResults(eq(1L), eq(PageRequest.of(0, 10)));
+    verify(athleteService).getAthleteResults(1L, PageRequest.of(0, 10));
   }
 
   @Test

@@ -33,6 +33,7 @@ import com.endurancetrio.data.insight.repository.projection.ArticleContentSummar
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -94,7 +95,7 @@ class ArticleRepositoryDataJpaTest {
     assertEquals("<p>Newest intro</p>", newest.introText());
     assertEquals("summary-newest", newest.slug());
     assertEquals("/img/insights/summary-newest.jpg", newest.featuredImage());
-    assertEquals(LocalDateTime.of(2026, 3, 1, 10, 0), newest.publishedDate());
+    assertEquals(LocalDateTime.of(2026, Month.MARCH, 1, 10, 0), newest.publishedDate());
 
     assertTrue(rows.stream().noneMatch(row -> row.articleId().equals(990004L)));
   }

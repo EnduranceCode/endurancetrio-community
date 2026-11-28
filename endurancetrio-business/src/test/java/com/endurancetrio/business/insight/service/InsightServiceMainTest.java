@@ -38,6 +38,7 @@ import com.endurancetrio.data.insight.model.entity.Article;
 import com.endurancetrio.data.insight.repository.ArticleRepository;
 import com.endurancetrio.data.insight.repository.projection.ArticleContentSummary;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -59,7 +60,7 @@ class InsightServiceMainTest {
   private static final String SLUG = "test-article";
   private static final Long EVENT_ID = 1L;
   private static final Long ATHLETE_ID = 1L;
-  private static final LocalDateTime PUBLISHED_DATE = LocalDateTime.of(2026, 8, 15, 10, 0);
+  private static final LocalDateTime PUBLISHED_DATE = LocalDateTime.of(2026, Month.AUGUST, 15, 10, 0);
   private static final Pageable PAGEABLE = PageRequest.of(0, 10);
 
   @Mock
