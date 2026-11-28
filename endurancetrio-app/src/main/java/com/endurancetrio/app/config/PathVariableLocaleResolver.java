@@ -20,6 +20,8 @@
 
 package com.endurancetrio.app.config;
 
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +47,7 @@ public class PathVariableLocaleResolver implements LocaleResolver {
     if (parts.length > 1) {
       String localePart = parts[1];
       if ("pt".equalsIgnoreCase(localePart)) {
-        return Locale.of("pt", "PT");
+        return LOCALE_PORTUGUESE;
       }
       if ("en".equalsIgnoreCase(localePart)) {
         return DEFAULT_LOCALE;
@@ -56,7 +58,7 @@ public class PathVariableLocaleResolver implements LocaleResolver {
     // preference. A prefix in the URL is authoritative and must never be overridden by the header.
     String acceptLang = request.getHeader("Accept-Language");
     if (acceptLang != null && acceptLang.startsWith("pt")) {
-      return Locale.of("pt", "PT");
+      return LOCALE_PORTUGUESE;
     }
 
     return DEFAULT_LOCALE;
