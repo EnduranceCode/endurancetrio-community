@@ -131,7 +131,7 @@ public class AthleteServiceMain implements AthleteService {
   public AthleteDTO getAthleteById(Long id) {
     return athleteRepository.findById(id).map(athleteMapper::map).orElseThrow(() -> {
       String errorMsg = String.format("No athlete found with ID %d", id);
-      LOG.warn(errorMsg);
+      LOG.debug("No athlete found with ID {}", id);
       return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     });
   }

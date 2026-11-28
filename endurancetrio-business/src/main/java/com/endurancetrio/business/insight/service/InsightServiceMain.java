@@ -62,7 +62,7 @@ public class InsightServiceMain implements InsightService {
   public ArticleDTO getArticleBySlug(String slug, Locale locale) {
     var article = articleRepository.findPublishedBySlug(slug).orElseThrow(() -> {
       String errorMsg = String.format("No article found with slug '%s'", slug);
-      LOG.warn(errorMsg);
+      LOG.debug("No article found with slug '{}'", slug);
       return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     });
 
