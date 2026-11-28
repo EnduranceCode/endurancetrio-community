@@ -24,10 +24,13 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -35,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.endurancetrio.app.common.handler.EnduranceTrioExceptionHandlerWeb;
 import com.endurancetrio.app.common.model.PageWindow;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.competitor.fixtures.AthleteDTOFixtures;
@@ -43,6 +45,7 @@ import com.endurancetrio.app.competitor.fixtures.TeamDTOFixtures;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.insight.fixtures.ArticleDTOFixtures;
 import com.endurancetrio.business.common.dto.PaginationDTO;
+import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.TeamDTO;
 import com.endurancetrio.business.event.dto.EventDTO;
@@ -66,6 +69,7 @@ import com.endurancetrio.data.competitor.model.enumerator.AgeGroup;
 import com.endurancetrio.data.competitor.model.enumerator.ParaClass;
 import com.endurancetrio.data.event.model.enumerator.Penalty;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
+import jakarta.servlet.ServletException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
@@ -239,12 +243,13 @@ class EventWebControllerTest {
   @Test
   void eventsPageSecondPage() throws Exception {
     stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
-    stubEventDirectory(PAGE_WITH_EVENTS);
+    EventsPageDTO secondPage = new EventsPageDTO(List.of(EVENT_DTO), new PaginationDTO(1, 3, 30, true, true));
+    stubEventDirectory(secondPage);
 
     mockMvc.perform(get("/en/events").param("page", "1"))
         .andExpect(status().isOk())
         .andExpect(view().name("events"))
-        .andExpect(model().attribute("pagination", PAGE_WITH_EVENTS.pagination()));
+        .andExpect(model().attribute("pagination", secondPage.pagination()));
 
     verify(eventService).getEvents(PageRequest.of(1, 10), new EventFilterDTO(null, null, null, null));
   }
@@ -346,7 +351,7 @@ class EventWebControllerTest {
   @Test
   void eventsPageSetsMetadataWhenPagedWithoutFilters() throws Exception {
     stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
-    stubEventDirectory(PAGE_WITH_EVENTS);
+    stubEventDirectory(PAGE_WITH_EVENTS_PAGINATED);
 
     mockMvc.perform(get("/en/events").param("page", "1"))
         .andExpect(status().isOk())
@@ -413,7 +418,11 @@ class EventWebControllerTest {
     when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
     when(insightService.getArticlesCountByEvent(1L)).thenReturn(0L);
 
-    assertThrows(Exception.class, () -> mockMvc.perform(get("/en/events/1984/1/insights")));
+    ServletException exception = assertThrows(ServletException.class,
+        () -> mockMvc.perform(get("/en/events/1984/1/insights"))
+    );
+    EnduranceTrioException cause = assertInstanceOf(EnduranceTrioException.class, exception.getCause());
+    assertEquals(404, cause.getCode());
   }
 
   @Test
@@ -531,14 +540,8 @@ class EventWebControllerTest {
   }
 
   @Test
-  void getEventOverviewShouldReturnBadRequestForNonNumericYear() throws Exception {
-    MockMvc advisedMockMvc = MockMvcBuilders.standaloneSetup(eventWebController)
-        .setControllerAdvice(new EnduranceTrioExceptionHandlerWeb(messageService, appProperties))
-        .build();
-
-    advisedMockMvc.perform(get("/en/events/abc/1/overview"))
-        .andExpect(status().isBadRequest())
-        .andExpect(view().name("error/400"));
+  void getEventOverviewWithNonNumericYearShouldReturnNotFound() throws Exception {
+    mockMvc.perform(get("/en/events/abc/1/overview")).andExpect(status().isNotFound());
   }
 
   @Test
@@ -737,6 +740,178 @@ class EventWebControllerTest {
         .andExpect(model().attribute("activeContributorColumns",
             Matchers.containsInAnyOrder("rank", "athlete", "ageGroup", "paraClass", "total")
         ));
+  }
+
+  @Test
+  void eventsPageOutOfRangePageShouldRedirectToLastPagePreservingFilters() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_WITH_EVENTS_PAGINATED);
+
+    mockMvc.perform(get("/en/events").param("page", "9")
+            .param("q", "Peniche")
+            .param("year", "1984")
+            .param("district", "Leiria")
+            .param("county", "Peniche"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/events?page=4&q=Peniche&year=1984&district=Leiria&county=Peniche"));
+
+    verify(eventService).getEvents(PageRequest.of(9, 10), new EventFilterDTO("Peniche", 1984, "Leiria", "Peniche"));
+  }
+
+  @Test
+  void eventsPageOutOfRangePageShouldRedirectToLastPageInPortuguese() throws Exception {
+    stubEventMessages("Eventos - EnduranceTrio", "Explore eventos de desportos de endurance");
+    stubEventDirectory(PAGE_WITH_EVENTS_PAGINATED);
+
+    mockMvc.perform(get("/pt/events").param("page", "8").param("year", "1984"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/pt/events?page=4&year=1984"));
+  }
+
+  @Test
+  void eventsPageWithNoResultsAndOutOfRangePageShouldRedirectToBareUrlPreservingFilters() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_EMPTY);
+
+    mockMvc.perform(get("/en/events").param("page", "4")
+            .param("q", "Peniche")
+            .param("year", "1984")
+            .param("district", "Leiria")
+            .param("county", "Peniche"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/events?q=Peniche&year=1984&district=Leiria&county=Peniche"));
+  }
+
+  @Test
+  void eventsPageFirstPageWithNoResultsShouldRenderEmptyState() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    stubEventDirectory(PAGE_EMPTY);
+
+    mockMvc.perform(get("/en/events").param("page", "0"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events"))
+        .andExpect(model().attribute("pagination", PAGE_EMPTY.pagination()))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(), false, false)));
+  }
+
+  @Test
+  void eventsPageLastValidPageShouldRenderResults() throws Exception {
+    stubEventMessages("Events - EnduranceTrio", "Browse endurance sports events");
+    EventsPageDTO lastPage = new EventsPageDTO(List.of(EVENT_DTO), new PaginationDTO(1, 2, 11, true, false));
+    stubEventDirectory(lastPage);
+
+    mockMvc.perform(get("/en/events").param("page", "1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("events"))
+        .andExpect(model().attribute("events", lastPage.events()))
+        .andExpect(model().attribute("pagination", lastPage.pagination()))
+        .andExpect(model().attribute("pageWindow", new PageWindow(List.of(0, 1), false, false)))
+        .andExpect(model().attribute("paginationUrls", hasEntry(0, "/en/events?page=0")))
+        .andExpect(model().attribute("paginationUrls", hasEntry(1, "/en/events?page=1")))
+        .andExpect(model().attribute("paginationPreviousUrl", "/en/events?page=0"))
+        .andExpect(model().attribute("paginationNextUrl", nullValue()));
+
+    verify(eventService).getEvents(PageRequest.of(1, 10), new EventFilterDTO(null, null, null, null));
+  }
+
+  @Test
+  void getEventInsightsPageNegativePageShouldBeClamped() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(), any())).thenReturn(
+        "Event Insights - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(), any())).thenReturn(
+        "Articles related to this event");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(EVENT_INSIGHT_PAGE);
+
+    mockMvc.perform(get("/en/events/1984/1/insights").param("page", "-1"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-insights"))
+        .andExpect(model().attribute("pagination", INSIGHT_PAGINATION));
+
+    verify(insightService).getArticlesByEvent(eq(1L), eq(PageRequest.of(0, 10)), any());
+  }
+
+  @Test
+  void eventInsightsPageOutOfRangePageShouldRedirectToLastPage() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(), any())).thenReturn(
+        "Event Insights - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(), any())).thenReturn(
+        "Articles related to this event");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
+        new InsightPageDTO(List.of(INSIGHT_ARTICLE_EN), new PaginationDTO(9, 6, 60, true, false)));
+
+    mockMvc.perform(get("/en/events/1984/1/insights").param("page", "9"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/events/1984/1/insights?page=5"));
+  }
+
+  @Test
+  void eventInsightsPageOutOfRangePageShouldRedirectToLastPageInPortuguese() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(), any())).thenReturn(
+        "Perspetivas do Evento - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(), any())).thenReturn(
+        "Artigos relacionados com este evento");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
+        new InsightPageDTO(List.of(INSIGHT_ARTICLE_PT), new PaginationDTO(12, 4, 40, true, false)));
+
+    mockMvc.perform(get("/pt/events/1984/1/insights").param("page", "12"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/pt/events/1984/1/insights?page=3"));
+  }
+
+  @Test
+  void eventInsightsPageLastValidPageShouldRenderArticles() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(), any())).thenReturn(
+        "Event Insights - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(), any())).thenReturn(
+        "Articles related to this event");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
+    InsightPageDTO lastPage = new InsightPageDTO(List.of(INSIGHT_ARTICLE_EN), new PaginationDTO(2, 3, 21, true, false));
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(lastPage);
+
+    mockMvc.perform(get("/en/events/1984/1/insights").param("page", "2"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("event-insights"))
+        .andExpect(model().attribute("articles", lastPage.articles()))
+        .andExpect(model().attribute("pagination", lastPage.pagination()));
+
+    verify(insightService).getArticlesByEvent(eq(1L), eq(PageRequest.of(2, 10)), any());
+  }
+
+  @Test
+  void eventInsightsPageWithNoPagesAndOutOfRangePageShouldRedirectToBareUrl() throws Exception {
+    when(messageService.getMessage(eq("page.event.insights.metadata.title"), any(), any())).thenReturn(
+        "Event Insights - EnduranceTrio");
+    when(messageService.getMessage(eq("page.event.insights.metadata.description"), any(), any())).thenReturn(
+        "Articles related to this event");
+    when(eventService.getEventOverview(1L, 1984)).thenReturn(EVENT_OVERVIEW);
+    when(insightService.getArticlesCountByEvent(1L)).thenReturn(ARTICLES_COUNT);
+    when(insightService.getArticlesByEvent(eq(1L), any(Pageable.class), any())).thenReturn(
+        new InsightPageDTO(List.of(), new PaginationDTO(0, 0, 0, false, false)));
+
+    mockMvc.perform(get("/en/events/1984/1/insights").param("page", "3"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/en/events/1984/1/insights"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+          "/en/events/not-a-year", "/en/events/not-a-year/1/insights", "/pt/events/1984/not-a-number/insights",
+          "/en/events/1984/not-a-number/overview", "/en/events/1984/not-a-number/results/1",
+          "/pt/events/1984/1/results/not-a-number"
+      }
+  )
+  void eventRoutesWithNonNumericPathVariablesShouldReturnNotFound(String path) throws Exception {
+    mockMvc.perform(get(path)).andExpect(status().isNotFound());
+
+    verifyNoInteractions(eventService, insightService, raceService, messageService);
   }
 
   private static RelayResultDTO relayResultDTO(

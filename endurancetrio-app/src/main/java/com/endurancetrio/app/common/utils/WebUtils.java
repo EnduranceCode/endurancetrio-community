@@ -30,15 +30,24 @@ public final class WebUtils {
   }
 
   /**
-   * Prefix used when returning a Spring redirect view name.
+   * Prefix used when returning a Spring redirect view name. The path it is combined with must start
+   * with a '/'.
    */
-  public static final String REDIRECT_PREFIX = "redirect:/";
+  public static final String REDIRECT_PREFIX = "redirect:";
 
   /**
    * Build a redirect view name for the given language and path. The provided path must start with a
    * '/'.
    */
   public static String redirect(String language, String path) {
-    return REDIRECT_PREFIX + language + path;
+    return REDIRECT_PREFIX + "/" + language + path;
+  }
+
+  /**
+   * Build a redirect view name for a path that already contains the language segment and any query
+   * parameters. The provided path must start with a '/'.
+   */
+  public static String redirect(String path) {
+    return REDIRECT_PREFIX + path;
   }
 }
