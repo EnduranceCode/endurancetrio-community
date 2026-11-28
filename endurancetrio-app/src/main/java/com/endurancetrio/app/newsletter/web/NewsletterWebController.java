@@ -21,7 +21,6 @@
 package com.endurancetrio.app.newsletter.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
@@ -131,7 +130,7 @@ public class NewsletterWebController {
   }
 
   private String renderView(String view, String language, HttpServletRequest request, Model model) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+    Locale locale = WebUtils.fromLanguage(language);
 
     PageMetadata metadata = PageMetadataUtils.create(view,
         messageService.getMessage("page.newsletter." + view + ".metadata.title", null, locale),

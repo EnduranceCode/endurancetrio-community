@@ -22,11 +22,10 @@ package com.endurancetrio.app.common.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 
+import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
-import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,16 +50,14 @@ public class PolicyWebController {
   }
 
   @GetMapping("/{language:en|pt}/privacy-policy")
-  public String policy(@PathVariable String language, HttpServletRequest request, Model model) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
+  public String policy(@PathVariable Locale language, HttpServletRequest request, Model model) {
     PageMetadata metadata = PageMetadataUtils.create(VIEW,
-        messageService.getMessage("page.policy.metadata.title", null, locale),
-        messageService.getMessage("page.policy.metadata.description", null, locale), request,
+        messageService.getMessage("page.policy.metadata.title", null, language),
+        messageService.getMessage("page.policy.metadata.description", null, language), request,
         appProperties
     );
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
 
     return VIEW;

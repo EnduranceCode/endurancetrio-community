@@ -58,6 +58,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,6 +67,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
@@ -167,10 +169,20 @@ class EventWebControllerWebMvcTest {
   @Autowired
   private RaceService raceService;
 
+  @Autowired
+  private FormattingConversionService conversionService;
+
   @BeforeEach
   void setUp() {
     when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW);
     when(insightService.getArticlesCountByEvent(EVENT_ID)).thenReturn(ARTICLES_COUNT);
+  }
+
+  @Test
+  void mvcConversionServiceShouldResolvePtToPortugueseLocale() {
+    // Spring's default converter would map "pt" to Locale.of("pt"), without the country.
+    assertEquals(Locale.of("pt", "PT"), conversionService.convert("pt", Locale.class));
+    assertEquals(Locale.ENGLISH, conversionService.convert("en", Locale.class));
   }
 
   @Test

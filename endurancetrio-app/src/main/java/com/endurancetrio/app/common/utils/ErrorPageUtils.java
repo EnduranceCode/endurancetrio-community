@@ -21,7 +21,6 @@
 package com.endurancetrio.app.common.utils;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 
 import com.endurancetrio.app.common.model.PageMetadata;
@@ -171,9 +170,6 @@ public final class ErrorPageUtils {
     int slashIndex = requestUri.indexOf('/');
     String language = slashIndex > 0 ? requestUri.substring(0, slashIndex) : requestUri;
 
-    if ("pt".equalsIgnoreCase(language)) {
-      return LOCALE_PORTUGUESE;
-    }
-    return Locale.ENGLISH;
+    return WebUtils.fromLanguage(language);
   }
 }

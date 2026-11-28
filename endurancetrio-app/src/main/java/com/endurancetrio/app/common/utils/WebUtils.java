@@ -20,6 +20,10 @@
 
 package com.endurancetrio.app.common.utils;
 
+import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
+
+import java.util.Locale;
+
 /**
  * Web-related helpers shared by controllers and view helpers.
  */
@@ -34,6 +38,18 @@ public final class WebUtils {
    * with a '/'.
    */
   public static final String REDIRECT_PREFIX = "redirect:";
+
+  /**
+   * Resolves a language path value to a {@link Locale}. A case-insensitive {@code pt} maps to
+   * {@code LOCALE_PORTUGUESE}; every other value, including blank and unexpected values, maps to
+   * {@link Locale#ENGLISH}.
+   *
+   * @param language the raw language path value
+   * @return the resolved locale
+   */
+  public static Locale fromLanguage(String language) {
+    return "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
+  }
 
   /**
    * Build a redirect view name for the given language and path. The provided path must start with a

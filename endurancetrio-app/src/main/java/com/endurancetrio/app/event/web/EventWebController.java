@@ -21,7 +21,6 @@
 package com.endurancetrio.app.event.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
 
@@ -138,7 +137,8 @@ public class EventWebController {
    * paged listings. An out-of-range page redirects to the last valid page, or to the bare listing
    * URL when there are no results, retaining the active filters.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param page     the page number from the query string (default {@code 0}; blank, non-numeric
    *                 and negative values are ignored)
    * @param q        the optional free-text search term
@@ -151,16 +151,14 @@ public class EventWebController {
    */
   @GetMapping("/{language:en|pt}/events")
   public String getEvents(
-      @PathVariable String language, @RequestParam(defaultValue = "0") String page,
+      @PathVariable Locale language, @RequestParam(defaultValue = "0") String page,
       @RequestParam(required = false) String q, @RequestParam(required = false) String year,
       @RequestParam(required = false) String district, @RequestParam(required = false) String county,
       HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENTS,
-        messageService.getMessage("page.events.metadata.title", null, locale),
-        messageService.getMessage("page.events.metadata.description", null, locale), request,
+        messageService.getMessage("page.events.metadata.title", null, language),
+        messageService.getMessage("page.events.metadata.description", null, language), request,
         appProperties
     );
 
@@ -176,13 +174,12 @@ public class EventWebController {
 
     if (isFiltered || clampedPage > 0) {
       String baseUrl = PageMetadataUtils.getBaseUrl(appProperties);
-      metadata.setCanonicalUrl(buildAbsoluteEventsUrl(baseUrl, locale.getLanguage()));
+      metadata.setCanonicalUrl(buildAbsoluteEventsUrl(baseUrl, language.getLanguage()));
       metadata.setHreflangUrlEn(buildAbsoluteEventsUrl(baseUrl, "en"));
       metadata.setHreflangUrlPt(buildAbsoluteEventsUrl(baseUrl, "pt"));
     }
 
-    String eventsPath = UriComponentsBuilder.fromPath("/")
-        .pathSegment(locale.getLanguage(), VIEW_EVENTS)
+    String eventsPath = UriComponentsBuilder.fromPath("/").pathSegment(language.getLanguage(), VIEW_EVENTS)
         .build()
         .toUriString();
 
@@ -200,7 +197,7 @@ public class EventWebController {
       paginationUrls.put(pageIndex, buildEventsUrl(eventsPath, pageIndex, filter));
     }
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, eventsPage.pagination());
     model.addAttribute(ATTRIBUTE_EVENTS, eventsPage.events());
@@ -244,7 +241,8 @@ public class EventWebController {
    * Returns the event-scoped insights page with related articles. An out-of-range page redirects
    * to the last valid page, or to the bare insights URL when there are no results.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param year     the event year
    * @param id       the event ID
    * @param page     the page number from the query string (default {@code 0}, clamped to
@@ -255,18 +253,16 @@ public class EventWebController {
    */
   @GetMapping("/{language:en|pt}/events/{year:\\d+}/{id:\\d+}/insights")
   public String getEventInsights(
-      @PathVariable String language, @PathVariable int year, @PathVariable Long id,
+      @PathVariable Locale language, @PathVariable int year, @PathVariable Long id,
       @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
     EventOverviewDTO event = eventService.getEventOverview(id, year);
 
     Object[] messageArgs = {event.title(), String.valueOf(year)};
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_INSIGHTS,
-        messageService.getMessage("page.event.insights.metadata.title", messageArgs, locale),
-        messageService.getMessage("page.event.insights.metadata.description", messageArgs, locale),
+        messageService.getMessage("page.event.insights.metadata.title", messageArgs, language),
+        messageService.getMessage("page.event.insights.metadata.description", messageArgs, language),
         request, appProperties
     );
 
@@ -280,12 +276,12 @@ public class EventWebController {
 
     int clampedPage = Math.max(0, page);
     Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
-    InsightPageDTO insightPage = insightService.getArticlesByEvent(id, pageable, locale);
+    InsightPageDTO insightPage = insightService.getArticlesByEvent(id, pageable, language);
 
     int totalPages = insightPage.pagination().totalPages();
 
     String insightsPath = UriComponentsBuilder.fromPath("/")
-        .pathSegment(locale.getLanguage(), VIEW_EVENTS, String.valueOf(year), String.valueOf(id), "insights")
+        .pathSegment(language.getLanguage(), VIEW_EVENTS, String.valueOf(year), String.valueOf(id), "insights")
         .build()
         .toUriString();
 
@@ -295,7 +291,7 @@ public class EventWebController {
       return WebUtils.redirect(buildEventInsightsUrl(insightsPath, targetPage == 0 ? null : targetPage));
     }
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
     model.addAttribute(ATTRIBUTE_ARTICLES, insightPage.articles());
@@ -308,7 +304,8 @@ public class EventWebController {
   /**
    * Returns the event overview page for the given event.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param year     the event year
    * @param id       the event ID
    * @param request  the current HTTP request for building page metadata
@@ -317,24 +314,22 @@ public class EventWebController {
    */
   @GetMapping("/{language:en|pt}/events/{year:\\d+}/{id:\\d+}/overview")
   public String getEventOverview(
-      @PathVariable String language, @PathVariable int year, @PathVariable Long id,
+      @PathVariable Locale language, @PathVariable int year, @PathVariable Long id,
       HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
     EventOverviewDTO event = eventService.getEventOverview(id, year);
 
     Object[] messageArgs = {event.title(), String.valueOf(year), event.city()};
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_EVENT_OVERVIEW,
-        messageService.getMessage("page.event.overview.metadata.title", messageArgs, locale),
-        messageService.getMessage("page.event.overview.metadata.description", messageArgs, locale),
+        messageService.getMessage("page.event.overview.metadata.title", messageArgs, language),
+        messageService.getMessage("page.event.overview.metadata.description", messageArgs, language),
         request, appProperties
     );
 
     long articlesCount = insightService.getArticlesCountByEvent(id);
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
     model.addAttribute(ATTRIBUTE_ARTICLES_COUNT, articlesCount);
@@ -345,7 +340,8 @@ public class EventWebController {
   /**
    * Returns the race results page for the given event and race.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param year     the event year
    * @param eventId  the event ID
    * @param raceId   the race ID
@@ -355,11 +351,9 @@ public class EventWebController {
    */
   @GetMapping("/{language:en|pt}/events/{year:\\d+}/{eventId:\\d+}/results/{raceId:\\d+}")
   public String getRaceResults(
-      @PathVariable String language, @PathVariable int year, @PathVariable Long eventId,
+      @PathVariable Locale language, @PathVariable int year, @PathVariable Long eventId,
       @PathVariable Long raceId, HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
     EventOverviewDTO event = eventService.getEventOverview(eventId, year);
 
     List<RaceDTO> races = event.races();
@@ -379,8 +373,8 @@ public class EventWebController {
     Object[] messageArgs = {currentRace.title(), event.title(), String.valueOf(year)};
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_RACE_RESULTS,
-        messageService.getMessage("page.event.results.metadata.title", messageArgs, locale),
-        messageService.getMessage("page.event.results.metadata.description", messageArgs, locale),
+        messageService.getMessage("page.event.results.metadata.title", messageArgs, language),
+        messageService.getMessage("page.event.results.metadata.description", messageArgs, language),
         request, appProperties
     );
 
@@ -390,7 +384,7 @@ public class EventWebController {
 
     long articlesCount = insightService.getArticlesCountByEvent(eventId);
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_EVENT, event);
     model.addAttribute(ATTRIBUTE_RACE_ID, raceId);
