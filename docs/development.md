@@ -1968,6 +1968,47 @@ The script also accepts an optional `--commit` flag to automatically create a gi
 ./set-version.sh {VERSION_NUMBER} --commit
 ```
 
+To also create the release tag in one step, add the `--tag` flag. The tag is created locally
+only and is **not** pushed:
+
+```shell
+./set-version.sh {VERSION_NUMBER} --commit --tag
+```
+
+To publish the commit and the tag to `origin`, add the `--push` flag. It pushes the current
+branch first, then pushes `community-v{VERSION_NUMBER}` if it exists locally and its commit is an
+ancestor of the branch:
+
+```shell
+./set-version.sh {VERSION_NUMBER} --commit --tag --push
+```
+
+Additional options:
+
+- `--dry-run` prints the planned actions without modifying any file or touching the remote.
+- `--remote <name>` uses a remote other than `origin` (default: `origin`).
+- `--tag-name <name>` overrides the tag name (default: `community-v<version>`).
+- `--push-only` skips version update, commit, and tag creation and only publishes the branch and
+  tag to `<remote>`. This is intended for publishing an already-created tag to a fork (such as
+  the `community` remote) after that fork has been synced with `origin`:
+
+  ```shell
+  # 1. Release to origin
+  ./set-version.sh {VERSION_NUMBER} --commit --tag --push
+
+  # 2. After syncing the fork to origin, publish the tag to the fork
+  ./set-version.sh {VERSION_NUMBER} --push-only --remote community
+  ```
+
+  `--push-only` requires either a version number or `--tag-name`.
+
+`--tag` requires `--commit`, so the tag always points at the commit that contains the version
+change, and it refuses `-SNAPSHOT` versions, because tags represent released state only. It also
+aborts if the tag already exists locally or on the remote. The script refuses to run when the
+tracked working tree is dirty, and it fetches from the remote first so the existence and
+divergence checks are up to date. Re-running is safe: a commit with no staged changes is skipped
+instead of failing. See [Version Tagging](#version-tagging) for the tag name and message format.
+
 #### Manual fallback
 
 If you prefer to update the version manually (or need to revert changes), the Maven commands are
@@ -2008,7 +2049,8 @@ the pattern:
 
 For example, version `1.0.0` is tagged as `community-v1.0.0`.
 
-Create an annotated tag with a release message:
+`./set-version.sh {VERSION_NUMBER} --commit --tag` performs the two steps below automatically. To do
+them manually, create an annotated tag with a release message:
 
 ```shell
 git tag -a community-vX.Y.Z -m "vX.Y.Z"
