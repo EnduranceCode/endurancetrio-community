@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.endurancetrio.app.common.service.MessageService;
@@ -33,6 +35,8 @@ import com.endurancetrio.business.common.dto.ErrorDTO;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +46,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 @ExtendWith(MockitoExtension.class)
 class EnduranceTrioExceptionHandlerWebTest {
@@ -68,10 +73,13 @@ class EnduranceTrioExceptionHandlerWebTest {
 
   private HttpServletRequest request;
 
+  private ContentCachingResponseWrapper cachedResponse;
+
   @BeforeEach
   void setUp() {
     underTest = new EnduranceTrioExceptionHandlerWeb(messageService, appProperties);
     request = mock(HttpServletRequest.class);
+    cachedResponse = mock(ContentCachingResponseWrapper.class);
 
     when(appProperties.getOpenGraph()).thenReturn(openGraph);
     when(appProperties.getSocial()).thenReturn(social);
@@ -98,11 +106,12 @@ class EnduranceTrioExceptionHandlerWebTest {
     )).thenReturn(
         "Not found");
 
-    ModelAndView result = underTest.handleEnduranceTrioException(exception, request);
+    ModelAndView result = underTest.handleEnduranceTrioException(exception, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/404", result.getViewName());
     assertEquals("The requested resource was not found", result.getModel().get("message"));
+    verify(cachedResponse).resetBuffer();
   }
 
   @Test
@@ -117,10 +126,11 @@ class EnduranceTrioExceptionHandlerWebTest {
     )).thenReturn(
         "Access denied");
 
-    ModelAndView result = underTest.handleEnduranceTrioException(exception, request);
+    ModelAndView result = underTest.handleEnduranceTrioException(exception, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/403", result.getViewName());
+    verify(cachedResponse).resetBuffer();
   }
 
   @Test
@@ -135,10 +145,11 @@ class EnduranceTrioExceptionHandlerWebTest {
     )).thenReturn(
         "Error occurred");
 
-    ModelAndView result = underTest.handleEnduranceTrioException(exception, request);
+    ModelAndView result = underTest.handleEnduranceTrioException(exception, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/500", result.getViewName());
+    verify(cachedResponse).resetBuffer();
   }
 
   @Test
@@ -152,11 +163,12 @@ class EnduranceTrioExceptionHandlerWebTest {
     )).thenReturn(
         "Error");
 
-    ModelAndView result = underTest.handleEnduranceTrioException(exception, request);
+    ModelAndView result = underTest.handleEnduranceTrioException(exception, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/400", result.getViewName());
     assertNotNull(result.getModel().get("errors"));
+    verify(cachedResponse).resetBuffer();
   }
 
   @SuppressWarnings("ConstantConditions")
@@ -171,12 +183,13 @@ class EnduranceTrioExceptionHandlerWebTest {
     when(messageService.getMessage(eq("page.error.400.metadata.description"), any(), any())).thenReturn(
         "Error occurred");
 
-    ModelAndView result = underTest.handleTypeMismatch(ex, request);
+    ModelAndView result = underTest.handleTypeMismatch(ex, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/400", result.getViewName());
     assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
     assertEquals("Bad request parameters", result.getModel().get("message"));
+    verify(cachedResponse).resetBuffer();
   }
 
   @Test
@@ -191,7 +204,7 @@ class EnduranceTrioExceptionHandlerWebTest {
     )).thenReturn(
         "Error");
 
-    ModelAndView result = underTest.handleDataIntegrity(ex, request);
+    ModelAndView result = underTest.handleDataIntegrity(ex, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/500", result.getViewName());
@@ -199,6 +212,7 @@ class EnduranceTrioExceptionHandlerWebTest {
     assertEquals("A conflict occurred with the current state of the resource",
         result.getModel().get("message")
     );
+    verify(cachedResponse).resetBuffer();
   }
 
   @Test
@@ -212,11 +226,38 @@ class EnduranceTrioExceptionHandlerWebTest {
     )).thenReturn(
         "Error");
 
-    ModelAndView result = underTest.handleUnhandledException(ex, request);
+    ModelAndView result = underTest.handleUnhandledException(ex, request, cachedResponse);
 
     assertNotNull(result);
     assertEquals("error/500", result.getViewName());
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), result.getModel().get("status"));
     assertEquals("An internal server error occurred", result.getModel().get("message"));
+    verify(cachedResponse).resetBuffer();
+  }
+
+  @Test
+  void shouldNotResetBufferWhenResponseIsNotCachingWrapper() {
+    Exception ex = new RuntimeException("Unexpected error");
+    HttpServletResponse plainResponse = mock(HttpServletResponse.class);
+
+    when(messageService.getMessage(eq("page.error.500.metadata.title"), any(), any())).thenReturn("Server Error");
+    when(messageService.getMessage(eq("page.error.500.metadata.description"), any(), any())).thenReturn("Error");
+
+    underTest.handleUnhandledException(ex, request, plainResponse);
+
+    verify(plainResponse, never()).resetBuffer();
+  }
+
+  @Test
+  void shouldResetBufferThroughNestedResponseWrappers() {
+    Exception ex = new RuntimeException("Unexpected error");
+    HttpServletResponseWrapper outerResponse = new HttpServletResponseWrapper(cachedResponse);
+
+    when(messageService.getMessage(eq("page.error.500.metadata.title"), any(), any())).thenReturn("Server Error");
+    when(messageService.getMessage(eq("page.error.500.metadata.description"), any(), any())).thenReturn("Error");
+
+    underTest.handleUnhandledException(ex, request, outerResponse);
+
+    verify(cachedResponse).resetBuffer();
   }
 }

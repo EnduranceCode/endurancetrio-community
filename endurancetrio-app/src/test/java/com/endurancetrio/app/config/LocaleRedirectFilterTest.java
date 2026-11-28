@@ -65,7 +65,8 @@ class LocaleRedirectFilterTest {
       "/sitemap.xml",
       "/api/tracker/v1/devices",
       "/swagger-ui/index.html",
-      "/v3/api-docs"
+      "/v3/api-docs",
+      "/v3/api-docs.yaml"
   })
   void shouldPassStaticAndApiRequestsThroughWithoutRedirect(String uri) throws Exception {
     when(request.getRequestURI()).thenReturn(uri);

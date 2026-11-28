@@ -67,6 +67,19 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
   /**
+   * Registers the filter that caches HTML page output until rendering completes, so a partially
+   * rendered page can be discarded when an error occurs. Non-page requests pass through untouched.
+   */
+  @Bean
+  public FilterRegistrationBean<Filter> htmlResponseCachingFilter() {
+    FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+    registrationBean.setFilter(new HtmlResponseCachingFilter());
+    registrationBean.addUrlPatterns("/*");
+    registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 70);
+    return registrationBean;
+  }
+
+  /**
    * Registers the converter used to resolve a language path variable to its {@link Locale}.
    *
    * @param registry the formatter registry to which the converter is added

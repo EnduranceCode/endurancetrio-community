@@ -27,6 +27,7 @@ import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The {@link TestErrorWebController} provides endpoints for testing error pages during local
@@ -62,6 +63,19 @@ public class TestErrorWebController {
   @GetMapping("/{language:en|pt}/test/error-500")
   public String trigger500(@PathVariable String language) {
     throw new TestServerErrorException(String.format("This is a test 500 error for the %s locale", language));
+  }
+
+  /**
+   * Returns a view whose template writes visible markup before failing while a fragment is
+   * processed. The failure occurs during view rendering, after the handler method has returned,
+   * which is the real-world scenario the caching filter must handle.
+   *
+   * @param language the locale path segment, bound to the template model
+   * @return the {@link ModelAndView} that fails while Thymeleaf renders it
+   */
+  @GetMapping("/{language:en|pt}/test/error-render")
+  public ModelAndView triggerRenderFailure(@PathVariable String language) {
+    return new ModelAndView("test/render-failure", "language", language);
   }
 
   private static class TestServerErrorException extends RuntimeException {

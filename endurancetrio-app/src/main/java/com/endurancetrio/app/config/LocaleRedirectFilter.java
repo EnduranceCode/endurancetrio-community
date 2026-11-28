@@ -28,12 +28,8 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
 
 public class LocaleRedirectFilter implements Filter {
-
-  private static final Set<String> STATIC_ROOT_FILES = Set.of(
-      "/favicon.ico", "/favicon.svg", "/apple-touch-icon.png", "/robots.txt", "/sitemap.xml");
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -43,7 +39,7 @@ public class LocaleRedirectFilter implements Filter {
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
     String requestUri = httpRequest.getRequestURI();
-    String uri = stripPathParameters(requestUri);
+    String uri = PageRequestUtils.stripPathParameters(requestUri);
 
     // Container-managed session tracking (e.g. ";jsessionid=...") must not reach Spring
     // Security, whose StrictHttpFirewall rejects semicolons with a 400. Redirect to the clean
@@ -54,10 +50,7 @@ public class LocaleRedirectFilter implements Filter {
       return;
     }
 
-    if (uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")
-        || uri.startsWith("/webjars/") || STATIC_ROOT_FILES.contains(uri) || uri.startsWith("/api/")
-        || uri.startsWith("/actuator") || uri.equals("/v3/api-docs") || uri.startsWith("/v3/api-docs/")
-        || uri.startsWith("/swagger-ui")) {
+    if (PageRequestUtils.isNonPageRequest(uri)) {
       chain.doFilter(request, response);
       return;
     }
@@ -70,16 +63,5 @@ public class LocaleRedirectFilter implements Filter {
     }
 
     chain.doFilter(request, response);
-  }
-
-  /**
-   * Removes path parameters (matrix parameters such as {@code ;jsessionid=...}) from every segment
-   * of the given request URI.
-   *
-   * @param uri the raw request URI
-   * @return the URI without path parameters
-   */
-  private static String stripPathParameters(String uri) {
-    return uri.indexOf(';') < 0 ? uri : uri.replaceAll(";[^/]*", "");
   }
 }
