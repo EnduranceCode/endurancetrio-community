@@ -21,6 +21,7 @@
 package com.endurancetrio.app.common.handler;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,6 +35,9 @@ import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.config.AppSecurityConfig;
 import com.endurancetrio.app.config.WebConfig;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -44,6 +48,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @WebMvcTest(useDefaultFilters = false)
 @ActiveProfiles("test")
@@ -70,6 +76,16 @@ class EnduranceTrioExceptionHandlerWebMvcSliceTest {
         .andExpect(content().string(containsString("Os parâmetros do pedido eram inválidos")));
   }
 
+  @Test
+  void shouldReplacePartialPageWithErrorPageWhenFragmentFails() throws Exception {
+    mockMvc.perform(get("/en/test/render-failure"))
+        .andExpect(status().isInternalServerError())
+        .andExpect(view().name("error/500"))
+        .andExpect(content().string(containsString("Error Details")))
+        .andExpect(content().string(containsString("An internal server error occurred")))
+        .andExpect(content().string(not(containsString("render-failure-partial-content"))));
+  }
+
   @EnduranceTrioWebController
   static class BadRequestTestController {
 
@@ -80,11 +96,29 @@ class EnduranceTrioExceptionHandlerWebMvcSliceTest {
     }
   }
 
+  @EnduranceTrioWebController
+  static class RenderFailureTestController {
+
+    private final TemplateEngine templateEngine;
+
+    RenderFailureTestController(TemplateEngine templateEngine) {
+      this.templateEngine = templateEngine;
+    }
+
+    // Rendering from the handler method raises the fragment failure where @ExceptionHandler can
+    // see it. A failure during normal view rendering bypasses the advice because DispatcherServlet
+    // renders outside the try/catch that feeds exception handlers.
+    @GetMapping("/{language:en|pt}/test/render-failure")
+    void renderFailure(@PathVariable String language, HttpServletResponse response) throws IOException {
+      templateEngine.process("test/render-failure", new Context(Locale.forLanguageTag(language)), response.getWriter());
+    }
+  }
+
   @SpringBootConfiguration
   @Import(
       {
           AppSecurityConfig.class, WebConfig.class, MessageService.class, EnduranceTrioExceptionHandlerWeb.class,
-          BadRequestTestController.class
+          BadRequestTestController.class, RenderFailureTestController.class
       }
   )
   static class TestApplication {

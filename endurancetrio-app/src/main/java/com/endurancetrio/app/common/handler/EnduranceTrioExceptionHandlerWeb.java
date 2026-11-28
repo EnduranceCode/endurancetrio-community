@@ -29,7 +29,10 @@ import com.endurancetrio.app.common.utils.ErrorPageUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.ServletResponseWrapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +43,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 /**
  * The {@link EnduranceTrioExceptionHandlerWeb} class is a global exception handler for Thymeleaf
@@ -72,11 +76,16 @@ public class EnduranceTrioExceptionHandlerWeb {
    *
    * @param exception the domain exception containing error codes and messages
    * @param request   the current HTTP request
+   * @param response  the current HTTP response
    * @return a {@link ModelAndView} with the error page
    */
   @ExceptionHandler(EnduranceTrioException.class)
   public ModelAndView handleEnduranceTrioException(
-      @NonNull EnduranceTrioException exception, @NonNull HttpServletRequest request) {
+      @NonNull EnduranceTrioException exception,
+      @NonNull HttpServletRequest request, @NonNull HttpServletResponse response
+  ) {
+    discardCachedPageOutput(response);
+
     HttpStatus status = HttpStatus.resolve(exception.getCode());
     if (status == null) {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -102,13 +111,18 @@ public class EnduranceTrioExceptionHandlerWeb {
    * Intercepts database integrity violations, such as unique constraint conflicts or foreign key
    * violations.
    *
-   * @param ex      the data integrity violation exception
-   * @param request the current HTTP request
+   * @param ex       the data integrity violation exception
+   * @param request  the current HTTP request
+   * @param response the current HTTP response
    * @return a {@link ModelAndView} with a conflict error page
    */
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ModelAndView handleDataIntegrity(
-      @NonNull DataIntegrityViolationException ex, @NonNull HttpServletRequest request) {
+      @NonNull DataIntegrityViolationException ex,
+      @NonNull HttpServletRequest request, @NonNull HttpServletResponse response
+  ) {
+    discardCachedPageOutput(response);
+
     LOG.warn("Database integrity violation: {}", ex.getMostSpecificCause().getMessage());
     return ErrorPageUtils.buildErrorModelAndView(HttpStatus.CONFLICT, EnduranceTrioError.CONFLICT.getMessage(),
         null, request, messageService, appProperties
@@ -121,13 +135,18 @@ public class EnduranceTrioExceptionHandlerWeb {
    * value, to avoid forging log entries. The debug message is resolved from the message bundle,
    * following the same localized pattern as the error-page titles and metadata.
    *
-   * @param ex      the type mismatch exception
-   * @param request the current HTTP request
+   * @param ex       the type mismatch exception
+   * @param request  the current HTTP request
+   * @param response the current HTTP response
    * @return a {@link ModelAndView} with a bad request error page
    */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   public ModelAndView handleTypeMismatch(
-      @NonNull MethodArgumentTypeMismatchException ex, @NonNull HttpServletRequest request) {
+      @NonNull MethodArgumentTypeMismatchException ex,
+      @NonNull HttpServletRequest request, @NonNull HttpServletResponse response
+  ) {
+    discardCachedPageOutput(response);
+
     LOG.warn("Invalid value for request parameter '{}'", ex.getName());
     String message = messageService.getMessage("page.error.400.message", null, ErrorPageUtils.resolveLocale(request));
 
@@ -142,14 +161,44 @@ public class EnduranceTrioExceptionHandlerWeb {
    *
    * @param exception the unexpected exception
    * @param request   the current HTTP request
+   * @param response  the current HTTP response
    * @return a {@link ModelAndView} with a generic error page
    */
   @ExceptionHandler(Exception.class)
   public ModelAndView handleUnhandledException(
-      @NonNull Exception exception, @NonNull HttpServletRequest request) {
+      @NonNull Exception exception, @NonNull HttpServletRequest request,
+      @NonNull HttpServletResponse response
+  ) {
+    discardCachedPageOutput(response);
+
     LOG.error("Unhandled exception ({}): {}", STATUS_500, exception.getMessage(), exception);
     return ErrorPageUtils.buildErrorModelAndView(HttpStatus.INTERNAL_SERVER_ERROR, MSG_SERVER_ERROR, null,
         request, messageService, appProperties
     );
+  }
+
+  /**
+   * Discards any page output cached by {@link ContentCachingResponseWrapper} so the error page rendered
+   * afterward is the only document the browser receives. Security and resource-URL filters wrap the
+   * response outside the caching filter, so the wrapper chain is traversed to find it. The response
+   * status and headers are left untouched; the error page is applied to the same request, keeping
+   * the original browser URL.
+   *
+   * @param response the current HTTP response
+   */
+  private void discardCachedPageOutput(HttpServletResponse response) {
+    ServletResponse current = response;
+    while (true) {
+      if (current instanceof ContentCachingResponseWrapper cachedResponse) {
+        cachedResponse.resetBuffer();
+        return;
+      }
+
+      if (!(current instanceof ServletResponseWrapper wrapper)) {
+        return;
+      }
+
+      current = wrapper.getResponse();
+    }
   }
 }
