@@ -31,6 +31,7 @@ import com.endurancetrio.app.common.model.PageWindow;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.common.utils.PaginationUtils;
+import com.endurancetrio.app.common.utils.WebUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.app.event.enumerator.IndividualResultColumns;
 import com.endurancetrio.app.event.enumerator.RelayResultColumns;
@@ -61,6 +62,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.OptionalInt;
 import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -133,7 +135,8 @@ public class EventWebController {
    * Returns the searchable events directory with paginated events filtered by year, district,
    * county and a free-text title search. All filters are optional and invalid values are ignored.
    * Also builds the pagination URLs used by the view and sets canonical metadata for filtered or
-   * paged listings.
+   * paged listings. An out-of-range page redirects to the last valid page, or to the bare listing
+   * URL when there are no results, retaining the active filters.
    *
    * @param language the language path variable ({@code en} or {@code pt})
    * @param page     the page number from the query string (default {@code 0}; blank, non-numeric
@@ -144,7 +147,7 @@ public class EventWebController {
    * @param county   the optional county filter
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
-   * @return the events view name
+   * @return the events view name, or a redirect view name for an out-of-range page
    */
   @GetMapping("/{language:en|pt}/events")
   public String getEvents(
@@ -184,6 +187,13 @@ public class EventWebController {
         .toUriString();
 
     int totalPages = eventsPage.pagination().totalPages();
+
+    OptionalInt redirectTargetPage = PaginationUtils.redirectTargetPage(clampedPage, totalPages);
+    if (redirectTargetPage.isPresent()) {
+      int targetPage = redirectTargetPage.getAsInt();
+      return WebUtils.redirect(buildEventsUrl(eventsPath, targetPage == 0 ? null : targetPage, filter));
+    }
+
     PageWindow pageWindow = PaginationUtils.pageWindow(clampedPage, totalPages);
     Map<Integer, String> paginationUrls = new LinkedHashMap<>();
     for (Integer pageIndex : pageWindow.pages()) {
@@ -219,28 +229,31 @@ public class EventWebController {
    * @param year     the year to filter events by
    * @return the redirect view name
    */
-  @GetMapping("/{language:en|pt}/events/{year}")
+  @GetMapping("/{language:en|pt}/events/{year:\\d+}")
   public String redirectEventsByYear(@PathVariable String language, @PathVariable int year) {
-    return "redirect:" + UriComponentsBuilder.fromPath("/")
+    String path = UriComponentsBuilder.fromPath("/")
         .pathSegment(language, VIEW_EVENTS)
         .queryParam("year", year)
         .build()
         .encode()
         .toUriString();
+    return WebUtils.redirect(path);
   }
 
   /**
-   * Returns the event-scoped insights page with related articles.
+   * Returns the event-scoped insights page with related articles. An out-of-range page redirects
+   * to the last valid page, or to the bare insights URL when there are no results.
    *
    * @param language the language path variable ({@code en} or {@code pt})
    * @param year     the event year
    * @param id       the event ID
-   * @param page     the page number from the query string (default {@code 0})
+   * @param page     the page number from the query string (default {@code 0}, clamped to
+   *                 non-negative)
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
-   * @return the event insights view name
+   * @return the event insights view name, or a redirect view name for an out-of-range page
    */
-  @GetMapping("/{language:en|pt}/events/{year}/{id}/insights")
+  @GetMapping("/{language:en|pt}/events/{year:\\d+}/{id:\\d+}/insights")
   public String getEventInsights(
       @PathVariable String language, @PathVariable int year, @PathVariable Long id,
       @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
@@ -265,8 +278,22 @@ public class EventWebController {
       throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     }
 
-    Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+    int clampedPage = Math.max(0, page);
+    Pageable pageable = PageRequest.of(clampedPage, PAGE_SIZE);
     InsightPageDTO insightPage = insightService.getArticlesByEvent(id, pageable, locale);
+
+    int totalPages = insightPage.pagination().totalPages();
+
+    String insightsPath = UriComponentsBuilder.fromPath("/")
+        .pathSegment(locale.getLanguage(), VIEW_EVENTS, String.valueOf(year), String.valueOf(id), "insights")
+        .build()
+        .toUriString();
+
+    OptionalInt redirectTargetPage = PaginationUtils.redirectTargetPage(clampedPage, totalPages);
+    if (redirectTargetPage.isPresent()) {
+      int targetPage = redirectTargetPage.getAsInt();
+      return WebUtils.redirect(buildEventInsightsUrl(insightsPath, targetPage == 0 ? null : targetPage));
+    }
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
@@ -288,7 +315,7 @@ public class EventWebController {
    * @param model    the model to populate with view attributes
    * @return the event overview view name
    */
-  @GetMapping("/{language:en|pt}/events/{year}/{id}/overview")
+  @GetMapping("/{language:en|pt}/events/{year:\\d+}/{id:\\d+}/overview")
   public String getEventOverview(
       @PathVariable String language, @PathVariable int year, @PathVariable Long id,
       HttpServletRequest request, Model model
@@ -326,7 +353,7 @@ public class EventWebController {
    * @param model    the model to populate with view attributes
    * @return the race results view name
    */
-  @GetMapping("/{language:en|pt}/events/{year}/{eventId}/results/{raceId}")
+  @GetMapping("/{language:en|pt}/events/{year:\\d+}/{eventId:\\d+}/results/{raceId:\\d+}")
   public String getRaceResults(
       @PathVariable String language, @PathVariable int year, @PathVariable Long eventId,
       @PathVariable Long raceId, HttpServletRequest request, Model model
@@ -387,6 +414,21 @@ public class EventWebController {
   private static String buildAbsoluteEventsUrl(String baseUrl, String language) {
     return UriComponentsBuilder.fromUriString(baseUrl).pathSegment(language, VIEW_EVENTS).build()
         .toUriString();
+  }
+
+  /**
+   * Builds a context-relative event insights URL, optionally carrying a page query parameter.
+   *
+   * @param path the insights path, already containing the language, year and event ID
+   * @param page the 0-based page number, or {@code null} to omit the query parameter
+   * @return the encoded, context-relative insights URL
+   */
+  private static String buildEventInsightsUrl(String path, Integer page) {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromPath(path);
+    if (page != null) {
+      builder.queryParam("page", page);
+    }
+    return builder.build().encode().toUriString();
   }
 
   /**

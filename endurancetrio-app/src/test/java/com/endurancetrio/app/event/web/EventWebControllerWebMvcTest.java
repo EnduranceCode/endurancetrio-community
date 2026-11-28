@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.endurancetrio.app.common.handler.EnduranceTrioExceptionHandlerWeb;
 import com.endurancetrio.app.common.security.entrypoint.EnduranceTrioAuthEntryPoint;
 import com.endurancetrio.app.common.security.provider.EnduranceTrioAuthProvider;
 import com.endurancetrio.app.common.service.MessageService;
@@ -170,6 +171,13 @@ class EventWebControllerWebMvcTest {
   void setUp() {
     when(eventService.getEventOverview(EVENT_ID, YEAR)).thenReturn(EVENT_OVERVIEW);
     when(insightService.getArticlesCountByEvent(EVENT_ID)).thenReturn(ARTICLES_COUNT);
+  }
+
+  @Test
+  void eventInsightsWithNoArticlesShouldReturnNotFound() throws Exception {
+    when(insightService.getArticlesCountByEvent(EVENT_ID)).thenReturn(0L);
+
+    mockMvc.perform(get("/en/events/" + YEAR + "/" + EVENT_ID + "/insights")).andExpect(status().isNotFound());
   }
 
   @Test
@@ -425,7 +433,8 @@ class EventWebControllerWebMvcTest {
   @SpringBootConfiguration
   @Import(
     {
-      AppSecurityConfig.class, WebConfig.class, MessageService.class, EventWebController.class
+        AppSecurityConfig.class, WebConfig.class, MessageService.class, EnduranceTrioExceptionHandlerWeb.class,
+        EventWebController.class
     }
   )
   static class TestApplication {

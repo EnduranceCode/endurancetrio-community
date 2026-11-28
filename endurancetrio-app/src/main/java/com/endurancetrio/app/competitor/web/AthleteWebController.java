@@ -30,6 +30,7 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.common.utils.PaginationUtils;
+import com.endurancetrio.app.common.utils.WebUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
@@ -215,7 +216,7 @@ public class AthleteWebController {
     OptionalInt redirectTargetPage = PaginationUtils.redirectTargetPage(clampedPage, totalPages);
     if (redirectTargetPage.isPresent()) {
       int targetPage = redirectTargetPage.getAsInt();
-      return "redirect:" + buildAthleteUrl(athletePath, targetPage == 0 ? null : targetPage);
+      return WebUtils.redirect(buildAthleteUrl(athletePath, targetPage == 0 ? null : targetPage));
     }
 
     List<ArticleSummaryDTO> athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
@@ -415,7 +416,7 @@ public class AthleteWebController {
       return null;
     }
     int targetPage = redirectTargetPage.getAsInt();
-    return "redirect:" + buildAthletesUrl(athletesPath, targetPage == 0 ? null : targetPage, filter);
+    return WebUtils.redirect(buildAthletesUrl(athletesPath, targetPage == 0 ? null : targetPage, filter));
   }
 
   /**
