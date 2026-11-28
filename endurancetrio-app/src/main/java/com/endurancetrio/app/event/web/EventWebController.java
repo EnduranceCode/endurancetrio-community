@@ -270,7 +270,7 @@ public class EventWebController {
 
     if (articlesCount == 0) {
       String errorMsg = String.format("No articles found for event %d", id);
-      LOG.warn(errorMsg);
+      LOG.debug("No articles found for event {}", id);
       throw new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     }
 
@@ -366,7 +366,7 @@ public class EventWebController {
         .findFirst()
         .orElseThrow(() -> {
           String errorMsg = String.format("No race found with ID %d for event %d", raceId, eventId);
-          LOG.warn(errorMsg);
+          LOG.debug("No race found with ID {} for event {}", raceId, eventId);
           return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
         });
 

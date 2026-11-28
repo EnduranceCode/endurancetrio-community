@@ -106,7 +106,7 @@ public class EventServiceMain implements EventService {
   public EventOverviewDTO getEventOverview(Long id, int year) {
     Event event = eventRepository.findByIdAndYearWithGraph(id, year).orElseThrow(() -> {
       String errorMsg = String.format("No event found with ID %d for year %d", id, year);
-      LOG.warn(errorMsg);
+      LOG.debug("No event found with ID {} for year {}", id, year);
       return new EnduranceTrioException(new ErrorDTO(EnduranceTrioError.NOT_FOUND, errorMsg));
     });
 
