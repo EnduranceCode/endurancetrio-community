@@ -21,7 +21,6 @@
 package com.endurancetrio.app.insight.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
 
@@ -76,7 +75,8 @@ public class InsightsWebController {
   /**
    * Returns the insights listing page with paginated articles.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param page     the page number from the query string (default {@code 0})
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
@@ -84,21 +84,19 @@ public class InsightsWebController {
    */
   @GetMapping("/{language:en|pt}/insights")
   public String getInsights(
-      @PathVariable String language,
+      @PathVariable Locale language,
       @RequestParam(defaultValue = "0") int page, HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
     PageMetadata metadata = PageMetadataUtils.create(VIEW_INSIGHTS,
-        messageService.getMessage("page.insights.metadata.title", null, locale),
-        messageService.getMessage("page.insights.metadata.description", null, locale), request,
+        messageService.getMessage("page.insights.metadata.title", null, language),
+        messageService.getMessage("page.insights.metadata.description", null, language), request,
         appProperties
     );
 
     Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-    InsightPageDTO insightPage = insightService.getArticles(page, pageable, locale);
+    InsightPageDTO insightPage = insightService.getArticles(page, pageable, language);
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, insightPage.pagination());
     model.addAttribute(ATTRIBUTE_ARTICLES, insightPage.articles());
@@ -109,7 +107,8 @@ public class InsightsWebController {
   /**
    * Returns the article detail page for the given slug.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param slug     the article URL slug
    * @param request  the current HTTP request for building page metadata
    * @param model    the model to populate with view attributes
@@ -117,12 +116,10 @@ public class InsightsWebController {
    */
   @GetMapping("/{language:en|pt}/insights/{slug}")
   public String getInsightDetail(
-      @PathVariable String language, @PathVariable String slug,
+      @PathVariable Locale language, @PathVariable String slug,
       HttpServletRequest request, Model model
   ) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
-    ArticleDTO article = insightService.getArticleBySlug(slug, locale);
+    ArticleDTO article = insightService.getArticleBySlug(slug, language);
 
     String metaTitle = (article.metaTitle() != null && !article.metaTitle().isBlank())
         ? article.metaTitle() + BRAND_SUFFIX
@@ -137,7 +134,7 @@ public class InsightsWebController {
     );
     metadata.setJsonLd(JsonLdUtils.buildArticleJsonLd(article, metadata, PageMetadataUtils.getBaseUrl(appProperties)));
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_ARTICLE, article);
 

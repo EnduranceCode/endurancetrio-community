@@ -20,11 +20,14 @@
 
 package com.endurancetrio.app.config;
 
+import com.endurancetrio.app.common.utils.WebUtils;
 import jakarta.servlet.Filter;
+import java.util.Locale;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -61,6 +64,17 @@ public class WebConfig implements WebMvcConfigurer {
     registrationBean.addUrlPatterns("/*");
     registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 60);
     return registrationBean;
+  }
+
+  /**
+   * Registers the converter used to resolve a language path variable to its {@link Locale}.
+   *
+   * @param registry the formatter registry to which the converter is added
+   * @see WebUtils#fromLanguage
+   */
+  @Override
+  public void addFormatters(FormatterRegistry registry) {
+    registry.addConverter(String.class, Locale.class, WebUtils::fromLanguage);
   }
 
   /**

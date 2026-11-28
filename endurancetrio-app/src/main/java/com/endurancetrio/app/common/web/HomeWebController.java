@@ -21,7 +21,6 @@
 package com.endurancetrio.app.common.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 
 import com.endurancetrio.app.common.annotation.EnduranceTrioWebController;
@@ -78,21 +77,18 @@ public class HomeWebController {
   }
 
   @GetMapping("/{language:en|pt}/")
-  public String homePage(@PathVariable String language, HttpServletRequest request, Model model) {
-    Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
-
+  public String homePage(@PathVariable Locale language, HttpServletRequest request, Model model) {
     PageMetadata metadata = PageMetadataUtils.create(VIEW_HOME,
-        messageService.getMessage("page.home.metadata.title", null, locale),
-        messageService.getMessage("page.home.metadata.description", null, locale), request,
+        messageService.getMessage("page.home.metadata.title", null, language),
+        messageService.getMessage("page.home.metadata.description", null, language), request,
         appProperties
     );
 
-    List<ArticleDTO> featuredArticles = insightService.getArticlesByIds(
-        appProperties.getFeaturedArticleIds(), locale
+    List<ArticleDTO> featuredArticles = insightService.getArticlesByIds(appProperties.getFeaturedArticleIds(), language
     );
 
     List<ArticleDTO> featuredEventArticles = insightService.getArticlesByIds(
-        List.of(appProperties.getFeaturedEventArticleId()), locale
+        List.of(appProperties.getFeaturedEventArticleId()), language
     );
     ArticleDTO featuredEventArticle = featuredEventArticles.isEmpty()
         ? null
@@ -110,7 +106,7 @@ public class HomeWebController {
         PageRequest.of(0, RECENT_EVENTS_SIZE)
     );
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_INSIGHTS, featuredArticles);
     model.addAttribute(ATTRIBUTE_FEATURED_EVENT_ARTICLE, featuredEventArticle);

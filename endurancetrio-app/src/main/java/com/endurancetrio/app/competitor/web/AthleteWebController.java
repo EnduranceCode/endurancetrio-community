@@ -21,7 +21,6 @@
 package com.endurancetrio.app.competitor.web;
 
 import static com.endurancetrio.app.common.constants.AppConstants.LANGUAGE;
-import static com.endurancetrio.app.common.constants.AppConstants.LOCALE_PORTUGUESE;
 import static com.endurancetrio.app.common.constants.AppConstants.METADATA;
 import static com.endurancetrio.app.common.constants.AppConstants.PAGINATION;
 
@@ -107,7 +106,8 @@ public class AthleteWebController {
    * filter-toggle URLs used by the view. An out-of-range page redirects to the last valid page, or
    * to the bare listing URL when there are no results, retaining the active filters.
    *
-   * @param language    the language path variable ({@code en} or {@code pt})
+   * @param language    the locale resolved from the language path segment ({@code pt_PT} for
+   *                    {@code pt}, English otherwise)
    * @param page        the page number from the query string (default {@code 0}, clamped to
    *                    non-negative)
    * @param letterRange the optional letter-range identifier ({@code a_f}, case-insensitive)
@@ -120,15 +120,13 @@ public class AthleteWebController {
    */
   @GetMapping("/{language:en|pt}/athletes")
   public String getAthletes(
-      @PathVariable String language, @RequestParam(defaultValue = "0") int page,
+      @PathVariable Locale language, @RequestParam(defaultValue = "0") int page,
       @RequestParam(required = false) String letterRange, @RequestParam(required = false) String gender,
       @RequestParam(name = "q", required = false) String searchTerm, HttpServletRequest request, Model model
   ) {
-    Locale locale = resolveLocale(language);
-
     PageMetadata metadata = PageMetadataUtils.create(VIEW_ATHLETES,
-        messageService.getMessage("page.athletes.metadata.title", null, locale),
-        messageService.getMessage("page.athletes.metadata.description", null, locale), request,
+        messageService.getMessage("page.athletes.metadata.title", null, language),
+        messageService.getMessage("page.athletes.metadata.description", null, language), request,
         appProperties
     );
 
@@ -138,16 +136,16 @@ public class AthleteWebController {
     int totalPages = athletesPage.pagination().totalPages();
     boolean isFiltered = hasActiveFilter(filter);
 
-    String athletesPath = buildAthletesPath(locale);
+    String athletesPath = buildAthletesPath(language);
 
     String redirectView = buildRedirectView(athletesPath, clampedPage, totalPages, filter);
     if (redirectView != null) {
       return redirectView;
     }
 
-    applyMetadataUrls(metadata, locale, isFiltered, clampedPage, appProperties);
+    applyMetadataUrls(metadata, language, isFiltered, clampedPage, appProperties);
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, athletesPage.pagination());
     model.addAttribute(ATTRIBUTE_ATHLETES, athletesPage.athletes());
@@ -174,7 +172,8 @@ public class AthleteWebController {
    * authored insight articles. An out-of-range page redirects to the last valid page, or to the bare
    * profile URL when there are no results.
    *
-   * @param language the language path variable ({@code en} or {@code pt})
+   * @param language the locale resolved from the language path segment ({@code pt_PT} for
+   *                 {@code pt}, English otherwise)
    * @param id       the ID of the athlete
    * @param page     the page number from the query string (default {@code 0}, clamped to
    *                 non-negative)
@@ -184,21 +183,17 @@ public class AthleteWebController {
    */
   @GetMapping("/{language:en|pt}/athletes/{id:\\d+}")
   public String getAthleteById(
-      @PathVariable String language,
+      @PathVariable Locale language,
       @PathVariable Long id,
       @RequestParam(defaultValue = "0") int page,
       HttpServletRequest request, Model model
   ) {
-    Locale locale = resolveLocale(language);
-
     AthleteDTO athlete = athleteService.getAthleteById(id);
 
     PageMetadata metadata = PageMetadataUtils.create(VIEW_ATHLETE_PROFILE,
-        messageService.getMessage("page.athlete.profile.metadata.title",
-            new Object[]{athlete.knownName()}, locale
-        ),
-        messageService.getMessage("page.athlete.profile.metadata.description",
-            new Object[]{athlete.knownName()}, locale
+        messageService.getMessage("page.athlete.profile.metadata.title", new Object[]{athlete.knownName()}, language),
+        messageService.getMessage("page.athlete.profile.metadata.description", new Object[]{athlete.knownName()},
+            language
         ), request, appProperties
     );
 
@@ -209,7 +204,7 @@ public class AthleteWebController {
     int totalPages = athleteResults.pagination().totalPages();
 
     String athletePath = UriComponentsBuilder.fromPath("/")
-        .pathSegment(locale.getLanguage(), ATTRIBUTE_ATHLETES, String.valueOf(id))
+        .pathSegment(language.getLanguage(), ATTRIBUTE_ATHLETES, String.valueOf(id))
         .build()
         .toUriString();
 
@@ -219,14 +214,14 @@ public class AthleteWebController {
       return WebUtils.redirect(buildAthleteUrl(athletePath, targetPage == 0 ? null : targetPage));
     }
 
-    List<ArticleSummaryDTO> athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
+    List<ArticleSummaryDTO> athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), language);
 
     Map<Integer, String> paginationUrls = new LinkedHashMap<>();
     for (Integer pageIndex : PaginationUtils.pageWindow(clampedPage, totalPages).pages()) {
       paginationUrls.put(pageIndex, buildAthleteUrl(athletePath, pageIndex));
     }
 
-    model.addAttribute(LANGUAGE, locale.getLanguage());
+    model.addAttribute(LANGUAGE, language.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(PAGINATION, athleteResults.pagination());
     model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles);
@@ -486,16 +481,5 @@ public class AthleteWebController {
    */
   private static String paginationUrl(boolean hasPage, String athletesPath, int page, AthleteFilterDTO filter) {
     return hasPage ? buildAthletesUrl(athletesPath, page, filter) : null;
-  }
-
-  /**
-   * Resolves the locale for a language path segment, treating anything other than {@code pt} as
-   * English.
-   *
-   * @param language the language path variable ({@code en} or {@code pt})
-   * @return the resolved locale
-   */
-  private static Locale resolveLocale(String language) {
-    return "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
   }
 }
